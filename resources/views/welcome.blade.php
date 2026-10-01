@@ -78,7 +78,7 @@
                     <div><i class="fa-solid fa-chart-column" aria-hidden="true"></i><span><b>Reportes</b><small>en tiempo real</small></span></div>
                     <div><i class="fa-solid fa-users" aria-hidden="true"></i><span><b>Multiempresa</b><small>varias empresas, una cuenta</small></span></div>
                 </div>
-                <div class="hero-actions"><a class="button button-primary button-large" href="{{ route('registro.create') }}">Comenzar ahora <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a><a class="button button-video" href="#como-funciona"><i class="fa-regular fa-circle-play" aria-hidden="true"></i> Ver cómo funciona</a></div>
+                <div class="hero-actions"><a class="button button-primary button-large" href="{{ route('registro.create') }}">Comenzar ahora <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a><button class="button button-video" type="button" data-video-open><i class="fa-regular fa-circle-play" aria-hidden="true"></i> Ver cómo funciona</button></div>
             </div>
             <div class="hero-visual" aria-label="Vista previa del panel de asistencia {{ config('app.name') }}">
                 <div class="hero-orb"></div>
@@ -125,6 +125,16 @@
 
         <section class="final-cta" id="contacto"><div class="final-cta-inner section-shell"><div><h2>Empieza a controlar<br>la asistencia de tu equipo hoy.</h2><p>{{ config('app.name') }} es la forma más sencilla y accesible de mantener a tu equipo a tiempo.</p></div><a class="button button-primary button-large" href="{{ route('registro.create') }}">Comenzar ahora <i class="fa-solid fa-arrow-right"></i></a></div></section>
     </main>
+    <div class="video-modal" data-video-modal data-video-url="{{ config('constantes.video_como_funciona_youtube') }}" aria-hidden="true">
+        <div class="video-modal-backdrop" data-video-close></div>
+        <section class="video-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="video-modal-title" tabindex="-1">
+            <header class="video-modal-header">
+                <h2 id="video-modal-title">Cómo funciona Horalia</h2>
+                <button class="video-modal-close" type="button" data-video-close aria-label="Cerrar video">&times;</button>
+            </header>
+            <div class="video-modal-frame" data-video-frame></div>
+        </section>
+    </div>
     <footer class="site-footer" id="footer">
         <div class="footer-inner section-shell">
             <a class="brand" href="#inicio"><img src="{{ asset('assets/logos/logoLN.png') }}" alt="{{ config('app.name') }}, tu equipo a tiempo"></a>

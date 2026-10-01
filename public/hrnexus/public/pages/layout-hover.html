@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0B0D1A"/>
+  <title>Hover Sidebar — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Hover-expand sidebar layout that reveals labels on mouse-over."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+
+<style id="layout-css">
+/* Override default sidebar */
+.sidebar { display: none !important; }
+.main-content { margin-left: 0 !important; }
+
+/* Hover sidebar — starts collapsed, expands on hover */
+.sb-hover {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: 68px; /* collapsed default */
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex; flex-direction: column;
+  z-index: 1000; overflow: hidden;
+  transition: width .22s cubic-bezier(.4,0,.2,1);
+  box-shadow: none;
+}
+.sb-hover:hover {
+  width: 256px;
+  box-shadow: 4px 0 32px rgba(0,0,0,.22);
+}
+/* Brand */
+.sbh-brand {
+  display: flex; align-items: center; gap: .875rem;
+  padding: 0 .875rem; height: var(--topbar-height);
+  border-bottom: 1px solid var(--sidebar-border);
+  text-decoration: none; flex-shrink: 0; overflow: hidden;
+}
+.sbh-logo {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  background: linear-gradient(135deg,#4F6EF7,#8B5CF6);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: .9rem;
+}
+.sbh-name { font-size: .9375rem; font-weight: 800; color: #E8ECFF;
+  white-space: nowrap; opacity: 0; transition: opacity .18s .04s; }
+.sb-hover:hover .sbh-name { opacity: 1; }
+
+/* Nav */
+.sbh-nav { flex: 1; overflow-y: auto; padding: .75rem 0;
+  scrollbar-width: none; }
+.sbh-nav::-webkit-scrollbar { display: none; }
+
+.sbh-section {
+  font-size: .6rem; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--sidebar-section-color);
+  padding: .875rem 1.25rem .3rem; white-space: nowrap;
+  opacity: 0; transition: opacity .15s; overflow: hidden; height: 0;
+}
+.sb-hover:hover .sbh-section { opacity: 1; height: auto; }
+
+.sbh-li { margin: 0 .625rem .0625rem; }
+.sbh-lnk {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .5625rem .75rem; border-radius: .625rem;
+  color: var(--sidebar-text); font-size: .845rem; font-weight: 500;
+  text-decoration: none; transition: all .13s; cursor: pointer;
+  background: none; border: none; width: 100%; font-family: var(--font);
+  white-space: nowrap; overflow: hidden; position: relative;
+}
+.sbh-lnk:hover { background: rgba(255,255,255,.06); color: var(--sidebar-text-hover); }
+.sbh-lnk.active { background: var(--sidebar-item-active); color: #7B9FFF; font-weight: 700; }
+.sbh-lnk.active::before { content: ''; position: absolute; left: 0; top: 25%; bottom: 25%;
+  width: 3px; background: #4F6EF7; border-radius: 0 3px 3px 0; }
+.sbh-icon { width: 20px; height: 20px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+.sbh-text { flex: 1; opacity: 0; transition: opacity .15s .05s; }
+.sb-hover:hover .sbh-text { opacity: 1; }
+.sbh-chevron { font-size: .6rem; color: var(--sidebar-section-color);
+  opacity: 0; transition: opacity .1s, transform .22s;
+  margin-left: auto; flex-shrink: 0; }
+.sb-hover:hover .sbh-chevron { opacity: 1; }
+.sbh-lnk.grp-open .sbh-chevron { transform: rotate(90deg); }
+
+/* Group body */
+.sbh-body { max-height: 0; overflow: hidden; transition: max-height .28s; }
+.sbh-body.open { max-height: 600px; }
+.sbh-child {
+  display: flex; align-items: center; gap: .625rem;
+  padding: .45rem .75rem .45rem 2.25rem;
+  border-radius: .5rem; color: var(--sidebar-text); font-size: .82rem;
+  text-decoration: none; transition: all .13s; background: none;
+  border: none; width: 100%; font-family: var(--font); white-space: nowrap; cursor: pointer;
+}
+.sbh-child:hover { background: rgba(255,255,255,.06); color: var(--sidebar-text-hover); }
+.sbh-child.active { color: #7B9FFF; font-weight: 700; }
+
+/* Tooltip shown only when NOT hovering over sidebar */
+.sbh-tooltip {
+  position: fixed; left: 76px; z-index: 1100;
+  background: var(--sidebar-bg2); color: var(--sidebar-text-hover);
+  font-size: .8rem; font-weight: 600; padding: .35rem .75rem;
+  border-radius: .5rem; white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity .1s;
+  box-shadow: 0 4px 16px rgba(0,0,0,.28);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.sbh-tooltip.show { opacity: 1; }
+
+/* Main content */
+.main-hover {
+  margin-left: 68px; min-height: 100vh;
+  background: var(--body-bg); display: flex; flex-direction: column;
+  transition: none; /* don't animate main; sidebar overlays */
+}
+.topbar-hov {
+  position: sticky; top: 0; z-index: 998;
+  height: var(--topbar-height); display: flex; align-items: center;
+  padding: 0 1.5rem; gap: 1rem;
+  background: var(--topbar-bg); border-bottom: 1px solid var(--topbar-border);
+  box-shadow: var(--topbar-shadow);
+}
+</style>
+
+  <style id="layout-hover-css">
+
+/* ═══════════════════════════════════════════════════════
+   HOVER SIDEBAR — complete standalone CSS
+   Default .sidebar is hidden; this layout owns the page.
+   ═══════════════════════════════════════════════════════ */
+
+/* Kill the default sidebar & reset main margin */
+.sidebar        { display: none !important; }
+.main-content   { margin-left: 0 !important; }
+
+/* ── Design tokens ── */
+:root {
+  --hs-rail:       64px;
+  --hs-wide:       268px;
+  --hs-dur:        .24s;
+  --hs-ease:       cubic-bezier(.4, 0, .2, 1);
+  --hs-bg:         #0B0D1A;
+  --hs-bg2:        #111326;
+  --hs-border:     rgba(255,255,255,.055);
+  --hs-text:       #7A80A8;
+  --hs-text-hi:    #CDD2F8;
+  --hs-accent:     #4F6EF7;
+  --hs-glow:       rgba(79,110,247,.35);
+  --hs-active-bg:  rgba(79,110,247,.14);
+  --hs-hover-bg:   rgba(255,255,255,.055);
+}
+
+/* ── Rail / Shell ─────────────────────────────────────── */
+.hs-rail {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--hs-rail);
+  background: var(--hs-bg);
+  border-right: 1px solid var(--hs-border);
+  display: flex;
+  flex-direction: column;
+  z-index: 1010;
+  overflow: hidden;
+  transition: width var(--hs-dur) var(--hs-ease),
+              box-shadow var(--hs-dur) var(--hs-ease);
+  will-change: width;
+}
+.hs-rail:hover,
+.hs-rail.pinned-open {
+  width: var(--hs-wide);
+  box-shadow: 6px 0 48px rgba(0,0,0,.38), 1px 0 0 var(--hs-border);
+}
+
+/* ── Brand row ───────────────────────────────────────── */
+.hs-brand-row {
+  position: relative;
+  height: 64px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--hs-border);
+  overflow: hidden;
+}
+.hs-brand {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  padding: 0 14px;
+  gap: 12px;
+  text-decoration: none;
+  overflow: hidden;
+}
+.hs-pin-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--hs-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: .8rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s .08s, background .13s, color .13s;
+}
+.hs-rail:hover .hs-pin-btn,
+.hs-rail.pinned-open .hs-pin-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+.hs-pin-btn:hover { background: var(--hs-hover-bg); color: var(--hs-text-hi); }
+.hs-rail.pinned-open .hs-pin-btn { color: var(--hs-accent); }
+.hs-brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #4F6EF7, #8B5CF6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: .95rem;
+  box-shadow: 0 0 0 0 var(--hs-glow);
+  transition: box-shadow .2s;
+}
+.hs-rail:hover .hs-brand-icon,
+.hs-rail.pinned-open .hs-brand-icon {
+  box-shadow: 0 0 18px var(--hs-glow);
+}
+.hs-brand-text {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.hs-brand-name {
+  font-size: .9375rem;
+  font-weight: 800;
+  color: #E8ECFF;
+  white-space: nowrap;
+  letter-spacing: -.025em;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity .18s .05s var(--hs-ease),
+              transform .18s .05s var(--hs-ease);
+}
+.hs-brand-tag {
+  font-size: .575rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--hs-text);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity .15s .08s var(--hs-ease),
+              transform .15s .08s var(--hs-ease);
+}
+.hs-rail:hover .hs-brand-name,
+.hs-rail:hover .hs-brand-tag,
+.hs-rail.pinned-open .hs-brand-name,
+.hs-rail.pinned-open .hs-brand-tag {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Nav scroll area ────────────────────────────────── */
+.hs-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px 0 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.07) transparent;
+}
+.hs-nav::-webkit-scrollbar       { width: 3px; }
+.hs-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.07); border-radius: 2px; }
+
+/* ── Section label ──────────────────────────────────── */
+.hs-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 14px 4px;
+  overflow: hidden;
+}
+.hs-section-bar {
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  opacity: .65;
+}
+.hs-section-label {
+  font-size: .575rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--hs-text);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity .16s .04s, transform .16s .04s;
+}
+.hs-rail:hover .hs-section-label,
+.hs-rail.pinned-open .hs-section-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Nav item wrapper ───────────────────────────────── */
+.hs-li {
+  margin: 0 8px 2px;
+}
+
+/* ── Rail icon pill (collapsed state visual) ─────── */
+.hs-lnk {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  color: var(--hs-text);
+  font-size: .845rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  width: 100%;
+  font-family: var(--font, 'DM Sans', sans-serif);
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  transition: background .13s, color .13s;
+}
+.hs-lnk:hover {
+  background: var(--hs-hover-bg);
+  color: var(--hs-text-hi);
+}
+.hs-lnk.active {
+  background: var(--hs-active-bg);
+  color: #7B9FFF;
+  font-weight: 700;
+}
+
+/* Active left accent bar — grows in on hover of sidebar */
+.hs-lnk.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 3px;
+  background: var(--hs-accent);
+  border-radius: 0 3px 3px 0;
+  box-shadow: 1px 0 8px var(--hs-glow);
+  opacity: 0;
+  transition: opacity .15s .06s;
+}
+.hs-rail:hover .hs-lnk.active::before,
+.hs-rail.pinned-open .hs-lnk.active::before { opacity: 1; }
+
+/* ── Icon ───────────────────────────────────────────── */
+.hs-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.0625rem;
+  transition: background .15s, transform .18s var(--hs-ease),
+              box-shadow .18s;
+  position: relative;
+}
+/* Hover glow on icon when rail is narrow */
+.hs-lnk:hover .hs-icon {
+  background: rgba(255,255,255,.06);
+  transform: scale(1.08);
+}
+.hs-lnk.active .hs-icon {
+  background: rgba(79,110,247,.18);
+  color: #7B9FFF;
+}
+/* Active dot on icon (only shown in narrow rail) */
+.hs-lnk.active .hs-icon::after {
+  content: '';
+  position: absolute;
+  bottom: 3px; right: 3px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--hs-accent);
+  box-shadow: 0 0 6px var(--hs-glow);
+  opacity: 1;
+  transition: opacity .15s;
+}
+.hs-rail:hover .hs-lnk.active .hs-icon::after,
+.hs-rail.pinned-open .hs-lnk.active .hs-icon::after { opacity: 0; }
+
+/* ── Text & meta (fade in when expanded) ──────────── */
+.hs-label {
+  flex: 1;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity .17s .06s var(--hs-ease),
+              transform .17s .06s var(--hs-ease);
+}
+.hs-rail:hover .hs-label,
+.hs-rail.pinned-open .hs-label { opacity: 1; transform: translateX(0); }
+
+.hs-badge {
+  font-size: .58rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 999px;
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity .15s .08s;
+}
+.hs-rail:hover .hs-badge,
+.hs-rail.pinned-open .hs-badge { opacity: 1; }
+
+.hs-chevron {
+  font-size: .58rem;
+  color: var(--hs-text);
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity .13s .08s, transform .22s var(--hs-ease);
+}
+.hs-rail:hover .hs-chevron,
+.hs-rail.pinned-open .hs-chevron { opacity: 1; }
+.hs-lnk.hs-open .hs-chevron     { transform: rotate(90deg); }
+
+/* ── Group children ─────────────────────────────────── */
+.hs-children {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .26s var(--hs-ease);
+}
+.hs-children.open { max-height: 500px; }
+
+.hs-child {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px 7px 54px;
+  border-radius: 8px;
+  color: var(--hs-text);
+  font-size: .8rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background .12s, color .12s, padding-left .12s;
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+  font-family: var(--font, 'DM Sans', sans-serif);
+  position: relative;
+}
+.hs-child::before {
+  content: '';
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  flex-shrink: 0;
+  transition: background .12s, transform .12s;
+}
+.hs-child:hover {
+  background: var(--hs-hover-bg);
+  color: var(--hs-text-hi);
+}
+.hs-child:hover::before   { background: var(--hs-accent); transform: scale(1.4); }
+.hs-child.active          { color: #7B9FFF; font-weight: 700; }
+.hs-child.active::before  {
+  background: var(--hs-accent);
+  box-shadow: 0 0 6px var(--hs-glow);
+  transform: scale(1.2);
+}
+
+/* Children only visible when sidebar is expanded */
+.hs-children { opacity: 0; transition: max-height .26s var(--hs-ease), opacity .18s .04s; }
+.hs-rail:hover .hs-children,
+.hs-rail.pinned-open .hs-children { opacity: 1; }
+.hs-children.open                 { max-height: 500px; }
+/* When rail is closed, keep children collapsed even if JS set them open */
+.hs-rail:not(:hover):not(.pinned-open) .hs-children { max-height: 0 !important; }
+
+/* ── User card at bottom ────────────────────────────── */
+.hs-footer {
+  padding: 10px;
+  border-top: 1px solid var(--hs-border);
+  flex-shrink: 0;
+}
+.hs-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px;
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background .13s;
+}
+.hs-user:hover { background: var(--hs-hover-bg); }
+.hs-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #4F6EF7, #8B5CF6);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 800; font-size: .8125rem;
+  box-shadow: 0 0 0 2px var(--hs-bg), 0 0 0 3px rgba(79,110,247,.4);
+}
+.hs-user-info {
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity .17s .07s, transform .17s .07s;
+}
+.hs-rail:hover .hs-user-info,
+.hs-rail.pinned-open .hs-user-info { opacity: 1; transform: translateX(0); }
+.hs-user-name {
+  font-size: .8125rem; font-weight: 700; color: var(--hs-text-hi);
+  white-space: nowrap;
+}
+.hs-user-role {
+  font-size: .68rem; color: var(--hs-text); white-space: nowrap;
+}
+
+/* ── Tooltip (narrow state only, mobile) ────────────── */
+.hs-tip {
+  position: fixed;
+  left: calc(var(--hs-rail) + 8px);
+  background: var(--hs-bg2);
+  color: var(--hs-text-hi);
+  font-size: .78rem; font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 7px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .1s;
+  z-index: 2000;
+  border: 1px solid var(--hs-border);
+  box-shadow: 0 4px 18px rgba(0,0,0,.3);
+}
+.hs-tip.show { opacity: 1; }
+
+/* ── Keyboard / touch focus ring ────────────────────── */
+.hs-lnk:focus-visible,
+.hs-child:focus-visible {
+  outline: 2px solid var(--hs-accent);
+  outline-offset: -2px;
+}
+
+/* ── Main layout ────────────────────────────────────── */
+.hs-main {
+  margin-left: var(--hs-rail);
+  transition: margin-left var(--hs-dur) var(--hs-ease);
+  min-height: 100vh;
+  background: var(--body-bg);
+  display: flex;
+  flex-direction: column;
+}
+.hs-rail.pinned-open ~ .hs-main {
+  margin-left: var(--hs-wide);
+}
+
+/* ── Topbar inside hover layout ─────────────────────── */
+.hs-topbar {
+  position: sticky; top: 0; z-index: 1000;
+  height: 64px;
+  display: flex; align-items: center;
+  padding: 0 1.5rem; gap: 1rem;
+  background: var(--topbar-bg);
+  border-bottom: 1px solid var(--topbar-border);
+  box-shadow: var(--topbar-shadow);
+  flex-shrink: 0;
+}
+
+/* ── Reduced motion ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .hs-rail, .hs-brand-name, .hs-brand-tag,
+  .hs-section-label, .hs-label, .hs-badge,
+  .hs-chevron, .hs-user-info, .hs-icon,
+  .hs-lnk.active::before { transition: none !important; }
+}
+
+  </style>
+</head>
+<body>
+
+<!-- Tooltip element -->
+<div class="hs-tip" id="hsTip" aria-hidden="true"></div>
+
+<!-- ══ Hover Rail ══════════════════════════════════════════════════════ -->
+<nav class="hs-rail" id="hsRail" aria-label="Main navigation">
+
+  <!-- Brand -->
+  <div class="hs-brand-row">
+    <a class="hs-brand" href="../index.html" aria-label="HRNexus home">
+      <div class="hs-brand-icon"><i class="bi bi-people-fill"></i></div>
+      <div class="hs-brand-text">
+        <span class="hs-brand-name">HRNexus</span>
+        <span class="hs-brand-tag">Admin Suite</span>
+      </div>
+    </a>
+    <button type="button" class="hs-pin-btn" id="hsPinBtn" aria-label="Pin sidebar open" aria-pressed="false">
+      <i class="bi bi-pin-angle-fill"></i>
+    </button>
+  </div>
+
+  <!-- Nav items -->
+  <div class="hs-nav" id="hsNav">
+
+<div class="hs-section">
+  <span class="hs-section-bar" style="background:#4F6EF7"></span>
+  <span class="hs-section-label">Main</span>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Dashboards">
+    <span class="hs-icon"><i class="bi bi-grid-1x2-fill"></i></span>
+    <span class="hs-label">Dashboards</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="../index.html" class="hs-child">Main Dashboard</a><a href="dashboard-ecommerce.html" class="hs-child">E-Commerce</a><a href="dashboard-employees.html" class="hs-child">Employees</a><a href="dashboard-leads.html" class="hs-child">Leads</a><a href="dashboard-hr.html" class="hs-child">HR</a><a href="dashboard-it.html" class="hs-child">IT Admin</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="HR Core">
+    <span class="hs-icon"><i class="bi bi-people-fill"></i></span>
+    <span class="hs-label">HR Core</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="employees.html" class="hs-child">Employees</a><a href="recruitment.html" class="hs-child">Recruitment</a><a href="attendance.html" class="hs-child">Attendance</a><a href="leaves.html" class="hs-child">Leave Mgmt</a><a href="payroll.html" class="hs-child">Payroll</a><a href="performance.html" class="hs-child">Performance</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="AI Features">
+    <span class="hs-icon"><i class="bi bi-stars"></i></span>
+    <span class="hs-label">AI Features</span>
+    <span class="hs-badge" style="background:#EF4444;color:#fff">New</span>
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="ai-resume-screener.html" class="hs-child">Resume Screener</a><a href="ai-attrition-risk.html" class="hs-child">Attrition Risk</a><a href="ai-performance-summary.html" class="hs-child">Performance AI</a><a href="ai-hr-chatbot.html" class="hs-child">HR Chatbot</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Analytics">
+    <span class="hs-icon"><i class="bi bi-bar-chart-fill"></i></span>
+    <span class="hs-label">Analytics</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="analytics.html" class="hs-child">Dashboard</a><a href="reports.html" class="hs-child">Reports</a><a href="activity.html" class="hs-child">Activity</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Communication">
+    <span class="hs-icon"><i class="bi bi-chat-square-text-fill"></i></span>
+    <span class="hs-label">Communication</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="chat.html" class="hs-child">Team Chat</a><a href="email.html" class="hs-child">Email</a><a href="calendar.html" class="hs-child">Calendar</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Operations">
+    <span class="hs-icon"><i class="bi bi-gear-fill"></i></span>
+    <span class="hs-label">Operations</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="training.html" class="hs-child">Training & Dev</a><a href="announcements.html" class="hs-child">Announcements</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Pages">
+    <span class="hs-icon"><i class="bi bi-files"></i></span>
+    <span class="hs-label">Pages</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="pricing.html" class="hs-child">Pricing Plans</a><a href="faq.html" class="hs-child">FAQ</a><a href="coming-soon.html" class="hs-child">Coming Soon</a><a href="profile.html" class="hs-child">Employee Profile</a><a href="roles.html" class="hs-child">Roles & Permissions</a><a href="blog-grid.html" class="hs-child">Blog Grid</a><a href="blog-list.html" class="hs-child">Blog List</a><a href="blog-detail.html" class="hs-child">Blog Detail</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Error Pages">
+    <span class="hs-icon"><i class="bi bi-exclamation-octagon-fill"></i></span>
+    <span class="hs-label">Error Pages</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="error-simple.html" class="hs-child">Error: Simple</a><a href="error-cover.html" class="hs-child">Error: Cover</a><a href="error-full.html" class="hs-child">Error: Full</a><a href="under-construction-1.html" class="hs-child">Under Construction 1</a><a href="under-construction-2.html" class="hs-child">Under Construction 2</a><a href="under-construction-3.html" class="hs-child">Under Construction 3</a><a href="blank.html" class="hs-child">Blank Page</a><a href="activity.html" class="hs-child">Activity Log</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Files & Billing">
+    <span class="hs-icon"><i class="bi bi-folder-fill"></i></span>
+    <span class="hs-label">Files & Billing</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="files.html" class="hs-child">File Manager</a><a href="invoice-classic.html" class="hs-child">Invoice: Classic</a><a href="invoice-modern.html" class="hs-child">Invoice: Modern</a><a href="invoice-minimal.html" class="hs-child">Invoice: Minimal</a><a href="invoice-create.html" class="hs-child">Create Invoice</a><a href="invoice-manager.html" class="hs-child">Invoice Manager</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="UI Components">
+    <span class="hs-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span>
+    <span class="hs-label">UI Components</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="ui-accordion.html" class="hs-child">Accordion</a><a href="ui-alerts.html" class="hs-child">Alerts</a><a href="ui-badge.html" class="hs-child">Badge</a><a href="ui-buttons.html" class="hs-child">Buttons</a><a href="ui-cards.html" class="hs-child">Cards</a><a href="ui-carousel.html" class="hs-child">Carousel</a><a href="ui-modal.html" class="hs-child">Modal</a><a href="ui-tabs.html" class="hs-child">Tabs</a><a href="ui-typography.html" class="hs-child">Typography</a><a href="avatars.html" class="hs-child">Avatars</a><a href="card-designs.html" class="hs-child">Card Designs</a><a href="drag-drop.html" class="hs-child">Drag & Drop</a><a href="swiper.html" class="hs-child">Swiper Sliders</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Icons">
+    <span class="hs-icon"><i class="bi bi-emoji-smile-fill"></i></span>
+    <span class="hs-label">Icons</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="icons-bootstrap.html" class="hs-child">Bootstrap Icons</a><a href="icons-lucide.html" class="hs-child">Lucide Icons</a><a href="icons-fontawesome.html" class="hs-child">Font Awesome</a><a href="icons-flaticon.html" class="hs-child">Flaticon</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Forms & Tables">
+    <span class="hs-icon"><i class="bi bi-table"></i></span>
+    <span class="hs-label">Forms & Tables</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="form-elements.html" class="hs-child">Form Elements</a><a href="form-layouts.html" class="hs-child">Form Layouts</a><a href="tables-bootstrap.html" class="hs-child">Bootstrap Tables</a><a href="tables-datatable.html" class="hs-child">DataTables</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Authentication">
+    <span class="hs-icon"><i class="bi bi-shield-lock-fill"></i></span>
+    <span class="hs-label">Authentication</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="login-basic.html" class="hs-child">Login: Basic</a><a href="login-cover.html" class="hs-child">Login: Cover</a><a href="login-frame.html" class="hs-child">Login: Frame</a><a href="register-basic.html" class="hs-child">Register: Basic</a><a href="register-cover.html" class="hs-child">Register: Cover</a><a href="forgot-password.html" class="hs-child">Forgot Password</a><a href="new-password.html" class="hs-child">New Password</a></div>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Chart & Map Libs">
+    <span class="hs-icon"><i class="bi bi-pie-chart-fill"></i></span>
+    <span class="hs-label">Chart & Map Libs</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="chart-libs.html" class="hs-child">Chart Libraries</a><a href="map-libs.html" class="hs-child">Map Libraries</a><a href="sidebar-menu.html" class="hs-child">Sidebar Menu</a></div>
+</div>
+<div class="hs-section">
+  <span class="hs-section-bar" style="background:#10B981"></span>
+  <span class="hs-section-label">Workspace</span>
+</div>
+<div class="hs-li">
+  <a href="#" class="hs-lnk" data-tip="Calendar">
+    <span class="hs-icon"><i class="bi bi-calendar3-fill"></i></span>
+    <span class="hs-label">Calendar</span>
+    
+  </a>
+</div>
+<div class="hs-li">
+  <a href="#" class="hs-lnk" data-tip="Tasks">
+    <span class="hs-icon"><i class="bi bi-check2-all"></i></span>
+    <span class="hs-label">Tasks</span>
+    
+  </a>
+</div>
+<div class="hs-li">
+  <a href="#" class="hs-lnk" data-tip="Messages">
+    <span class="hs-icon"><i class="bi bi-chat-dots-fill"></i></span>
+    <span class="hs-label">Messages</span>
+    
+  </a>
+</div>
+<div class="hs-section">
+  <span class="hs-section-bar" style="background:#8B5CF6"></span>
+  <span class="hs-section-label">Layouts</span>
+</div>
+<div class="hs-li">
+  <a href="layout-horizontal.html" class="hs-lnk" data-tip="Horizontal">
+    <span class="hs-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span>
+    <span class="hs-label">Horizontal</span>
+    
+  </a>
+</div>
+<div class="hs-li">
+  <a href="layout-detached.html" class="hs-lnk" data-tip="Detached">
+    <span class="hs-icon"><i class="bi bi-layout-sidebar"></i></span>
+    <span class="hs-label">Detached</span>
+    
+  </a>
+</div>
+<div class="hs-li">
+  <a href="layout-modern.html" class="hs-lnk" data-tip="Modern">
+    <span class="hs-icon"><i class="bi bi-stars"></i></span>
+    <span class="hs-label">Modern</span>
+    
+  </a>
+</div>
+<div class="hs-li">
+  <a href="layout-twocol.html" class="hs-lnk" data-tip="Two Column">
+    <span class="hs-icon"><i class="bi bi-layout-split"></i></span>
+    <span class="hs-label">Two Column</span>
+    
+  </a>
+</div>
+<div class="hs-li">
+  <a href="layout-hover.html" class="hs-lnk active" data-tip="Hover (This)">
+    <span class="hs-icon"><i class="bi bi-arrow-bar-right"></i></span>
+    <span class="hs-label">Hover (This)</span>
+    
+  </a>
+</div>
+<div class="hs-li">
+  <a href="layout-boxed.html" class="hs-lnk" data-tip="Boxed">
+    <span class="hs-icon"><i class="bi bi-app-indicator"></i></span>
+    <span class="hs-label">Boxed</span>
+    
+  </a>
+</div>
+<div class="hs-section">
+  <span class="hs-section-bar" style="background:#F59E0B"></span>
+  <span class="hs-section-label">System</span>
+</div>
+<div class="hs-li">
+  <button type="button" class="hs-lnk" data-hs-group data-tip="Settings">
+    <span class="hs-icon"><i class="bi bi-gear-fill"></i></span>
+    <span class="hs-label">Settings</span>
+    
+    <i class="bi bi-chevron-right hs-chevron"></i>
+  </button>
+  <div class="hs-children"><a href="profile.html" class="hs-child">Profile</a><a href="settings.html" class="hs-child">Settings</a><a href="roles.html" class="hs-child">Roles</a></div>
+</div>
+<div class="hs-li">
+  <a href="#" class="hs-lnk" data-tip="Help">
+    <span class="hs-icon"><i class="bi bi-question-circle-fill"></i></span>
+    <span class="hs-label">Help</span>
+    
+  </a>
+</div>
+  </div>
+
+  <!-- Footer / user card -->
+  <div class="hs-footer">
+    <div class="hs-user" role="button" tabindex="0" aria-label="User menu">
+      <div class="hs-avatar">R</div>
+      <div class="hs-user-info">
+        <div class="hs-user-name">Ravindra S.</div>
+        <div class="hs-user-role">HR Manager</div>
+      </div>
+    </div>
+  </div>
+
+</nav>
+
+<!-- ══ Main content ════════════════════════════════════════════════════ -->
+<div class="hs-main" id="hsMain">
+
+  <!-- Topbar -->
+  <header class="hs-topbar">
+    <nav class="breadcrumb-bar" aria-label="Breadcrumb">
+      <span>HRNexus</span>
+      <span class="bc-sep">/</span>
+      <span>Layouts</span>
+      <span class="bc-sep">/</span>
+      <span class="bc-current">Hover Sidebar</span>
+    </nav>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:.375rem">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications"><i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span></button>
+    <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-w260" id="profile-panel">
+        <div class="card-bd p-45">
+          <div class="flex-ac-g35-mb4">
+            <div class="icon-box-primary-violet-48-fs1125">R</div>
+            <div>
+              <div class="fw7-fs9375-body">Ravindra S.</div>
+              <div class="fs775-muted">HR Manager</div>
+              <div class="flex-ac-g1-mt05">
+                <span class="d-iblock-sq6px-bg-green"></span>
+                <span class="fs7-fw6-c-green">Online</span>
+              </div>
+            </div>
+          </div>
+          <div class="divider-hr m-2-0"></div>
+          <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+          <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+          <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help &amp; Support</a>
+          <div class="divider-hr m-2-0"></div>
+          <div class="flex-ac-jsb-p-1-0">
+            <span class="fs8-muted">Appearance</span>
+            <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+              <i class="bi bi-sun-fill theme-icon-light"></i>
+              <i class="bi bi-moon-fill theme-icon-dark"></i>
+            </button>
+          </div>
+          <div class="divider-hr m-2-0"></div>
+          <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+            <i class="bi bi-box-arrow-right"></i> Sign Out
+          </a>
+        </div>
+      </div>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <!-- Page content -->
+  <div class="page-content">
+    <div class="page-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Hover Sidebar</h1>
+          <p class="page-subtitle">Rests as a 64 px icon rail. Hover to expand. Every group, label and accent grows in — no click, no state, pure CSS transition overlaying the content.</p>
+        </div>
+        <div style="display:flex;gap:.5rem">
+          <button type="button" class="btn-hr btn-outline-hr">
+            <i class="bi bi-grid me-1"></i>Switch Layout
+          </button>
+          <button type="button" class="btn-hr btn-primary-hr">
+            <i class="bi bi-plus-lg me-1"></i>Add Employee
+          </button>
+        </div>
+      </div>
+      <!-- Stat cards row -->
+      <div class="row g-3 mb-1rem">
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-blue">
+            <div class="stat-icon" style="background:rgba(79,110,247,.12);color:#4F6EF7"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-value">284</div>
+            <div class="stat-label">Total Employees</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+12 this month</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-green">
+            <div class="stat-icon" style="background:rgba(16,185,129,.12);color:#10B981"><i class="bi bi-calendar-check-fill"></i></div>
+            <div class="stat-value">96.2%</div>
+            <div class="stat-label">Attendance</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+1.4%</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-amber">
+            <div class="stat-icon" style="background:rgba(245,158,11,.12);color:#F59E0B"><i class="bi bi-credit-card-fill"></i></div>
+            <div class="stat-value">₹2.84Cr</div>
+            <div class="stat-label">Monthly Payroll</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-check-circle-fill"></i>Processed</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-violet">
+            <div class="stat-icon" style="background:rgba(139,92,246,.12);color:#8B5CF6"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="stat-value">4.2%</div>
+            <div class="stat-label">Attrition</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-down-right"></i>-0.8%</div>
+          </div>
+        </div>
+      </div>
+      <!-- Content row -->
+      <div class="row g-4">
+        <div class="col-12 col-xl-8">
+          <div class="card-hr">
+            <div class="card-hd">
+              <div class="card-title-hr">Employee Directory</div>
+              <span class="badge-primary-xs">Active</span>
+            </div>
+            <div class="table-wrap">
+              <table class="hr-table">
+                <thead><tr><th>Name</th><th>Department</th><th>Role</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#4F6EF7,#8B5CF6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">SC</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Sarah Chen</div><div style="font-size:.72rem;color:var(--body-text-muted)">sarah.chen@hr.io</div></div></div></td><td>Product</td><td>Sr UX Designer</td><td><span class="badge-st st-active">Active</span></td></tr>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#10B981,#06B6D4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">MJ</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Marcus Johnson</div><div style="font-size:.72rem;color:var(--body-text-muted)">m.johnson@hr.io</div></div></div></td><td>Engineering</td><td>Backend Lead</td><td><span class="badge-st st-active">Active</span></td></tr>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#F59E0B,#EF4444);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">PN</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Priya Nair</div><div style="font-size:.72rem;color:var(--body-text-muted)">p.nair@hr.io</div></div></div></td><td>Product</td><td>Product Manager</td><td><span class="badge-st st-active">Active</span></td></tr>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#8B5CF6,#EC4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">RD</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Ravi Das</div><div style="font-size:.72rem;color:var(--body-text-muted)">r.das@hr.io</div></div></div></td><td>Engineering</td><td>DevOps Engineer</td><td><span class="badge-st st-pending">On Leave</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-xl-4">
+          <div class="card-hr mb-1rem">
+            <div class="card-hd"><div class="card-title-hr">Quick Actions</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.5rem">
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-person-plus-fill" style="color:var(--color-primary)"></i>Add New Employee</button>
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-calendar-check-fill" style="color:#10B981"></i>Mark Attendance</button>
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-credit-card-fill" style="color:#F59E0B"></i>Run Payroll</button>
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-graph-up-arrow" style="color:#8B5CF6"></i>View Analytics</button>
+            </div>
+          </div>
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Department Split</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.625rem">
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Engineering</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:34%;height:100%;background:linear-gradient(90deg,#4F6EF7,#8B5CF6);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">96</span></div>
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Product</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:19%;height:100%;background:linear-gradient(90deg,#10B981,#06B6D4);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">54</span></div>
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Sales</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:16%;height:100%;background:linear-gradient(90deg,#F59E0B,#F97316);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">46</span></div>
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">HR</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:9%;height:100%;background:linear-gradient(90deg,#8B5CF6,#EC4899);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">26</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </div></div>
+</div>
+
+<!-- ══ Scripts ═════════════════════════════════════════════════════════ -->
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+(function() {
+  var rail   = document.getElementById('hsRail');
+  var tip    = document.getElementById('hsTip');
+  var pinBtn = document.getElementById('hsPinBtn');
+
+  /* Pin toggle — gives touch devices (where :hover is unreliable or simply
+     doesn't exist) and click-preferring desktop users a reliable way to
+     keep the rail expanded, instead of depending entirely on mouse hover. */
+  pinBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var pinned = rail.classList.toggle('pinned-open');
+    pinBtn.setAttribute('aria-pressed', String(pinned));
+    pinBtn.querySelector('i').className = pinned ? 'bi bi-pin-angle-fill' : 'bi bi-pin-angle';
+    tip.classList.remove('show');
+  });
+
+  /* Group toggle — only when rail is expanded */
+  document.querySelectorAll('[data-hs-group]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var children = btn.nextElementSibling;
+      if (!children) return;
+      var isOpen = children.classList.toggle('open');
+      btn.classList.toggle('hs-open', isOpen);
+    });
+  });
+
+  /* Tooltip — show only when rail is NOT hovered (narrow state) */
+  document.querySelectorAll('[data-tip]').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      /* If rail is wide, tooltip is redundant */
+      if (rail.matches(':hover') || rail.classList.contains('pinned-open')) return;
+      var rect = el.getBoundingClientRect();
+      tip.textContent = el.dataset.tip;
+      tip.style.top   = (rect.top + rect.height / 2 - 13) + 'px';
+      tip.classList.add('show');
+    });
+    el.addEventListener('mouseleave', function() {
+      tip.classList.remove('show');
+    });
+  });
+
+  /* Hide tooltip when rail expands */
+  rail.addEventListener('mouseenter', function() {
+    tip.classList.remove('show');
+  });
+
+  /* Keyboard: Enter/Space on user card */
+  document.querySelector('.hs-user').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      window.location.href = 'profile.html';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

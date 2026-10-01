@@ -1,0 +1,121 @@
+# ================================================================
+#  HRNexus Admin — Performance & Caching (.htaccess)
+#  Implements Google PageSpeed recommendations:
+#    - Gzip/Brotli compression
+#    - Long-term asset caching
+#    - Security headers
+#    - Proper MIME types
+# ================================================================
+
+Options -Indexes
+
+# ── Compression ─────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE font/woff2
+  AddOutputFilterByType DEFLATE font/woff
+  AddOutputFilterByType DEFLATE application/x-font-ttf
+  AddOutputFilterByType DEFLATE text/plain
+  # Don't compress already-compressed types
+  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|avif|ico|zip|gz|br)$ no-gzip
+</IfModule>
+
+# ── Brotli (preferred over gzip where available) ─────────────────
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css application/javascript
+  AddOutputFilterByType BROTLI_COMPRESS application/json image/svg+xml
+  AddOutputFilterByType BROTLI_COMPRESS font/woff2 font/woff
+</IfModule>
+
+# ── Browser Caching ──────────────────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+
+  # HTML — short cache (pages change more often)
+  ExpiresByType text/html                   "access plus 1 hour"
+
+  # CSS & JS — versioned filenames → long cache
+  ExpiresByType text/css                    "access plus 1 year"
+  ExpiresByType application/javascript      "access plus 1 year"
+  ExpiresByType text/javascript             "access plus 1 year"
+
+  # Fonts — very long cache
+  ExpiresByType font/woff2                  "access plus 2 years"
+  ExpiresByType font/woff                   "access plus 2 years"
+  ExpiresByType application/x-font-ttf      "access plus 2 years"
+  ExpiresByType application/font-woff       "access plus 2 years"
+  ExpiresByType font/opentype               "access plus 2 years"
+
+  # Images
+  ExpiresByType image/webp                  "access plus 1 year"
+  ExpiresByType image/jpeg                  "access plus 1 year"
+  ExpiresByType image/png                   "access plus 1 year"
+  ExpiresByType image/gif                   "access plus 1 year"
+  ExpiresByType image/svg+xml               "access plus 1 year"
+  ExpiresByType image/x-icon               "access plus 1 year"
+
+  # JSON / manifest
+  ExpiresByType application/json            "access plus 1 day"
+  ExpiresByType application/manifest+json   "access plus 1 week"
+</IfModule>
+
+# ── Cache-Control headers ────────────────────────────────────────
+<IfModule mod_headers.c>
+  # CSS / JS — immutable long cache
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Fonts — very long cache
+  <FilesMatch "\.(woff2|woff|ttf|otf|eot)$">
+    Header set Cache-Control "public, max-age=63072000, immutable"
+  </FilesMatch>
+
+  # Images
+  <FilesMatch "\.(jpg|jpeg|png|gif|webp|avif|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000"
+  </FilesMatch>
+
+  # HTML — short, must-revalidate
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=3600, must-revalidate"
+  </FilesMatch>
+
+  # Security headers
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+  # CORS for fonts loaded from same origin
+  <FilesMatch "\.(woff2|woff|ttf|otf|eot)$">
+    Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
+
+  # Remove ETags (use Cache-Control instead)
+  Header unset ETag
+</IfModule>
+
+# ── ETag ─────────────────────────────────────────────────────────
+FileETag None
+
+# ── MIME Types ───────────────────────────────────────────────────
+<IfModule mod_mime.c>
+  AddType font/woff2                .woff2
+  AddType font/woff                 .woff
+  AddType application/javascript    .js
+  AddType image/webp                .webp
+  AddType image/avif                .avif
+  AddType image/svg+xml             .svg
+</IfModule>
+
+# ── Keep-Alive ───────────────────────────────────────────────────
+<IfModule mod_headers.c>
+  Header set Connection keep-alive
+</IfModule>

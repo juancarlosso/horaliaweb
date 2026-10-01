@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Register — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Split-screen registration page with a branded hero panel."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body class="bg-body-var">
+<div class="flex-3">
+  <div class="flex-col-jfc-rel-bg-grad-sidebar-navy-sidebar-navy2-p-12">
+    <div class="abs-t-100px-r-100px-sq400px-bg-primary-8"></div>
+    <div class="abs-b-50px-l-50px-sq250px-bg-violet-6"></div>
+    <div class="pos-rel-z1">
+      <a class="iflex-mb12-tdn" href="../index.html">
+        <div class="icon-box-primary-violet-40">
+          <i class="bi bi-people-fill fs11-c-white"></i>
+        </div>
+        <span class="fs125-fw8-c-white">HRNexus</span>
+      </a>
+      <h2 class="fs2-fw8-c-white-m-0-0-4-lh-13">The HR platform<br>built for modern teams</h2>
+      <p class="fs1-c-white-60-m-0-0-10-lh-16">Manage your entire workforce from one beautiful dashboard.</p>
+      <div class="flex-col-g35">
+        <div class="flex-ac-g35-c-white-80"><div class="avatar-primary-25-32"><i class="bi bi-check-lg c-primary-lt"></i></div><span class="fs9">HR & payroll management</span></div>
+        <div class="flex-ac-g35-c-white-80"><div class="avatar-primary-25-32"><i class="bi bi-check-lg c-primary-lt"></i></div><span class="fs9">Real-time analytics & reports</span></div>
+        <div class="flex-ac-g35-c-white-80"><div class="avatar-primary-25-32"><i class="bi bi-check-lg c-primary-lt"></i></div><span class="fs9">Recruitment & onboarding</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-col-jfc-w480px-bg-bg-p-12-ov-y-auto-shrink0">
+    <div class="w100pct-mw380px-m-0-auto">
+      <h1 class="fs1625-fw8-c-body-m-0-0-2">Create your account 🚀</h1>
+      <p class="fs9-c-muted-m-0-0-8">Join thousands of HR teams using HRNexus.</p>
+      <div class="flex-col-g44">
+  <div class="row g-3">
+    <div class="col-6"><label class="form-label-hr">First Name</label><input class="hr-input" type="text" id="regFirstName" placeholder="Ravindra" required/></div>
+    <div class="col-6"><label class="form-label-hr">Last Name</label><input class="hr-input" type="text" id="regLastName" placeholder="Sharma" required/></div>
+  </div>
+  <div><label class="form-label-hr">Work Email</label><input class="hr-input" type="email" id="regEmail" placeholder="ravindra@company.com" required/></div>
+  <div><label class="form-label-hr">Company Name</label><input class="hr-input" type="text" id="regCompany" placeholder="Acme Corp" required/></div>
+  <div><label class="form-label-hr">Password</label><input class="hr-input" type="password" id="regPassword" placeholder="Create a strong password" required/></div>
+  <div class="flex-afs-g25">
+    <input class="mt08-accent-primary" type="checkbox" id="terms" required />
+    <label class="fs8125-muted" for="terms">I agree to the <a class="c-primary-tdn" href="#">Terms of Service</a> and <a class="c-primary-tdn" href="#">Privacy Policy</a></label>
+  </div>
+  <div id="regError" style="display:none;font-size:.8125rem;color:#EF4444;margin-bottom:.5rem"></div>
+  <div id="regSuccess" style="display:none;align-items:center;gap:.5rem;color:#10B981;font-size:.875rem;font-weight:600;margin-bottom:.75rem"><i class="bi bi-check-circle-fill"></i><span>Account created! Redirecting…</span></div>
+  <button type="button" class="btn-hr btn-primary-hr w100pct-mt1-tdn" id="regSubmitBtn" onclick="submitRegistration()">
+    <i class="bi bi-person-plus-fill me-2"></i>Create Account
+  </button>
+</div>
+      <p class="fs845-c-muted-mt6-tc">Already have an account? <a class="fw6-c-primary-tdn" href="../pages/login-cover.html">Sign in</a></p>
+    </div>
+  </div>
+</div>
+  <script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+function clearRegErrors() {
+  ['regFirstName', 'regLastName', 'regEmail', 'regCompany', 'regPassword'].forEach(function(id) {
+    document.getElementById(id).style.borderColor = '';
+  });
+  var errorBox = document.getElementById('regError');
+  errorBox.style.display = 'none';
+  errorBox.textContent = '';
+}
+
+function submitRegistration() {
+  clearRegErrors();
+
+  var firstName = document.getElementById('regFirstName');
+  var lastName = document.getElementById('regLastName');
+  var email = document.getElementById('regEmail');
+  var company = document.getElementById('regCompany');
+  var password = document.getElementById('regPassword');
+  var terms = document.getElementById('terms');
+  var errorBox = document.getElementById('regError');
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  var missing = [];
+  if (!firstName.value.trim()) missing.push(firstName);
+  if (!lastName.value.trim()) missing.push(lastName);
+  if (!email.value.trim()) missing.push(email);
+  if (!company.value.trim()) missing.push(company);
+  if (!password.value) missing.push(password);
+
+  if (missing.length) {
+    missing.forEach(function(el) { el.style.borderColor = '#EF4444'; });
+    errorBox.textContent = 'Please fill in all fields before creating your account.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  if (!EMAIL_RE.test(email.value.trim())) {
+    email.style.borderColor = '#EF4444';
+    errorBox.textContent = 'Please enter a valid work email address.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  if (password.value.length < 8) {
+    password.style.borderColor = '#EF4444';
+    errorBox.textContent = 'Password must be at least 8 characters long.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  if (!terms.checked) {
+    errorBox.textContent = 'Please agree to the Terms of Service and Privacy Policy to continue.';
+    errorBox.style.display = 'block';
+    return;
+  }
+
+  document.getElementById('regSuccess').style.display = 'flex';
+  document.getElementById('regSubmitBtn').disabled = true;
+  setTimeout(function() {
+    window.location.href = '../index.html';
+  }, 1200);
+}
+</script>
+</body>
+</html>

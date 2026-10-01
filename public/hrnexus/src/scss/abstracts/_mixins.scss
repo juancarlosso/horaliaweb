@@ -1,0 +1,96 @@
+// =============================================================================
+// HRNexus — Mixins
+// =============================================================================
+@use 'variables' as *;
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@mixin below($bp)  { @media (max-width: $bp)                   { @content; } }
+@mixin above($bp)  { @media (min-width: calc(#{$bp} + 0.02px)) { @content; } }
+
+// ── Flexbox helpers ───────────────────────────────────────────────────────────
+@mixin flex-center  { display: flex; align-items: center; justify-content: center; }
+@mixin flex-between { display: flex; align-items: center; justify-content: space-between; }
+@mixin flex-col     { display: flex; flex-direction: column; }
+
+// ── Focus ring ────────────────────────────────────────────────────────────────
+@mixin focus-ring($color: $primary) {
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($color, 0.22);
+  }
+}
+
+// ── Card base ─────────────────────────────────────────────────────────────────
+@mixin card-base {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--card-border);
+  transition: box-shadow $transition-fast, border-color $transition-fast;
+  &:hover {
+    box-shadow: var(--card-shadow-hover);
+    border-color: rgba($primary, 0.2);
+  }
+}
+
+// ── Button base ───────────────────────────────────────────────────────────────
+@mixin btn-base {
+  display: inline-flex; align-items: center; gap: 0.4375rem;
+  padding: 0.5625rem 1.125rem;
+  border-radius: $card-radius-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semi;
+  font-family: var(--font);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all $transition-fast;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 1;
+  @include focus-ring;
+}
+
+// ── Sidebar active state ──────────────────────────────────────────────────────
+@mixin sidebar-active {
+  background: var(--sidebar-item-active);
+  color: #7B9FFF;
+  font-weight: $font-weight-bold;
+  &::before {
+    content: '';
+    position: absolute; left: 0; top: 25%; bottom: 25%;
+    width: 3px;
+    background: var(--sidebar-item-active-border);
+    border-radius: 0 3px 3px 0;
+  }
+}
+
+// ── Thin scrollbar ────────────────────────────────────────────────────────────
+@mixin scrollbar($w: 5px, $color: var(--body-border)) {
+  scrollbar-width: thin;
+  scrollbar-color: $color transparent;
+  &::-webkit-scrollbar { width: $w; height: $w; }
+  &::-webkit-scrollbar-thumb { background: $color; border-radius: 3px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+}
+
+// ── Gradient text ─────────────────────────────────────────────────────────────
+@mixin gradient-text($from: $primary, $to: $secondary) {
+  background: linear-gradient(135deg, $from, $to);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// ── Auto-fill grid ────────────────────────────────────────────────────────────
+@mixin auto-grid($min: 220px, $gap: 1rem) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min, 1fr));
+  gap: $gap;
+}
+
+// ── Animation delay classes ───────────────────────────────────────────────────
+@mixin anim-delays($n: 8, $step: 0.04s, $prefix: 'd') {
+  @for $i from 1 through $n {
+    .#{$prefix}#{$i} { animation-delay: $i * $step; }
+  }
+}

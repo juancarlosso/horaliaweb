@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Error 500 — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Error 500 page with a full-cover illustration layout."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body class="bg-body-var"><div class="flex-3">
+  <div class="flex-col-ac-jfc-rel-bg-grad-indigo-dk2-indigo-dk-p-12-8">
+    <div class="abs-inset0-glow"></div>
+    <div class="abs-b-100px-l-100px-sq300px-b-1"></div>
+    <div class="abs-t-60px-r-60px-sq200px-b-1"></div>
+    <div class="rel-tc-z1">
+      <div class="rel-fs8-fw9-mono-c-white-6-lh-1">500</div>
+      <div class="rel-mt-20-z2">
+        <div class="avatar-white-8-80">
+          <i class="bi bi-exclamation-triangle-fill fs2-c-amber"></i>
+        </div>
+        <div class="fs1-fw7-c-white-50-mb3-uc">Server Error</div>
+        <h1 class="fs3-fw9-c-white-mb4-lh-11">Something went wrong</h1>
+        <div class="mw340px-fs9375-c-white-60-lh-17">Our servers are having a tough moment. Our engineering team has been notified and is working on a fix.</div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-col-ac-jfc-bg-card-bg-p-12-10">
+    <div class="w100pct-mw360px">
+      <div class="flex-ac-g25-mb8">
+        <div class="icon-box-blue-purple-40"><span class="fs9-fw9-c-white">HR</span></div>
+        <span class="fs1125-fw8-c-body">HRNexus</span>
+      </div>
+      <h2 class="fs15-fw8-c-body-mb3">Error Reference: <span class="mono-c-blue">#ERR-50274</span></h2>
+      <p class="fs9375-c-muted-mb7-lh-17">We&rsquo;ve automatically logged this error and alerted our team. You can try refreshing, or head back to the dashboard.</p>
+      <div class="fs8125-mono-c-muted-bg-bg-br35-p-4-mb7-b-1">
+        <div><span class="c-red">ERROR</span> <span class="c-amber">Internal Server Error</span></div>
+        <div class="mt-1">at /api/v2/dashboard/metrics</div>
+        <div class="mt-1">timestamp: 2026-03-21T11:49:50.648Z</div>
+      </div>
+      <div class="flex-col-g25">
+        <button class="btn-hr btn-primary-hr justify-content" type="button" id="retryBtn" onclick="retryRequest()"><i class="bi bi-arrow-clockwise me-1"></i>Retry</button>
+        <a class="btn-hr btn-outline-hr justify-content" href="../index.html"><i class="bi bi-house me-1"></i>Back to Dashboard</a>
+        <button class="btn-hr btn-ghost-hr fs875-2" type="button" data-bs-toggle="modal" data-bs-target="#contactSupportModal"><i class="bi bi-headset me-1"></i>Contact Support</button>
+      </div>
+      <div class="fs8-c-muted-mt6-tc">Status page: <a class="c-primary" href="#">status.hrnexus.com</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Contact Support ══════ -->
+<div class="modal fade" id="contactSupportModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-headset me-2 c-primary"></i>Contact Support</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="supportForm" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label-hr">Your Email <span class="c-red">*</span></label>
+              <input class="hr-input" type="email" id="supportEmail" placeholder="you@company.com"/>
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">What were you trying to do? <span class="c-red">*</span></label>
+              <textarea class="hr-input" id="supportDetails" rows="3" placeholder="Briefly describe what you were doing when this error occurred..."></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Error Details <span class="fs75-muted">(auto-attached)</span></label>
+              <div class="fs8125-mono-c-muted-bg-bg-br35-p-4-mb7-b-1" style="margin-bottom:0" id="supportErrorDetails"></div>
+            </div>
+          </div>
+          <div id="supportFormError" style="display:none;font-size:.8125rem;color:#EF4444;margin-top:1rem"></div>
+        </form>
+        <div id="supportFormSuccess" style="display:none;text-align:center;padding:2rem 1rem">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem">
+            <i class="bi bi-check-circle-fill" style="font-size:1.75rem;color:#10B981"></i>
+          </div>
+          <div style="font-weight:800;font-size:1.05rem;color:var(--body-text);margin-bottom:.375rem">Report Sent</div>
+          <div style="font-size:.8125rem;color:var(--body-text-muted);max-width:380px;margin:0 auto">
+            Thanks — our engineering team already has this error, and your report helps us prioritize it. We'll email you if we need more details. Ticket ID: <strong style="color:var(--body-text)" id="supportTicketId">TCK-0000</strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" id="supportCancelBtn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" id="supportSendBtn" onclick="sendSupportReport()"><i class="bi bi-send-fill me-1"></i>Send Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+var ERROR_REF = 'ERR-50274';
+var ERROR_ENDPOINT = '/api/v2/dashboard/metrics';
+
+/* ── Retry ──────────────────────────────────────────────────────────── */
+function retryRequest() {
+  var btn = document.getElementById('retryBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Retrying...';
+  setTimeout(function() {
+    window.location.reload();
+  }, 900);
+}
+
+/* ── Contact Support ────────────────────────────────────────────────── */
+document.getElementById('supportErrorDetails').innerHTML =
+  '<div><span class="c-red">ERROR</span> <span class="c-amber">Internal Server Error</span></div>' +
+  '<div class="mt-1">Reference: ' + ERROR_REF + '</div>' +
+  '<div class="mt-1">at ' + ERROR_ENDPOINT + '</div>';
+
+function clearSupportFieldErrors() {
+  ['supportEmail', 'supportDetails'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.borderColor = '';
+  });
+  var errorBox = document.getElementById('supportFormError');
+  if (errorBox) { errorBox.style.display = 'none'; errorBox.textContent = ''; }
+}
+
+function sendSupportReport() {
+  clearSupportFieldErrors();
+
+  var emailEl = document.getElementById('supportEmail');
+  var detailsEl = document.getElementById('supportDetails');
+  var errorBox = document.getElementById('supportFormError');
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  var missing = [];
+  if (!emailEl.value.trim()) missing.push(emailEl);
+  if (!detailsEl.value.trim()) missing.push(detailsEl);
+
+  if (missing.length) {
+    missing.forEach(function(el) { el.style.borderColor = '#EF4444'; });
+    errorBox.textContent = 'Please fill in both fields before sending.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  if (!EMAIL_RE.test(emailEl.value.trim())) {
+    emailEl.style.borderColor = '#EF4444';
+    errorBox.textContent = 'Please enter a valid email address.';
+    errorBox.style.display = 'block';
+    return;
+  }
+
+  var ticketId = 'TCK-' + Math.floor(10000 + Math.random() * 90000);
+  document.getElementById('supportTicketId').textContent = ticketId;
+
+  document.getElementById('supportForm').style.display = 'none';
+  document.getElementById('supportFormSuccess').style.display = 'block';
+  document.getElementById('supportSendBtn').style.display = 'none';
+  document.getElementById('supportCancelBtn').textContent = 'Close';
+}
+
+function resetSupportModal() {
+  var form = document.getElementById('supportForm');
+  if (form) form.reset();
+  clearSupportFieldErrors();
+  document.getElementById('supportForm').style.display = 'block';
+  document.getElementById('supportFormSuccess').style.display = 'none';
+  document.getElementById('supportSendBtn').style.display = 'inline-flex';
+  document.getElementById('supportCancelBtn').textContent = 'Cancel';
+}
+
+var contactSupportModalEl = document.getElementById('contactSupportModal');
+if (contactSupportModalEl) {
+  contactSupportModalEl.addEventListener('hidden.bs.modal', resetSupportModal);
+}
+</script>
+</body>
+</html>

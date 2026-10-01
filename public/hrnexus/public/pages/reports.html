@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Reports &amp; Analytics &#8212; HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Reports and analytics hub for exporting HR, payroll, and attendance data summaries."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Reports &amp; Analytics</span></nav>
+      <div class="search-wrap"><i class="bi bi-search search-icon-i"></i><input type="search" class="search-input" placeholder="Search reports..." oninput="searchReports(this.value)"/></div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel"><i class="bi bi-bell-fill"></i><span class="badge-dot"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Reports &amp; Analytics</h1>
+          <p class="page-subtitle">Generate, schedule, and download HR reports &mdash; powered by live data</p>
+        </div>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="document.getElementById('newReportModal').style.display='flex'">
+          <i class="bi bi-plus-lg me-1"></i>New Report
+        </button>
+      </div>
+
+      <!-- Main tab bar — exact React style -->
+      <div class="rep-tab-bar">
+        <button type="button" class="rep-tab-btn active" id="rtab-reports"   onclick="setRepTab('reports')"><i class="bi bi-file-earmark-bar-graph"></i>Report Library</button>
+        <button type="button" class="rep-tab-btn"        id="rtab-generated" onclick="setRepTab('generated')"><i class="bi bi-download"></i>Generated Reports</button>
+        <button type="button" class="rep-tab-btn"        id="rtab-analytics" onclick="setRepTab('analytics')"><i class="bi bi-bar-chart-line"></i>Analytics Dashboard</button>
+        <button type="button" class="rep-tab-btn"        id="rtab-scheduled" onclick="setRepTab('scheduled')"><i class="bi bi-clock"></i>Scheduled</button>
+      </div>
+
+      <!-- ═════ TAB: REPORT LIBRARY ═════ -->
+      <div id="view-reports">
+        <!-- Filter bar -->
+        <div class="flex-ac-wrap-g3-mb5">
+          <div class="rel-mnw200px-fl1">
+            <i class="bi bi-search abs-t50pct-l3-c-muted-pe-none"></i>
+            <input class="hr-input pl9" id="repSearch" placeholder="Search reports&#8230;" oninput="searchReports(this.value)"/>
+          </div>
+          <div class="flex-g15-wrap" id="catPills"><button class="cat-pill active badge-blue-12-xs-fs78-p14-3-2" type="button" data-cat="All" onclick="filterReports('All')">All</button><button class="cat-pill badge-transparent-xs-fs78-p14-3-2" type="button" data-cat="HR Core" onclick="filterReports('HR Core')">HR Core</button><button class="cat-pill badge-transparent-xs-fs78-p14-3-2" type="button" data-cat="Finance" onclick="filterReports('Finance')">Finance</button><button class="cat-pill badge-transparent-xs-fs78-p14-3-2" type="button" data-cat="Performance" onclick="filterReports('Performance')">Performance</button><button class="cat-pill badge-transparent-xs-fs78-p14-3-2" type="button" data-cat="Recruitment" onclick="filterReports('Recruitment')">Recruitment</button><button class="cat-pill badge-transparent-xs-fs78-p14-3-2" type="button" data-cat="L&D" onclick="filterReports('L&D')">L&D</button><button class="cat-pill badge-transparent-xs-fs78-p14-3-2" type="button" data-cat="Compliance" onclick="filterReports('Compliance')">Compliance</button><button class="cat-pill badge-transparent-xs-fs78-p14-3-2" type="button" data-cat="Custom" onclick="filterReports('Custom')">Custom</button></div>
+        </div>
+        <!-- Report cards grid -->
+        <div id="reportGrid"><div class="report-card-item" data-cat="HR Core" data-name="headcount summary"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-blue-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-blue-10-44"><i class="bi bi-people-fill fs125-c-blue"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Headcount Summary</div><span class="badge-blue-10-xs-fs72-ib-p06-2">HR Core</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Total employees by department, location, employment type, and tenure band.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>2h ago</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Headcount Summary')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Headcount Summary')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="Finance" data-name="payroll summary"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-green-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-green-10-44"><i class="bi bi-credit-card-fill fs125-c-green"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Payroll Summary</div><span class="badge-green-10-xs-fs72-ib-p06-2">Finance</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Gross pay, deductions, bonuses, and net pay breakdown by department.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>Yesterday</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Payroll Summary')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Payroll Summary')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="HR Core" data-name="attendance report"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-purple-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-purple-10-44"><i class="bi bi-calendar-check-fill fs125-c-purple"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Attendance Report</div><span class="badge-purple-10-xs-fs72-ib-p06-2">HR Core</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Daily and monthly attendance rates, late arrivals, early departures, absences.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>1h ago</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Attendance Report')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Attendance Report')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="Performance" data-name="performance review"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-amber-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-amber-10-44"><i class="bi bi-graph-up-arrow fs125-c-amber"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Performance Review</div><span class="badge-amber-10-xs-fs72-ib-p06-2">Performance</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Individual and team performance scores, goal completion, and ratings summary.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>3d ago</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Performance Review')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Performance Review')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="HR Core" data-name="leave & absence"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-red-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-red-10-44"><i class="bi bi-calendar2-x-fill fs125-c-red"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Leave & Absence</div><span class="badge-red-10-xs-fs72-ib-p06-2">HR Core</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Leave utilisation, pending approvals, absence patterns by employee and team.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>5h ago</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Leave & Absence')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Leave & Absence')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="Recruitment" data-name="recruitment funnel"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-sky-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-sky-10-44"><i class="bi bi-person-plus-fill fs125-c-sky"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Recruitment Funnel</div><span class="badge-sky-10-xs-fs72-ib-p06-2">Recruitment</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Applications, shortlists, interviews, offers, hires — full pipeline by role.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>2d ago</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Recruitment Funnel')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Recruitment Funnel')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="L&D" data-name="training completion"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-violet-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-violet-10-44"><i class="bi bi-mortarboard-fill fs125-c-violet"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Training Completion</div><span class="badge-violet-10-xs-fs72-ib-p06-2">L&D</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Course enrolments, completions, pass rates, and certifications earned.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>1d ago</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Training Completion')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Training Completion')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="HR Core" data-name="turnover & retention"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-pink-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-pink-10-44"><i class="bi bi-door-open-fill fs125-c-pink"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Turnover & Retention</div><span class="badge-pink-10-xs-fs72-ib-p06-2">HR Core</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Voluntary/involuntary exits, retention rates, tenure analysis, flight risk.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>1w ago</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Turnover & Retention')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Turnover & Retention')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="Finance" data-name="compensation analysis"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-teal-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-teal-10-44"><i class="bi bi-bar-chart-fill fs125-c-teal"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Compensation Analysis</div><span class="badge-teal-10-xs-fs72-ib-p06-2">Finance</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Salary bands, equity gaps, market benchmarks, and compensation ratios.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>2w ago</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Compensation Analysis')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Compensation Analysis')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="Compliance" data-name="diversity & inclusion"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-orange-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-orange-10-44"><i class="bi bi-heart-fill fs125-c-orange"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Diversity & Inclusion</div><span class="badge-orange-10-xs-fs72-ib-p06-2">Compliance</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Gender, age, ethnicity distribution, pay equity, and representation scores.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>1mo ago</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Diversity & Inclusion')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Diversity & Inclusion')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="Compliance" data-name="compliance audit"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-indigo-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-indigo-10-44"><i class="bi bi-shield-check-fill fs125-c-indigo"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Compliance Audit</div><span class="badge-indigo-10-xs-fs72-ib-p06-2">Compliance</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Policy acknowledgements, certifications due, regulatory checklist status.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>3d ago</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Compliance Audit')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Compliance Audit')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div><div class="report-card-item" data-cat="Custom" data-name="custom report"><div class="card-hr rel-p-6-ov-hidden-pointer-trans" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><div class="abs-t0-r0-sq80px-bg-slate-dk-10-op60"></div><div class="flex-afs-g4-mb35"><div class="icon-box-slate-dk-10-44"><i class="bi bi-sliders fs125-c-slate-dk"></i></div><div class="fl1"><div class="fs9-fw8-c-body-mb08">Custom Report</div><span class="badge-slate-dk-10-xs-fs72-ib-p06-2">Custom</span></div></div><p class="fs8-c-muted-m-0-0-4-lh-15">Build your own report — pick any data fields, filters, groupings, and format.</p><div class="flex-jsb-ac-pt3-bt"><span class="fs75-muted"><i class="bi bi-clock mr-1"></i>Never</span><div class="flex-g2"><button class="btn-run-rep flex-ac-g12-fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none" type="button" onclick="openNewReport('Custom Report')"><i class="bi bi-play-fill"></i>Run</button><button class="btn-sched-rep fs75-c-muted-bg-transparent-br16-p-12-24-pointer" type="button" onclick="openSchedule('Custom Report')" title="Schedule"><i class="bi bi-clock"></i></button></div></div></div></div></div>
+      </div>
+
+      <!-- ═════ TAB: GENERATED REPORTS ═════ -->
+      <div class="d-none" id="view-generated">
+        <div class="card-hr">
+          <div class="card-hd"><div class="card-title-hr">Generated Reports</div><div class="card-subtitle-hr" id="genSubtitle">6 reports ready to download</div></div>
+          <div class="ov-x-auto">
+            <table class="w100pct-fs85" id="genTable">
+              <thead>
+                <tr class="bb-2-border">
+                  <th class="th-standard">Report Name</th>
+                  <th class="fs75-fw7-c-muted-p-25-4-tl-uc">Type</th>
+                  <th class="th-standard">Generated</th>
+                  <th class="fs75-fw7-c-muted-p-25-4-tl-uc">Department</th>
+                  <th class="fs75-fw7-c-muted-p-25-4-tl-uc">Period</th>
+                  <th class="fs75-fw7-c-muted-p-25-4-tl-uc">Format</th>
+                  <th class="fs75-fw7-c-muted-p-25-4-tl-uc">Size</th>
+                  <th class="fs75-fw7-c-muted-p-25-4-tl-uc">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="genBody"><tr class="bg-transparent-bb-1"><td class="p-3-4-fw7-body">Headcount Summary &#8211; Q1 2026</td><td class="p-3-4-muted">Headcount Summary</td><td class="c-muted-p-3-4-nowrap">15 Mar 2026, 09:14</td><td class="p-3-4-muted">All Departments</td><td class="p-3-4-muted">Q1 2026</td><td class="p-3-4"><span class="fs75-fw7-c-red-bg-red-10-br15-p-08-2">PDF</span></td><td class="p-3-4-muted">1.2 MB</td><td class="p-3-4"><div class="flex-g2"><button class="btn-view-rep fs8-c-muted-bg-transparent-br15-p-12-24-pointer" type="button" data-rep="101" onclick="openViewReport(101)" title="View"><i class="bi bi-eye"></i></button><button class="fs8-c-white-bg-blue-br15-p-12-24-b-none-pointer" type="button" onclick="handleDownloadReport(101)" title="Download"><i class="bi bi-download"></i></button></div></td></tr><tr class="bg-blue-2-bb-1"><td class="p-3-4-fw7-body">Payroll Summary &#8211; Feb 2026</td><td class="p-3-4-muted">Payroll Summary</td><td class="c-muted-p-3-4-nowrap">01 Mar 2026, 08:00</td><td class="p-3-4-muted">Engineering</td><td class="p-3-4-muted">Feb 2026</td><td class="p-3-4"><span class="fs75-fw7-c-green-bg-green-10-br15-p-08-2">Excel</span></td><td class="p-3-4-muted">840 KB</td><td class="p-3-4"><div class="flex-g2"><button class="btn-view-rep fs8-c-muted-bg-transparent-br15-p-12-24-pointer" type="button" data-rep="102" onclick="openViewReport(102)" title="View"><i class="bi bi-eye"></i></button><button class="fs8-c-white-bg-blue-br15-p-12-24-b-none-pointer" type="button" onclick="handleDownloadReport(102)" title="Download"><i class="bi bi-download"></i></button></div></td></tr><tr class="bg-transparent-bb-1"><td class="p-3-4-fw7-body">Attendance &#8211; Week 10</td><td class="p-3-4-muted">Attendance Report</td><td class="c-muted-p-3-4-nowrap">14 Mar 2026, 18:30</td><td class="p-3-4-muted">All Departments</td><td class="p-3-4-muted">Week 10</td><td class="p-3-4"><span class="fs75-fw7-c-red-bg-red-10-br15-p-08-2">PDF</span></td><td class="p-3-4-muted">650 KB</td><td class="p-3-4"><div class="flex-g2"><button class="btn-view-rep fs8-c-muted-bg-transparent-br15-p-12-24-pointer" type="button" data-rep="103" onclick="openViewReport(103)" title="View"><i class="bi bi-eye"></i></button><button class="fs8-c-white-bg-blue-br15-p-12-24-b-none-pointer" type="button" onclick="handleDownloadReport(103)" title="Download"><i class="bi bi-download"></i></button></div></td></tr><tr class="bg-blue-2-bb-1"><td class="p-3-4-fw7-body">Recruitment Funnel &#8211; Q1</td><td class="p-3-4-muted">Recruitment Funnel</td><td class="c-muted-p-3-4-nowrap">13 Mar 2026, 14:00</td><td class="p-3-4-muted">All Departments</td><td class="p-3-4-muted">Q1 2026</td><td class="p-3-4"><span class="fs75-fw7-c-red-bg-red-10-br15-p-08-2">PDF</span></td><td class="p-3-4-muted">980 KB</td><td class="p-3-4"><div class="flex-g2"><button class="btn-view-rep fs8-c-muted-bg-transparent-br15-p-12-24-pointer" type="button" data-rep="104" onclick="openViewReport(104)" title="View"><i class="bi bi-eye"></i></button><button class="fs8-c-white-bg-blue-br15-p-12-24-b-none-pointer" type="button" onclick="handleDownloadReport(104)" title="Download"><i class="bi bi-download"></i></button></div></td></tr><tr class="bg-transparent-bb-1"><td class="p-3-4-fw7-body">Leave Report &#8211; Mar 2026</td><td class="p-3-4-muted">Leave & Absence</td><td class="c-muted-p-3-4-nowrap">10 Mar 2026, 11:00</td><td class="p-3-4-muted">Marketing</td><td class="p-3-4-muted">Mar 2026</td><td class="p-3-4"><span class="fs75-fw7-c-blue-bg-blue-10-br15-p-08-2">CSV</span></td><td class="p-3-4-muted">210 KB</td><td class="p-3-4"><div class="flex-g2"><button class="btn-view-rep fs8-c-muted-bg-transparent-br15-p-12-24-pointer" type="button" data-rep="105" onclick="openViewReport(105)" title="View"><i class="bi bi-eye"></i></button><button class="fs8-c-white-bg-blue-br15-p-12-24-b-none-pointer" type="button" onclick="handleDownloadReport(105)" title="Download"><i class="bi bi-download"></i></button></div></td></tr><tr class="bg-blue-2-bb-1"><td class="p-3-4-fw7-body">Performance &#8211; Annual 2025</td><td class="p-3-4-muted">Performance Review</td><td class="c-muted-p-3-4-nowrap">05 Jan 2026, 09:00</td><td class="p-3-4-muted">All Departments</td><td class="p-3-4-muted">FY 2025</td><td class="p-3-4"><span class="fs75-fw7-c-red-bg-red-10-br15-p-08-2">PDF</span></td><td class="p-3-4-muted">3.4 MB</td><td class="p-3-4"><div class="flex-g2"><button class="btn-view-rep fs8-c-muted-bg-transparent-br15-p-12-24-pointer" type="button" data-rep="106" onclick="openViewReport(106)" title="View"><i class="bi bi-eye"></i></button><button class="fs8-c-white-bg-blue-br15-p-12-24-b-none-pointer" type="button" onclick="handleDownloadReport(106)" title="Download"><i class="bi bi-download"></i></button></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═════ TAB: ANALYTICS DASHBOARD ═════ -->
+      <div class="d-none" id="view-analytics">
+        <!-- Period selector -->
+        <div class="flex-ac-jsb-wrap-g3-mb5">
+          <div class="flex-g15" id="anlPeriodBtns"><button class="anl-period active-period badge-blue-12-xs-fs78-p15-35" type="button" onclick="setAnlPeriod('Q1 2026')">Q1 2026</button><button class="anl-period badge-transparent-xs-fs78-p15-35" type="button" onclick="setAnlPeriod('Q4 2025')">Q4 2025</button><button class="anl-period badge-transparent-xs-fs78-p15-35" type="button" onclick="setAnlPeriod('Q3 2025')">Q3 2025</button><button class="anl-period badge-transparent-xs-fs78-p15-35" type="button" onclick="setAnlPeriod('FY 2025')">FY 2025</button></div>
+        </div>
+        <!-- KPI cards grid -->
+        <div class="grid-cols-auto-fill-mn200-g4-mb6" id="anlKpis"><div class="card-hr p-125rem"><div class="flex-ac-g3-mb3"><div class="icon-box-blue-9-40"><i class="bi bi-people-fill fs11-c-blue"></i></div><span class="fs78-fw6-c-muted">Total Employees</span></div><div class="fs16-fw9-c-body-lh-1" id="anlValEmployees">247</div><div class="flex-ac-g15-mt15"><span class="fs78-fw7-c-green" id="anlDeltaEmployees"><i class="bi bi-arrow-up"></i> +4</span><span class="fs72-muted" id="anlSubEmployees">vs last quarter</span></div></div><div class="card-hr p-125rem"><div class="flex-ac-g3-mb3"><div class="icon-box-green-9-40"><i class="bi bi-clock-history fs11-c-green"></i></div><span class="fs78-fw6-c-muted">Avg Tenure</span></div><div class="fs16-fw9-c-body-lh-1" id="anlValTenure">2.8 yrs</div><div class="flex-ac-g15-mt15"><span class="fs78-fw7-c-green" id="anlDeltaTenure"><i class="bi bi-arrow-up"></i> +0.2</span><span class="fs72-muted" id="anlSubTenure">stable growth</span></div></div><div class="card-hr p-125rem"><div class="flex-ac-g3-mb3"><div class="icon-box-red-9-40"><i class="bi bi-door-open-fill fs11-c-red"></i></div><span class="fs78-fw6-c-muted">Turnover Rate</span></div><div class="fs16-fw9-c-body-lh-1" id="anlValTurnover">6.2%</div><div class="flex-ac-g15-mt15"><span class="fs78-fw7-c-red" id="anlDeltaTurnover"><i class="bi bi-arrow-down"></i> -1.1%</span><span class="fs72-muted" id="anlSubTurnover">improving</span></div></div><div class="card-hr p-125rem"><div class="flex-ac-g3-mb3"><div class="icon-box-amber-9-40"><i class="bi bi-person-plus-fill fs11-c-amber"></i></div><span class="fs78-fw6-c-muted">Time to Hire</span></div><div class="fs16-fw9-c-body-lh-1" id="anlValTimeToHire">18 days</div><div class="flex-ac-g15-mt15"><span class="fs78-fw7-c-red" id="anlDeltaTimeToHire"><i class="bi bi-arrow-down"></i> -3d</span><span class="fs72-muted" id="anlSubTimeToHire">vs 21d last qtr</span></div></div><div class="card-hr p-125rem"><div class="flex-ac-g3-mb3"><div class="icon-box-purple-9-40"><i class="bi bi-heart-fill fs11-c-purple"></i></div><span class="fs78-fw6-c-muted">Engagement Score</span></div><div class="fs16-fw9-c-body-lh-1" id="anlValEngagement">78%</div><div class="flex-ac-g15-mt15"><span class="fs78-fw7-c-green" id="anlDeltaEngagement"><i class="bi bi-arrow-up"></i> +3%</span><span class="fs72-muted" id="anlSubEngagement">above target</span></div></div><div class="card-hr p-125rem"><div class="flex-ac-g3-mb3"><div class="icon-box-sky-9-40"><i class="bi bi-mortarboard-fill fs11-c-sky"></i></div><span class="fs78-fw6-c-muted">Training Complete</span></div><div class="fs16-fw9-c-body-lh-1" id="anlValTraining">84%</div><div class="flex-ac-g15-mt15"><span class="fs78-fw7-c-green" id="anlDeltaTraining"><i class="bi bi-arrow-up"></i> +6%</span><span class="fs72-muted" id="anlSubTraining">this quarter</span></div></div></div>
+        <!-- Dept bars + Funnel -->
+        <div class="row g-3 mb-75rem">
+          <div class="col-md-6">
+            <div class="card-hr">
+              <div class="card-hd"><div><div class="card-title-hr">Headcount by Department</div><div class="card-subtitle-hr">Current quarter</div></div></div>
+              <div class="card-bd"><div class="mb-75rem"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Engineering</span><span class="fs82-fw8-c-blue">68</span></div><div class="prog-md2"><div class="w100pct-h100pct-bg-grad-blue-purple-br4px-trans"></div></div></div><div class="mb-75rem"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Sales</span><span class="fs82-fw8-c-blue">42</span></div><div class="prog-md2"><div class="w62pct-h100pct-bg-grad-blue-purple-br4px-trans"></div></div></div><div class="mb-75rem"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Marketing</span><span class="fs82-fw8-c-blue">31</span></div><div class="prog-md2"><div class="w46pct-h100pct-bg-grad-blue-purple-br4px-trans"></div></div></div><div class="mb-75rem"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">HR & Admin</span><span class="fs82-fw8-c-blue">18</span></div><div class="prog-md2"><div class="w26pct-h100pct-bg-grad-blue-purple-br4px-trans"></div></div></div><div class="mb-75rem"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Finance</span><span class="fs82-fw8-c-blue">22</span></div><div class="prog-md2"><div class="w32pct-h100pct-bg-grad-blue-purple-br4px-trans"></div></div></div><div class="mb-75rem"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Operations</span><span class="fs82-fw8-c-blue">38</span></div><div class="prog-md2"><div class="w56pct-h100pct-bg-grad-blue-purple-br4px-trans"></div></div></div><div class="mb-75rem"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Product</span><span class="fs82-fw8-c-blue">28</span></div><div class="prog-md2"><div class="w41pct-h100pct-bg-grad-blue-purple-br4px-trans"></div></div></div></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card-hr">
+              <div class="card-hd"><div><div class="card-title-hr">Recruitment Funnel</div><div class="card-subtitle-hr">Q1 2026</div></div></div>
+              <div class="card-bd"><div class="mb-35"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Applications</span><div class="flex-g3"><span class="fs82-fw8-c-blue">312</span><span class="fs75-muted">100%</span></div></div><div class="h10px-bg-border-br5px-ov-hidden"><div class="w100pct-h100pct-bg-blue-br5px-trans"></div></div></div><div class="mb-35"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Screened</span><div class="flex-g3"><span class="fs82-fw8-c-purple">187</span><span class="fs75-muted">60%</span></div></div><div class="h10px-bg-border-br5px-ov-hidden"><div class="w60pct-h100pct-bg-purple-br5px-trans-2"></div></div></div><div class="mb-35"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Interviews</span><div class="flex-g3"><span class="fs82-fw8-c-sky">94</span><span class="fs75-muted">30%</span></div></div><div class="h10px-bg-border-br5px-ov-hidden"><div class="w30pct-h100pct-bg-sky-br5px-trans"></div></div></div><div class="mb-35"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Offers Made</span><div class="flex-g3"><span class="fs82-fw8-c-green">38</span><span class="fs75-muted">12%</span></div></div><div class="h10px-bg-border-br5px-ov-hidden"><div class="w12pct-h100pct-bg-green-br5px-trans"></div></div></div><div class="mb-35"><div class="flex-jsb-mb1"><span class="fs82-fw6-c-body">Hired</span><div class="flex-g3"><span class="fs82-fw8-c-amber">27</span><span class="fs75-muted">9%</span></div></div><div class="h10px-bg-border-br5px-ov-hidden"><div class="w9pct-h100pct-bg-amber-br5px-trans"></div></div></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Monthly trends table -->
+        <div class="card-hr">
+          <div class="card-hd"><div class="card-title-hr">Monthly Hiring Trends &mdash; Q1 2026</div></div>
+          <div class="ov-x-auto">
+            <table class="w100pct-fs85">
+              <thead><tr class="bb-2-border">
+                <th class="fs75-fw7-c-muted-p-25-4-tl-uc">Month</th><th class="fs75-fw7-c-muted-p-25-4-tl-uc">New Hires</th><th class="fs75-fw7-c-muted-p-25-4-tl-uc">Departures</th><th class="fs75-fw7-c-muted-p-25-4-tl-uc">Net Change</th><th class="fs75-fw7-c-muted-p-25-4-tl-uc">Headcount</th><th class="fs75-fw7-c-muted-p-25-4-tl-uc">Hiring Cost</th>
+              </tr></thead>
+              <tbody><tr class="bb-1"><td class="p-3-4-fw7-body">Jan</td><td class="p-3-4"><span class="c-green-fw7">+8</span></td><td class="p-3-4"><span class="fw7-cred">-3</span></td><td class="p-3-4"><span class="c-green-fw7">+5</span></td><td class="fw8-c-body-p-3-4">235</td><td class="p-3-4-muted">$142,000</td></tr><tr class="bb-1"><td class="p-3-4-fw7-body">Feb</td><td class="p-3-4"><span class="c-green-fw7">+12</span></td><td class="p-3-4"><span class="fw7-cred">-4</span></td><td class="p-3-4"><span class="c-green-fw7">+8</span></td><td class="fw8-c-body-p-3-4">243</td><td class="p-3-4-muted">$198,000</td></tr><tr class="bb-1"><td class="p-3-4-fw7-body">Mar</td><td class="p-3-4"><span class="c-green-fw7">+7</span></td><td class="p-3-4"><span class="fw7-cred">-3</span></td><td class="p-3-4"><span class="c-green-fw7">+4</span></td><td class="fw8-c-body-p-3-4">247</td><td class="p-3-4-muted">$131,000</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═════ TAB: SCHEDULED ═════ -->
+      <div class="d-none" id="view-scheduled">
+        <div class="card-hr">
+          <div class="card-hd"><div><div class="card-title-hr">Scheduled Reports</div><div class="card-subtitle-hr">Automatically generated and delivered on a fixed cadence</div></div></div>
+          <div class="card-bd"><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-blue-10-40"><i class="bi bi-people-fill fs11-c-blue"></i></div><div><div class="fw7-fs875-body">Headcount Summary</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Weekly &middot; Last run: 2h ago</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge0">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Headcount Summary')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn0" onclick="handleToggleSchedule(0,'Headcount Summary')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-green-10-40"><i class="bi bi-credit-card-fill fs11-c-green"></i></div><div><div class="fw7-fs875-body">Payroll Summary</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Monthly &middot; Last run: Yesterday</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge1">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Payroll Summary')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn1" onclick="handleToggleSchedule(1,'Payroll Summary')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-purple-10-40-2"><i class="bi bi-calendar-check-fill fs11-c-purple"></i></div><div><div class="fw7-fs875-body">Attendance Report</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Daily &middot; Last run: 1h ago</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge2">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Attendance Report')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn2" onclick="handleToggleSchedule(2,'Attendance Report')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-amber-10-40"><i class="bi bi-graph-up-arrow fs11-c-amber"></i></div><div><div class="fw7-fs875-body">Performance Review</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Quarterly &middot; Last run: 3d ago</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge3">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Performance Review')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn3" onclick="handleToggleSchedule(3,'Performance Review')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-red-10-40-2"><i class="bi bi-calendar2-x-fill fs11-c-red"></i></div><div><div class="fw7-fs875-body">Leave & Absence</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Monthly &middot; Last run: 5h ago</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge4">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Leave & Absence')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn4" onclick="handleToggleSchedule(4,'Leave & Absence')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-sky-10-40"><i class="bi bi-person-plus-fill fs11-c-sky"></i></div><div><div class="fw7-fs875-body">Recruitment Funnel</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Weekly &middot; Last run: 2d ago</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge5">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Recruitment Funnel')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn5" onclick="handleToggleSchedule(5,'Recruitment Funnel')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-violet-10-40"><i class="bi bi-mortarboard-fill fs11-c-violet"></i></div><div><div class="fw7-fs875-body">Training Completion</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Monthly &middot; Last run: 1d ago</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge6">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Training Completion')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn6" onclick="handleToggleSchedule(6,'Training Completion')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-pink-10-40"><i class="bi bi-door-open-fill fs11-c-pink"></i></div><div><div class="fw7-fs875-body">Turnover & Retention</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Monthly &middot; Last run: 1w ago</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge7">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Turnover & Retention')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn7" onclick="handleToggleSchedule(7,'Turnover & Retention')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-teal-10-40"><i class="bi bi-bar-chart-fill fs11-c-teal"></i></div><div><div class="fw7-fs875-body">Compensation Analysis</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Quarterly &middot; Last run: 2w ago</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge8">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Compensation Analysis')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn8" onclick="handleToggleSchedule(8,'Compensation Analysis')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-orange-10-40"><i class="bi bi-heart-fill fs11-c-orange"></i></div><div><div class="fw7-fs875-body">Diversity & Inclusion</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Quarterly &middot; Last run: 1mo ago</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge9">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Diversity & Inclusion')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn9" onclick="handleToggleSchedule(9,'Diversity & Inclusion')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div><div class="flex-ac-jsb-wrap-g3-bg-card-bg-br3-p-4-5-mb3"><div class="flex-ac-g35"><div class="icon-box-indigo-10-40"><i class="bi bi-shield-check-fill fs11-c-indigo"></i></div><div><div class="fw7-fs875-body">Compliance Audit</div><div class="fs78-c-muted-mt04"><i class="bi bi-clock mr-1"></i>Monthly &middot; Last run: 3d ago</div></div></div><div class="flex-g2-ac"><span class="badge-green-10-xs-fs75-p08-25" id="schedBadge10">&#9679; Active</span><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="openSchedule('Compliance Audit')" title="Edit"><i class="bi bi-pencil"></i></button><button class="fs75-c-red-bg-transparent-br2-p-16-24-pointer" type="button" id="schedPauseBtn10" onclick="handleToggleSchedule(10,'Compliance Audit')" title="Pause"><i class="bi bi-pause-fill"></i></button></div></div></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ══ MODAL: New Report ══ -->
+<div class="d-none-fixed-bg-black-50-p-4-z9999-inset0" id="newReportModal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="w100pct-mw560px-bg-card-bg-br5-p-8-ov-y-auto" onclick="event.stopPropagation()">
+    <div class="flex-jsb-ac-mb6">
+      <div><h2 class="fs115-fw9-c-body-m-0">Generate New Report</h2><p class="fs8-c-muted-m-1-0-0">Configure and run a custom report</p></div>
+      <button class="fs14-c-muted-bg-none-lh-1-b-none-pointer" type="button" onclick="document.getElementById('newReportModal').style.display='none'">&times;</button>
+    </div>
+    <div class="row g-3">
+      <div class="col-12"><label class="form-label-hr">Report Name <span class="c-red">*</span></label><input class="hr-input" id="repName" placeholder="e.g. Q1 2026 Headcount Summary"/></div>
+      <div class="col-md-6"><label class="form-label-hr">Report Type</label>
+        <select class="hr-input" id="repType">
+          <option value="headcount">Headcount Summary</option><option value="payroll">Payroll Summary</option>
+          <option value="attendance">Attendance Report</option><option value="performance">Performance Review</option>
+          <option value="leave">Leave &amp; Absence</option><option value="recruitment">Recruitment Funnel</option>
+          <option value="training">Training Completion</option><option value="turnover">Turnover &amp; Retention</option>
+          <option value="compensation">Compensation Analysis</option><option value="diversity">Diversity &amp; Inclusion</option>
+          <option value="compliance">Compliance Audit</option><option value="custom">Custom Report</option>
+        </select>
+      </div>
+      <div class="col-md-6"><label class="form-label-hr">Department</label>
+        <select class="hr-input" id="repDept">
+          <option value="all">All Departments</option><option>Engineering</option><option>Sales</option>
+          <option>Marketing</option><option>HR &amp; Admin</option><option>Finance</option><option>Operations</option><option>Product</option>
+        </select>
+      </div>
+      <div class="col-md-6"><label class="form-label-hr">Period</label>
+        <select class="hr-input" id="repPeriod" onchange="toggleCustomDate(this.value)">
+          <option value="monthly">This Month</option><option value="quarterly">This Quarter (Q1 2026)</option>
+          <option value="ytd">Year to Date</option><option value="last_month">Last Month</option>
+          <option value="last_quarter">Last Quarter (Q4 2025)</option><option value="custom">Custom Range</option>
+        </select>
+      </div>
+      <div class="col-md-6"><label class="form-label-hr">Export Format</label>
+        <div class="flex-g2" id="fmtBtns">
+          <button class="flex-col-ac-g1-fs78-fw7-c-red-bg-red-10-br2-p-2-b-2-pointer" type="button" id="fmt-pdf" onclick="setFmt('pdf')"><i class="bi bi-file-pdf fs11"></i>PDF</button>
+          <button class="flex-col-ac-g1-fs78-fw7-c-muted-bg-transparent-br2-p-2-b-2" type="button" id="fmt-excel" onclick="setFmt('excel')"><i class="bi bi-file-earmark-excel fs11"></i>Excel</button>
+          <button class="flex-col-ac-g1-fs78-fw7-c-muted-bg-transparent-br2-p-2-b-2" type="button" id="fmt-csv" onclick="setFmt('csv')"><i class="bi bi-file-earmark-text fs11"></i>CSV</button>
+        </div>
+      </div>
+      <div class="col-6 d-none" id="dateFrom"><label class="form-label-hr">From</label><input class="hr-input" type="date" value="2026-01-01"/></div>
+      <div class="col-6 d-none" id="dateTo"><label class="form-label-hr">To</label>  <input class="hr-input" type="date" value="2026-03-31"/></div>
+      <div class="col-12">
+        <div class="flex-g6-bg-bg-br25-p-3-b-1">
+          <label class="flex-ac-g2-fs82-fw6-pointer"><input class="sq16px-accent-blue" type="checkbox" checked> Include Charts &amp; Visualizations</label>
+          <label class="flex-ac-g2-fs82-fw6-pointer"><input class="sq16px-accent-blue" type="checkbox"> Include Raw Data Table</label>
+        </div>
+      </div>
+    </div>
+    <div class="flex-jfe-g3-mt6">
+      <button type="button" onclick="document.getElementById('newReportModal').style.display='none'" class="btn-hr btn-outline-hr">Cancel</button>
+      <button class="btn-hr btn-primary-hr mnw140px" type="button" onclick="generateReport()" id="genBtn"><i class="bi bi-play-fill me-1"></i>Generate Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: View Report ══ -->
+<div class="d-none-fixed-bg-black-50-p-4-z9999-inset0" id="viewReportModal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="w100pct-mw500px-bg-card-bg-br5-p-8" onclick="event.stopPropagation()">
+    <div class="flex-jsb-mb5">
+      <h3 class="fs1-fw9-c-body-m-0" id="viewRepTitle"></h3>
+      <button class="ghost-icon-lg" type="button" onclick="document.getElementById('viewReportModal').style.display='none'">&times;</button>
+    </div>
+    <div id="viewRepBody"></div>
+    <div class="flex-g3-mt5">
+      <button class="btn-hr btn-primary-hr fl1-jfc" type="button" onclick="handleDownloadReport(_viewedIdx)"><i class="bi bi-download me-1"></i>Download</button>
+      <button class="btn-hr btn-outline-hr fl1-jfc" type="button" onclick="handleShareReport()"><i class="bi bi-share me-1"></i>Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Schedule ══ -->
+<div class="d-none-fixed-bg-black-50-p-4-z9999-inset0" id="scheduleModal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="w100pct-mw420px-bg-card-bg-br5-p-8" onclick="event.stopPropagation()">
+    <div class="flex-jsb-mb5">
+      <h3 class="fs1-fw9-c-body-m-0" id="schedRepTitle">Schedule Report</h3>
+      <button class="ghost-icon-lg" type="button" onclick="document.getElementById('scheduleModal').style.display='none'">&times;</button>
+    </div>
+    <div class="row g-3">
+      <div class="col-12"><label class="form-label-hr">Frequency</label><select class="hr-input" id="schedFreq"><option>Daily</option><option>Weekly</option><option>Bi-weekly</option><option>Monthly</option><option>Quarterly</option></select></div>
+      <div class="col-12"><label class="form-label-hr">Deliver To (emails)</label><input class="hr-input" id="schedEmails" placeholder="hr@company.com, ceo@company.com"/></div>
+      <div class="col-12"><label class="form-label-hr">Format</label><select class="hr-input" id="schedFormat"><option>PDF</option><option>Excel</option><option>CSV</option></select></div>
+    </div>
+    <div class="flex-jfe-g3-mt5">
+      <button type="button" onclick="document.getElementById('scheduleModal').style.display='none'" class="btn-hr btn-outline-hr">Cancel</button>
+      <button type="button" onclick="handleSaveSchedule()" class="btn-hr btn-primary-hr">Save Schedule</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Generating overlay ══ -->
+<div class="generating-overlay d-none" id="generatingOverlay">
+  <div class="generating-box">
+    <div class="spinner-border text-primary w12-h12-mb3" role="status"></div>
+    <h4 class="fw8-c-body-mb2">Generating Report&#8230;</h4>
+    <p class="fs875-c-muted-m-0">Processing data and building your report. This may take a moment.</p>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+var GENERATED_REPORTS = [{"id": 101, "name": "Headcount Summary \u2013 Q1 2026", "type": "Headcount Summary", "generatedAt": "15 Mar 2026, 09:14", "dept": "All Departments", "period": "Q1 2026", "format": "PDF", "size": "1.2 MB", "rows": 247}, {"id": 102, "name": "Payroll Summary \u2013 Feb 2026", "type": "Payroll Summary", "generatedAt": "01 Mar 2026, 08:00", "dept": "Engineering", "period": "Feb 2026", "format": "Excel", "size": "840 KB", "rows": 89}, {"id": 103, "name": "Attendance \u2013 Week 10", "type": "Attendance Report", "generatedAt": "14 Mar 2026, 18:30", "dept": "All Departments", "period": "Week 10", "format": "PDF", "size": "650 KB", "rows": 412}, {"id": 104, "name": "Recruitment Funnel \u2013 Q1", "type": "Recruitment Funnel", "generatedAt": "13 Mar 2026, 14:00", "dept": "All Departments", "period": "Q1 2026", "format": "PDF", "size": "980 KB", "rows": 63}, {"id": 105, "name": "Leave Report \u2013 Mar 2026", "type": "Leave & Absence", "generatedAt": "10 Mar 2026, 11:00", "dept": "Marketing", "period": "Mar 2026", "format": "CSV", "size": "210 KB", "rows": 34}, {"id": 106, "name": "Performance \u2013 Annual 2025", "type": "Performance Review", "generatedAt": "05 Jan 2026, 09:00", "dept": "All Departments", "period": "FY 2025", "format": "PDF", "size": "3.4 MB", "rows": 289}];
+
+/* ── Main tab switcher ──────────────────────────────────────────────── */
+function setRepTab(tab) {
+  ['reports','generated','analytics','scheduled'].forEach(function(t) {
+    var view = document.getElementById('view-' + t);
+    view.classList.toggle('d-none', t !== tab);
+    view.style.display = '';
+    document.getElementById('rtab-' + t).classList.toggle('active', t === tab);
+  });
+}
+
+/* ── Category filter ────────────────────────────────────────────────── */
+var _cat = 'All';
+function filterReports(cat) {
+  _cat = cat;
+  document.querySelectorAll('.cat-pill').forEach(function(p) {
+    var isCat = p.getAttribute('data-cat') === cat;
+    p.style.borderColor  = isCat ? '#5B8FF9' : 'var(--body-border)';
+    p.style.background   = isCat ? 'rgba(91,143,249,.12)' : 'transparent';
+    p.style.color        = isCat ? '#5B8FF9' : 'var(--body-text-muted)';
+  });
+  applyRepFilters();
+}
+
+/* ── Search ─────────────────────────────────────────────────────────── */
+var _repSearch = '';
+function searchReports(q) {
+  _repSearch = q.toLowerCase().trim();
+  applyRepFilters();
+}
+
+function applyRepFilters() {
+  document.querySelectorAll('.report-card-item').forEach(function(item) {
+    var cat  = item.getAttribute('data-cat');
+    var name = item.getAttribute('data-name');
+    var show = (_cat === 'All' || cat === _cat) && (!_repSearch || name.includes(_repSearch));
+    item.style.display = show ? '' : 'none';
+  });
+}
+
+/* ── Open New Report modal pre-filled ───────────────────────────────── */
+function openNewReport(name) {
+  document.getElementById('repName').value = name + ' \u2013 Q1 2026';
+  document.getElementById('newReportModal').style.display = 'flex';
+}
+
+/* ── Open Schedule modal ────────────────────────────────────────────── */
+function openSchedule(name) {
+  _schedName = name;
+  document.getElementById('schedRepTitle').textContent = 'Schedule: ' + name;
+  document.getElementById('scheduleModal').style.display = 'flex';
+}
+
+/* ── Open View Report modal (looked up by stable report id, never by
+      array position — GENERATED_REPORTS.unshift() in generateReport()
+      would otherwise silently shift every existing report's index) ── */
+var _viewedIdx = null;
+function openViewReport(id) {
+  var r = GENERATED_REPORTS.find(function(x) { return x.id === id; });
+  if (!r) return;
+  _viewedIdx = id;
+  document.getElementById('viewRepTitle').textContent = r.name.replace(/&#8211;/g, '\u2013');
+  var fields = [['Type',r.type],['Generated',r.generatedAt],['Department',r.dept],['Period',r.period],['Format',r.format],['File Size',r.size],['Total Rows',r.rows]];
+  document.getElementById('viewRepBody').innerHTML = fields.map(function(f) {
+    return '<div style="display:flex;justify-content:space-between;padding:.625rem 0;border-bottom:1px solid var(--body-border)">' +
+           '<span style="font-size:.82rem;color:var(--body-text-muted);font-weight:600">' + f[0] + '</span>' +
+           '<span style="font-size:.82rem;color:var(--body-text);font-weight:700">' + f[1] + '</span></div>';
+  }).join('');
+  document.getElementById('viewReportModal').style.display = 'flex';
+}
+
+/* ── Toast helper ── */
+function showToast(message, kind) {
+  var bg = kind === 'success' ? 'linear-gradient(135deg,#10B981,#06B6D4)' : 'linear-gradient(135deg,#4F6EF7,#8B5CF6)';
+  var icon = kind === 'success' ? 'bi-check-circle-fill' : 'bi-download';
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:' + bg + ';color:#fff;padding:.875rem 1.25rem;border-radius:.875rem;font-size:.875rem;font-weight:700;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:.625rem;opacity:0;transition:opacity .25s';
+  toast.innerHTML = '<i class="bi ' + icon + '"></i><span>' + message + '</span>';
+  document.body.appendChild(toast);
+  requestAnimationFrame(function () { toast.style.opacity = '1'; });
+  setTimeout(function () {
+    toast.style.opacity = '0';
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 3000);
+}
+
+/* ── Download a generated report (by stable id) ── */
+function handleDownloadReport(id) {
+  var r = GENERATED_REPORTS.find(function(x) { return x.id === id; });
+  if (!r) return;
+  showToast(r.name.replace(/&#8211;/g, '\u2013') + ' downloaded (' + r.format + ')', 'success');
+}
+
+/* ── Share the currently-open report ── */
+function handleShareReport() {
+  var r = GENERATED_REPORTS.find(function(x) { return x.id === _viewedIdx; });
+  if (!r) return;
+  showToast('Share link copied for ' + r.name.replace(/&#8211;/g, '\u2013'), 'success');
+}
+
+/* ── Scheduled reports: Edit reuses the Schedule modal; Pause/Resume
+      toggles the row's own badge + button, purely client-side state ── */
+function handleToggleSchedule(i, name) {
+  var badge = document.getElementById('schedBadge' + i);
+  var btn = document.getElementById('schedPauseBtn' + i);
+  var isActive = badge.textContent.indexOf('Active') !== -1;
+  if (isActive) {
+    badge.textContent = '\u25CF Paused';
+    badge.className = 'badge-amber-10-xs-fs75-p08-25';
+    btn.innerHTML = '<i class="bi bi-play-fill"></i>';
+    btn.title = 'Resume';
+    btn.className = 'fs75-c-green-bg-transparent-br2-p-16-24-pointer';
+    showToast(name + ' schedule paused', 'success');
+  } else {
+    badge.textContent = '\u25CF Active';
+    badge.className = 'badge-green-10-xs-fs75-p08-25';
+    btn.innerHTML = '<i class="bi bi-pause-fill"></i>';
+    btn.title = 'Pause';
+    btn.className = 'fs75-c-red-bg-transparent-br2-p-16-24-pointer';
+    showToast(name + ' schedule resumed', 'success');
+  }
+}
+
+/* ── Save Schedule (with the same validation style as generateReport) ── */
+var _schedName = '';
+function handleSaveSchedule() {
+  var emailsEl = document.getElementById('schedEmails');
+  var emails = emailsEl.value.trim();
+  if (!emails) {
+    emailsEl.style.borderColor = '#EF4444';
+    emailsEl.focus();
+    return;
+  }
+  emailsEl.style.borderColor = '';
+  var freq = document.getElementById('schedFreq').value;
+  var fmt = document.getElementById('schedFormat').value;
+  document.getElementById('scheduleModal').style.display = 'none';
+  showToast((_schedName || 'Report') + ' scheduled ' + freq.toLowerCase() + ' as ' + fmt, 'success');
+  emailsEl.value = '';
+}
+
+/* ── Format button toggle ────────────────────────────────────────────── */
+var _fmt = 'pdf';
+var _fmtStyles = {
+  pdf:   {border:'2px solid #EF4444',background:'rgba(239,68,68,.1)',color:'#EF4444'},
+  excel: {border:'2px solid #10B981',background:'rgba(16,185,129,.1)',color:'#10B981'},
+  csv:   {border:'2px solid #5B8FF9',background:'rgba(91,143,249,.1)',color:'#5B8FF9'},
+};
+function setFmt(fmt) {
+  _fmt = fmt;
+  ['pdf','excel','csv'].forEach(function(f) {
+    var btn = document.getElementById('fmt-' + f);
+    if (!btn) return;
+    if (f === fmt) {
+      Object.assign(btn.style, _fmtStyles[f]);
+    } else {
+      btn.style.border = '2px solid var(--body-border)';
+      btn.style.background = 'transparent';
+      btn.style.color = 'var(--body-text-muted)';
+    }
+  });
+}
+
+/* ── Custom date range toggle ───────────────────────────────────────── */
+function toggleCustomDate(val) {
+  var show = val === 'custom';
+  document.getElementById('dateFrom').style.display = show ? '' : 'none';
+  document.getElementById('dateTo').style.display   = show ? '' : 'none';
+}
+
+/* ── Generate report (async simulation) ─────────────────────────────── */
+function generateReport() {
+  var name = (document.getElementById('repName').value || '').trim();
+  if (!name) { document.getElementById('repName').style.borderColor = '#EF4444'; return; }
+  document.getElementById('repName').style.borderColor = '';
+  document.getElementById('newReportModal').style.display = 'none';
+  var overlay = document.getElementById('generatingOverlay');
+  overlay.classList.remove('d-none');
+  overlay.style.display = 'flex';
+  setTimeout(function() {
+    overlay.classList.add('d-none');
+    overlay.style.display = 'none';
+    var dept   = document.getElementById('repDept').value;
+    var period = document.getElementById('repPeriod').value;
+    var now    = new Date();
+    var genAt  = now.getDate().toString().padStart(2,'0') + ' ' +
+                 ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()] +
+                 ' ' + now.getFullYear() + ', ' + now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+    var newRep = {
+      id: Date.now(), name: name, type: name,
+      generatedAt: genAt, dept: dept === 'all' ? 'All Departments' : dept,
+      period: period, format: _fmt.toUpperCase(),
+      size: (Math.random()*2+0.3).toFixed(1)+' MB', rows: Math.floor(Math.random()*300+50)
+    };
+    GENERATED_REPORTS.unshift(newRep);
+    // Inject new row at top of gen table
+    var tbody = document.getElementById('genBody');
+    var fmtBg  = newRep.format==='PDF'?'rgba(239,68,68,.1)':newRep.format==='EXCEL'?'rgba(16,185,129,.1)':'rgba(91,143,249,.1)';
+    var fmtCol = newRep.format==='PDF'?'#EF4444':newRep.format==='EXCEL'?'#10B981':'#5B8FF9';
+    var row = document.createElement('tr');
+    row.style.borderBottom = '1px solid var(--body-border)';
+    row.innerHTML =
+      '<td style="padding:.75rem 1rem;font-weight:700;color:var(--body-text)">' + newRep.name + '</td>' +
+      '<td style="padding:.75rem 1rem;color:var(--body-text-muted)">' + newRep.type + '</td>' +
+      '<td style="padding:.75rem 1rem;color:var(--body-text-muted)">' + newRep.generatedAt + '</td>' +
+      '<td style="padding:.75rem 1rem;color:var(--body-text-muted)">' + newRep.dept + '</td>' +
+      '<td style="padding:.75rem 1rem;color:var(--body-text-muted)">' + newRep.period + '</td>' +
+      '<td style="padding:.75rem 1rem"><span style="padding:.2rem .5rem;border-radius:.375rem;background:' + fmtBg + ';color:' + fmtCol + ';font-weight:700;font-size:.75rem">' + newRep.format + '</span></td>' +
+      '<td style="padding:.75rem 1rem;color:var(--body-text-muted)">' + newRep.size + '</td>' +
+      '<td style="padding:.75rem 1rem"><div style="display:flex;gap:.5rem">' +
+      '<button type="button" style="padding:.3rem .6rem;border-radius:.375rem;border:1.5px solid var(--body-border);background:transparent;color:var(--body-text-muted);cursor:pointer;font-size:.8rem" onclick="openViewReport(' + newRep.id + ')" title="View"><i class="bi bi-eye"></i></button>' +
+      '<button type="button" style="padding:.3rem .6rem;border-radius:.375rem;border:none;background:#5B8FF9;color:#fff;cursor:pointer;font-size:.8rem" onclick="handleDownloadReport(' + newRep.id + ')" title="Download"><i class="bi bi-download"></i></button>' +
+      '</div></td>';
+    tbody.insertBefore(row, tbody.firstChild);
+    // Update subtitle count
+    document.getElementById('genSubtitle').textContent = GENERATED_REPORTS.length + ' reports ready to download';
+    // Switch to generated tab
+    setRepTab('generated');
+  }, 2200);
+}
+
+/* ── Analytics period selector ────────────────────────────────────── */
+var ANL_PERIOD_DATA = {
+  'Q1 2026': { employees: '247', employeesD: '+4',    employeesSub: 'vs last quarter',
+               tenure: '2.8 yrs', tenureD: '+0.2',     tenureSub: 'stable growth',
+               turnover: '6.2%', turnoverD: '-1.1%',   turnoverSub: 'improving',
+               timeToHire: '18 days', timeToHireD: '-3d', timeToHireSub: 'vs 21d last qtr',
+               engagement: '78%', engagementD: '+3%',  engagementSub: 'above target',
+               training: '84%', trainingD: '+6%',      trainingSub: 'this quarter' },
+  'Q4 2025': { employees: '240', employeesD: '+5',    employeesSub: 'vs Q3 2025',
+               tenure: '2.5 yrs', tenureD: '+0.2',     tenureSub: 'stable growth',
+               turnover: '7.3%', turnoverD: '-0.8%',   turnoverSub: 'improving',
+               timeToHire: '21 days', timeToHireD: '-3d', timeToHireSub: 'vs 24d Q3 2025',
+               engagement: '75%', engagementD: '+3%',  engagementSub: 'above target',
+               training: '79%', trainingD: '+4%',      trainingSub: 'this quarter' },
+  'Q3 2025': { employees: '235', employeesD: '+5',    employeesSub: 'vs Q2 2025',
+               tenure: '2.3 yrs', tenureD: '+0.1',     tenureSub: 'stable growth',
+               turnover: '8.1%', turnoverD: '-0.5%',   turnoverSub: 'improving',
+               timeToHire: '24 days', timeToHireD: '-2d', timeToHireSub: 'vs 26d Q2 2025',
+               engagement: '72%', engagementD: '+2%',  engagementSub: 'above target',
+               training: '75%', trainingD: '+3%',      trainingSub: 'this quarter' },
+  'FY 2025': { employees: '240', employeesD: '+25',   employeesSub: 'vs FY 2024',
+               tenure: '2.5 yrs', tenureD: '+0.4',     tenureSub: 'vs FY 2024',
+               turnover: '7.5%', turnoverD: '-2.3%',   turnoverSub: 'vs FY 2024',
+               timeToHire: '22 days', timeToHireD: '-6d', timeToHireSub: 'vs FY 2024',
+               engagement: '75%', engagementD: '+8%',  engagementSub: 'vs FY 2024',
+               training: '79%', trainingD: '+12%',     trainingSub: 'vs FY 2024' }
+};
+/* Each metric keeps the same up/down direction across every period —
+   matching the original Q1 2026 card exactly, so re-selecting Q1 2026
+   never changes how it looks. */
+var ANL_METRIC_UP = { employees: true, tenure: true, turnover: false, timeToHire: false, engagement: true, training: true };
+
+function setAnlPeriod(p) {
+  var d = ANL_PERIOD_DATA[p];
+  if (!d) return;
+
+  document.querySelectorAll('.anl-period').forEach(function(btn) {
+    var active = btn.textContent === p;
+    btn.style.borderColor  = active ? '#5B8FF9' : 'var(--body-border)';
+    btn.style.background   = active ? 'rgba(91,143,249,.12)' : 'transparent';
+    btn.style.color        = active ? '#5B8FF9' : 'var(--body-text-muted)';
+  });
+
+  updateAnlStat('Employees', d.employees, d.employeesD, d.employeesSub);
+  updateAnlStat('Tenure', d.tenure, d.tenureD, d.tenureSub);
+  updateAnlStat('Turnover', d.turnover, d.turnoverD, d.turnoverSub);
+  updateAnlStat('TimeToHire', d.timeToHire, d.timeToHireD, d.timeToHireSub);
+  updateAnlStat('Engagement', d.engagement, d.engagementD, d.engagementSub);
+  updateAnlStat('Training', d.training, d.trainingD, d.trainingSub);
+}
+
+function updateAnlStat(key, val, deltaText, subText) {
+  document.getElementById('anlVal' + key).textContent = val;
+  var deltaEl = document.getElementById('anlDelta' + key);
+  var isUp = ANL_METRIC_UP[key.charAt(0).toLowerCase() + key.slice(1)];
+  deltaEl.className = isUp ? 'fs78-fw7-c-green' : 'fs78-fw7-c-red';
+  var icon = isUp ? 'bi-arrow-up' : 'bi-arrow-down';
+  deltaEl.innerHTML = '<i class="bi ' + icon + '"></i> ' + deltaText;
+  document.getElementById('anlSub' + key).textContent = subText;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /hrnexus/
+
+Sitemap: https://horalia.mx/sitemap.xml

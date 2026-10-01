@@ -1,0 +1,52 @@
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in-down {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes backdrop-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sb-popup-in {
+  from { opacity: 0; transform: translateX(-8px) scale(0.96); }
+  to   { opacity: 1; transform: translateX(0)    scale(1); }
+}
+@keyframes shimmer {
+  0%   { background-position: -1000px 0; }
+  100% { background-position:  1000px 0; }
+}
+@keyframes spin  { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.anim-fiu { animation: fade-in-up   0.35s cubic-bezier(0.4, 0, 0.2, 1) both; }
+// Scoped to desktop only: this class is used exclusively on .sidebar as an
+// entrance flourish. Unscoped, its "to" keyframe (transform: translateX(0))
+// permanently overrides the mobile media query's translateX(-100%) rule,
+// since CSS animations take cascade precedence over regular declarations —
+// leaving the sidebar stuck visible on mobile regardless of viewport width.
+@media (min-width: 768px) {
+  .anim-sil { animation: slide-in-left 0.28s cubic-bezier(0.4, 0, 0.2, 1) both; }
+}
+.spin     { animation: spin  0.8s linear infinite; }
+.pulse    { animation: pulse 1.5s ease   infinite; }
+
+// Stagger delays d1–d8
+@for $i from 1 through 8 {
+  .d#{$i} { animation-delay: $i * 0.04s; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--body-border) 25%,
+    var(--body-bg2)    50%,
+    var(--body-border) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: 0.375rem;
+}

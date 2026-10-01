@@ -1,0 +1,377 @@
+// =============================================================================
+// components/_dashboard-widgets.scss
+// Widgets introduced by the Assets, IT Admin, Finance, Attendance and
+// Recruitment dashboards (src: public/pages/dashboard-{assets,it,finance,
+// attendance,recruitment}.html). Kept as one partial since most of these
+// components are small, single-purpose, and several are shared across more
+// than one dashboard (bar tracks, avatar stacks, AI assistant widgets, list
+// rows) — factored out once here rather than duplicated per page.
+// =============================================================================
+@use '../abstracts' as *;
+@use 'sass:color';
+
+// ── Shared across dashboards ────────────────────────────────────────────────
+
+// Thin progress/segment bar (Finance "Avg Working Hours", Recruitment "Stage
+// Performance", Attendance "Avg Working Hours")
+.fin-bar-track { height: 8px; border-radius: 999px; background: var(--body-border); overflow: hidden; }
+.fin-bar-fill  { height: 100%; border-radius: 999px; }
+
+// Small stat tile used inside card bodies (HR Cost Breakdown, Attendance
+// Summary check-in/out counts)
+.cost-item { padding: 0.75rem; border-radius: 0.625rem; background: var(--body-bg); }
+
+// Overlapping avatar-circle stack (header leave badge, late-arrival lists,
+// pending-payment groups)
+.avatar-stack {
+  display: flex; align-items: center;
+  .av-item {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 2px solid var(--card-bg);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 0.68rem; font-weight: $font-weight-bold;
+    margin-left: -9px; flex-shrink: 0;
+    &:first-child { margin-left: 0; }
+  }
+}
+
+// List row with leading icon/badge + trailing meta (Late Arrivals & Alerts,
+// Upcoming Schedules)
+.la-row {
+  display: flex; align-items: center; gap: 0.875rem;
+  padding: 0.75rem 0; border-bottom: 1px solid var(--body-border);
+  &:last-child { border-bottom: none; }
+}
+
+// AI assistant card widgets — light variant (Finance, Recruitment)
+.ai-bubble {
+  background: var(--body-bg); border-radius: 0.875rem;
+  padding: 0.875rem 1rem; font-size: 0.8125rem; line-height: 1.55;
+  color: var(--body-text);
+}
+// Outgoing/self-sent message variant — same shape, right-aligned, primary-coloured
+// (two-way chat widgets: FAQ live support, etc.)
+.ai-bubble-out {
+  background: var(--color-primary); border-radius: 0.875rem;
+  padding: 0.875rem 1rem; font-size: 0.8125rem; line-height: 1.55;
+  color: #fff; margin-left: auto; max-width: 80%;
+}
+.ai-input-wrap {
+  display: flex; align-items: center; gap: 0.5rem;
+  border: 1.5px solid var(--body-border); border-radius: 999px;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  input {
+    border: none; outline: none; background: transparent; flex: 1;
+    font-size: 0.8125rem; color: var(--body-text); font-family: inherit;
+  }
+}
+.ai-send-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #16181F; color: #fff; border: none;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; cursor: pointer;
+}
+
+// "Online" status pill — light-background variant (dark-card variant is
+// `.online-badge` below, under Attendance)
+.online-badge-lt {
+  font-size: 0.68rem; font-weight: $font-weight-bold; color: $success;
+  background: rgba($success, 0.1); padding: 0.15rem 0.5rem; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  &::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: $success; }
+}
+
+// Small coloured legend swatch + label (chart legends across IT/Finance/
+// Attendance/Recruitment dashboards)
+%legend-chip,
+.legend-chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.72rem; font-weight: $font-weight-bold; color: var(--body-text-muted);
+}
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+
+// ── Asset Dashboard ──────────────────────────────────────────────────────────
+
+.kpi-spark {
+  display: flex; align-items: flex-end; gap: 3px; height: 36px; margin-top: 0.875rem;
+  span {
+    flex: 1; background: var(--body-border); border-radius: 2px 2px 0 0;
+    min-height: 3px; align-self: flex-end;
+    &.hl { background: var(--bar-color, #{$primary}); }
+  }
+}
+
+// Note: the '.st-repair' / '.st-available' status-badge variants this
+// dashboard needs are generated automatically from the shared
+// $status-variants map (abstracts/_variables.scss) via the @each loop in
+// components/_ui.scss — no additional CSS needed here.
+
+
+// ── IT Admin Dashboard ───────────────────────────────────────────────────────
+
+.env-tabs {
+  display: inline-flex; background: var(--body-bg);
+  border: 1px solid var(--body-border); border-radius: 0.625rem; padding: 0.2rem;
+}
+.env-tab {
+  padding: 0.375rem 0.875rem; border-radius: 0.4375rem;
+  font-size: 0.78rem; font-weight: $font-weight-bold; color: var(--body-text-muted);
+  border: none; background: transparent; cursor: pointer; transition: all $transition-fast;
+  &.active { background: var(--color-primary); color: #fff; box-shadow: 0 2px 8px rgba($primary, 0.28); }
+}
+
+.storage-bars  { display: flex; align-items: flex-end; gap: 1.25rem; height: 240px; padding: 0 0.5rem; }
+.storage-col   { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
+.storage-track {
+  position: relative; width: 100%; max-width: 56px; height: 100%;
+  background: var(--body-bg2); border-radius: 0.5rem 0.5rem 0 0;
+  display: flex; align-items: flex-end; overflow: hidden;
+}
+.storage-fill {
+  width: 100%; border-radius: 0.5rem 0.5rem 0 0;
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 0.5rem;
+  color: #fff; font-size: 0.72rem; font-weight: $font-weight-black;
+  transition: height 0.8s ease;
+}
+.storage-label { margin-top: 0.625rem; font-size: 0.78rem; font-weight: $font-weight-semi; color: var(--body-text-muted); }
+
+.module-card {
+  padding: 0.875rem 1rem; border-radius: 0.75rem;
+  border: 1px solid var(--body-border); background: var(--body-bg);
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+}
+
+.mfa-dots { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.mfa-dot  { width: 14px; height: 14px; border-radius: 50%; background: var(--body-border); &.on { background: linear-gradient(135deg, $warning, #F97316); } }
+
+.qa-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  background: transparent; border: none; cursor: pointer; text-align: center; padding: 0.5rem;
+  &:hover .qa-icon { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18); }
+}
+.qa-icon {
+  width: 52px; height: 52px; border-radius: 50%; background: #16181F; color: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 1.15rem;
+  transition: transform $transition-fast;
+}
+.qa-label { font-size: 0.72rem; font-weight: $font-weight-semi; color: var(--body-text); line-height: 1.25; }
+
+.hour-card { padding: 0.875rem 1rem; border-radius: 0.75rem; border: 1px solid var(--body-border); background: var(--body-bg); }
+.hour-bar  { height: 6px; border-radius: 999px; background: var(--body-border); overflow: hidden; margin-top: 0.625rem; }
+.hour-fill { height: 100%; border-radius: 999px; }
+
+.heatmap-grid { display: grid; grid-template-columns: repeat(24, 1fr); gap: 4px; }
+.heatmap-cell { aspect-ratio: 1; border-radius: 3px; background: var(--body-border); }
+
+.role-bar-seg {
+  height: 14px;
+  &:first-child { border-radius: 999px 0 0 999px; }
+  &:last-child  { border-radius: 0 999px 999px 0; }
+}
+
+// 5-column grid helper (Bootstrap ships 1–6 and 12-col splits, not a clean
+// /5 — used by the Peak Hours cards)
+.col-lg-2-4 {
+  position: relative; width: 100%;
+  padding-right: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
+  padding-left: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
+  @media (min-width: 992px) { flex: 0 0 auto; width: 20%; }
+}
+
+
+// ── Finance Dashboard ────────────────────────────────────────────────────────
+
+.fin-topbar-card {
+  @include card-base;
+  padding: 1.25rem; position: relative; overflow: hidden; height: 100%;
+}
+.fin-icon-badge {
+  width: 44px; height: 44px; border-radius: 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.15rem; color: #fff;
+}
+.fin-spark {
+  display: flex; align-items: flex-end; gap: 3px; height: 40px;
+  span { flex: 1; border-radius: 2px 2px 0 0; min-height: 3px; }
+}
+
+// Diverging (up/down from a shared baseline) bar chart — Headcount vs Payroll Growth
+.diverge-chart    { display: flex; align-items: stretch; gap: 0.625rem; height: 260px; }
+.diverge-col      { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.diverge-top      { flex: 1; display: flex; align-items: flex-end; justify-content: center; }
+.diverge-bottom   { flex: 1; display: flex; align-items: flex-start; justify-content: center; }
+.diverge-bar      { width: 60%; max-width: 14px; border-radius: 3px; }
+.diverge-baseline { height: 1px; background: var(--body-border); }
+
+.gauge-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+
+.ai-card { @include card-base; height: 100%; display: flex; flex-direction: column; }
+.ai-avatar {
+  width: 38px; height: 38px; border-radius: 0.75rem;
+  background: linear-gradient(135deg, $secondary, #EC4899);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 1.05rem; flex-shrink: 0;
+}
+
+// Dark promotional / upsell card (Payroll Forecast)
+.upsell-card {
+  border-radius: 1rem;
+  background: linear-gradient(145deg, #0B0E1A 0%, #151933 55%, #0B0E1A 100%);
+  padding: 1.5rem; height: 100%; display: flex; flex-direction: column;
+  position: relative; overflow: hidden; color: #fff;
+  &::before {
+    content: ''; position: absolute; top: -40%; right: -30%;
+    width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(79, 110, 247, 0.35), transparent 70%);
+  }
+}
+
+.fh-bars { display: flex; align-items: flex-end; gap: 0.625rem; height: 170px; }
+.fh-bar  { flex: 1; border-radius: 0.4rem 0.4rem 0 0; background: linear-gradient(180deg, #94A3B8, #CBD5E1); }
+
+
+// ── Attendance Dashboard ─────────────────────────────────────────────────────
+
+.ov-stat { display: flex; align-items: center; gap: 1rem; padding: 1.125rem; border-radius: 0.875rem; background: var(--body-bg); height: 100%; }
+.ov-icon { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #fff; flex-shrink: 0; }
+
+// Yearly attendance-trend bar chart with a floating "peak %" callout
+.att-bars  { display: flex; align-items: flex-end; gap: 1rem; height: 280px; padding: 0 0.25rem; margin-top: 2rem; }
+.att-col   { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; position: relative; }
+.att-track { position: relative; width: 100%; max-width: 44px; height: 100%; display: flex; align-items: flex-end; }
+.att-fill  { width: 100%; border-radius: 0.4rem 0.4rem 0 0; }
+.att-label { margin-top: 0.625rem; font-size: 0.78rem; font-weight: $font-weight-semi; color: var(--body-text-muted); }
+.att-peak-badge {
+  position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+  background: #16181F; color: #fff; font-size: 0.72rem; font-weight: $font-weight-black;
+  padding: 0.2rem 0.55rem; border-radius: 0.4rem; white-space: nowrap;
+}
+
+// Dark summary card (Attendance Status: Present/WFH/Late/On Leave/Absent)
+.status-dark-card {
+  border-radius: 1rem;
+  background: linear-gradient(145deg, #0B0E1A 0%, #151933 60%, #0B0E1A 100%);
+  padding: 1.5rem; height: 100%; color: #fff; position: relative; overflow: hidden;
+  &::before {
+    content: ''; position: absolute; top: -30%; right: -20%;
+    width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.3), transparent 70%);
+  }
+}
+.wd-track { display: flex; gap: 4px; height: 10px; border-radius: 999px; overflow: hidden; margin: 1rem 0 1.25rem; }
+.wd-seg   { flex: 1; border-radius: 2px; }
+.status-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.6rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  &:last-child { border-bottom: none; }
+}
+.status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+.scatter-legend { @extend %legend-chip; }
+
+.viol-bars { display: flex; align-items: flex-end; gap: 0.75rem; height: 100px; }
+.vb {
+  width: 28px; border-radius: 0.3rem 0.3rem 0 0; position: relative;
+  .vb-label {
+    position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+    font-size: 0.7rem; font-weight: $font-weight-black; color: var(--body-text); white-space: nowrap;
+  }
+}
+
+.la-mini-bar { display: flex; align-items: flex-end; gap: 2px; height: 22px; span { width: 4px; border-radius: 1px 1px 0 0; background: #F97316; } }
+
+// AI assistant card — dark variant (Attendance uses a fully dark card;
+// Finance/Recruitment use the light `.ai-card` above)
+.ai-dark-card { border-radius: 1rem; background: #0B0E1A; height: 100%; display: flex; flex-direction: column; overflow: hidden; color: #fff; }
+.ai-dark-hd   { display: flex; align-items: center; gap: 0.75rem; padding: 1.125rem 1.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+.ai-dark-avatar {
+  width: 42px; height: 42px; border-radius: 50%; background: #fff;
+  display: flex; align-items: center; justify-content: center; color: #16181F; font-size: 1.1rem; flex-shrink: 0;
+}
+.online-badge {
+  font-size: 0.68rem; font-weight: $font-weight-bold; color: $success;
+  background: rgba($success, 0.15); padding: 0.2rem 0.55rem; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  &::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: $success; }
+}
+.ai-dark-bubble { background: rgba(255, 255, 255, 0.06); border-radius: 0.875rem; padding: 0.875rem 1rem; font-size: 0.8125rem; line-height: 1.55; color: rgba(255, 255, 255, 0.88); }
+.suggest-chip {
+  display: inline-block; background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 999px;
+  padding: 0.5rem 0.875rem; font-size: 0.78rem; color: rgba(255, 255, 255, 0.85);
+  margin: 0.25rem 0.375rem 0.25rem 0; cursor: pointer;
+}
+.ai-dark-input-wrap {
+  display: flex; align-items: center; gap: 0.5rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.12); border-radius: 999px;
+  padding: 0.5rem 0.5rem 0.5rem 1rem; margin: auto 1.25rem 1.25rem;
+  input { border: none; outline: none; background: transparent; flex: 1; font-size: 0.8125rem; color: #fff; font-family: inherit; &::placeholder { color: rgba(255, 255, 255, 0.4); } }
+}
+.ai-dark-send {
+  width: 32px; height: 32px; border-radius: 50%; background: #F97316; color: #fff; border: none;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer;
+}
+
+
+// ── Recruitment Dashboard ────────────────────────────────────────────────────
+
+.hire-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 52px; padding: 0.4rem 0.5rem; border-radius: 0.5rem;
+  color: #fff; font-weight: $font-weight-black; font-size: 0.8125rem;
+  &.empty { background: var(--body-bg2); color: transparent; }
+}
+.hire-table-hd, .hire-table-row {
+  display: grid; grid-template-columns: 1.6fr repeat(5, 1fr); gap: 0.5rem;
+}
+.hire-table-hd {
+  padding: 0 0 0.75rem; font-size: 0.78rem; font-weight: $font-weight-bold;
+  color: var(--body-text-muted); border-bottom: 1px solid var(--body-border); margin-bottom: 0.75rem;
+}
+.hire-table-row { align-items: center; padding: 0.625rem 0; }
+
+.gauge-ring-wrap  { position: relative; display: flex; align-items: center; justify-content: center; }
+.gauge-center-val { position: absolute; text-align: center; }
+
+// Dark promo card (Quick Reminder) — visually distinct from Finance's
+// `.upsell-card` (teal vs. navy gradient) so kept separate
+.reminder-card {
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #0E3A52 0%, #164E63 100%);
+  padding: 1.5rem; color: #fff; position: relative; overflow: hidden; height: 100%;
+  &::before {
+    content: ''; position: absolute; bottom: -40%; right: -20%;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
+  }
+}
+
+.stat-icon-circle { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; margin: 0 auto 0.75rem; }
+
+.ai-recruit-card { @include card-base; height: 100%; display: flex; flex-direction: column; padding: 1.5rem; }
+.ai-recruit-icon {
+  width: 64px; height: 64px; border-radius: 1rem;
+  background: linear-gradient(135deg, #F97316, $danger);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.75rem; color: #fff; margin: 0 auto 0.875rem;
+}
+
+// Average Time To Hire — 3-segment stacked bar chart
+.tth-bars { display: flex; align-items: flex-end; gap: 1.5rem; height: 180px; padding: 0 0.5rem; }
+.tth-col  { flex: 1; display: flex; flex-direction: column-reverse; max-width: 70px; margin: 0 auto; border-radius: 0.4rem 0.4rem 0 0; overflow: hidden; }
+.tth-seg  { width: 100%; }
+
+.sched-date-badge {
+  width: 52px; height: 52px; border-radius: 0.625rem; background: var(--body-bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+.stage-card { @include card-base; padding: 1.125rem; height: 100%; }
+.app-card   { @include card-base; padding: 1rem; margin-bottom: 0.75rem; &:last-child { margin-bottom: 0; } }
+
+.priority-badge { font-size: 0.68rem; font-weight: $font-weight-bold; padding: 0.15rem 0.5rem; border-radius: 0.35rem; display: inline-block; margin-top: 0.2rem; }
+
+// Revenue trend chart (dashboard-assets, dashboard-ecommerce) — the SVG has an
+// explicit height set inline per-page; this just makes it stretch full-width.
+.rev-chart { width: 100%; display: block; }

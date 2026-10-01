@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Form Elements — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Reference page for all form input types — text fields, selects, checkboxes, and switches."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span>UI Components</span><span class="bc-sep">/</span><span class="bc-current">Form Elements</span></nav>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel"><i class="bi bi-bell-fill"></i><span class="badge-dot"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Form Elements</h1>
+          <p class="page-subtitle">Complete library of interactive form controls — checkboxes, radios, toggles, ranges, selects and inputs</p>
+        </div>
+      </div>
+
+      <!-- ══ CHECKBOXES ══════════════════════════════════════════════════════ -->
+      <div class="sub-card">
+        <div class="sub-title">Checkboxes</div>
+        <div class="sub-subtitle">Default, coloured, reverse and inline variants</div>
+        <div class="sub-divider"></div>
+        <div class="row g-4">
+
+          <!-- Default -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Default</div>
+            <div class="d-flex flex-column gap-2">
+              <label class="cb-label"><div class="cb-box checked" onclick="toggleCb(this)"></div>Option A (checked)</label>
+              <label class="cb-label"><div class="cb-box" onclick="toggleCb(this)"></div>Option B</label>
+              <label class="cb-label"><div class="cb-box checked" onclick="toggleCb(this)"></div>Option C (checked)</label>
+              <label class="cb-label"><div class="cb-box" onclick="toggleCb(this)"></div>Option D</label>
+              <label class="cb-label"><div class="cb-box" onclick="toggleCb(this)"></div><span class="op50">Disabled</span></label>
+            </div>
+          </div>
+
+          <!-- Colour variants -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Colour Variants</div>
+            <div class="d-flex flex-column gap-2">
+              <label class="cb-label"><div class="cb-box checked" onclick="toggleCb(this)"></div>Primary</label>
+              <label class="cb-label"><div class="cb-box success checked" onclick="toggleCb(this)"></div>Success</label>
+              <label class="cb-label"><div class="cb-box danger" onclick="toggleCb(this)"></div>Danger</label>
+              <label class="cb-label"><div class="cb-box warning checked" onclick="toggleCb(this)"></div>Warning</label>
+              <label class="cb-label"><div class="cb-box info" onclick="toggleCb(this)"></div>Info</label>
+              <label class="cb-label"><div class="cb-box purple" onclick="toggleCb(this)"></div>Purple</label>
+            </div>
+          </div>
+
+          <!-- Reverse / right-aligned -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Reverse (Right-aligned)</div>
+            <div class="d-flex flex-column gap-2 mw220px">
+              <label class="cb-label reverse"><div class="cb-box checked" onclick="toggleCb(this)"></div>Full-Time Employee</label>
+              <label class="cb-label reverse"><div class="cb-box" onclick="toggleCb(this)"></div>Part-Time Contract</label>
+              <label class="cb-label reverse"><div class="cb-box checked" onclick="toggleCb(this)"></div>Remote Work</label>
+              <label class="cb-label reverse"><div class="cb-box" onclick="toggleCb(this)"></div>Hybrid Schedule</label>
+            </div>
+          </div>
+
+          <!-- Inline -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Inline (Departments)</div>
+            <div class="d-flex flex-no-wrap gap-3">
+              <label class="cb-label"><div class="cb-box checked" onclick="toggleCb(this)"></div>Engineering</label>
+              <label class="cb-label"><div class="cb-box" onclick="toggleCb(this)"></div>Marketing</label>
+              <label class="cb-label"><div class="cb-box checked" onclick="toggleCb(this)"></div>Design</label>
+              <label class="cb-label"><div class="cb-box" onclick="toggleCb(this)"></div>Sales</label>
+              <label class="cb-label"><div class="cb-box" onclick="toggleCb(this)"></div>Finance</label>
+              <label class="cb-label"><div class="cb-box" onclick="toggleCb(this)"></div>HR</label>
+              <label class="cb-label"><div class="cb-box" onclick="toggleCb(this)"></div>Product</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══ RADIO BUTTONS ═══════════════════════════════════════════════════ -->
+      <div class="sub-card">
+        <div class="sub-title">Radio Buttons</div>
+        <div class="sub-subtitle">Default, coloured, reverse and inline variants</div>
+        <div class="sub-divider"></div>
+        <div class="row g-4">
+
+          <!-- Default -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Default</div>
+            <div class="d-flex flex-column gap-2" id="rg1">
+              <label class="cb-label"><div class="rb-dot checked" data-rg="rg1" onclick="selectRb(this)"></div>Option A</label>
+              <label class="cb-label"><div class="rb-dot" data-rg="rg1" onclick="selectRb(this)"></div>Option B</label>
+              <label class="cb-label"><div class="rb-dot" data-rg="rg1" onclick="selectRb(this)"></div>Option C</label>
+              <label class="cb-label"><div class="rb-dot" data-rg="rg1" onclick="selectRb(this)"></div>Option D</label>
+            </div>
+          </div>
+
+          <!-- Colour -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Colour Variants</div>
+            <div class="d-flex flex-column gap-2" id="rg2">
+              <label class="cb-label"><div class="rb-dot checked" data-rg="rg2" onclick="selectRb(this)"></div>Primary</label>
+              <label class="cb-label"><div class="rb-dot success" data-rg="rg2" onclick="selectRb(this)"></div>Success</label>
+              <label class="cb-label"><div class="rb-dot danger" data-rg="rg2" onclick="selectRb(this)"></div>Danger</label>
+              <label class="cb-label"><div class="rb-dot warning" data-rg="rg2" onclick="selectRb(this)"></div>Warning</label>
+            </div>
+          </div>
+
+          <!-- Reverse -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Reverse</div>
+            <div class="d-flex flex-column gap-2 mw220px" id="rg3">
+              <label class="cb-label reverse"><div class="rb-dot checked" data-rg="rg3" onclick="selectRb(this)"></div>Full-Time</label>
+              <label class="cb-label reverse"><div class="rb-dot" data-rg="rg3" onclick="selectRb(this)"></div>Part-Time</label>
+              <label class="cb-label reverse"><div class="rb-dot" data-rg="rg3" onclick="selectRb(this)"></div>Contract</label>
+              <label class="cb-label reverse"><div class="rb-dot" data-rg="rg3" onclick="selectRb(this)"></div>Intern</label>
+            </div>
+          </div>
+
+          <!-- Inline -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Inline</div>
+            <div class="d-flex flex-no-wrap gap-3" id="rg4">
+              <label class="cb-label"><div class="rb-dot checked" data-rg="rg4" onclick="selectRb(this)"></div>Full-Time</label>
+              <label class="cb-label"><div class="rb-dot" data-rg="rg4" onclick="selectRb(this)"></div>Part-Time</label>
+              <label class="cb-label"><div class="rb-dot" data-rg="rg4" onclick="selectRb(this)"></div>Contract</label>
+              <label class="cb-label"><div class="rb-dot" data-rg="rg4" onclick="selectRb(this)"></div>Intern</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══ TOGGLE SWITCHES ════════════════════════════════════════════════ -->
+      <div class="sub-card">
+        <div class="sub-title">Toggle Switches</div>
+        <div class="sub-subtitle">Default, coloured, reverse and radio-toggle variants</div>
+        <div class="sub-divider"></div>
+        <div class="row g-4">
+
+          <!-- Default switches -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Default Toggles</div>
+            <div class="d-flex flex-column gap-3">
+              <label class="cb-label"><div class="tgl-track on" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Email Notifications</label>
+              <label class="cb-label"><div class="tgl-track" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Push Notifications</label>
+              <label class="cb-label"><div class="tgl-track on" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Dark Mode</label>
+              <label class="cb-label"><div class="tgl-track" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Two-Factor Auth</label>
+            </div>
+          </div>
+
+          <!-- Colour switches -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Colour Variants</div>
+            <div class="d-flex flex-column gap-3">
+              <label class="cb-label"><div class="tgl-track on" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Primary (on)</label>
+              <label class="cb-label"><div class="tgl-track success on" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Success (on)</label>
+              <label class="cb-label"><div class="tgl-track danger" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Danger (off)</label>
+              <label class="cb-label"><div class="tgl-track warning on" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Warning (on)</label>
+            </div>
+          </div>
+
+          <!-- Reverse switches -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Reverse Toggles</div>
+            <div class="d-flex flex-column gap-3 mw240px">
+              <label class="cb-label reverse"><div class="tgl-track on" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Auto-Payroll</label>
+              <label class="cb-label reverse"><div class="tgl-track" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Holiday Override</label>
+              <label class="cb-label reverse"><div class="tgl-track on" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Leave Alerts</label>
+              <label class="cb-label reverse"><div class="tgl-track" onclick="toggleSwitch(this)"><div class="tgl-thumb"></div></div>Weekend Restrict</label>
+            </div>
+          </div>
+
+          <!-- Radio toggles (exclusive select) -->
+          <div class="col-md-6 col-xl-3">
+            <div class="form-label-hr mb-2">Radio Toggle Group</div>
+            <div class="d-flex flex-column gap-3" id="rtg">
+              <label class="cb-label"><div class="tgl-track" data-rtg="rtg" onclick="radioToggle(this)"><div class="tgl-thumb"></div></div>Weekly Reports</label>
+              <label class="cb-label"><div class="tgl-track on" data-rtg="rtg" onclick="radioToggle(this)"><div class="tgl-thumb"></div></div>Monthly Reports</label>
+              <label class="cb-label"><div class="tgl-track" data-rtg="rtg" onclick="radioToggle(this)"><div class="tgl-thumb"></div></div>Quarterly Reports</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══ RANGE SLIDERS ══════════════════════════════════════════════════ -->
+      <div class="sub-card">
+        <div class="sub-title">Range Sliders</div>
+        <div class="sub-subtitle">Interactive sliders with live value display and colour variants</div>
+        <div class="sub-divider"></div>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="form-label-hr d-flex justify-content-between"><span>Performance Score</span><span class="fw7-cblue" id="rv1">40%</span></div>
+            <input type="range" class="hr-range" min="0" max="100" value="40" oninput="document.getElementById('rv1').textContent=this.value+'%'">
+          </div>
+          <div class="col-md-6">
+            <div class="form-label-hr d-flex justify-content-between"><span>Attendance Rate</span><span class="c-green-fw7" id="rv2">65%</span></div>
+            <input type="range" class="hr-range success" min="0" max="100" value="65" oninput="document.getElementById('rv2').textContent=this.value+'%'">
+          </div>
+          <div class="col-md-6">
+            <div class="form-label-hr d-flex justify-content-between"><span>Leave Balance</span><span class="fw7-cred" id="rv3">30%</span></div>
+            <input type="range" class="hr-range danger" min="0" max="100" value="30" oninput="document.getElementById('rv3').textContent=this.value+'%'">
+          </div>
+          <div class="col-md-6">
+            <div class="form-label-hr d-flex justify-content-between"><span>Training Progress</span><span class="fw7-camber" id="rv4">75%</span></div>
+            <input type="range" class="hr-range warning" min="0" max="100" value="75" oninput="document.getElementById('rv4').textContent=this.value+'%'">
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SELECT DROPDOWNS ═══════════════════════════════════════════════ -->
+      <div class="sub-card">
+        <div class="sub-title">Select Dropdowns</div>
+        <div class="sub-subtitle">Standard, multi-select and searchable select variants</div>
+        <div class="sub-divider"></div>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label-hr">Department</label>
+            <select class="hr-select-el">
+              <option value="">Select department...</option>
+              <option>Engineering</option><option>Marketing</option><option>Design</option>
+              <option>Sales</option><option>Finance</option><option>HR &amp; Admin</option><option>Product</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Employment Type <span class="c-blue">★</span></label>
+            <select class="hr-select-el">
+              <option>Full-Time</option><option>Part-Time</option><option>Contract</option><option>Intern</option>
+            </select>
+            <div class="form-hint">Pre-selected with default value</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Multi-Select (Skills)</label>
+            <select class="hr-select-el" multiple size="5">
+              <option selected>Figma</option><option>React</option><option selected>Python</option>
+              <option>SQL</option><option>Java</option><option>Go</option>
+            </select>
+            <div class="form-hint">Hold Ctrl / Cmd to select multiple</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ INPUT FIELDS ═══════════════════════════════════════════════════ -->
+      <div class="sub-card">
+        <div class="sub-title">Input Fields</div>
+        <div class="sub-subtitle">States, validation, with icons and size variants</div>
+        <div class="sub-divider"></div>
+
+        <!-- States -->
+        <div class="form-label-hr mb-2">Input States</div>
+        <div class="row g-3 mb-1rem">
+          <div class="col-md-4">
+            <label class="form-label-hr">Default</label>
+            <input type="text" class="hr-input-el" placeholder="Enter full name...">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Success State</label>
+            <input type="text" class="hr-input-el success" value="sarah.chen@hrnexus.com">
+            <div class="form-hint success"><i class="bi bi-check-circle-fill me-1"></i>Email verified successfully</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Error State</label>
+            <input type="text" class="hr-input-el error" value="invalid@">
+            <div class="form-hint error"><i class="bi bi-exclamation-circle-fill me-1"></i>Please enter a valid email</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">With Left Icon</label>
+            <div class="pos-rel">
+              <i class="bi bi-search abs-t50pct-l3-c-muted-pe-none"></i>
+              <input class="hr-input-el pl9" type="text" placeholder="Search employees...">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">With Right Icon</label>
+            <div class="pos-rel">
+              <input class="hr-input-el pr10" type="password" value="password123">
+              <i class="bi bi-eye abs-t50pct-r3-c-muted-pointer" onclick="togglePass(this)"></i>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Disabled</label>
+            <input type="text" class="hr-input-el" value="Read-only field" disabled>
+            <div class="form-hint">This field cannot be edited</div>
+          </div>
+        </div>
+
+        <!-- Input Sizes -->
+        <div class="form-label-hr mb-2">Input Sizes</div>
+        <div class="row g-3 mb-1rem">
+          <div class="col-md-4">
+            <label class="form-label-hr">Small (sm)</label>
+            <input type="text" class="hr-input-el sm" placeholder="Small input...">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Default (md)</label>
+            <input type="text" class="hr-input-el" placeholder="Default input...">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Large (lg)</label>
+            <input type="text" class="hr-input-el lg" placeholder="Large input...">
+          </div>
+        </div>
+
+        <!-- Input Group -->
+        <div class="form-label-hr mb-2">Input Groups</div>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label-hr">Salary (prefix)</label>
+            <div class="flex">
+              <span class="fs875-c-muted-bg-bg-p-24-35-nowrap-br-1-none">₹</span>
+              <input class="hr-input-el border-radius" type="number" placeholder="0.00">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Email (suffix)</label>
+            <div class="flex">
+              <input class="hr-input-el border-radius-2" type="text" placeholder="username">
+              <span class="fs875-c-muted-bg-bg-p-24-35-nowrap-bl-1-none">@hrnexus.in</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Search with button</label>
+            <div class="flex">
+              <input class="hr-input-el border-radius-2" type="text" placeholder="Employee ID...">
+              <button class="fs875-c-white-bg-blue-p-24-4-bl-1-none-pointer" type="button">Search</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ TEXTAREA ════════════════════════════════════════════════════════ -->
+      <div class="sub-card">
+        <div class="sub-title">Textarea</div>
+        <div class="sub-subtitle">Multi-line text input with resize and character count</div>
+        <div class="sub-divider"></div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label-hr">Notes / Description</label>
+            <textarea class="hr-input-el resize" rows="4" placeholder="Enter employee notes or performance feedback..."></textarea>
+            <div class="form-hint">Max 500 characters</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-hr">Auto-resize (with char count)</label>
+            <textarea class="hr-input-el resize-none" id="charTa" rows="4" maxlength="200" oninput="document.getElementById('charCount').textContent=this.value.length+'/200'" placeholder="Type something..."></textarea>
+            <div class="form-hint d-flex justify-content-between"><span>Keep it concise</span><span id="charCount">0/200</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ FILE UPLOAD ════════════════════════════════════════════════════ -->
+      <div class="sub-card">
+        <div class="sub-title">File Upload</div>
+        <div class="sub-subtitle">Drag-and-drop and standard file upload controls</div>
+        <div class="sub-divider"></div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label-hr">Standard File Input</label>
+            <input class="hr-input-el p-18-35" type="file" accept=".pdf,.doc,.docx">
+            <div class="form-hint">Accepts PDF, DOC, DOCX up to 10 MB</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-hr">Profile Photo</label>
+            <input class="hr-input-el p-18-35" type="file" accept="image/*">
+            <div class="form-hint">JPG, PNG, WebP — max 2 MB</div>
+          </div>
+          <div class="col-12">
+            <label class="form-label-hr">Drag &amp; Drop Upload</label>
+            <div class="file-drop" id="fileDrop" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event,this)" onclick="document.getElementById('fileInput').click()">
+              <i class="bi bi-cloud-upload-fill d-block-fs25-c-blue-mb3"></i>
+              <div class="fw7-c-body-mb15">Drop files here or click to browse</div>
+              <div class="fs82-c-muted">Supports PDF, DOCX, XLSX, JPG, PNG — max 10 MB each</div>
+              <input class="d-none" type="file" id="fileInput" multiple onchange="showFiles(this)">
+            </div>
+            <div class="flex-col-g2-mt3" id="fileList"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-inner -->
+  </main>
+</div>
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ── Checkbox toggle ─────────────────────────── */
+function toggleCb(el) {
+  el.classList.toggle('checked');
+}
+
+/* ── Radio button (single-select within group) ── */
+function selectRb(el) {
+  var rg = el.dataset.rg;
+  document.querySelectorAll('.rb-dot[data-rg="' + rg + '"]').forEach(function(d) {
+    d.classList.remove('checked');
+  });
+  el.classList.add('checked');
+}
+
+/* ── Toggle switch ──────────────────────────────── */
+function toggleSwitch(el) {
+  el.classList.toggle('on');
+}
+
+/* ── Radio toggle (exclusive) ──────────────────── */
+function radioToggle(el) {
+  var rg = el.dataset.rtg;
+  document.querySelectorAll('.tgl-track[data-rtg="' + rg + '"]').forEach(function(t) {
+    t.classList.remove('on');
+  });
+  el.classList.add('on');
+}
+
+/* ── Password toggle ────────────────────────────── */
+function togglePass(icon) {
+  var inp = icon.previousElementSibling;
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    icon.className = 'bi bi-eye-slash';
+  } else {
+    inp.type = 'password';
+    icon.className = 'bi bi-eye';
+  }
+}
+
+/* ── File drag-drop ─────────────────────────────── */
+function handleDrop(e, zone) {
+  e.preventDefault();
+  zone.classList.remove('dragover');
+  showFileItems(e.dataTransfer.files);
+}
+
+function showFiles(input) {
+  showFileItems(input.files);
+}
+
+function showFileItems(files) {
+  var list = document.getElementById('fileList');
+  list.innerHTML = '';
+  Array.from(files).forEach(function(f) {
+    var size = f.size > 1048576 ? (f.size/1048576).toFixed(1)+' MB' : (f.size/1024).toFixed(0)+' KB';
+    var ext  = f.name.split('.').pop().toLowerCase();
+    var icon = {pdf:'bi-file-earmark-pdf-fill',docx:'bi-file-earmark-word-fill',xlsx:'bi-file-earmark-excel-fill',jpg:'bi-file-earmark-image-fill',jpeg:'bi-file-earmark-image-fill',png:'bi-file-earmark-image-fill'}[ext] || 'bi-file-earmark-fill';
+    var col  = {pdf:'#EF4444',docx:'#3B82F6',xlsx:'#10B981',jpg:'#0EA5E9',jpeg:'#0EA5E9',png:'#0EA5E9'}[ext] || '#64748B';
+    var div  = document.createElement('div');
+    div.style.cssText = 'display:flex;align-items:center;gap:.75rem;padding:.625rem .875rem;background:var(--body-bg);border-radius:.5rem;border:1px solid var(--body-border)';
+    div.innerHTML = '<i class="bi ' + icon + '" style="color:' + col + ';font-size:1.2rem;flex-shrink:0"></i>' +
+      '<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:.82rem;color:var(--body-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + f.name + '</div>' +
+      '<div style="font-size:.72rem;color:var(--body-text-muted)">' + size + '</div></div>' +
+      '<button type="button" onclick="this.closest(&quot;div&quot;).remove()" style="background:none;border:none;color:var(--body-text-muted);cursor:pointer;font-size:1rem">&times;</button>';
+    list.appendChild(div);
+  });
+}
+</script>
+</body>
+</html>

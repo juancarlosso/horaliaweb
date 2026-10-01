@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Employee Directory — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Searchable employee directory with department filters, contact details, and profile cards."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<style id="page-css">
+
+/* ── Avatar card grid ── */
+.emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.emp-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:1.125rem;
+  overflow:hidden;transition:transform .18s,box-shadow .18s;cursor:pointer;position:relative}
+.emp-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(79,110,247,.14);
+  border-color:rgba(79,110,247,.3)}
+.emp-card-cover{height:72px;position:relative}
+.emp-card-cover::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 40%,var(--card-bg))}
+.emp-avatar-wrap{position:absolute;top:44px;left:1.125rem;z-index:2}
+.emp-avatar{width:52px;height:52px;border-radius:50%;border:3px solid var(--card-bg);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;
+  color:#fff;flex-shrink:0}
+.emp-card-body{padding:2rem 1.125rem 1.125rem}
+.emp-name{font-size:.9375rem;font-weight:800;color:var(--body-text);line-height:1.2}
+.emp-role{font-size:.775rem;color:var(--body-text-muted);margin:.125rem 0 .75rem}
+.emp-meta{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.875rem}
+.emp-meta-row{display:flex;align-items:center;gap:.5rem;font-size:.775rem;color:var(--body-text-muted)}
+.emp-meta-row i{color:var(--color-primary);width:14px;font-size:.8rem}
+.emp-perf-bar{height:5px;border-radius:999px;background:var(--body-border);overflow:hidden;margin-bottom:.25rem}
+.emp-perf-fill{height:100%;border-radius:999px}
+.emp-skills{display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.625rem}
+.skill-tag{padding:.15rem .5rem;border-radius:999px;font-size:.65rem;font-weight:700;
+  background:rgba(79,110,247,.1);color:var(--color-primary);border:1px solid rgba(79,110,247,.2)}
+.emp-card-footer{display:flex;align-items:center;justify-content:space-between;
+  padding:.75rem 1.125rem;border-top:1px solid var(--card-border);
+  background:var(--body-bg)}
+/* ── Filter pill tabs ── */
+.filter-pills{display:flex;gap:.375rem;flex-wrap:wrap}
+.fpill{padding:.375rem .875rem;border-radius:999px;font-size:.8rem;font-weight:600;
+  border:1px solid var(--body-border);background:var(--card-bg);color:var(--body-text-muted);
+  cursor:pointer;transition:all .13s;white-space:nowrap}
+.fpill:hover{border-color:var(--color-primary);color:var(--color-primary)}
+.fpill.active{background:var(--color-primary);border-color:var(--color-primary);color:#fff}
+/* ── Stats ribbon ── */
+.stats-ribbon{display:flex;gap:1px;background:var(--card-border);border-radius:1rem;overflow:hidden;margin-bottom:1.5rem}
+.stats-ribbon-cell{flex:1;padding:1rem 1.25rem;background:var(--card-bg);text-align:center}
+.stats-ribbon-val{font-size:1.5rem;font-weight:900;color:var(--body-text);line-height:1}
+.stats-ribbon-lbl{font-size:.7rem;color:var(--body-text-muted);margin-top:.25rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em}
+.stats-ribbon-delta{font-size:.7rem;font-weight:700;margin-top:.2rem}
+/* ── Drawer / flyout ── */
+.emp-drawer{position:fixed;top:0;right:-440px;width:420px;height:100vh;
+  background:var(--card-bg);border-left:1px solid var(--card-border);
+  z-index:1100;transition:right .28s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;overflow:hidden}
+.emp-drawer.open{right:0;box-shadow:-8px 0 40px rgba(0,0,0,.15)}
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:1099}
+.drawer-overlay.show{display:block}
+.drawer-hd{padding:1.25rem 1.5rem;border-bottom:1px solid var(--card-border);
+  display:flex;align-items:center;gap:.875rem;flex-shrink:0}
+.drawer-body{flex:1;overflow-y:auto;padding:1.5rem}
+.drawer-section{margin-bottom:1.5rem}
+.drawer-section-title{font-size:.65rem;font-weight:800;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--body-text-muted);margin-bottom:.75rem;
+  display:flex;align-items:center;gap:.5rem}
+.drawer-section-title::after{content:'';flex:1;height:1px;background:var(--card-border)}
+.drawer-stat{display:flex;align-items:center;justify-content:space-between;
+  padding:.5rem 0;border-bottom:1px solid var(--body-bg)}
+.drawer-stat:last-child{border:none}
+.drawer-stat-key{font-size:.8rem;color:var(--body-text-muted);font-weight:500}
+.drawer-stat-val{font-size:.8rem;font-weight:700;color:var(--body-text)}
+/* Timeline inside drawer */
+.tl-item{display:flex;gap:.875rem;padding-bottom:1rem;position:relative}
+.tl-item::before{content:'';position:absolute;left:15px;top:28px;bottom:0;
+  width:1px;background:var(--card-border)}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:.75rem;
+  border:2px solid var(--card-border)}
+.tl-text{font-size:.8125rem;color:var(--body-text)}
+.tl-date{font-size:.7rem;color:var(--body-text-muted);margin-top:.1rem}
+/* Dept colour badges */
+.dept-eng{background:rgba(79,110,247,.1);color:#4F6EF7;border-color:rgba(79,110,247,.2)}
+.dept-prd{background:rgba(16,185,129,.1);color:#10B981;border-color:rgba(16,185,129,.2)}
+.dept-sal{background:rgba(245,158,11,.1);color:#D97706;border-color:rgba(245,158,11,.2)}
+.dept-mkt{background:rgba(6,182,212,.1);color:#06B6D4;border-color:rgba(6,182,212,.2)}
+.dept-hr {background:rgba(139,92,246,.1);color:#8B5CF6;border-color:rgba(139,92,246,.2)}
+.dept-fin{background:rgba(239,68,68,.1);color:#EF4444;border-color:rgba(239,68,68,.2)}
+/* Cover gradient presets */
+.cov-1{background:linear-gradient(135deg,#4F6EF7,#8B5CF6)}
+.cov-2{background:linear-gradient(135deg,#10B981,#06B6D4)}
+.cov-3{background:linear-gradient(135deg,#F59E0B,#EF4444)}
+.cov-4{background:linear-gradient(135deg,#8B5CF6,#EC4899)}
+.cov-5{background:linear-gradient(135deg,#06B6D4,#10B981)}
+.cov-6{background:linear-gradient(135deg,#EF4444,#F97316)}
+.cov-7{background:linear-gradient(135deg,#667eea,#764ba2)}
+.cov-8{background:linear-gradient(135deg,#f7971e,#ffd200)}
+
+  </style>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span>HR Core</span><span class="bc-sep">/</span><span class="bc-current">Employee Directory</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- ── Stats ribbon ── -->
+      <div class="stats-ribbon">
+        <div class="stats-ribbon-cell">
+          <div class="stats-ribbon-val">284</div>
+          <div class="stats-ribbon-lbl">Total Headcount</div>
+          <div class="stats-ribbon-delta" style="color:#10B981">▲ +12 this quarter</div>
+        </div>
+        <div class="stats-ribbon-cell">
+          <div class="stats-ribbon-val" style="color:#10B981">261</div>
+          <div class="stats-ribbon-lbl">Active Right Now</div>
+          <div class="stats-ribbon-delta" style="color:#10B981">▲ 92.0% presence</div>
+        </div>
+        <div class="stats-ribbon-cell">
+          <div class="stats-ribbon-val" style="color:#F59E0B">18</div>
+          <div class="stats-ribbon-lbl">On Leave Today</div>
+          <div class="stats-ribbon-delta" style="color:var(--body-text-muted)">— 6.3% of workforce</div>
+        </div>
+        <div class="stats-ribbon-cell">
+          <div class="stats-ribbon-val" style="color:#8B5CF6">5</div>
+          <div class="stats-ribbon-lbl">New Joiners MTD</div>
+          <div class="stats-ribbon-delta" style="color:#10B981">▲ 2 more pending</div>
+        </div>
+        <div class="stats-ribbon-cell">
+          <div class="stats-ribbon-val" style="color:#EF4444">4.2%</div>
+          <div class="stats-ribbon-lbl">Attrition Rate</div>
+          <div class="stats-ribbon-delta" style="color:#10B981">▼ -0.8% vs Q3</div>
+        </div>
+      </div>
+      <!-- ── Page header ── -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Employee Directory</h1>
+          <p class="page-subtitle">284 people across 6 departments — click any card to open their full profile</p>
+        </div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <div class="search-wrap">
+            <i class="bi bi-search search-icon-i"></i>
+            <input type="search" class="search-input" placeholder="Search name, role, skill…" id="empSearch" aria-label="Search employees"/>
+          </div>
+          <button type="button" class="btn-hr btn-outline-hr" onclick="exportDirectory()"><i class="bi bi-download me-1"></i>Export</button>
+          <button type="button" class="btn-hr btn-primary-hr" onclick="openAddEmployee()">
+            <i class="bi bi-person-plus-fill me-1"></i>Add Employee
+          </button>
+        </div>
+      </div>
+      <!-- ── Filter pills ── -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem">
+        <div class="filter-pills">
+          <button class="fpill active" onclick="filterEmp(this,'all')">All Employees</button>
+          <button class="fpill" onclick="filterEmp(this,'eng')">Engineering</button>
+          <button class="fpill" onclick="filterEmp(this,'prd')">Product</button>
+          <button class="fpill" onclick="filterEmp(this,'sal')">Sales</button>
+          <button class="fpill" onclick="filterEmp(this,'mkt')">Marketing</button>
+          <button class="fpill" onclick="filterEmp(this,'hr')">HR</button>
+          <button class="fpill" onclick="filterEmp(this,'fin')">Finance</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <span style="font-size:.8rem;color:var(--body-text-muted)">Sort:</span>
+          <select class="hr-inp" id="empSort" style="padding:.35rem .75rem;width:auto;font-size:.8rem" onchange="sortEmpCards(this.value)">
+            <option value="name">Name A–Z</option><option value="perf">Performance ↓</option><option value="tenure">Tenure ↓</option><option value="recent">Recently Added</option>
+          </select>
+        </div>
+      </div>
+      <!-- ── Card grid ── -->
+      <div class="emp-grid" id="empGrid">
+<div class="emp-card" data-idx="0" onclick="openDrawer(0)">
+  <div class="emp-card-cover cov-2"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-2">SC</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Sarah Chen</div>
+        <div class="emp-role">Senior UX Designer</div>
+      </div>
+      <span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>sarah.chen@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Bengaluru</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>3y 9m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#10B981">94%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:94%;background:#10B981"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">Figma</span><span class="skill-tag">React</span><span class="skill-tag">Proto</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-prd">Product</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="1" onclick="openDrawer(1)">
+  <div class="emp-card-cover cov-1"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-1">MJ</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Marcus Johnson</div>
+        <div class="emp-role">Backend Lead</div>
+      </div>
+      <span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>m.johnson@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Mumbai</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>5y 2m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#4F6EF7">88%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:88%;background:#4F6EF7"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">Node.js</span><span class="skill-tag">AWS</span><span class="skill-tag">Go</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-eng">Engineering</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="2" onclick="openDrawer(2)">
+  <div class="emp-card-cover cov-4"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-4">PN</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Priya Nair</div>
+        <div class="emp-role">Product Manager</div>
+      </div>
+      <span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>p.nair@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Pune</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>2y 4m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#10B981">91%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:91%;background:#10B981"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">Strategy</span><span class="skill-tag">SQL</span><span class="skill-tag">Jira</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-prd">Product</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="3" onclick="openDrawer(3)">
+  <div class="emp-card-cover cov-7"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-7">RD</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Ravi Das</div>
+        <div class="emp-role">DevOps Engineer</div>
+      </div>
+      <span class="badge-st st-leave" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">On Leave</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>r.das@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Hyderabad</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>1y 8m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#F59E0B">79%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:79%;background:#F59E0B"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">Docker</span><span class="skill-tag">K8s</span><span class="skill-tag">CI/CD</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-eng">Engineering</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="4" onclick="openDrawer(4)">
+  <div class="emp-card-cover cov-5"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-5">AI</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Aisha Iyer</div>
+        <div class="emp-role">Growth Manager</div>
+      </div>
+      <span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>a.iyer@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Chennai</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>4y 1m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#4F6EF7">85%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:85%;background:#4F6EF7"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">SEO</span><span class="skill-tag">Ads</span><span class="skill-tag">GTM</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-mkt">Marketing</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="5" onclick="openDrawer(5)">
+  <div class="emp-card-cover cov-3"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-3">TN</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Tom Nakamura</div>
+        <div class="emp-role">DevOps Engineer</div>
+      </div>
+      <span class="badge-st st-pending" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Joining</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>t.nakamura@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Bengaluru</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>0y 7m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#F59E0B">72%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:72%;background:#F59E0B"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">Terraform</span><span class="skill-tag">GCP</span><span class="skill-tag">Bash</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-eng">Engineering</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="6" onclick="openDrawer(6)">
+  <div class="emp-card-cover cov-8"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-8">KR</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Kavita Rao</div>
+        <div class="emp-role">Data Analyst</div>
+      </div>
+      <span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>k.rao@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Mumbai</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>1y 3m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#4F6EF7">83%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:83%;background:#4F6EF7"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">Python</span><span class="skill-tag">Tableau</span><span class="skill-tag">SQL</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-mkt">Analytics</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="7" onclick="openDrawer(7)">
+  <div class="emp-card-cover cov-6"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-6">AM</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Arjun Mehta</div>
+        <div class="emp-role">Sales Executive</div>
+      </div>
+      <span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>a.mehta@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Delhi NCR</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>2y 11m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#F59E0B">76%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:76%;background:#F59E0B"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">CRM</span><span class="skill-tag">Cold-call</span><span class="skill-tag">HubSpot</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-sal">Sales</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="8" onclick="openDrawer(8)">
+  <div class="emp-card-cover cov-5"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-5">DS</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Deepika Sharma</div>
+        <div class="emp-role">HR Business Partner</div>
+      </div>
+      <span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>d.sharma@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Pune</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>3y 5m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#10B981">92%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:92%;background:#10B981"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">Recruiting</span><span class="skill-tag">L&D</span><span class="skill-tag">HRIS</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-hr">HR</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="9" onclick="openDrawer(9)">
+  <div class="emp-card-cover cov-1"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-1">VP</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Vikram Patel</div>
+        <div class="emp-role">Finance Manager</div>
+      </div>
+      <span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>v.patel@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Mumbai</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>6y 0m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#4F6EF7">87%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:87%;background:#4F6EF7"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">SAP</span><span class="skill-tag">GST</span><span class="skill-tag">FP&A</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-fin">Finance</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="10" onclick="openDrawer(10)">
+  <div class="emp-card-cover cov-4"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-4">NS</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Neha Singh</div>
+        <div class="emp-role">Frontend Developer</div>
+      </div>
+      <span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>n.singh@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Bengaluru</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>2y 1m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#10B981">90%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:90%;background:#10B981"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">React</span><span class="skill-tag">TS</span><span class="skill-tag">CSS</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-eng">Engineering</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div><div class="emp-card" data-idx="11" onclick="openDrawer(11)">
+  <div class="emp-card-cover cov-2"></div>
+  <div class="emp-avatar-wrap">
+    <div class="emp-avatar cov-2">RK</div>
+  </div>
+  <div class="emp-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <div class="emp-name">Rohit Kulkarni</div>
+        <div class="emp-role">Account Executive</div>
+      </div>
+      <span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>
+    </div>
+    <div class="emp-meta">
+      <div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>r.kulkarni@hrnexus.io</div>
+      <div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>Hyderabad</div>
+      <div class="emp-meta-row"><i class="bi bi-clock-fill"></i>1y 6m</div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>
+        <span style="font-size:.72rem;font-weight:800;color:#4F6EF7">81%</span>
+      </div>
+      <div class="emp-perf-bar"><div class="emp-perf-fill" style="width:81%;background:#4F6EF7"></div></div>
+    </div>
+    <div class="emp-skills"><span class="skill-tag">Salesforce</span><span class="skill-tag">Demos</span><span class="skill-tag">ARR</span></div>
+  </div>
+  <div class="emp-card-footer">
+    <span class="skill-tag dept-sal">Sales</span>
+    <div style="display:flex;gap:.375rem">
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>
+    </div>
+  </div>
+</div>
+      </div>
+
+      <!-- ── Profile drawer overlay ── -->
+      <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+      <!-- ── Profile drawer ── -->
+      <aside class="emp-drawer" id="empDrawer" aria-label="Employee profile">
+        <div class="drawer-hd">
+          <div class="emp-avatar cov-2" id="drawerAvatar" style="width:46px;height:46px;font-size:.9rem;border:none">SC</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:800;font-size:1rem;color:var(--body-text)" id="drawerName">Sarah Chen</div>
+            <div style="font-size:.775rem;color:var(--body-text-muted)" id="drawerRole">Senior UX Designer · Product</div>
+          </div>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" onclick="closeDrawer()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="drawer-body">
+          <div class="drawer-section">
+            <div class="drawer-section-title"><i class="bi bi-person-badge-fill"></i>Contact Info</div>
+            <div class="drawer-stat"><span class="drawer-stat-key">Email</span><span class="drawer-stat-val" id="dEmail">—</span></div>
+            <div class="drawer-stat"><span class="drawer-stat-key">Location</span><span class="drawer-stat-val" id="dLoc">—</span></div>
+            <div class="drawer-stat"><span class="drawer-stat-key">Tenure</span><span class="drawer-stat-val" id="dTenure">—</span></div>
+            <div class="drawer-stat"><span class="drawer-stat-key">CTC</span><span class="drawer-stat-val" id="dSalary">—</span></div>
+          </div>
+          <div class="drawer-section">
+            <div class="drawer-section-title"><i class="bi bi-graph-up-arrow"></i>Performance</div>
+            <div style="margin-bottom:.5rem" id="dPerfBar"></div>
+            <div class="drawer-stat"><span class="drawer-stat-key">Score</span><span class="drawer-stat-val" id="dPerf">—</span></div>
+            <div class="drawer-stat"><span class="drawer-stat-key">Rank</span><span class="drawer-stat-val">Top 15% in dept</span></div>
+            <div class="drawer-stat"><span class="drawer-stat-key">Last Review</span><span class="drawer-stat-val">Dec 2025 · 4.5★</span></div>
+          </div>
+          <div class="drawer-section">
+            <div class="drawer-section-title"><i class="bi bi-clock-history"></i>Activity Timeline</div>
+            <div class="tl-item">
+              <div class="tl-dot" style="background:rgba(79,110,247,.12);color:#4F6EF7"><i class="bi bi-award-fill" style="font-size:.7rem"></i></div>
+              <div><div class="tl-text">Promoted to Senior UX Designer</div><div class="tl-date">Sep 2024</div></div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot" style="background:rgba(16,185,129,.12);color:#10B981"><i class="bi bi-check-circle-fill" style="font-size:.7rem"></i></div>
+              <div><div class="tl-text">Completed Advanced Figma certification</div><div class="tl-date">Jun 2024</div></div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot" style="background:rgba(245,158,11,.12);color:#F59E0B"><i class="bi bi-calendar2-check-fill" style="font-size:.7rem"></i></div>
+              <div><div class="tl-text">Annual leave approved (10 days)</div><div class="tl-date">Mar 2024</div></div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot" style="background:rgba(79,110,247,.12);color:#4F6EF7"><i class="bi bi-door-open-fill" style="font-size:.7rem"></i></div>
+              <div><div class="tl-text">Joined HRNexus as UX Designer</div><div class="tl-date">Apr 2022</div></div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:1rem 1.5rem;border-top:1px solid var(--card-border);display:flex;gap:.625rem;position:relative">
+          <button class="btn-hr btn-primary-hr" style="flex:1" type="button" onclick="openEditProfile()"><i class="bi bi-pencil-fill me-1"></i>Edit Profile</button>
+          <button class="btn-hr btn-outline-hr btn-icon-hr" type="button" onclick="toggleDrawerMenu(event)"><i class="bi bi-three-dots-vertical"></i></button>
+          <div class="hr-panel" id="drawerMenu" style="display:none;position:fixed;min-width:190px;z-index:1250">
+            <div class="card-bd p-2">
+              <a class="notif-item" href="#" style="text-decoration:none" onclick="drawerAction(event,'message')"><i class="bi bi-chat-fill c-primary-icon"></i>Send Message</a>
+              <a class="notif-item" href="#" style="text-decoration:none" onclick="drawerAction(event,'report')"><i class="bi bi-file-earmark-bar-graph-fill c-primary-icon"></i>View Full Report</a>
+              <a class="notif-item" href="#" style="text-decoration:none" onclick="drawerAction(event,'transfer')"><i class="bi bi-arrow-left-right c-primary-icon"></i>Transfer Department</a>
+              <div class="divider-hr m-2-0"></div>
+              <a class="notif-item" href="#" style="color:#EF4444;text-decoration:none" onclick="drawerAction(event,'deactivate')"><i class="bi bi-person-dash-fill" style="color:#EF4444"></i>Deactivate</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+
+<!-- ══════ MODAL: Add / Edit Employee ══════ -->
+<div class="modal fade" id="empModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="empModalTitle"><i class="bi bi-person-plus-fill me-2 c-primary"></i>Add Employee</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="empForm" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label-hr">Full Name <span class="c-red">*</span></label>
+              <input class="hr-input" type="text" id="empFormName" placeholder="e.g. Neha Kapoor"/>
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Job Title <span class="c-red">*</span></label>
+              <input class="hr-input" type="text" id="empFormRole" placeholder="e.g. Product Designer"/>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Department</label>
+              <select class="hr-input" id="empFormDept">
+                <option value="eng">Engineering</option><option value="prd">Product</option>
+                <option value="sal">Sales</option><option value="mkt">Marketing</option>
+                <option value="hr">HR</option><option value="fin">Finance</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Location</label>
+              <input class="hr-input" type="text" id="empFormLoc" placeholder="e.g. Bengaluru"/>
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Email <span class="c-red">*</span></label>
+              <input class="hr-input" type="email" id="empFormEmail" placeholder="name@hrnexus.io"/>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">CTC</label>
+              <input class="hr-input" type="text" id="empFormSalary" placeholder="e.g. ₹18L"/>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Tenure</label>
+              <input class="hr-input" type="text" id="empFormTenure" placeholder="e.g. 0y 1m"/>
+            </div>
+          </div>
+          <div id="empFormError" style="display:none;font-size:.8125rem;color:#EF4444;margin-top:1rem"></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" id="empFormSubmitBtn" onclick="submitEmpForm()"><i class="bi bi-check-lg me-1"></i>Add Employee</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var empData=[
+  {name:"Sarah Chen",role:"Sr UX Designer · Product",email:"sarah.chen@hrnexus.io",loc:"Bengaluru",tenure:"3y 9m",salary:"₹18.5L",perf:94,color:"#10B981",cov:"cov-2"},
+  {name:"Marcus Johnson",role:"Backend Lead · Engineering",email:"m.johnson@hrnexus.io",loc:"Mumbai",tenure:"5y 2m",salary:"₹32L",perf:88,color:"#4F6EF7",cov:"cov-1"},
+  {name:"Priya Nair",role:"Product Manager · Product",email:"p.nair@hrnexus.io",loc:"Pune",tenure:"2y 4m",salary:"₹24L",perf:91,color:"#10B981",cov:"cov-4"},
+  {name:"Ravi Das",role:"DevOps Engineer · Engineering",email:"r.das@hrnexus.io",loc:"Hyderabad",tenure:"1y 8m",salary:"₹20L",perf:79,color:"#F59E0B",cov:"cov-7"},
+  {name:"Aisha Iyer",role:"Growth Manager · Marketing",email:"a.iyer@hrnexus.io",loc:"Chennai",tenure:"4y 1m",salary:"₹22L",perf:85,color:"#4F6EF7",cov:"cov-5"},
+  {name:"Tom Nakamura",role:"DevOps Engineer · Engineering",email:"t.nakamura@hrnexus.io",loc:"Bengaluru",tenure:"0y 7m",salary:"₹19L",perf:72,color:"#F59E0B",cov:"cov-3"},
+  {name:"Kavita Rao",role:"Data Analyst · Analytics",email:"k.rao@hrnexus.io",loc:"Mumbai",tenure:"1y 3m",salary:"₹16L",perf:83,color:"#4F6EF7",cov:"cov-8"},
+  {name:"Arjun Mehta",role:"Sales Executive · Sales",email:"a.mehta@hrnexus.io",loc:"Delhi NCR",tenure:"2y 11m",salary:"₹14L",perf:76,color:"#F59E0B",cov:"cov-6"},
+  {name:"Deepika Sharma",role:"HR Business Partner · HR",email:"d.sharma@hrnexus.io",loc:"Pune",tenure:"3y 5m",salary:"₹17L",perf:92,color:"#10B981",cov:"cov-5"},
+  {name:"Vikram Patel",role:"Finance Manager · Finance",email:"v.patel@hrnexus.io",loc:"Mumbai",tenure:"6y 0m",salary:"₹28L",perf:87,color:"#4F6EF7",cov:"cov-1"},
+  {name:"Neha Singh",role:"Frontend Developer · Engineering",email:"n.singh@hrnexus.io",loc:"Bengaluru",tenure:"2y 1m",salary:"₹21L",perf:90,color:"#10B981",cov:"cov-4"},
+  {name:"Rohit Kulkarni",role:"Account Executive · Sales",email:"r.kulkarni@hrnexus.io",loc:"Hyderabad",tenure:"1y 6m",salary:"₹13L",perf:81,color:"#4F6EF7",cov:"cov-2"}
+];
+var currentDrawerIdx = null;
+function openDrawer(i){
+  currentDrawerIdx = i;
+  var d=empData[i];
+  document.getElementById('drawerName').textContent=d.name;
+  document.getElementById('drawerRole').textContent=d.role;
+  document.getElementById('dEmail').textContent=d.email;
+  document.getElementById('dLoc').textContent=d.loc;
+  document.getElementById('dTenure').textContent=d.tenure;
+  document.getElementById('dSalary').textContent=d.salary;
+  document.getElementById('dPerf').textContent=d.perf+'%';
+  var av=document.getElementById('drawerAvatar');
+  av.className='emp-avatar '+d.cov;
+  av.textContent=d.name.split(' ').map(function(n){return n[0]}).join('').slice(0,2);
+  document.getElementById('dPerfBar').innerHTML='<div style="height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:'+d.perf+'%;height:100%;border-radius:999px;background:'+d.color+'"></div></div>';
+  document.getElementById('empDrawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('show');
+}
+function closeDrawer(){
+  document.getElementById('empDrawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('show');
+}
+function filterEmp(btn,dept){
+  document.querySelectorAll('.fpill').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  document.querySelectorAll('.emp-card').forEach(function(card){
+    var deptTag=card.querySelector('.emp-card-footer .skill-tag');
+    if(!deptTag)return;
+    var cls=deptTag.className;
+    card.style.display=(dept==='all'||cls.includes('dept-'+dept))?'':'none';
+  });
+}
+document.getElementById('empSearch').addEventListener('input',function(){
+  var q=this.value.toLowerCase();
+  document.querySelectorAll('.emp-card').forEach(function(card){
+    card.style.display=card.textContent.toLowerCase().includes(q)?'':'none';
+  });
+});
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ── Add / Edit Employee ──────────────────────────────────────────── */
+var COV_CLASSES = ['cov-1','cov-2','cov-3','cov-4','cov-5','cov-6','cov-7','cov-8'];
+var DEPT_LABELS = { eng:'Engineering', prd:'Product', sal:'Sales', mkt:'Marketing', hr:'HR', fin:'Finance' };
+var addedCounter = 0;
+
+function openAddEmployee(){
+  currentDrawerIdx = null;
+  document.getElementById('empForm').reset();
+  document.getElementById('empFormError').style.display='none';
+  document.getElementById('empModalTitle').innerHTML='<i class="bi bi-person-plus-fill me-2 c-primary"></i>Add Employee';
+  document.getElementById('empFormSubmitBtn').innerHTML='<i class="bi bi-check-lg me-1"></i>Add Employee';
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('empModal')).show();
+}
+
+function openEditProfile(){
+  if (currentDrawerIdx === null) return;
+  var d = empData[currentDrawerIdx];
+  var roleParts = d.role.split(' · ');
+  document.getElementById('empFormError').style.display='none';
+  document.getElementById('empFormName').value = d.name;
+  document.getElementById('empFormRole').value = roleParts[0];
+  document.getElementById('empFormEmail').value = d.email;
+  document.getElementById('empFormLoc').value = d.loc;
+  document.getElementById('empFormSalary').value = d.salary;
+  document.getElementById('empFormTenure').value = d.tenure;
+  var deptKey = Object.keys(DEPT_LABELS).find(function(k){ return DEPT_LABELS[k] === roleParts[1]; });
+  document.getElementById('empFormDept').value = deptKey || 'eng';
+  document.getElementById('empModalTitle').innerHTML='<i class="bi bi-pencil-fill me-2 c-primary"></i>Edit Profile';
+  document.getElementById('empFormSubmitBtn').innerHTML='<i class="bi bi-check-lg me-1"></i>Save Changes';
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('empModal')).show();
+}
+
+function buildCardHtml(idx, d, deptKey){
+  var initials = d.name.split(' ').map(function(n){return n[0]}).join('').slice(0,2);
+  var deptLabel = DEPT_LABELS[deptKey];
+  return (
+    '<div class="emp-card-cover ' + d.cov + '"></div>' +
+    '<div class="emp-avatar-wrap"><div class="emp-avatar ' + d.cov + '">' + initials + '</div></div>' +
+    '<div class="emp-card-body">' +
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">' +
+        '<div><div class="emp-name">' + escapeHtml(d.name) + '</div><div class="emp-role">' + escapeHtml(d.role.split(' · ')[0]) + '</div></div>' +
+        '<span class="badge-st st-active" style="font-size:.65rem;flex-shrink:0;margin-top:.125rem">Active</span>' +
+      '</div>' +
+      '<div class="emp-meta">' +
+        '<div class="emp-meta-row"><i class="bi bi-envelope-fill"></i>' + escapeHtml(d.email) + '</div>' +
+        '<div class="emp-meta-row"><i class="bi bi-geo-alt-fill"></i>' + escapeHtml(d.loc) + '</div>' +
+        '<div class="emp-meta-row"><i class="bi bi-clock-fill"></i>' + escapeHtml(d.tenure) + '</div>' +
+      '</div>' +
+      '<div>' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:.3rem">' +
+          '<span style="font-size:.72rem;font-weight:600;color:var(--body-text-muted)">Performance</span>' +
+          '<span style="font-size:.72rem;font-weight:800;color:' + d.color + '">' + d.perf + '%</span>' +
+        '</div>' +
+        '<div class="emp-perf-bar"><div class="emp-perf-fill" style="width:' + d.perf + '%;background:' + d.color + '"></div></div>' +
+      '</div>' +
+      '<div class="emp-skills"></div>' +
+    '</div>' +
+    '<div class="emp-card-footer">' +
+      '<span class="skill-tag dept-' + deptKey + '">' + deptLabel + '</span>' +
+      '<div style="display:flex;gap:.375rem">' +
+        '<button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Message" onclick="event.stopPropagation()"><i class="bi bi-chat-fill" style="font-size:.75rem"></i></button>' +
+        '<button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" title="Call" onclick="event.stopPropagation()"><i class="bi bi-telephone-fill" style="font-size:.75rem"></i></button>' +
+      '</div>' +
+    '</div>'
+  );
+}
+
+function submitEmpForm(){
+  var name = document.getElementById('empFormName').value.trim();
+  var role = document.getElementById('empFormRole').value.trim();
+  var deptKey = document.getElementById('empFormDept').value;
+  var loc = document.getElementById('empFormLoc').value.trim() || '—';
+  var email = document.getElementById('empFormEmail').value.trim();
+  var salary = document.getElementById('empFormSalary').value.trim() || '—';
+  var tenure = document.getElementById('empFormTenure').value.trim() || '0y 0m';
+  var errorBox = document.getElementById('empFormError');
+
+  if (!name || !role || !email) {
+    errorBox.textContent = 'Please fill in name, job title, and email.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  errorBox.style.display = 'none';
+
+  var combinedRole = role + ' · ' + DEPT_LABELS[deptKey];
+
+  if (currentDrawerIdx !== null) {
+    var d = empData[currentDrawerIdx];
+    d.name = name; d.role = combinedRole; d.email = email; d.loc = loc; d.salary = salary; d.tenure = tenure;
+    var card = document.querySelector('.emp-card[data-idx="' + currentDrawerIdx + '"]');
+    if (card) {
+      var skillsHtml = card.querySelector('.emp-skills') ? card.querySelector('.emp-skills').innerHTML : '';
+      card.innerHTML = buildCardHtml(currentDrawerIdx, d, deptKey);
+      card.querySelector('.emp-skills').innerHTML = skillsHtml;
+    }
+    openDrawer(currentDrawerIdx);
+  } else {
+    var perf = 70;
+    var color = '#F59E0B';
+    var cov = COV_CLASSES[empData.length % COV_CLASSES.length];
+    var newEmp = { name: name, role: combinedRole, email: email, loc: loc, tenure: tenure, salary: salary, perf: perf, color: color, cov: cov, addedOrder: ++addedCounter };
+    var newIdx = empData.length;
+    empData.push(newEmp);
+
+    var card = document.createElement('div');
+    card.className = 'emp-card';
+    card.setAttribute('data-idx', newIdx);
+    card.setAttribute('onclick', 'openDrawer(' + newIdx + ')');
+    card.innerHTML = buildCardHtml(newIdx, newEmp, deptKey);
+    document.getElementById('empGrid').prepend(card);
+  }
+
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('empModal')).hide();
+}
+
+/* ── Drawer 3-dot menu ────────────────────────────────────────────── */
+function toggleDrawerMenu(e){
+  e.stopPropagation();
+  var menu = document.getElementById('drawerMenu');
+  var isOpening = menu.style.display === 'none';
+  if (isOpening) {
+    var btn = e.currentTarget;
+    var rect = btn.getBoundingClientRect();
+    menu.style.visibility = 'hidden';
+    menu.style.display = 'block';
+    var menuHeight = menu.offsetHeight;
+    menu.style.top = Math.round(rect.top - menuHeight - 8) + 'px';
+    menu.style.left = Math.round(rect.right - menu.offsetWidth) + 'px';
+    menu.style.visibility = '';
+  } else {
+    menu.style.display = 'none';
+  }
+}
+document.addEventListener('click', function(e){
+  var menu = document.getElementById('drawerMenu');
+  if (menu && menu.style.display !== 'none' && !menu.contains(e.target)) {
+    menu.style.display = 'none';
+  }
+});
+function drawerAction(e, action){
+  e.preventDefault();
+  document.getElementById('drawerMenu').style.display = 'none';
+  var name = currentDrawerIdx !== null ? empData[currentDrawerIdx].name : 'this employee';
+  var messages = {
+    message: 'Message thread with ' + name + ' opened.',
+    report: 'Full performance report for ' + name + ' is ready.',
+    transfer: 'Department transfer request started for ' + name + '.',
+    deactivate: name + ' has been marked for deactivation.',
+  };
+  alert(messages[action] || '');
+}
+
+/* ── Export ───────────────────────────────────────────────────────── */
+function csvEscape(val){ var s=String(val); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
+function csvRow(cells){ return cells.map(csvEscape).join(',')+'\r\n'; }
+
+function exportDirectory(){
+  var visibleIdx = Array.from(document.querySelectorAll('.emp-card'))
+    .filter(function(c){ return c.style.display !== 'none'; })
+    .map(function(c){ return parseInt(c.getAttribute('data-idx'), 10); });
+
+  var csv = csvRow(['Name','Role','Department','Email','Location','Tenure','CTC','Performance']);
+  visibleIdx.forEach(function(i){
+    var d = empData[i];
+    var parts = d.role.split(' · ');
+    csv += csvRow([d.name, parts[0], parts[1] || '', d.email, d.loc, d.tenure, d.salary, d.perf + '%']);
+  });
+
+  var blob = new Blob(['\uFEFF'+csv], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'employee-directory-' + new Date().toISOString().slice(0,10) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ── Sort ─────────────────────────────────────────────────────────── */
+function tenureToMonths(t){
+  var m = t.match(/(\d+)y\s*(\d+)m/);
+  return m ? parseInt(m[1],10)*12 + parseInt(m[2],10) : 0;
+}
+function sortEmpCards(mode){
+  var grid = document.getElementById('empGrid');
+  var cards = Array.from(grid.querySelectorAll('.emp-card'));
+  cards.sort(function(a,b){
+    var ai = parseInt(a.getAttribute('data-idx'),10), bi = parseInt(b.getAttribute('data-idx'),10);
+    var da = empData[ai], db = empData[bi];
+    if (mode==='name') return da.name.localeCompare(db.name);
+    if (mode==='perf') return db.perf - da.perf;
+    if (mode==='tenure') return tenureToMonths(db.tenure) - tenureToMonths(da.tenure);
+    if (mode==='recent') return (db.addedOrder||0) - (da.addedOrder||0);
+    return 0;
+  });
+  cards.forEach(function(c){ grid.appendChild(c); });
+}
+</script>
+</body>
+</html>

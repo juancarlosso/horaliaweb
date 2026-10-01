@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>HR FAQ Chatbot — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="AI-powered HR FAQ chatbot interface for answering common policy and benefits questions instantly."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+  <style>
+/* Chat layout */
+.chat-shell{display:flex;gap:1.25rem;height:calc(100vh - 200px);min-height:540px}
+.chat-sidebar{width:260px;flex-shrink:0;display:flex;flex-direction:column;gap:.875rem}
+.chat-main{flex:1;min-width:0;display:flex;flex-direction:column;
+  background:var(--card-bg);border:1px solid var(--body-border);border-radius:1rem;overflow:hidden}
+
+/* Message list */
+.msg-list{flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:1rem}
+.msg-list::-webkit-scrollbar{width:4px}
+.msg-list::-webkit-scrollbar-thumb{background:var(--body-border);border-radius:4px}
+
+/* Bubbles */
+.bubble-wrap{display:flex;gap:.625rem;align-items:flex-end}
+.bubble-wrap.user{flex-direction:row-reverse}
+.bubble{max-width:72%;padding:.875rem 1.125rem;border-radius:1rem;font-size:.875rem;
+  line-height:1.65;color:var(--body-text)}
+.bubble.bot{background:var(--body-bg);border:1px solid var(--body-border);
+  border-radius:1rem 1rem 1rem .25rem}
+.bubble.user{background:var(--color-primary);color:#fff;border-radius:1rem 1rem .25rem 1rem}
+.bubble-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;font-size:.78rem;font-weight:800}
+.bubble-time{font-size:.62rem;color:var(--body-text-muted);margin-top:.25rem;
+  text-align:right}
+.bubble-wrap.user .bubble-time{text-align:left}
+
+/* Typing indicator */
+.typing-bubble{display:flex;align-items:center;gap:4px;padding:.75rem 1rem}
+.typing-dot{width:8px;height:8px;border-radius:50%;background:var(--body-text-muted);
+  animation:typing-bounce .9s ease-in-out infinite}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes typing-bounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-6px);opacity:1}}
+
+/* Input bar */
+.chat-input-bar{padding:.875rem 1.125rem;border-top:1px solid var(--body-border);
+  display:flex;gap:.75rem;align-items:flex-end}
+.chat-textarea{flex:1;padding:.625rem .875rem;border-radius:.75rem;
+  border:1.5px solid var(--body-border);background:var(--body-bg);
+  color:var(--body-text);font-size:.875rem;font-family:var(--font);
+  resize:none;outline:none;line-height:1.5;max-height:120px;
+  transition:border-color .15s}
+.chat-textarea:focus{border-color:var(--color-primary)}
+.send-btn{width:42px;height:42px;border-radius:.75rem;background:var(--color-primary);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:1rem;flex-shrink:0;transition:all .15s}
+.send-btn:hover{background:var(--color-primary-dark)}
+.send-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Quick replies */
+.quick-chip{display:inline-flex;padding:.35rem .75rem;border-radius:999px;
+  background:var(--body-bg);border:1.5px solid var(--body-border);
+  font-size:.75rem;font-weight:600;color:var(--body-text-muted);cursor:pointer;
+  transition:all .15s;white-space:nowrap;font-family:var(--font)}
+.quick-chip:hover{border-color:var(--color-primary);color:var(--color-primary);
+  background:var(--color-primary-light)}
+
+/* Topic card */
+.topic-card{padding:.875rem;background:var(--card-bg);border:1px solid var(--body-border);
+  border-radius:.875rem;cursor:pointer;transition:all .15s}
+.topic-card:hover{border-color:var(--color-primary);background:var(--color-primary-light)}
+
+/* Stat chip */
+.stat-chip{padding:.625rem;background:var(--body-bg);border-radius:.75rem;
+  border:1px solid var(--body-border);text-align:center}
+
+/* Source pill */
+.source-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .625rem;
+  border-radius:999px;background:rgba(91,143,249,.1);color:#5B8FF9;
+  font-size:.65rem;font-weight:700;margin-top:.5rem;border:1px solid rgba(91,143,249,.2)}
+
+@media(max-width:768px){
+  .chat-shell{flex-direction:column;height:auto}
+  .chat-sidebar{width:100%;flex-direction:row;overflow-x:auto}
+  .chat-main{min-height:400px}
+}
+</style>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation"><a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a><div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span>AI Features</span><span class="bc-sep">/</span><span class="bc-current">HR Chatbot</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content"><div class="page-inner">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">HR FAQ Chatbot</h1>
+          <p class="page-subtitle">Ask anything about leaves, payroll, benefits, and company policies — powered by Claude AI with your HR knowledge base</p>
+        </div>
+      </div>
+
+      <div class="chat-shell">
+        <!-- Sidebar -->
+        <div class="chat-sidebar">
+          <!-- Stats -->
+          <div class="card-hr" style="padding:1rem">
+            <div class="card-title-hr mb-75rem" style="font-size:.8rem">Session Stats</div>
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="stat-chip">
+                  <div style="font-size:1.5rem;font-weight:900;color:var(--color-primary)" id="statMessages">0</div>
+                  <div class="fs72-muted">Questions</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="stat-chip">
+                  <div style="font-size:1.5rem;font-weight:900;color:#10B981">100%</div>
+                  <div class="fs72-muted">Resolved</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Policy Quick Links -->
+          <div class="card-hr" style="padding:1rem;flex:1">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.875rem">
+              <div class="card-title-hr" style="font-size:.8rem">Policy Topics</div>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr fs75" id="clearBtn">Clear</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem" id="recentTopics"></div>
+            <div style="margin-top:1rem;padding-top:.875rem;border-top:1px solid var(--body-border)">
+              <div class="fs72-muted mb-2" style="font-weight:700;text-transform:uppercase;letter-spacing:.06em">Quick Topics</div>
+              <div style="display:flex;flex-direction:column;gap:.375rem">
+                <button type="button" class="topic-card" style="text-align:left" onclick="sendMessage('What is the annual leave policy?')"><i class="bi bi-calendar3 c-primary-fs9 me-2"></i><span class="fs8125-fw5-body">Leave Policy</span></button>
+                <button type="button" class="topic-card" style="text-align:left" onclick="sendMessage('Explain the payroll and salary structure')"><i class="bi bi-credit-card-fill c-green-fs9 me-2"></i><span class="fs8125-fw5-body">Payroll</span></button>
+                <button type="button" class="topic-card" style="text-align:left" onclick="sendMessage('What health insurance benefits do I have?')"><i class="bi bi-heart-pulse-fill c-red-fs9 me-2"></i><span class="fs8125-fw5-body">Health Benefits</span></button>
+                <button type="button" class="topic-card" style="text-align:left" onclick="sendMessage('What is the work from home policy?')"><i class="bi bi-house-fill c-amber-fs9 me-2"></i><span class="fs8125-fw5-body">WFH Policy</span></button>
+                <button type="button" class="topic-card" style="text-align:left" onclick="sendMessage('How does the performance review and promotion process work?')"><i class="bi bi-graph-up-arrow c-blue-fs9 me-2"></i><span class="fs8125-fw5-body">Performance</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat main -->
+        <div class="chat-main">
+          <div style="padding:.875rem 1.125rem;border-bottom:1px solid var(--body-border);
+            display:flex;align-items:center;gap:.75rem">
+            <div style="width:38px;height:38px;border-radius:50%;background:var(--color-primary-light);
+              display:flex;align-items:center;justify-content:center;color:var(--color-primary);font-size:1rem">
+              <i class="bi bi-robot"></i>
+            </div>
+            <div class="fl1-mnw0">
+              <div class="fw7-fs875-body">HRBot</div>
+              <div class="fs72-muted" style="display:flex;align-items:center;gap:.375rem">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block"></span>
+                Online · Powered by Claude AI
+              </div>
+            </div>
+            <span class="badge-green-xs">Live</span>
+          </div>
+
+          <div class="msg-list" id="msgList"></div>
+
+          <!-- Quick replies -->
+          <div style="padding:.5rem 1.125rem;display:flex;gap:.5rem;flex-wrap:wrap;
+            border-top:1px solid var(--body-border)" id="quickReplies"></div>
+
+          <!-- Input bar -->
+          <div class="chat-input-bar">
+            <textarea class="chat-textarea" id="chatInput" rows="1"
+              placeholder="Ask about leave, payroll, benefits, policies…"></textarea>
+            <button type="button" class="send-btn" id="sendBtn">
+              <i class="bi bi-send-fill"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+</div></main>
+</div>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+
+
+<script>
+// NOTE: This is a static HTML/CSS/JS template with no backend. A real AI
+// integration would need a server-side proxy to hold an API key safely —
+// calling a real LLM API directly from client-side JS would either fail
+// outright (no key, and the API isn't reachable cross-origin like this
+// anyway) or, worse, require embedding a real secret key in the page
+// source for anyone to copy. Instead, HRBot answers from the same HR
+// knowledge base below, matched entirely in the browser — genuinely
+// useful for a template/demo, and safe to ship without a backend.
+
+// HR knowledge base — real company policies HRBot answers from
+const HR_CONTEXT = `You are HRBot, the intelligent HR assistant for HRNexus, an HR management platform.
+You help employees and HR managers with questions about company policies, benefits, leave, payroll, and HR processes.
+
+Company HR Policy Summary:
+- Annual Leave: 18 days per year for all permanent employees. Accrues monthly (1.5 days/month). Carry-forward max: 12 days.
+- Sick Leave: 10 days per year. Requires medical certificate for 3+ consecutive days.
+- Maternity Leave: 26 weeks (182 days) fully paid as per Maternity Benefit Act 2017.
+- Paternity Leave: 15 days paid within 6 months of birth/adoption.
+- Bereavement Leave: 5 days paid for immediate family (spouse, parent, child, sibling).
+- Work From Home: Hybrid policy — 3 days office, 2 days WFH per week. Flexible on manager approval.
+- Leave Application: Submit minimum 2 days before (planned leave) via HRNexus portal. Emergency leave via WhatsApp to manager + HRNexus within 24 hrs.
+
+Payroll:
+- Pay cycle: Monthly, last working day of month.
+- Pay components: Basic (40% CTC), HRA (20%), Special Allowance, PF, Professional Tax.
+- Payslips available in HRNexus portal by 2nd of next month.
+- Increment cycle: April 1st every year, based on performance review.
+- Bonus: Annual performance bonus paid in May (based on Q4 rating and company performance).
+
+Benefits:
+- Health Insurance: ₹5 lakh family floater (employee + spouse + 2 children). Premium fully covered by company.
+- Term Life Insurance: 3x annual CTC.
+- Internet Reimbursement: ₹1,500/month for WFH days.
+- Learning Budget: ₹25,000/year per employee for courses, conferences, certifications.
+- Gratuity: After 5 years continuous service, as per Gratuity Act.
+
+Performance:
+- Reviews: Quarterly self-assessment + annual manager review in March.
+- Rating scale: 1-5. Above 4.0 eligible for fast-track promotion consideration.
+- Promotion cycle: Twice yearly (April and October).
+
+Policies:
+- Notice period: 30 days for all levels; 60 days for managers and above.
+- Probation: 3 months. Leave limited to 5 days during probation.
+- Referral bonus: ₹25,000 paid after successful hire + 3-month retention of referred employee.
+
+Answer clearly, accurately, and helpfully. If the question is outside HR scope, gently redirect. 
+Always be warm and professional. Use bullet points when listing multiple items. Keep responses concise.
+If a policy detail is not in the above context, say you'll escalate to the HR team rather than guessing.`;
+
+let conversationHistory = [];
+let isTyping = false;
+
+// ── DOM refs ──────────────────────────────────────────────────────────────────
+const msgList  = document.getElementById('msgList');
+const textarea = document.getElementById('chatInput');
+const sendBtn  = document.getElementById('sendBtn');
+
+// ── Send message ──────────────────────────────────────────────────────────────
+function sendMessage(text) {
+  const msg = (text || textarea.value).trim();
+  if (!msg || isTyping) return;
+  textarea.value = '';
+  textarea.style.height = 'auto';
+  isTyping = true;
+  sendBtn.disabled = true;
+  document.getElementById('quickReplies').style.display = 'none';
+
+  // Add user bubble
+  appendMessage('user', msg);
+  conversationHistory.push({ role: 'user', content: msg });
+
+  // Typing indicator
+  const typingId = 'typing-' + Date.now();
+  appendTyping(typingId);
+  msgList.scrollTop = msgList.scrollHeight;
+
+  // Increment stat
+  const statsEl = document.getElementById('statMessages');
+  if (statsEl) statsEl.textContent = parseInt(statsEl.textContent || 0) + 1;
+
+  setTimeout(() => {
+    const reply = generateResponse(msg);
+
+    removeTyping(typingId);
+    appendMessage('bot', reply);
+    conversationHistory.push({ role: 'assistant', content: reply });
+
+    showSmartReplies(msg, reply);
+
+    isTyping = false;
+    sendBtn.disabled = false;
+    msgList.scrollTop = msgList.scrollHeight;
+    updateTopics(msg);
+  }, 550 + Math.random() * 500);
+}
+
+function generateResponse(q) {
+  const ql = q.toLowerCase();
+
+  if (ql.includes('maternity'))
+    return "**Maternity Leave** is 26 weeks (182 days), fully paid, as per the Maternity Benefit Act 2017. Please notify HR and your manager as early as possible so cover can be arranged.";
+  if (ql.includes('paternity'))
+    return "**Paternity Leave** is 15 days paid, available within 6 months of the child's birth or adoption. Apply through the HRNexus portal.";
+  if (ql.includes('bereavement'))
+    return "**Bereavement Leave** is 5 days paid for immediate family — spouse, parent, child, or sibling. Please reach out to HR directly and we'll handle the paperwork.";
+  if (ql.includes('sick'))
+    return "**Sick Leave** is 10 days per year. A medical certificate is required for 3 or more consecutive days of sick leave.";
+  if (ql.includes('carry') || ql.includes('carry-forward') || ql.includes('carryforward'))
+    return "You can carry forward up to **12 unused annual leave days** into the next year. Anything beyond that is forfeited, so it's worth planning leave across the year.";
+  if (ql.includes('emergency'))
+    return "For **emergency leave**, message your manager on WhatsApp and log it in the HRNexus portal within 24 hours. Planned leave normally needs at least 2 days' notice.";
+
+  if (ql.includes('increment') || ql.includes('raise'))
+    return "**Increments** are reviewed once a year on **April 1st**, based on your performance review outcome for the prior year.";
+  if (ql.includes('referral'))
+    return "The **employee referral bonus is ₹25,000**, paid out after your referral is successfully hired and completes 3 months with us.";
+  if (ql.includes('bonus'))
+    return "The **annual performance bonus** is paid in **May**, based on your Q4 rating and overall company performance for the year.";
+  if (ql.includes('payslip'))
+    return "Payslips are available in the HRNexus portal by the **2nd of every month**, covering the previous month's pay.";
+
+  if (ql.includes('life insurance') || ql.includes('term insurance'))
+    return "You're covered by **term life insurance at 3x your annual CTC**, fully company-paid — no action needed on your end.";
+  if (ql.includes('gratuity'))
+    return "**Gratuity** applies after 5 years of continuous service, calculated as per the Gratuity Act. It's paid out on exit once you're eligible.";
+  if (ql.includes('internet') || (ql.includes('reimbur') && ql.includes('wfh')))
+    return "You get **₹1,500/month internet reimbursement** for your work-from-home days — submit the bill through the HRNexus portal.";
+  if (ql.includes('learning') || ql.includes('training') || ql.includes('course') || ql.includes('certification'))
+    return "There's a **₹25,000/year learning budget** per employee for courses, conferences, or certifications. Submit a request through the HRNexus portal for approval.";
+
+  if (ql.includes('probation'))
+    return "**Probation** lasts 3 months from your joining date. Leave during probation is limited to 5 days.";
+  if (ql.includes('notice') || ql.includes('resign'))
+    return "The **notice period is 30 days** for most roles, and **60 days for managers and above**. Submit your resignation in writing to your manager and HR to start the process.";
+  if (ql.includes('promotion'))
+    return "**Promotion cycles** run twice a year, in **April and October**. A performance rating above 4.0 puts you on the fast-track for consideration.";
+  if (ql.includes('perform') || ql.includes('review') || ql.includes('rating'))
+    return "Performance reviews run **quarterly as a self-assessment**, plus an **annual manager review in March**, rated on a 1–5 scale. A rating above 4.0 is fast-tracked for promotion.";
+
+  if (ql.includes('leave') || ql.includes('annual') || ql.includes('vacation') || ql.includes('pto'))
+    return "You're entitled to **18 days annual leave** per year, accruing at 1.5 days a month. Up to 12 unused days carry forward to the next year. Apply at least 2 days ahead of planned leave through the HRNexus portal.";
+  if (ql.includes('pay') || ql.includes('paid') || ql.includes('salary') || ql.includes('ctc'))
+    return "Salaries are processed on the **last working day of every month**. Pay is split into Basic (40% CTC), HRA (20%), Special Allowance, PF, and Professional Tax. Payslips land in the portal by the 2nd of the following month.";
+  if (ql.includes('health') || ql.includes('insurance') || ql.includes('medical') || ql.includes('hospital'))
+    return "You're covered under a **₹5 lakh family floater health insurance** plan (you, spouse, and up to 2 children), fully paid by the company. Contact HR for your TPA card and the network hospital list for cashless treatment.";
+
+  if (ql.includes('wfh') || ql.includes('work from home') || ql.includes('remote') || ql.includes('hybrid'))
+    return "Our hybrid policy is **3 days in-office, 2 days WFH** per week, flexible with manager approval. WFH days come with a ₹1,500/month internet reimbursement.";
+
+  if (ql.includes('hello') || /\bhi\b/.test(ql) || ql.includes('hey'))
+    return "Hi there! Ask me about leave, payroll, benefits, WFH policy, performance reviews, or anything else HR-related.";
+  if (ql.includes('thank'))
+    return "You're welcome! Let me know if there's anything else you'd like to know.";
+
+  return "That's a bit outside what I have on file — I don't want to guess and give you the wrong answer. I'll flag this for the HR team to follow up with you directly. In the meantime, feel free to ask about leave, payroll, benefits, WFH policy, or performance reviews.";
+}
+
+// ── Append bubbles ────────────────────────────────────────────────────────────
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function appendMessage(role, text) {
+  const now = new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+  const isBot = role === 'bot';
+  const avatar = isBot
+    ? `<div class="bubble-avatar" style="background:var(--color-primary-light);color:var(--color-primary)"><i class="bi bi-robot"></i></div>`
+    : `<div class="bubble-avatar" style="background:rgba(79,110,247,.2);color:#fff;background:var(--color-primary)">You</div>`;
+
+  const formatted = escapeHtml(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\n/g, '<br/>');
+
+  const sourcePill = isBot ? `<div><span class="source-pill"><i class="bi bi-shield-check-fill"></i>Company Policy · HRNexus</span></div>` : '';
+
+  const div = document.createElement('div');
+  div.className = `bubble-wrap ${role}`;
+  div.innerHTML = `
+    ${isBot ? avatar : ''}
+    <div>
+      <div class="bubble ${role}">${formatted}${sourcePill}</div>
+      <div class="bubble-time">${now}</div>
+    </div>
+    ${!isBot ? avatar : ''}`;
+  msgList.appendChild(div);
+}
+
+function appendTyping(id) {
+  const div = document.createElement('div');
+  div.className = 'bubble-wrap bot';
+  div.id = id;
+  div.innerHTML = `
+    <div class="bubble-avatar" style="background:var(--color-primary-light);color:var(--color-primary)"><i class="bi bi-robot"></i></div>
+    <div class="bubble bot" style="padding:.625rem 1rem">
+      <div class="typing-bubble">
+        <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+      </div>
+    </div>`;
+  msgList.appendChild(div);
+}
+
+function removeTyping(id) {
+  document.getElementById(id)?.remove();
+}
+
+// ── Smart quick replies ───────────────────────────────────────────────────────
+const QUICK_SETS = {
+  leave:     ['How many days do I have left?','What is the carry-forward limit?','How do I apply for emergency leave?'],
+  pay:       ['When is salary credited?','How do I download my payslip?','What is the increment cycle?'],
+  health:    ['Which hospitals are covered?','How do I claim reimbursement?','Is dental covered?'],
+  wfh:       ['Can I apply for full WFH?','What is the WFH reimbursement?','How do I request extra WFH days?'],
+  default:   ['Tell me about leave policy','What are my health benefits?','When is payroll?','Work from home policy'],
+};
+
+function showSmartReplies(userMsg, botReply) {
+  const qr = document.getElementById('quickReplies');
+  const combined = (userMsg + ' ' + botReply).toLowerCase();
+  let set = QUICK_SETS.default;
+  if (combined.includes('leave') || combined.includes('annual')) set = QUICK_SETS.leave;
+  else if (combined.includes('pay') || combined.includes('salary')) set = QUICK_SETS.pay;
+  else if (combined.includes('health') || combined.includes('insurance')) set = QUICK_SETS.health;
+  else if (combined.includes('wfh') || combined.includes('home')) set = QUICK_SETS.wfh;
+
+  qr.innerHTML = set.map(s =>
+    `<button type="button" class="quick-chip" onclick="sendMessage('${s.replace(/'/g,"\\'")}')">${s}</button>`
+  ).join('');
+  qr.style.display = 'flex';
+}
+
+// ── Topic tracker ─────────────────────────────────────────────────────────────
+const topicCounts = {};
+function updateTopics(msg) {
+  const ql = msg.toLowerCase();
+  const topic =
+    ql.includes('leave') ? 'Leave Policies' :
+    ql.includes('pay') || ql.includes('salary') ? 'Payroll' :
+    ql.includes('health') || ql.includes('insurance') ? 'Benefits' :
+    ql.includes('wfh') || ql.includes('remote') ? 'WFH Policy' :
+    ql.includes('perform') || ql.includes('review') ? 'Performance' : null;
+  if (topic) {
+    topicCounts[topic] = (topicCounts[topic] || 0) + 1;
+    renderTopics();
+  }
+}
+
+function renderTopics() {
+  const el = document.getElementById('recentTopics');
+  const entries = Object.entries(topicCounts).sort((a,b) => b[1]-a[1]).slice(0,5);
+  el.innerHTML = entries.map(([t, c]) => `
+    <div class="topic-card" onclick="sendMessage('Tell me more about ${t}')">
+      <div style="font-size:.8rem;font-weight:700;color:var(--body-text)">${t}</div>
+      <div class="fs72-muted">${c} question${c>1?'s':''}</div>
+    </div>`).join('') || '<div class="fs75-muted" style="padding:.5rem 0">Topics will appear as you chat</div>';
+}
+
+// ── Keyboard submit ───────────────────────────────────────────────────────────
+textarea.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+textarea.addEventListener('input', () => {
+  textarea.style.height = 'auto';
+  textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+});
+sendBtn.addEventListener('click', () => sendMessage());
+
+// ── Clear chat ────────────────────────────────────────────────────────────────
+document.getElementById('clearBtn').addEventListener('click', () => {
+  conversationHistory = [];
+  msgList.innerHTML = '';
+  appendWelcome();
+  document.getElementById('statMessages').textContent = '0';
+});
+
+function appendWelcome() {
+  appendMessage('bot', "👋 Hi! I'm **HRBot**, your AI-powered HR assistant. I can help you with:\n\n• **Leave policies** — annual, sick, maternity, paternity\n• **Payroll** — pay dates, payslips, increments, bonuses\n• **Benefits** — health insurance, life cover, learning budget\n• **WFH policy** — hybrid schedule, reimbursements\n• **Performance** — review cycles, promotions, ratings\n\nWhat can I help you with today?");
+  showSmartReplies('', 'welcome');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  appendWelcome();
+  renderTopics();
+});
+</script>
+</body></html>

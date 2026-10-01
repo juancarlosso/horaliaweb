@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Blog Detail — 10 HR Trends — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Blog article detail page — 10 HR Trends, shown with the HRNexus content layout."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+  <nav class="sidebar anim-sil" aria-label="Main navigation">
+    <a class="sidebar-brand" href="../index.html">
+      <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+      <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+    </a>
+    <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span>Blog</span><span class="bc-sep">/</span><span class="bc-current">Blog Detail</span></nav>
+      <div class="search-wrap"><i class="bi bi-search search-icon-i"></i><input type="search" class="search-input" placeholder="Search..."/></div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel"><i class="bi bi-bell-fill"></i><span class="badge-dot"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+      <!-- Breadcrumb — exact React: Blog > HR Trends -->
+      <div class="flex-ac-g2-fs875-c-muted-mb6">
+        <span class="c-primary-pointer">Blog</span>
+        <i class="bi bi-chevron-right fs7"></i>
+        <span>HR Trends</span>
+      </div>
+
+      <div class="row g-3">
+        <!-- LEFT: article content (col-xl-8) -->
+        <div class="col-xl-8">
+
+          <!-- ── Main article card ── -->
+          <div class="card-hr anim-fiu">
+
+            <!-- Hero banner — exact React: height:240, gradient -->
+            <div class="flex-ac-jfc-rel-h240px-fs5-bg-grad-blue-20-purple-15">
+              <div class="abs-inset0-glow-2"></div>
+              <span class="pos-rel-z1">📈</span>
+              <div class="abs-t4-l4">
+                <span class="badge-blue-20-xs-fs8-p15-35">Trends</span>
+              </div>
+            </div>
+
+            <!-- Article body — exact React: padding:2rem -->
+            <div class="p-8">
+
+              <!-- Title — exact React: clamp(1.375rem,3vw,2rem) fw:900 -->
+              <h1 class="fw9-c-body-mb4-lh-13">
+                10 HR Trends That Will Define the Workplace in 2025
+              </h1>
+
+              <!-- Meta row — exact React: gap:1rem, border-bottom, flexWrap:wrap -->
+              <div class="flex-ac-wrap-g4-pb6-mb6-bb-1">
+                <!-- Author -->
+                <div class="flex-ac-g25">
+                  <div class="avatar-green-purple-40">AP</div>
+                  <div>
+                    <div class="fw7-fs875">Aisha Patel</div>
+                    <div class="fs75-muted">Marketing Lead</div>
+                  </div>
+                </div>
+                <!-- Date, clock, views -->
+                <div class="flex-g4-wrap">
+                  <span class="fs8-muted"><i class="bi bi-calendar me-1"></i>December 10, 2024</span>
+                  <span class="fs8-muted"><i class="bi bi-clock me-1"></i>8 min read</span>
+                  <span class="fs8-muted"><i class="bi bi-eye me-1"></i>3,240 views</span>
+                </div>
+                <!-- Action buttons — marginLeft:auto -->
+                <div class="ml-auto-flex-g15">
+                  <button type="button" id="likeIconBtn" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="toggleLike()" title="Like">
+                    <i class="bi bi-heart" id="likeIcon"></i>
+                  </button>
+                  <button type="button" id="bookmarkIconBtn" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="toggleBookmark()" title="Bookmark">
+                    <i class="bi bi-bookmark" id="bookmarkIcon"></i>
+                  </button>
+                  <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Share">
+                    <i class="bi bi-share"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Article content — exact React: lineHeight:1.85, fontSize:.9375rem -->
+              <div class="fs9375-c-body-lh-185">
+
+                <!-- Lead quote — exact React: italic, borderLeft:4px solid #5B8FF9, background:rgba(91,143,249,.05) -->
+                <p class="fs10625-c-muted-bg-blue-5-br2-p-35-5-mb6-bl-4-blue">
+                  The workplace is evolving faster than HR playbooks can keep up. From AI-driven hiring tools to the rise of skills-based organisations, 2025 will demand a fundamentally different approach to people management.
+                </p>
+
+                <!-- Section 1 -->
+                <h2 class="fs125-fw8-c-body-mb35-mt7">1. AI-Augmented Hiring Becomes Mainstream</h2>
+                <p class="mb-125rem">Artificial intelligence is no longer a novelty in talent acquisition — it's becoming table stakes. In 2025, expect AI to screen resumes, schedule interviews, assess candidates through conversational AI, and even predict retention risk based on profile patterns.</p>
+
+                <!-- Section 2 -->
+                <h2 class="fs125-fw8-c-body-mb35-mt7">2. Skills-Based Organisations Over Job Titles</h2>
+                <p class="mb-125rem">Forward-thinking companies are moving away from rigid job descriptions toward skills inventories. This shift enables more fluid team formation, better internal mobility, and clearer career progression paths for employees.</p>
+
+                <!-- Key stat callout — exact React: rgba(16,185,129,.06) bg, green border -->
+                <div class="bg-green-6-br35-p-5-mb6-b-1">
+                  <div class="fs875-fw7-c-green-mb2">📊 Key Stat</div>
+                  <div class="fs9375">Companies with skills-based hiring practices see <strong>36% improvement</strong> in time-to-fill and <strong>25% better</strong> 12-month retention rates.</div>
+                </div>
+
+                <!-- Section 3 -->
+                <h2 class="fs125-fw8-c-body-mb35-mt7">3. Four-Day Work Week Goes Mainstream</h2>
+                <p class="mb-125rem">Following Iceland's landmark study, dozens of companies across Europe, Australia, and North America have adopted or are piloting four-day work weeks — without reducing pay. Productivity and employee satisfaction both improved.</p>
+
+                <!-- Section 4 -->
+                <h2 class="fs125-fw8-c-body-mb35-mt7">4. Pay Transparency Becomes a Legal Requirement</h2>
+                <p class="mb-6">California, New York, Colorado, and the EU have all introduced pay transparency legislation. By 2025, most knowledge workers will be able to see salary ranges before applying — and many will expect to see internal ranges too.</p>
+              </div>
+
+              <!-- Tags — exact React: border-top, flexWrap:wrap -->
+              <div class="flex-ac-wrap-g2-pt6-bt-1">
+                <span class="fs8-fw7-c-muted-mr1">Tags:</span>
+                <span class="fs8-fw5-c-body-bg-bg-br999px-p-12-28-b-1-pointer">HR Trends</span>
+                <span class="fs8-fw5-c-body-bg-bg-br999px-p-12-28-b-1-pointer">AI</span>
+                <span class="fs8-fw5-c-body-bg-bg-br999px-p-12-28-b-1-pointer">Future of Work</span>
+                <span class="fs8-fw5-c-body-bg-bg-br999px-p-12-28-b-1-pointer">Recruitment</span>
+                <span class="fs8-fw5-c-body-bg-bg-br999px-p-12-28-b-1-pointer">Engagement</span>
+              </div>
+
+              <!-- Footer action bar — exact React: justifyContent:space-between -->
+              <div class="flex-ac-jsb-wrap-g4-mt6">
+                <div class="flex-g25">
+                  <button type="button" id="likeBtn" class="btn-hr btn-outline-hr" onclick="toggleLike()">
+                    <i class="bi bi-heart me-1" id="likeBtnIcon"></i><span id="likeCount">187</span> Likes
+                  </button>
+                  <button type="button" class="btn-hr btn-ghost-hr"><i class="bi bi-share me-1"></i>Share</button>
+                </div>
+                <button type="button" class="btn-hr btn-primary-hr"><i class="bi bi-arrow-right me-1"></i>Next Article</button>
+              </div>
+
+            </div><!-- /padding:2rem -->
+          </div><!-- /card-hr main -->
+
+          <!-- ── Comments card — exact React: mt-3 ── -->
+          <div class="card-hr anim-fiu d3 mt-75rem">
+            <div class="card-hd">
+              <div class="card-title-hr">Comments <span class="fs875-fw4-c-muted">(12)</span></div>
+            </div>
+            <div class="card-bd">
+
+              <!-- New comment box — exact React: YO avatar + textarea -->
+              <div class="flex-g3-mb5">
+                <div class="avatar-blue-purple-36-2">YO</div>
+                <div class="fl1">
+                  <textarea class="hr-input min-height" id="commentInput" placeholder="Add a comment..."></textarea>
+                  <button class="btn-hr btn-primary-hr btn-sm-hr mt-2" type="button" onclick="postComment()">Post Comment</button>
+                </div>
+              </div>
+
+              <!-- Comment: Marcus Johnson -->
+              <div class="flex-g3-pt4-bt">
+                <div class="avatar-green-sky-36">MJ</div>
+                <div>
+                  <div class="flex-ac-g3-mb15">
+                    <span class="fw7-fs875">Marcus Johnson</span>
+                    <span class="fs75-muted">2 hrs ago</span>
+                  </div>
+                  <p class="fs875-c-body-mb25-lh-16">Great article! The pay transparency point really resonates — we've already started listing ranges in our job posts and it's dramatically improved candidate quality.</p>
+                  <div class="flex-g4">
+                    <button class="link-btn-muted" type="button"><i class="bi bi-heart"></i>12</button>
+                    <button class="fs8-c-muted-bg-none-p-0-b-none-pointer" type="button">Reply</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Comment: Tom Nakamura -->
+              <div class="flex-g3-pt4-bt" id="commentsEnd">
+                <div class="avatar-red-amber-36">TN</div>
+                <div>
+                  <div class="flex-ac-g3-mb15">
+                    <span class="fw7-fs875">Tom Nakamura</span>
+                    <span class="fs75-muted">Yesterday</span>
+                  </div>
+                  <p class="fs875-c-body-mb25-lh-16">The skills-based approach is something we've been piloting internally. Still a challenge to get hiring managers to let go of the job title mindset.</p>
+                  <div class="flex-g4">
+                    <button class="link-btn-muted" type="button"><i class="bi bi-heart"></i>8</button>
+                    <button class="fs8-c-muted-bg-none-p-0-b-none-pointer" type="button">Reply</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div><!-- /col-xl-8 -->
+
+        <!-- RIGHT: sidebar (col-xl-4) -->
+        <div class="col-xl-4">
+
+          <!-- About the Author — exact React: textAlign:center -->
+          <div class="card-hr anim-fiu d2 mb-75rem">
+            <div class="card-hd"><div class="card-title-hr">About the Author</div></div>
+            <div class="card-bd tc">
+              <div class="avatar-green-purple-64">AP</div>
+              <div class="fs1-fw7-mb1">Aisha Patel</div>
+              <div class="fs875-fw6-c-primary-mb3">Marketing Lead</div>
+              <p class="fs875-c-muted-mb4-lh-165">Aisha writes about HR strategy, employee engagement, and the future of work. 5+ years in people operations.</p>
+              <!-- Social icons — exact React: bi-linkedin, bi-twitter-x, bi-envelope -->
+              <div class="flex-jfc-g3-mb4">
+                <button class="avatar-linkedin-6-32" type="button"><i class="bi bi-linkedin fs875"></i></button>
+                <button class="avatar-black-10-32" type="button"><i class="bi bi-twitter-x fs875"></i></button>
+                <button class="avatar-blue-6-32" type="button"><i class="bi bi-envelope fs875"></i></button>
+              </div>
+              <button class="btn-hr btn-outline-hr btn-sm-hr w100pct-2" type="button">View All Posts</button>
+            </div>
+          </div>
+
+          <!-- Related Posts — exact React: 3 items, hover bg -->
+          <div class="card-hr anim-fiu d3 mb-75rem">
+            <div class="card-hd"><div class="card-title-hr">Related Posts</div></div>
+            <div class="p-0">
+              <div class="flex-g3-p-bb-hover" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+                <div class="icon-box-bg-44-fs125">❤️</div>
+                <div>
+                  <div class="fs875-fw6-mb1-lh-14">Preventing Quiet Quitting</div>
+                  <div class="fs75-muted"><i class="bi bi-clock me-1"></i>5 min</div>
+                </div>
+              </div>
+              <div class="flex-g3-p-bb-hover" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+                <div class="icon-box-bg-44-fs125">🏆</div>
+                <div>
+                  <div class="fs875-fw6-mb1-lh-14">The Science of Recognition</div>
+                  <div class="fs75-muted"><i class="bi bi-clock me-1"></i>6 min</div>
+                </div>
+              </div>
+              <div class="flex-g3-p-35-45-pointer-trans" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+                <div class="icon-box-bg-44-fs125">🌍</div>
+                <div>
+                  <div class="fs875-fw6-mb1-lh-14">Remote Work Culture Lessons</div>
+                  <div class="fs75-muted"><i class="bi bi-clock me-1"></i>7 min</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Newsletter card -->
+          <div class="card-hr anim-fiu d4">
+            <div class="card-hd"><div class="card-title-hr">Newsletter</div></div>
+            <div class="card-bd">
+              <p class="fs875-c-muted-mb4-lh-16">Get the latest HR insights delivered to your inbox every week.</p>
+              <input class="hr-input mb-25" id="newsletterEmail" placeholder="your@email.com" type="email" />
+              <button class="btn-hr btn-primary-hr w100pct-2" type="button" onclick="subscribeNewsletter()">Subscribe</button>
+            </div>
+          </div>
+
+        </div><!-- /col-xl-4 -->
+      </div><!-- /row -->
+    </div>
+  </main>
+</div>
+  <script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ═══════════════════════════════════════
+   BLOG DETAIL — like, bookmark, comment, newsletter
+   Exact React: liked state toggle, bookmarked state toggle
+═══════════════════════════════════════ */
+var _liked      = false;
+var _bookmarked = false;
+
+function toggleLike() {
+  _liked = !_liked;
+  // Icon buttons (top toolbar)
+  var iconI = document.getElementById('likeIcon');
+  var iconBtn = document.getElementById('likeIconBtn');
+  iconI.className = _liked ? 'bi bi-heart-fill' : 'bi bi-heart';
+  iconBtn.style.color = _liked ? '#EC4899' : '';
+
+  // Bottom outline button — exact React: color & borderColor change
+  var btn  = document.getElementById('likeBtn');
+  var icon = document.getElementById('likeBtnIcon');
+  var cnt  = document.getElementById('likeCount');
+  btn.style.color       = _liked ? '#EC4899' : '';
+  btn.style.borderColor = _liked ? '#EC4899' : '';
+  icon.className = (_liked ? 'bi bi-heart-fill' : 'bi bi-heart') + ' me-1';
+  cnt.textContent = _liked ? '188' : '187';
+}
+
+function toggleBookmark() {
+  _bookmarked = !_bookmarked;
+  var iconI   = document.getElementById('bookmarkIcon');
+  var iconBtn = document.getElementById('bookmarkIconBtn');
+  iconI.className = _bookmarked ? 'bi bi-bookmark-fill' : 'bi bi-bookmark';
+  iconBtn.style.color = _bookmarked ? '#F59E0B' : '';
+}
+
+function postComment() {
+  var txt = (document.getElementById('commentInput').value || '').trim();
+  if (!txt) return;
+  var end  = document.getElementById('commentsEnd');
+  var div  = document.createElement('div');
+  div.style.cssText = 'display:flex;gap:.75rem;padding-top:1rem;border-top:1px solid var(--body-border)';
+  div.innerHTML =
+    '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#5B8FF9,#7C3AED);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;flex-shrink:0">YO</div>' +
+    '<div><div style="display:flex;gap:.75rem;align-items:center;margin-bottom:.375rem">' +
+    '<span style="font-weight:700;font-size:.875rem">You</span>' +
+    '<span style="font-size:.75rem;color:var(--body-text-muted)">Just now</span></div>' +
+    '<p style="font-size:.875rem;line-height:1.6;color:var(--body-text);margin-bottom:.625rem">' + txt.replace(/</g,'&lt;') + '</p>' +
+    '<div style="display:flex;gap:1rem">' +
+    '<button type="button" style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--body-text-muted);padding:0;display:flex;align-items:center;gap:.3rem;font-family:var(--font)"><i class="bi bi-heart"></i>0</button>' +
+    '<button type="button" style="background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--body-text-muted);padding:0;font-family:var(--font)">Reply</button></div></div>';
+  end.parentNode.insertBefore(div, end.nextSibling);
+  document.getElementById('commentInput').value = '';
+}
+
+function subscribeNewsletter() {
+  var email = (document.getElementById('newsletterEmail').value || '').trim();
+  if (!email) return;
+  var card = document.getElementById('newsletterEmail').closest('.card-bd');
+  card.innerHTML =
+    '<div style="text-align:center;padding:.5rem 0">' +
+    '<i class="bi bi-check-circle-fill" style="font-size:2rem;color:#10B981;display:block;margin-bottom:.75rem"></i>' +
+    '<div style="font-weight:700;color:var(--body-text);margin-bottom:.25rem">You\'re subscribed!</div>' +
+    '<div style="font-size:.8rem;color:var(--body-text-muted)">Weekly HR insights heading to ' + email + '</div></div>';
+}
+</script>
+</body>
+</html>

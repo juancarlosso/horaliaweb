@@ -1,0 +1,129 @@
+// =============================================================================
+// HRNexus — SCSS Variables (sourced from React design tokens)
+// All values match the original React dashboard CSS custom properties.
+// Change $primary to re-colour the entire dashboard + Bootstrap.
+// =============================================================================
+
+// ── Typography ────────────────────────────────────────────────────────────────
+$font-primary:    ('DM Sans', 'Plus Jakarta Sans', system-ui, sans-serif) !default;
+$font-mono:       ('JetBrains Mono', 'Fira Code', monospace) !default;
+$font-size-base:  1rem !default;
+$font-size-sm:    0.875rem !default;
+$font-size-xs:    0.8125rem !default;
+$font-size-2xs:   0.75rem !default;
+$font-weight-normal: 400 !default;
+$font-weight-medium: 500 !default;
+$font-weight-semi:   600 !default;
+$font-weight-bold:   700 !default;
+$font-weight-black:  800 !default;
+$line-height-base: 1.6 !default;
+
+// ── Brand palette ─────────────────────────────────────────────────────────────
+$primary:   #4F6EF7 !default;
+$secondary: #8B5CF6 !default;
+$success:   #10B981 !default;
+$danger:    #EF4444 !default;
+$warning:   #F59E0B !default;
+$info:      #06B6D4 !default;
+$accent:    #F59E0B !default;
+
+// Derived primary shades
+$primary-dark:  #3855E0 !default;
+$primary-light: rgba(79, 110, 247, 0.09) !default;
+$primary-glow:  rgba(79, 110, 247, 0.18) !default;
+
+// ── Bootstrap overrides (must come before Bootstrap @use) ─────────────────────
+$font-family-sans-serif: $font-primary !default;
+$font-family-monospace:  $font-mono !default;
+$body-bg:          #F4F5FA !default;
+$body-color:       #1C1F3B !default;
+$border-radius:    0.5rem !default;
+$border-radius-sm: 0.375rem !default;
+$border-radius-lg: 0.875rem !default;
+$border-radius-xl: 1rem !default;
+
+// ── Light-theme surface tokens ─────────────────────────────────────────────────
+$body-bg2:           #ECEEF7 !default;
+$body-text-muted:    #6B6F98 !default;
+$body-border:        #E4E6F0 !default;
+$body-border-strong: #CDD0E8 !default;
+$card-bg:            #FFFFFF !default;
+$card-bg2:           #F8F9FE !default;
+$card-border:        #E8EAF4 !default;
+$card-shadow:        0 1px 2px rgba(30, 35, 90, 0.04), 0 4px 16px rgba(79, 110, 247, 0.06) !default;
+$card-shadow-hover:  0 4px 24px rgba(79, 110, 247, 0.14), 0 1px 4px rgba(30, 35, 90, 0.06) !default;
+
+// ── Topbar ────────────────────────────────────────────────────────────────────
+$topbar-bg:     #FFFFFF !default;
+$topbar-border: #EEF0F8 !default;
+$topbar-height: 64px !default;
+
+// ── Sidebar (always dark) ─────────────────────────────────────────────────────
+$sidebar-bg:            #13142B !default;
+$sidebar-bg2:           #1A1B35 !default;
+$sidebar-text:          #8A90B8 !default;
+$sidebar-text-hover:    #CDD2F8 !default;
+$sidebar-active-bg:     rgba(79, 110, 247, 0.16) !default;
+$sidebar-active-border: $primary !default;
+$sidebar-border:        rgba(255, 255, 255, 0.05) !default;
+$sidebar-section:       #474A6B !default;
+$sidebar-width:         264px !default;
+$sidebar-collapsed:     72px !default;
+
+// ── Dark theme tokens ─────────────────────────────────────────────────────────
+$dark-body-bg:       #080D1C !default;
+$dark-body-bg2:      #0C1220 !default;
+$dark-body-text:     #CDD2F0 !default;
+$dark-body-muted:    #5C6285 !default;
+$dark-body-border:   #1A2035 !default;
+$dark-card-bg:       #0F1320 !default;
+$dark-card-bg2:      #141928 !default;
+$dark-card-border:   #1E2540 !default;
+$dark-topbar-bg:     #0F1320 !default;
+$dark-topbar-border: #1A2035 !default;
+$dark-sidebar-bg:    #070C1A !default;
+$dark-sidebar-bg2:   #0D1220 !default;
+
+// ── Layout ────────────────────────────────────────────────────────────────────
+$card-radius:    0.875rem !default;
+$card-radius-sm: 0.625rem !default;
+
+// ── Transitions ───────────────────────────────────────────────────────────────
+$transition-fast:    0.13s ease !default;
+$transition-base:    0.22s ease !default;
+$transition-sidebar: 0.26s cubic-bezier(0.4, 0, 0.2, 1) !default;
+
+// ── Z-index ───────────────────────────────────────────────────────────────────
+$z-sidebar:     1000 !default;
+$z-topbar:       999 !default;
+$z-overlay:     1199 !default;
+$z-sidebar-mob: 1200 !default;
+$z-popup:     999999 !default;
+
+// ── Breakpoints ───────────────────────────────────────────────────────────────
+$bp-xs: 480px !default;
+$bp-sm: 576px !default;
+$bp-md: 767px !default;
+$bp-lg: 1200px !default;
+$bp-xl: 1280px !default;
+
+// ── Stat card colour variants ─────────────────────────────────────────────────
+$stat-variants: (
+  'blue':   ($primary,   $secondary),
+  'green':  (#10B981,    #059669),
+  'amber':  (#F59E0B,    #D97706),
+  'red':    (#EF4444,    #DC2626),
+  'cyan':   (#06B6D4,    #0891B2),
+  'violet': (#8B5CF6,    #7C3AED),
+) !default;
+
+// ── Status badge variants ─────────────────────────────────────────────────────
+$status-variants: (
+  'active':     (#10B981, #059669),
+  'inactive':   (#94A3B8, #6B6F98),
+  'pending':    (#F59E0B, #B45309),
+  'terminated': (#EF4444, #DC2626),
+  'leave':      (#06B6D4, #0891B2),
+  'available':  (#8B5CF6, #7748E2),
+  'repair':     (#EF4444, #DB3030),
+) !default;

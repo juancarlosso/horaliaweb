@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Chart Libraries — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Chart library integration reference for adding charts to HRNexus pages."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner"><div class="topbar-left"><button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button><nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Charts</span></nav><div class="search-wrap"><i class="bi bi-search search-icon-i"></i><input type="search" class="search-input" placeholder="Search..." aria-label="Search"/></div></div><div class="topbar-right pos-rel"><button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications"><i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span></button><button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode"><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button><button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button><div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+<div class="page-inner">
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Chart Libraries</h1>
+    <p class="page-subtitle">Custom SVG charts, sparklines, gauges and visual data components — no dependencies</p>
+  </div>
+</div>
+
+<!-- ══ ROW 1: Bar + Donut ══════════════════════════════════════════════════ -->
+<div class="row g-3 mb-75rem">
+  <div class="col-xl-8">
+    <div class="card-hr">
+      <div class="card-hd">
+        <div>
+          <div class="card-title-hr">Bar Chart — Monthly Hires</div>
+          <div class="card-subtitle-hr">New hires per month (2024)</div>
+        </div>
+      </div>
+      <div class="card-bd">
+        <div class="flex-afe-jsb-mb3">
+          <div>
+            <span class="fs175-fw8-c-body">149</span>
+            <span class="fs8125-c-muted-ml2">total hires YTD</span>
+          </div>
+          <div class="flex-g3">
+            <div class="flex-ac-g15">
+              <div class="sq10px-bg-blue-br2px"></div>
+              <span class="fs75-muted">Hired</span>
+            </div>
+          </div>
+        </div>
+        <svg class="overflow" viewBox="0 0 528 180" width="100%" id="barChart">
+          <defs>
+            <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5B8FF9"/>
+              <stop offset="100%" stop-color="rgba(91,143,249,.3)"/>
+            </linearGradient>
+          </defs>
+          <!-- Grid lines -->
+          <line x1="0" y1="140" x2="528" y2="140" stroke="var(--body-border)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="0" y1="105" x2="528" y2="105" stroke="var(--body-border)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="0" y1="70"  x2="528" y2="70"  stroke="var(--body-border)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="0" y1="35"  x2="528" y2="35"  stroke="var(--body-border)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="0" y1="0"   x2="528" y2="0"   stroke="var(--body-border)" stroke-width="1" stroke-dasharray="4,4"/>
+          <!-- Bars: Jan-Dec (values: 8,12,6,15,9,18,11,14,7,16,20,13) -->
+          <rect x="0"   y="84"  width="36" height="56"  rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="8"  data-label="Jan" onmouseenter="showTip(event,'Jan: 8 hires')" onmouseleave="hideTip()"/>
+          <text x="18"  y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Jan</text>
+          <rect x="44"  y="56"  width="36" height="84"  rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="12" data-label="Feb" onmouseenter="showTip(event,'Feb: 12 hires')" onmouseleave="hideTip()"/>
+          <text x="62"  y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Feb</text>
+          <rect x="88"  y="98"  width="36" height="42"  rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="6"  data-label="Mar" onmouseenter="showTip(event,'Mar: 6 hires')" onmouseleave="hideTip()"/>
+          <text x="106" y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Mar</text>
+          <rect x="132" y="35"  width="36" height="105" rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="15" data-label="Apr" onmouseenter="showTip(event,'Apr: 15 hires')" onmouseleave="hideTip()"/>
+          <text x="150" y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Apr</text>
+          <rect x="176" y="77"  width="36" height="63"  rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="9"  data-label="May" onmouseenter="showTip(event,'May: 9 hires')" onmouseleave="hideTip()"/>
+          <text x="194" y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">May</text>
+          <rect x="220" y="14"  width="36" height="126" rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="18" data-label="Jun" onmouseenter="showTip(event,'Jun: 18 hires')" onmouseleave="hideTip()"/>
+          <text x="238" y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Jun</text>
+          <rect x="264" y="63"  width="36" height="77"  rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="11" data-label="Jul" onmouseenter="showTip(event,'Jul: 11 hires')" onmouseleave="hideTip()"/>
+          <text x="282" y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Jul</text>
+          <rect x="308" y="42"  width="36" height="98"  rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="14" data-label="Aug" onmouseenter="showTip(event,'Aug: 14 hires')" onmouseleave="hideTip()"/>
+          <text x="326" y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Aug</text>
+          <rect x="352" y="91"  width="36" height="49"  rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="7"  data-label="Sep" onmouseenter="showTip(event,'Sep: 7 hires')" onmouseleave="hideTip()"/>
+          <text x="370" y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Sep</text>
+          <rect x="396" y="28"  width="36" height="112" rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="16" data-label="Oct" onmouseenter="showTip(event,'Oct: 16 hires')" onmouseleave="hideTip()"/>
+          <text x="414" y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Oct</text>
+          <rect x="440" y="0"   width="36" height="140" rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="20" data-label="Nov" onmouseenter="showTip(event,'Nov: 20 hires')" onmouseleave="hideTip()"/>
+          <text x="458" y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Nov</text>
+          <rect x="484" y="49"  width="36" height="91"  rx="4" fill="url(#blueGrad)" class="chart-bar" data-val="13" data-label="Dec" onmouseenter="showTip(event,'Dec: 13 hires')" onmouseleave="hideTip()"/>
+          <text x="502" y="175" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Dec</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-4">
+    <div class="card-hr">
+      <div class="card-hd">
+        <div>
+          <div class="card-title-hr">Donut Chart — Departments</div>
+          <div class="card-subtitle-hr">Headcount by team</div>
+        </div>
+      </div>
+      <div class="card-bd">
+        <div class="flex-jfc-mb5">
+          <div class="iflex-rel">
+            <svg class="transform" width="160" height="160" viewBox="0 0 160 160">
+              <circle cx="80" cy="80" r="69" fill="none" stroke="var(--body-border)" stroke-width="22"/>
+              <circle cx="80" cy="80" r="69" fill="none" stroke="#5B8FF9" stroke-width="22" stroke-dasharray="138.7 294.8" stroke-dashoffset="0"        stroke-linecap="round"/>
+              <circle cx="80" cy="80" r="69" fill="none" stroke="#7C3AED" stroke-width="22" stroke-dasharray="60.7 372.8"  stroke-dashoffset="-138.7"   stroke-linecap="round"/>
+              <circle cx="80" cy="80" r="69" fill="none" stroke="#10B981" stroke-width="22" stroke-dasharray="104.0 329.5" stroke-dashoffset="-199.4"   stroke-linecap="round"/>
+              <circle cx="80" cy="80" r="69" fill="none" stroke="#F59E0B" stroke-width="22" stroke-dasharray="52.0 381.5"  stroke-dashoffset="-303.5"   stroke-linecap="round"/>
+              <circle cx="80" cy="80" r="69" fill="none" stroke="#0EA5E9" stroke-width="22" stroke-dasharray="73.7 359.8"  stroke-dashoffset="-355.5"   stroke-linecap="round"/>
+            </svg>
+            <div class="abs-t50pct-l50pct-tc">
+              <span class="d-block-fs15-fw8-c-body-lh-1">128</span>
+              <span class="fs6875-fw5-c-muted">Employees</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex-col-g25">
+          <div class="flex-ac-g3"><div class="sq10px-bg-blue-shrink0"></div><span class="fl1-fs8125-fw5">Engineering</span><span class="fs8125-fw7-body">42</span><span class="w32px-fs75-c-muted-tr">32%</span></div>
+          <div class="flex-ac-g3"><div class="sq10px-bg-purple-shrink0"></div><span class="fl1-fs8125-fw5">Product</span><span class="fs8125-fw7-body">18</span><span class="w32px-fs75-c-muted-tr">14%</span></div>
+          <div class="flex-ac-g3"><div class="sq10px-bg-green-shrink0"></div><span class="fl1-fs8125-fw5">Sales</span><span class="fs8125-fw7-body">31</span><span class="w32px-fs75-c-muted-tr">24%</span></div>
+          <div class="flex-ac-g3"><div class="sq10px-bg-amber-shrink0"></div><span class="fl1-fs8125-fw5">Marketing</span><span class="fs8125-fw7-body">15</span><span class="w32px-fs75-c-muted-tr">12%</span></div>
+          <div class="flex-ac-g3"><div class="sq10px-bg-sky-shrink0"></div><span class="fl1-fs8125-fw5">HR &amp; Ops</span><span class="fs8125-fw7-body">22</span><span class="w32px-fs75-c-muted-tr">17%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ROW 2: Line + Horizontal Bar ═══════════════════════════════════════ -->
+<div class="row g-3 mb-75rem">
+  <div class="col-xl-8">
+    <div class="card-hr">
+      <div class="card-hd">
+        <div>
+          <div class="card-title-hr">Line Chart — Headcount Trend</div>
+          <div class="card-subtitle-hr">Total employee headcount over 12 months</div>
+        </div>
+      </div>
+      <div class="card-bd">
+        <svg class="overflow" viewBox="0 0 580 150" width="100%">
+          <defs>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(91,143,249,.2)"/>
+              <stop offset="100%" stop-color="rgba(91,143,249,0)"/>
+            </linearGradient>
+          </defs>
+          <line x1="0" y1="150" x2="580" y2="150" stroke="var(--body-border)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="0" y1="112" x2="580" y2="112" stroke="var(--body-border)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="0" y1="75"  x2="580" y2="75"  stroke="var(--body-border)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="0" y1="38"  x2="580" y2="38"  stroke="var(--body-border)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="0" y1="0"   x2="580" y2="0"   stroke="var(--body-border)" stroke-width="1" stroke-dasharray="4,4"/>
+          <polygon points="0,150 0,71 52,66 104,65 156,57 208,55 260,46 312,41 364,37 416,35 468,27 520,17 572,10 580,150" fill="url(#areaGrad)"/>
+          <polyline points="0,71 52,66 104,65 156,57 208,55 260,46 312,41 364,37 416,35 468,27 520,17 572,10" fill="none" stroke="#5B8FF9" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="0"   cy="71" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Jan: 108</title></circle>
+          <circle cx="52"  cy="66" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Feb: 116</title></circle>
+          <circle cx="104" cy="65" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Mar: 117</title></circle>
+          <circle cx="156" cy="57" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Apr: 130</title></circle>
+          <circle cx="208" cy="55" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>May: 133</title></circle>
+          <circle cx="260" cy="46" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Jun: 148</title></circle>
+          <circle cx="312" cy="41" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Jul: 155</title></circle>
+          <circle cx="364" cy="37" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Aug: 162</title></circle>
+          <circle cx="416" cy="35" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Sep: 164</title></circle>
+          <circle cx="468" cy="27" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Oct: 177</title></circle>
+          <circle cx="520" cy="17" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Nov: 193</title></circle>
+          <circle cx="572" cy="10" r="4" fill="#5B8FF9" stroke="var(--card-bg)" stroke-width="2"><title>Dec: 204</title></circle>
+          <text x="0"   y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Jan</text>
+          <text x="52"  y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Feb</text>
+          <text x="104" y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Mar</text>
+          <text x="156" y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Apr</text>
+          <text x="208" y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">May</text>
+          <text x="260" y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Jun</text>
+          <text x="312" y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Jul</text>
+          <text x="364" y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Aug</text>
+          <text x="416" y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Sep</text>
+          <text x="468" y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Oct</text>
+          <text x="520" y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Nov</text>
+          <text x="572" y="164" text-anchor="middle" font-size="10" fill="var(--body-text-muted)">Dec</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-4">
+    <div class="card-hr">
+      <div class="card-hd">
+        <div>
+          <div class="card-title-hr">Horizontal Bar — Dept Breakdown</div>
+          <div class="card-subtitle-hr">Staff distribution by department</div>
+        </div>
+      </div>
+      <div class="card-bd">
+        <div class="mb-35"><div class="flex-jsb-mb12"><span class="fs845-fw5-c-body">Engineering</span><span class="fs845-fw7-c-body">42</span></div><div class="prog-md"><div class="w32pct-h100pct-bg-blue-br999px-trans"></div></div><div class="fs72-c-muted-mt08">32% of workforce</div></div>
+        <div class="mb-35"><div class="flex-jsb-mb12"><span class="fs845-fw5-c-body">Product</span><span class="fs845-fw7-c-body">18</span></div><div class="prog-md"><div class="w14pct-h100pct-bg-purple-br999px-trans"></div></div><div class="fs72-c-muted-mt08">14% of workforce</div></div>
+        <div class="mb-35"><div class="flex-jsb-mb12"><span class="fs845-fw5-c-body">Sales</span><span class="fs845-fw7-c-body">31</span></div><div class="prog-md"><div class="w24pct-h100pct-bg-green-br999px-trans"></div></div><div class="fs72-c-muted-mt08">24% of workforce</div></div>
+        <div class="mb-35"><div class="flex-jsb-mb12"><span class="fs845-fw5-c-body">Marketing</span><span class="fs845-fw7-c-body">15</span></div><div class="prog-md"><div class="w12pct-h100pct-bg-amber-br999px-trans"></div></div><div class="fs72-c-muted-mt08">12% of workforce</div></div>
+        <div class="mb-35"><div class="flex-jsb-mb12"><span class="fs845-fw5-c-body">HR &amp; Ops</span><span class="fs845-fw7-c-body">22</span></div><div class="prog-md"><div class="w17pct-h100pct-bg-sky-br999px-trans"></div></div><div class="fs72-c-muted-mt08">17% of workforce</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ ROW 3: GAUGE CHART ══════════════════════════════════════════════════ -->
+<div class="row g-3 mb-75rem">
+  <!-- ── Gauge Chart — Attendance Rate ─────────────────────────────── -->
+  <div class="col-xl-4">
+    <div class="card-hr h-100">
+      <div class="card-hd">
+        <div>
+          <div class="card-title-hr">Gauge Chart — Attendance Rate</div>
+          <div class="card-subtitle-hr">Monthly attendance performance — click any gauge</div>
+        </div>
+      </div>
+      <div class="card-bd">
+
+        <!-- ── 3 small selectable gauges ──────────── -->
+        <div class="grid-g3-mb6">
+
+          <!-- Gauge 0: Attendance (green) -->
+          <div class="gauge-widget selected gauge-color-3" id="gw0" onclick="selectGauge(0)">
+            <svg class="overflow" viewBox="0 0 120 80" width="100%">
+              <defs>
+                <linearGradient id="gg0" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#10B981"/>
+                  <stop offset="100%" stop-color="#34D399"/>
+                </linearGradient>
+              </defs>
+              <!-- Track -->
+              <path d="M 10,70 A 50 50 0 0 1 110,70" fill="none" stroke="var(--body-border)" stroke-width="12" stroke-linecap="round"/>
+              <!-- Zone ticks -->
+              <line x1="10" y1="70" x2="10" y2="78"   stroke="var(--body-border)" stroke-width="1.5"/>
+              <line x1="60" y1="20" x2="60" y2="28"   stroke="var(--body-border)" stroke-width="1.5"/>
+              <line x1="110" y1="70" x2="110" y2="78" stroke="var(--body-border)" stroke-width="1.5"/>
+              <!-- Fill arc + needle — rendered by renderMiniGauge() -->
+              <path id="miniFill0" fill="none" stroke="url(#gg0)" stroke-width="12" stroke-linecap="round"/>
+              <g id="gn0">
+                <line x1="60" y1="70" id="gnLine0" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="60" cy="70" r="4" fill="#333"/>
+                <circle cx="60" cy="70" r="2" fill="white"/>
+              </g>
+              <!-- Value -->
+              <text id="miniPct0" x="60" y="55" text-anchor="middle" font-size="17" font-weight="900" fill="var(--body-text)"></text>
+              <text x="60" y="68" text-anchor="middle" font-size="8.5" fill="var(--body-text-muted)">Attendance</text>
+            </svg>
+            <div class="gauge-sub fs7-fw7-c-green">▲ +1.2% vs last month</div>
+          </div>
+
+          <!-- Gauge 1: Performance (blue) -->
+          <div class="gauge-widget gauge-color-2" id="gw1" onclick="selectGauge(1)">
+            <svg class="overflow" viewBox="0 0 120 80" width="100%">
+              <defs>
+                <linearGradient id="gg1" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#5B8FF9"/>
+                  <stop offset="100%" stop-color="#818CF8"/>
+                </linearGradient>
+              </defs>
+              <path d="M 10,70 A 50 50 0 0 1 110,70" fill="none" stroke="var(--body-border)" stroke-width="12" stroke-linecap="round"/>
+              <line x1="10" y1="70" x2="10" y2="78"   stroke="var(--body-border)" stroke-width="1.5"/>
+              <line x1="60" y1="20" x2="60" y2="28"   stroke="var(--body-border)" stroke-width="1.5"/>
+              <line x1="110" y1="70" x2="110" y2="78" stroke="var(--body-border)" stroke-width="1.5"/>
+              <path id="miniFill1" fill="none" stroke="url(#gg1)" stroke-width="12" stroke-linecap="round"/>
+              <g id="gn1">
+                <line x1="60" y1="70" id="gnLine1" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="60" cy="70" r="4" fill="#333"/>
+                <circle cx="60" cy="70" r="2" fill="white"/>
+              </g>
+              <text id="miniPct1" x="60" y="55" text-anchor="middle" font-size="17" font-weight="900" fill="var(--body-text)"></text>
+              <text x="60" y="68" text-anchor="middle" font-size="8.5" fill="var(--body-text-muted)">Performance</text>
+            </svg>
+            <div class="gauge-sub fs7-fw7-c-blue">▲ +3.1% vs last Q</div>
+          </div>
+
+          <!-- Gauge 2: Retention (amber) -->
+          <div class="gauge-widget gauge-color" id="gw2" onclick="selectGauge(2)">
+            <svg class="overflow" viewBox="0 0 120 80" width="100%">
+              <defs>
+                <linearGradient id="gg2" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#F59E0B"/>
+                  <stop offset="100%" stop-color="#FCD34D"/>
+                </linearGradient>
+              </defs>
+              <path d="M 10,70 A 50 50 0 0 1 110,70" fill="none" stroke="var(--body-border)" stroke-width="12" stroke-linecap="round"/>
+              <line x1="10" y1="70" x2="10" y2="78"   stroke="var(--body-border)" stroke-width="1.5"/>
+              <line x1="60" y1="20" x2="60" y2="28"   stroke="var(--body-border)" stroke-width="1.5"/>
+              <line x1="110" y1="70" x2="110" y2="78" stroke="var(--body-border)" stroke-width="1.5"/>
+              <path id="miniFill2" fill="none" stroke="url(#gg2)" stroke-width="12" stroke-linecap="round"/>
+              <g id="gn2">
+                <line x1="60" y1="70" id="gnLine2" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="60" cy="70" r="4" fill="#333"/>
+                <circle cx="60" cy="70" r="2" fill="white"/>
+              </g>
+              <text id="miniPct2" x="60" y="55" text-anchor="middle" font-size="17" font-weight="900" fill="var(--body-text)"></text>
+              <text x="60" y="68" text-anchor="middle" font-size="8.5" fill="var(--body-text-muted)">Retention</text>
+            </svg>
+            <div class="gauge-sub fs7-fw7-c-red">▼ -0.8% vs last yr</div>
+          </div>
+
+        </div><!-- /small gauges grid -->
+
+        <!-- ── Large interactive main gauge ────────── -->
+        <div class="bg-bg-br4-p-6-tc-b-1">
+          <!-- Label -->
+          <div class="fs72-fw7-c-muted-mb4-uc" id="bigGaugeLabel">
+            Attendance Rate — March 2026
+          </div>
+
+          <!-- Big gauge SVG: cx=110, cy=115, r=95 -->
+          <div class="rel-w220px-h132px-m-0-auto-2">
+            <svg class="overflow" viewBox="0 0 220 132" width="220" height="132">
+              <defs>
+                <!-- Zone gradient: red→amber→green across the arc -->
+                <linearGradient id="zoneGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%"   stop-color="#EF4444" stop-opacity="0.35"/>
+                  <stop offset="50%"  stop-color="#F59E0B" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#10B981" stop-opacity="0.35"/>
+                </linearGradient>
+                <!-- Fill gradient — updated dynamically -->
+                <linearGradient id="bigGaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%"   stop-color="#10B981" id="bigGradStop0"/>
+                  <stop offset="100%" stop-color="#34D399" id="bigGradStop1"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Background track -->
+              <path d="M 15,115 A 95 95 0 0 1 205,115"
+                    fill="none" stroke="var(--body-border)" stroke-width="22" stroke-linecap="round"/>
+
+              <!-- Zone colour backdrop (subtle) -->
+              <path d="M 15,115 A 95 95 0 0 1 205,115"
+                    fill="none" stroke="url(#zoneGrad)" stroke-width="22" stroke-linecap="round"/>
+
+              <!-- Target marker at 90% -->
+              <line x1="200.35" y1="85.64" x2="212.71" y2="81.63"
+                    stroke="#10B981" stroke-width="2" stroke-dasharray="3,2"/>
+              <text x="215" y="84" font-size="8" fill="#10B981" font-weight="700">90%</text>
+
+              <!-- Filled arc — driven by JS -->
+              <path class="trans" id="bigGaugeFill" d="M 15,115 A 95 95 0 1 1 203.32,97.20" fill="none" stroke="url(#bigGaugeGrad)" stroke-width="22" stroke-linecap="round" />
+
+              <!-- Needle -->
+              <g class="trans-2" id="gaugeNeedle">
+                <line x1="110" y1="115" x2="110" y2="28"
+                      stroke="var(--body-text)" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="110" cy="115" r="8" fill="var(--card-bg)" stroke="var(--body-text)" stroke-width="3"/>
+                <circle cx="110" cy="115" r="4" fill="var(--body-text)"/>
+              </g>
+
+              <!-- Tick marks at 0/25/50/75/100% -->
+              <line x1="15" y1="115" x2="8" y2="115"  stroke="var(--body-text-muted)" stroke-width="1.5"/>
+              <line x1="69.6" y1="22" x2="66.3" y2="15.5" stroke="var(--body-text-muted)" stroke-width="1.5"/>
+              <line x1="110" y1="20" x2="110" y2="12" stroke="var(--body-text-muted)" stroke-width="1.5"/>
+              <line x1="150.4" y1="22" x2="153.7" y2="15.5" stroke="var(--body-text-muted)" stroke-width="1.5"/>
+              <line x1="205" y1="115" x2="212" y2="115" stroke="var(--body-text-muted)" stroke-width="1.5"/>
+
+              <!-- Center value -->
+              <text id="bigGaugePct" x="110" y="99"
+                    text-anchor="middle" font-size="34" font-weight="900"
+                    fill="#10B981">94%</text>
+              <text id="bigGaugeMetric" x="110" y="116"
+                    text-anchor="middle" font-size="11" fill="var(--body-text-muted)">Attendance</text>
+            </svg>
+          </div>
+
+          <!-- Scale labels -->
+          <div class="flex-jsb-w220px-fs65-fw6-c-muted-m-0-auto-35">
+            <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+          </div>
+
+          <!-- Stat cards row -->
+          <div class="grid-g25-mb5">
+            <div class="bg-card-bg-br25-p-25-tc-b-1">
+              <div class="fs1-fw8-c-body" id="bigGaugeVal1">94.3%</div>
+              <div class="fs65-c-muted-mt04">This Month</div>
+            </div>
+            <div class="bg-card-bg-br25-p-25-tc-b-1">
+              <div class="fs1-fw8-c-body" id="bigGaugeVal2">93.1%</div>
+              <div class="fs65-c-muted-mt04">Last Month</div>
+            </div>
+            <div class="bg-card-bg-br25-p-25-tc-b-1" id="bigGaugeChange">
+              <div class="fs1-fw8"><span class="c-green">+1.2%</span></div>
+              <div class="fs65-c-muted-mt04">Change</div>
+            </div>
+          </div>
+
+          <!-- Interactive slider -->
+          <div>
+            <label class="d-block-fs72-fw6-c-muted-mb15">
+              Adjust value: <span class="fw7-body" id="sliderValLabel">94%</span>
+            </label>
+            <input class="w100pct-h6px-bg-border-br3px-pointer-accent-blue" type="range" min="0" max="100" value="94" id="gaugeSlider" oninput="onSliderInput(+this.value)"/>
+            <div class="flex-jsb-fs65-c-muted-mt1">
+              <span class="fw6-c-red">◀ Low</span>
+              <span class="fw6-c-blue">Target 90%</span>
+              <span class="c-green-fw6">Excellent ▶</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /card-bd -->
+    </div><!-- /card-hr -->
+  </div><!-- /col-xl-4 -->
+
+  <div class="col-xl-4">
+    <div class="card-hr h-100">
+      <div class="card-hd">
+        <div>
+          <div class="card-title-hr">Attendance Heatmap</div>
+          <div class="card-subtitle-hr">Weekly attendance rate by day</div>
+        </div>
+      </div>
+      <div class="card-bd">
+        <div class="flex-jfe-wrap-g2-mb3">
+          <div class="flex-ac-g03"><div class="sq12px-bg-green-br3px"></div><span class="fs7-muted">≥97%</span></div>
+          <div class="flex-ac-g03"><div class="sq12px-bg-blue-br3px"></div><span class="fs7-muted">93–96%</span></div>
+          <div class="flex-ac-g03"><div class="sq12px-bg-amber-br3px"></div><span class="fs7-muted">88–92%</span></div>
+          <div class="flex-ac-g03"><div class="sq12px-bg-red-br3px"></div><span class="fs7-muted">&lt;88%</span></div>
+        </div>
+        <table class="w100pct">
+          <thead><tr>
+            <th class="w44px-fs7-c-muted-p-4px-8px"></th>
+            <th class="fs7-c-muted-p-4px-tc">Mon</th>
+            <th class="fs7-c-muted-p-4px-tc">Tue</th>
+            <th class="fs7-c-muted-p-4px-tc">Wed</th>
+            <th class="fs7-c-muted-p-4px-tc">Thu</th>
+            <th class="fs7-c-muted-p-4px-tc">Fri</th>
+          </tr></thead>
+          <tbody><tr><td class="fs72-fw7-c-muted-p-3px-8px">W1</td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-blue-br6px-p-8px-4px-tc">96%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-green-br6px-p-8px-4px-tc">98%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-blue-br6px-p-8px-4px-tc">94%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-green-br6px-p-8px-4px-tc">97%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-amber-br6px-p-8px-4px-tc">89%</div></td></tr><tr><td class="fs72-fw7-c-muted-p-3px-8px">W2</td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-blue-br6px-p-8px-4px-tc">95%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-green-br6px-p-8px-4px-tc">97%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-blue-br6px-p-8px-4px-tc">94%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-green-br6px-p-8px-4px-tc">97%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-amber-br6px-p-8px-4px-tc">88%</div></td></tr><tr><td class="fs72-fw7-c-muted-p-3px-8px">W3</td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-green-br6px-p-8px-4px-tc">99%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-blue-br6px-p-8px-4px-tc">96%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-green-br6px-p-8px-4px-tc">98%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-blue-br6px-p-8px-4px-tc">95%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-amber-br6px-p-8px-4px-tc">91%</div></td></tr><tr><td class="fs72-fw7-c-muted-p-3px-8px">W4</td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-blue-br6px-p-8px-4px-tc">94%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-blue-br6px-p-8px-4px-tc">95%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-blue-br6px-p-8px-4px-tc">93%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-blue-br6px-p-8px-4px-tc">96%</div></td><td class="p-3px"><div class="mnw40px-fs75-fw7-c-white-bg-red-br6px-p-8px-4px-tc">87%</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-4">
+    <div class="card-hr h-100">
+      <div class="card-hd">
+        <div>
+          <div class="card-title-hr">Sparklines — Metric Cards</div>
+          <div class="card-subtitle-hr">Compact inline trend visualizations</div>
+        </div>
+      </div>
+      <div class="card-bd">
+        <div class="flex-col-g4">
+          <div class="flex-ac-g35-bg-bg-br35-p-35-b-1">
+            <div class="icon-box-blue-12-40"><i class="bi bi-people-fill c-blue-fs9"></i></div>
+            <div class="fl1"><div class="fs845-fw6-c-body">Total Employees</div><div class="fs1125-fw8-c-body">128</div></div>
+            <svg viewBox="0 0 60 30" width="60" height="30"><polyline points="0,20 10,15 20,22 30,12 40,16 50,8 60,10" fill="none" stroke="#5B8FF9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="fs75-fw7-c-blue">+4</span>
+          </div>
+          <div class="flex-ac-g35-bg-bg-br35-p-35-b-1">
+            <div class="icon-box-green-12-40"><i class="bi bi-person-check-fill c-green-fs9"></i></div>
+            <div class="fl1"><div class="fs845-fw6-c-body">Attendance Rate</div><div class="fs1125-fw8-c-body">94.3%</div></div>
+            <svg viewBox="0 0 60 30" width="60" height="30"><polyline points="0,22 10,18 20,20 30,14 40,16 50,12 60,8" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="fs75-fw7-c-green">+1.2%</span>
+          </div>
+          <div class="flex-ac-g35-bg-bg-br35-p-35-b-1">
+            <div class="icon-box-sky-12-40"><i class="bi bi-credit-card-fill c-cyan-fs9"></i></div>
+            <div class="fl1"><div class="fs845-fw6-c-body">Monthly Payroll</div><div class="fs1125-fw8-c-body">$1.24M</div></div>
+            <svg viewBox="0 0 60 30" width="60" height="30"><polyline points="0,25 10,20 20,22 30,18 40,15 50,12 60,10" fill="none" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="fs75-fw7-c-sky">+2.1%</span>
+          </div>
+          <div class="flex-ac-g35-bg-bg-br35-p-35-b-1">
+            <div class="icon-box-red-12-40"><i class="bi bi-graph-down-arrow c-red-fs9"></i></div>
+            <div class="fl1"><div class="fs845-fw6-c-body">Attrition Rate</div><div class="fs1125-fw8-c-body">3.2%</div></div>
+            <svg viewBox="0 0 60 30" width="60" height="30"><polyline points="0,10 10,14 20,12 30,16 40,14 50,18 60,20" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="fs75-fw7-c-red">+0.4%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div><!-- /page-inner -->
+</main>
+</div><!-- /main-content -->
+
+<!-- Tooltip -->
+<div class="chart-tooltip" id="chartTip"></div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   GAUGE CHART — COMPLETE INTERACTIVE ENGINE (v2 — redesigned)
+   All arc/needle geometry is computed from ONE shared function and
+   parameterised by center + radius, used identically by the big gauge
+   AND the three small selector gauges. Nothing is hand-typed/hardcoded
+   as a static path string anymore — that's what caused the earlier
+   needle bugs (a zero-length line, two widgets with no needle at all).
+   If it's wrong, it's wrong everywhere at once and easy to spot; if
+   it's right, it's right everywhere at once too.
+
+   Angle convention: 0% = 180° (left) … 50% = 90° (top) … 100% = 0° (right)
+   ═══════════════════════════════════════════════════════════════ */
+
+var GAUGES = [
+  {
+    label:    'Attendance Rate — March 2026',
+    metric:   'Attendance',
+    pct:      94,
+    val1:     '94.3%', val2: '93.1%', change: '+1.2%', changePos: true
+  },
+  {
+    label:    'Performance Score — Q1 2026',
+    metric:   'Performance',
+    pct:      87,
+    val1:     '87.0%', val2: '83.9%', change: '+3.1%', changePos: true
+  },
+  {
+    label:    'Retention Rate — YTD 2026',
+    metric:   'Retention',
+    pct:      73,
+    val1:     '73.0%', val2: '73.8%', change: '-0.8%', changePos: false
+  }
+];
+
+/* Colour zones — shared by the big gauge's arc, its centre text, AND the
+   three small gauges, so a given percentage always renders the same
+   colour everywhere on the page, no matter which widget shows it. */
+var GAUGE_ZONES = [
+  { min: 90, solid: '#10B981', pair: ['#10B981', '#34D399'] },
+  { min: 75, solid: '#5B8FF9', pair: ['#5B8FF9', '#818CF8'] },
+  { min: 60, solid: '#F59E0B', pair: ['#F59E0B', '#FCD34D'] },
+  { min: -1, solid: '#EF4444', pair: ['#EF4444', '#F87171'] }
+];
+function zoneFor(pct) {
+  for (var i = 0; i < GAUGE_ZONES.length; i++) {
+    if (pct >= GAUGE_ZONES[i].min) return GAUGE_ZONES[i];
+  }
+  return GAUGE_ZONES[GAUGE_ZONES.length - 1];
+}
+
+var _selGauge = 0;
+
+/* ── Shared geometry ─────────────────────────────────────────────── */
+function clampPct(pct) {
+  pct = Math.round(pct);
+  return Math.min(100, Math.max(0, pct));
+}
+
+/* Point on the gauge's semicircle at a given percentage, for any
+   center/radius — used for arc endpoints, needle tips, and tick marks. */
+function gaugePoint(cx, cy, r, pct) {
+  var angleDeg = 180 - (pct / 100) * 180;
+  var angleRad = angleDeg * Math.PI / 180;
+  return {
+    x: cx + r * Math.cos(angleRad),
+    y: cy - r * Math.sin(angleRad)
+  };
+}
+
+/* SVG path for the filled arc from 0% up to pct, for any center/radius. */
+function gaugeArcPath(cx, cy, r, pct) {
+  var safePct = Math.min(99.99, Math.max(0.01, pct)); /* avoid a degenerate 0-length arc */
+  var p = gaugePoint(cx, cy, r, safePct);
+  // The arc always sweeps from the 0% point to the current percentage
+  // point within a single semicircle (max 180°), so it can never need
+  // the SVG large-arc-flag — that flag is for sweeps *over* 180°, which
+  // this gauge geometry never produces. Setting it to 1 for pct > 50 was
+  // wrong: it made the renderer solve for a completely different arc
+  // center than the gauge's actual center, distorting the fill for
+  // every value above 50% (verified against the SVG spec's endpoint-to-
+  // center arc formula before fixing — every one of this page's 3 demo
+  // gauges is above 50%, so all of them were affected).
+  return 'M ' + (cx - r) + ',' + cy + ' A ' + r + ' ' + r + ' 0 0 1 ' +
+         p.x.toFixed(2) + ',' + p.y.toFixed(2);
+}
+
+/* Needle rotation in degrees: -90° at 0% (left) … 0° at 50% (up) … +90° at 100% (right). */
+function needleAngle(pct) {
+  return (pct / 100) * 180 - 90;
+}
+
+/* ── Big gauge (cx=110, cy=115, r=95) ───────────────────────────── */
+var BIG_CX = 110, BIG_CY = 115, BIG_R = 95;
+
+function updateBigGauge(pct) {
+  pct = clampPct(pct);
+  var zone = zoneFor(pct);
+
+  var fillEl = document.getElementById('bigGaugeFill');
+  if (fillEl) fillEl.setAttribute('d', gaugeArcPath(BIG_CX, BIG_CY, BIG_R, pct));
+
+  var needle = document.getElementById('gaugeNeedle');
+  if (needle) needle.style.transform = 'rotate(' + needleAngle(pct) + 'deg)';
+
+  var pctEl = document.getElementById('bigGaugePct');
+  if (pctEl) {
+    pctEl.textContent = pct + '%';
+    pctEl.setAttribute('fill', zone.solid);
+  }
+
+  /* Arc gradient follows the SAME zone as the centre text, always — no
+     more mismatched "red number, green arc" state when the slider is
+     dragged away from whichever preset gauge was last selected. */
+  document.getElementById('bigGradStop0').setAttribute('stop-color', zone.pair[0]);
+  document.getElementById('bigGradStop1').setAttribute('stop-color', zone.pair[1]);
+}
+
+/* ── Select a small gauge → drives the big display ──────────────── */
+function selectGauge(idx) {
+  _selGauge = idx;
+
+  for (var i = 0; i < 3; i++) {
+    var w = document.getElementById('gw' + i);
+    if (w) w.classList.toggle('selected', i === idx);
+  }
+
+  var g = GAUGES[idx];
+
+  var slider = document.getElementById('gaugeSlider');
+  if (slider) slider.value = g.pct;
+
+  var slLabel = document.getElementById('sliderValLabel');
+  if (slLabel) slLabel.textContent = g.pct + '%';
+
+  document.getElementById('bigGaugeLabel').textContent  = g.label;
+  document.getElementById('bigGaugeMetric').textContent = g.metric;
+  document.getElementById('bigGaugeVal1').textContent = g.val1;
+  document.getElementById('bigGaugeVal2').textContent = g.val2;
+
+  var chEl   = document.getElementById('bigGaugeChange');
+  var chSpan = chEl.querySelector('span');
+  chSpan.textContent = g.change;
+  chSpan.style.color = g.changePos ? '#10B981' : '#EF4444';
+
+  updateBigGauge(g.pct);
+}
+
+/* ── Slider input handler ────────────────────────────────────────── */
+function onSliderInput(val) {
+  var slLabel = document.getElementById('sliderValLabel');
+  if (slLabel) slLabel.textContent = clampPct(val) + '%';
+  updateBigGauge(val);
+}
+
+/* ── Small selector gauges — arc, needle and value text are rendered
+   here from the SAME gaugeArcPath()/gaugePoint() functions as the big
+   gauge, at their own center/radius, instead of being typed by hand. */
+var MINI_CX = 60, MINI_CY = 70, MINI_R = 50, MINI_NEEDLE_R = 38;
+
+function renderMiniGauge(idx) {
+  var g = GAUGES[idx];
+  var pct = clampPct(g.pct);
+
+  var fillEl = document.getElementById('miniFill' + idx);
+  if (fillEl) fillEl.setAttribute('d', gaugeArcPath(MINI_CX, MINI_CY, MINI_R, pct));
+
+  var needleLine = document.getElementById('gnLine' + idx);
+  if (needleLine) {
+    var tip = gaugePoint(MINI_CX, MINI_CY, MINI_NEEDLE_R, pct);
+    needleLine.setAttribute('x2', tip.x.toFixed(2));
+    needleLine.setAttribute('y2', tip.y.toFixed(2));
+  }
+
+  var pctEl = document.getElementById('miniPct' + idx);
+  if (pctEl) pctEl.textContent = pct + '%';
+}
+
+function renderAllMiniGauges() {
+  for (var i = 0; i < GAUGES.length; i++) renderMiniGauge(i);
+}
+
+/* ── Initial render on page load ─────────────────────────────────── */
+renderAllMiniGauges();
+updateBigGauge(GAUGES[_selGauge].pct);
+
+/* ── Bar chart tooltip ───────────────────────────────────────────── */
+var _tip = document.getElementById('chartTip');
+
+function showTip(e, text) {
+  if (!_tip) return;
+  _tip.textContent = text;
+  _tip.classList.add('visible');
+  moveTip(e);
+}
+function moveTip(e) {
+  if (!_tip) return;
+  _tip.style.left = (e.clientX + 12) + 'px';
+  _tip.style.top  = (e.clientY - 28) + 'px';
+}
+function hideTip() {
+  if (!_tip) return;
+  _tip.classList.remove('visible');
+}
+
+/* Track mouse for tooltip repositioning */
+document.querySelectorAll('.chart-bar').forEach(function(bar) {
+  bar.addEventListener('mousemove', moveTip);
+});
+
+/* ── Initialise: select gauge 0 on page load ─────────────────────── */
+selectGauge(0);
+</script>
+</body>
+</html>

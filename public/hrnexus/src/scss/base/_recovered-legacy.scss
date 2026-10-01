@@ -1,0 +1,127 @@
+// =============================================================================
+// base/_recovered-legacy.scss
+// =============================================================================
+// Rules that exist in the currently-deployed dist/css/hrnexus-core.css but
+// had NO corresponding SCSS source anywhere in this repo — discovered by
+// diffing a from-source build against the live file. Ported here verbatim
+// (selectors/values unchanged) so the SCSS source is a complete, buildable
+// record of what's actually shipped, rather than silently missing ~46 rules
+// that pages depend on (avatar gradients, search box, breadcrumb, the
+// collapsed-sidebar flyout popup, etc).
+//
+// Left as plain, mostly-unrefactored CSS on purpose: the goal here is
+// byte-for-byte behavioural parity with what's live today, not a rewrite.
+// Feel free to fold pieces of this into the more purpose-built partials
+// (layout/sidebar, layout/topbar, components/ui) over time.
+// =============================================================================
+@use '../abstracts' as *;
+
+// ── Scrollbar ──────────────────────────────────────────────────────────────
+::-webkit-scrollbar        { width: 5px; height: 5px; }
+::-webkit-scrollbar-thumb  { background: var(--body-border); border-radius: 3px; }
+
+// ── Generic layout helpers ───────────────────────────────────────────────────
+.dashboard-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.dashboard-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.table-wrap, .table-responsive-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+// ── Sidebar: collapsed state + flyout popup for collapsed nav groups ────────
+.sidebar.collapsed {
+  .nav-chevron, .sidebar-section, .nav-section-title { display: none; }
+  .nav-group-body { max-height: 0 !important; pointer-events: none; }
+  .nav-group-hd    { cursor: pointer; position: relative; }
+  .nav-li          { margin: 0 0.375rem 0.0625rem; }
+}
+
+#sb-main-popup {
+  position: fixed; left: calc(var(--sidebar-collapsed) + 8px); top: 0;
+  min-width: 200px; max-width: 240px;
+  background: var(--sidebar-bg2); border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.875rem; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  z-index: 1050; padding: 0.5rem; display: none;
+  max-height: calc(100vh - 32px); overflow-y: auto;
+  &.visible { display: block; }
+
+  .popup-title {
+    font-size: 0.65rem; font-weight: $font-weight-bold; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--sidebar-section-color);
+    padding: 0.5rem 0.75rem 0.375rem; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 0.25rem;
+  }
+  .nav-lnk {
+    color: var(--sidebar-text); background: transparent; border: none; width: 100%;
+    border-radius: 0.5rem; padding: 0.5rem 0.875rem; font-size: 0.825rem;
+    display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
+    transition: background $transition-fast; font-family: inherit;
+    &:hover  { background: rgba(255, 255, 255, 0.07); color: var(--sidebar-text-hover); }
+    &.active { background: var(--sidebar-item-active); color: #7B9FFF; }
+  }
+}
+
+// ── Mobile sidebar backdrop ──────────────────────────────────────────────────
+.mobile-backdrop, .sidebar-mobile-backdrop {
+  display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45);
+  z-index: 1199; animation: backdrop-in 0.2s ease;
+}
+
+// ── Stats / run ribbon (shared by several redesigned pages) ─────────────────
+.stats-ribbon       { display: flex; gap: 1px; background: var(--card-border); border-radius: 1rem; overflow: hidden; }
+.stats-ribbon-cell  { flex: 1; padding: 1rem 1.25rem; background: var(--card-bg); text-align: center; }
+.stats-ribbon-val   { font-size: 1.5rem; font-weight: 900; color: var(--body-text); line-height: 1; }
+.stats-ribbon-lbl   { font-size: 0.7rem; color: var(--body-text-muted); margin-top: 0.25rem; font-weight: $font-weight-semi; text-transform: uppercase; letter-spacing: 0.06em; }
+.stats-ribbon-delta { font-size: 0.7rem; font-weight: $font-weight-bold; margin-top: 0.2rem; }
+
+// ── Avatar gradient colour presets ───────────────────────────────────────────
+.cov-1 { background: linear-gradient(135deg, #4F6EF7, #8B5CF6); }
+.cov-2 { background: linear-gradient(135deg, #10B981, #06B6D4); }
+.cov-3 { background: linear-gradient(135deg, #F59E0B, #EF4444); }
+.cov-4 { background: linear-gradient(135deg, #8B5CF6, #EC4899); }
+.cov-5 { background: linear-gradient(135deg, #06B6D4, #10B981); }
+.cov-6 { background: linear-gradient(135deg, #EF4444, #F97316); }
+.cov-7 { background: linear-gradient(135deg, #667eea, #764ba2); }
+.cov-8 { background: linear-gradient(135deg, #f7971e, #ffd200); }
+
+.ldot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+// ── Department pill colours (payroll table) ──────────────────────────────────
+.dept-eng { background: rgba(79, 110, 247, 0.1);  color: #4F6EF7; border-color: rgba(79, 110, 247, 0.2); }
+.dept-prd { background: rgba(16, 185, 129, 0.1);  color: #10B981; border-color: rgba(16, 185, 129, 0.2); }
+.dept-sal { background: rgba(245, 158, 11, 0.1);  color: #D97706; border-color: rgba(245, 158, 11, 0.2); }
+.dept-mkt { background: rgba(6, 182, 212, 0.1);   color: #06B6D4; border-color: rgba(6, 182, 212, 0.2); }
+.dept-hr  { background: rgba(139, 92, 246, 0.1);  color: #8B5CF6; border-color: rgba(139, 92, 246, 0.2); }
+.dept-fin { background: rgba(239, 68, 68, 0.1);   color: #EF4444; border-color: rgba(239, 68, 68, 0.2); }
+
+// ── Topbar: icon buttons + search box + breadcrumb + profile link ───────────
+.btn-icon-top {
+  width: 36px; height: 36px; border-radius: 0.5625rem;
+  border: 1px solid var(--body-border); background: var(--card-bg); color: var(--body-text-muted);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: all $transition-fast; font-size: 0.9375rem; position: relative; font-family: inherit;
+  &:hover {
+    border-color: var(--color-primary); color: var(--color-primary);
+    background: var(--color-primary-light); box-shadow: 0 0 0 3px var(--color-primary-glow);
+  }
+}
+
+.search-wrap   { position: relative; flex: 1; max-width: 280px; }
+.search-icon-i { position: absolute; left: 0.875rem; top: 50%; transform: translateY(-50%); color: var(--body-text-muted); font-size: 0.8125rem; pointer-events: none; }
+.search-input {
+  width: 100%; padding: 0.5rem 1rem 0.5rem 2.375rem;
+  border: 1px solid var(--body-border); border-radius: 2rem;
+  background: var(--body-bg); color: var(--body-text); font-size: 0.845rem;
+  font-family: var(--font); transition: all $transition-fast; outline: none;
+  &::placeholder { color: var(--body-text-muted); }
+  &:focus {
+    border-color: var(--color-primary); background: var(--card-bg);
+    box-shadow: 0 0 0 3px var(--color-primary-glow);
+  }
+}
+
+.breadcrumb-bar { font-size: 0.775rem; color: var(--body-text-muted); display: flex; align-items: center; gap: 0.2rem; white-space: nowrap; flex-shrink: 0; }
+
+.prof-link {
+  display: flex; align-items: center; gap: 0.75rem; padding: 0.5625rem 0.625rem;
+  border-radius: 0.5rem; color: var(--body-text); text-decoration: none !important;
+  font-size: 0.845rem; font-weight: $font-weight-medium; transition: background $transition-fast;
+  &:hover { background: var(--body-bg); color: var(--body-text); }
+}

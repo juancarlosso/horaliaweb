@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Calendar — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Team calendar for scheduling meetings, interviews, and company events."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none"></div>
+
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<div class="main-content" id="mainContent">
+
+  <!-- Topbar -->
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Calendar</span></nav>
+      <div class="search-wrap"><i class="bi bi-search search-icon-i"></i><input type="search" class="search-input" placeholder="Search events..." oninput="searchEvents(this.value)"/></div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel"><i class="bi bi-bell-fill"></i><span class="badge-dot"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- ══ PAGE HEADER — exact React ══════════════════════════════════════ -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Calendar</h1>
+          <p class="page-subtitle" id="calSubtitle">March 2026 — Company &amp; personal events</p>
+        </div>
+        <div class="flex-g2-ac-wrap">
+          <!-- Month navigation — exact React style -->
+          <button type="button" class="nav-month-btn" id="prevBtn" onclick="changeMonth(-1)" title="Previous month">
+            <i class="bi bi-chevron-left fs75"></i>
+          </button>
+          <span class="mnw140px-fs9375-fw7-c-body-p-0-2-tc" id="monthLabel">March 2026</span>
+          <button type="button" class="nav-month-btn" id="nextBtn" onclick="changeMonth(1)" title="Next month">
+            <i class="bi bi-chevron-right fs75"></i>
+          </button>
+          <!-- View switcher — exact React tab style -->
+          <div class="view-toggle" role="tablist">
+            <button type="button" class="view-btn active" id="vMonth"  onclick="setView('month')"  role="tab">Month</button>
+            <button type="button" class="view-btn"        id="vWeek"   onclick="setView('week')"   role="tab">Week</button>
+            <button type="button" class="view-btn"        id="vAgenda" onclick="setView('agenda')" role="tab">Agenda</button>
+          </div>
+          <!-- New Event gradient button — exact React style -->
+          <button class="flex-ac-g16-fs875-fw7-c-white-bg-grad-blue-purple-br25" type="button" onclick="openNewEventModal()">
+            <i class="bi bi-plus-lg"></i>New Event
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ LEGEND — exact React 4 items ═══════════════════════════════════ -->
+      <div class="flex-wrap-g4-mb5">
+        <div class="flex-ac-g15"><div class="legend-dot bg-blue"></div><span class="fs78-fw6-c-muted">Company</span></div>
+        <div class="flex-ac-g15"><div class="legend-dot bg-green"></div><span class="fs78-fw6-c-muted">Personal</span></div>
+        <div class="flex-ac-g15"><div class="legend-dot bg-pink"></div><span class="fs78-fw6-c-muted">Holiday</span></div>
+        <div class="flex-ac-g15"><div class="legend-dot bg-red"></div><span class="fs78-fw6-c-muted">Deadline</span></div>
+      </div>
+
+      <!-- ══ 2-COLUMN LAYOUT: calendar left | right sidebar ════════════════ -->
+      <div class="cal-layout">
+
+        <!-- LEFT: calendar views -->
+        <div class="cal-left">
+
+          <!-- ── MONTH VIEW ──────────────────────────────────────────────── -->
+          <div id="viewMonth">
+            <div class="card-hr p-0-ov-hidden">
+              <!-- Day name headers -->
+              <div class="grid-cols-7-bb-5-border">
+                <div class="fs72-fw7-c-muted-p-25-tc-uc">Sun</div>
+                <div class="fs72-fw7-c-muted-p-25-tc-uc">Mon</div>
+                <div class="fs72-fw7-c-muted-p-25-tc-uc">Tue</div>
+                <div class="fs72-fw7-c-muted-p-25-tc-uc">Wed</div>
+                <div class="fs72-fw7-c-muted-p-25-tc-uc">Thu</div>
+                <div class="fs72-fw7-c-muted-p-25-tc-uc">Fri</div>
+                <div class="fs72-fw7-c-muted-p-25-tc-uc">Sat</div>
+              </div>
+              <!-- Calendar grid — dynamically rendered by JS -->
+              <div id="monthGrid"><div class="cal-week bb-1"><div class="cal-cell br-1-bg-trans" data-day="1" onclick="selectDay(1)"><div class="day-num bg-trans-body">1</div></div><div class="cal-cell br-1-bg-trans" data-day="2" onclick="selectDay(2)"><div class="day-num bg-trans-body">2</div></div><div class="cal-cell br-1-bg-trans" data-day="3" onclick="selectDay(3)"><div class="day-num bg-trans-body">3</div><div class="ev-pill c-blue-bg-blue-13" onclick="event.stopPropagation();openEventModal('e1',3)">Team Standup</div></div><div class="cal-cell br-1-bg-trans" data-day="4" onclick="selectDay(4)"><div class="day-num bg-trans-body">4</div></div><div class="cal-cell br-1-bg-trans" data-day="5" onclick="selectDay(5)"><div class="day-num bg-trans-body">5</div><div class="ev-pill c-purple-bg-purple-13" onclick="event.stopPropagation();openEventModal('e2',5)">Q1 Planning Session</div></div><div class="cal-cell br-1-bg-trans" data-day="6" onclick="selectDay(6)"><div class="day-num bg-trans-body">6</div></div><div class="cal-cell bg-transparent-br-1-none" data-day="7" onclick="selectDay(7)"><div class="day-num bg-trans-body">7</div></div></div><div class="cal-week bb-1"><div class="cal-cell br-1-bg-trans" data-day="8" onclick="selectDay(8)"><div class="day-num bg-trans-body">8</div></div><div class="cal-cell br-1-bg-trans" data-day="9" onclick="selectDay(9)"><div class="day-num bg-trans-body">9</div></div><div class="cal-cell br-1-bg-trans" data-day="10" onclick="selectDay(10)"><div class="day-num bg-trans-body">10</div><div class="ev-pill c-red-bg-red-13" onclick="event.stopPropagation();openEventModal('e3',10)">Performance Reviews Due</div><div class="ev-pill c-green-bg-green-13" onclick="event.stopPropagation();openEventModal('e4',10)">1:1 with Sarah</div></div><div class="cal-cell br-1-bg-trans" data-day="11" onclick="selectDay(11)"><div class="day-num bg-trans-body">11</div></div><div class="cal-cell br-1-bg-trans" data-day="12" onclick="selectDay(12)"><div class="day-num bg-trans-body">12</div></div><div class="cal-cell br-1-bg-trans" data-day="13" onclick="selectDay(13)"><div class="day-num bg-trans-body">13</div></div><div class="cal-cell bg-blue-6-br-1-none" data-day="14" onclick="selectDay(14)"><div class="day-num c-white-bg-blue">14</div><div class="ev-pill c-blue-bg-blue-13" onclick="event.stopPropagation();openEventModal('e5',14)">Morning Standup</div><div class="ev-pill c-pink-bg-pink-13" onclick="event.stopPropagation();openEventModal('e6',14)">Holi — Public Holiday 🎨</div></div></div><div class="cal-week bb-1"><div class="cal-cell br-1-bg-trans" data-day="15" onclick="selectDay(15)"><div class="day-num bg-trans-body">15</div></div><div class="cal-cell br-1-bg-trans" data-day="16" onclick="selectDay(16)"><div class="day-num bg-trans-body">16</div></div><div class="cal-cell br-1-bg-trans" data-day="17" onclick="selectDay(17)"><div class="day-num bg-trans-body">17</div><div class="ev-pill c-green-bg-green-13" onclick="event.stopPropagation();openEventModal('e7',17)">Analytics Dashboard Demo</div></div><div class="cal-cell br-1-bg-trans" data-day="18" onclick="selectDay(18)"><div class="day-num bg-trans-body">18</div></div><div class="cal-cell br-1-bg-trans" data-day="19" onclick="selectDay(19)"><div class="day-num bg-trans-body">19</div></div><div class="cal-cell br-1-bg-trans" data-day="20" onclick="selectDay(20)"><div class="day-num bg-trans-body">20</div><div class="ev-pill c-amber-bg-amber-13" onclick="event.stopPropagation();openEventModal('e8',20)">All-Hands Town Hall</div></div><div class="cal-cell bg-transparent-br-1-none" data-day="21" onclick="selectDay(21)"><div class="day-num bg-trans-body">21</div></div></div><div class="cal-week bb-1"><div class="cal-cell br-1-bg-trans" data-day="22" onclick="selectDay(22)"><div class="day-num bg-trans-body">22</div></div><div class="cal-cell br-1-bg-trans" data-day="23" onclick="selectDay(23)"><div class="day-num bg-trans-body">23</div></div><div class="cal-cell br-1-bg-trans" data-day="24" onclick="selectDay(24)"><div class="day-num bg-trans-body">24</div><div class="ev-pill c-purple-bg-purple-13" onclick="event.stopPropagation();openEventModal('e9',24)">Sprint Review & Retro</div></div><div class="cal-cell br-1-bg-trans" data-day="25" onclick="selectDay(25)"><div class="day-num bg-trans-body">25</div></div><div class="cal-cell br-1-bg-trans" data-day="26" onclick="selectDay(26)"><div class="day-num bg-trans-body">26</div></div><div class="cal-cell br-1-bg-trans" data-day="27" onclick="selectDay(27)"><div class="day-num bg-trans-body">27</div></div><div class="cal-cell bg-transparent-br-1-none" data-day="28" onclick="selectDay(28)"><div class="day-num bg-trans-body">28</div><div class="ev-pill c-red-bg-red-13" onclick="event.stopPropagation();openEventModal('e10',28)">Month-end Payroll</div></div></div><div class="cal-week bb-1-none"><div class="cal-cell br-1-bg-trans" data-day="29" onclick="selectDay(29)"><div class="day-num bg-trans-body">29</div></div><div class="cal-cell br-1-bg-trans" data-day="30" onclick="selectDay(30)"><div class="day-num bg-trans-body">30</div></div><div class="cal-cell br-1-bg-trans" data-day="31" onclick="selectDay(31)"><div class="day-num bg-trans-body">31</div><div class="ev-pill c-pink-bg-pink-13" onclick="event.stopPropagation();openEventModal('e11',31)">Team Lunch 🍽️</div></div><div class="cal-cell empty br-1"></div><div class="cal-cell empty br-1"></div><div class="cal-cell empty br-1"></div><div class="cal-cell empty br-1-none"></div></div></div>
+            </div>
+            <!-- Selected day events panel — exact React -->
+            <div class="sel-day-wrap" id="selDayWrap">
+              <div class="flex-jsb-ac-mb4">
+                <div class="fw8-fs9-body" id="selDayLabel">Saturday, March 14</div>
+                <button class="flex-ac-g15-fs8-fw7-c-blue-bg-blue-10-br2-p-16-35-b-none" type="button" onclick="openNewEventForDay()">
+                  <i class="bi bi-plus-lg"></i>Add Event
+                </button>
+              </div>
+              <div id="selDayBody"><div class="flex-ac-g35-bg-bg-br25-p-35-mb25-bl-4-blue-b-1-pointer" onclick="openEventModal('e5',14)"><div class="icon-box-blue-13-34"><i class="bi bi-chat-square-fill fs85-c-blue"></i></div><div class="fl1"><div class="fw7-fs875-body">Morning Standup</div><div class="fs75-muted">9:00 AM · 15m</div></div><div class="flex"><div class="avatar-blue-22">S</div><div class="avatar-green-22">M</div><div class="avatar-red-22">T</div></div></div><div class="flex-ac-g35-bg-bg-br25-p-35-mb25-bl-4-pink-b-1-pointer" onclick="openEventModal('e6',14)"><div class="icon-box-pink-13-34"><i class="bi bi-building fs85-c-pink"></i></div><div class="fl1"><div class="fw7-fs875-body">Holi — Public Holiday 🎨</div><div class="fs75-muted">All Day</div></div><div class="flex"></div></div></div>
+            </div>
+          </div>
+
+          <!-- ── WEEK VIEW ───────────────────────────────────────────────── -->
+          <div class="d-none" id="viewWeek">
+            <div class="card-hr p-0-ov-hidden">
+              <!-- Week header row -->
+              <div class="week-hdr">
+                <div class="p-25-br-1"></div>
+                <div class="bg-transparent-p-25-tc-br-1"><div class="fs72-fw6-c-muted-uc">TUE</div><div class="avatar-transparent-28">10</div></div><div class="bg-transparent-p-25-tc-br-1"><div class="fs72-fw6-c-muted-uc">WED</div><div class="avatar-transparent-28">11</div></div><div class="bg-transparent-p-25-tc-br-1"><div class="fs72-fw6-c-muted-uc">THU</div><div class="avatar-transparent-28">12</div></div><div class="bg-transparent-p-25-tc-br-1"><div class="fs72-fw6-c-muted-uc">FRI</div><div class="avatar-transparent-28">13</div></div><div class="bg-blue-6-p-25-tc-br-1"><div class="fs72-fw6-c-muted-uc">SAT</div><div class="avatar-blue-28-2">14</div></div><div class="bg-transparent-p-25-tc-br-1"><div class="fs72-fw6-c-muted-uc">SUN</div><div class="avatar-transparent-28">15</div></div><div class="bg-transparent-p-25-tc-br-1-none"><div class="fs72-fw6-c-muted-uc">MON</div><div class="avatar-transparent-28">16</div></div>
+              </div>
+              <!-- Week body -->
+              <div class="week-grid">
+                <!-- Time column -->
+                <div class="br-1"><div class="week-time-slot">8:00</div><div class="week-time-slot">9:00</div><div class="week-time-slot">10:00</div><div class="week-time-slot">11:00</div><div class="week-time-slot">12:00</div><div class="week-time-slot">13:00</div><div class="week-time-slot">14:00</div><div class="week-time-slot">15:00</div><div class="week-time-slot">16:00</div><div class="week-time-slot">17:00</div><div class="week-time-slot">18:00</div></div>
+                <!-- Day columns -->
+                <div class="rel-bg-transparent-br-1"><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="abs-t60px-r2px-l2px-bg-green-13-br15-p-1-16-bl-3-green" onclick="openEventModal('e4',10)"><div class="fs7-fw7-c-green-lh-13">1:1 with Sarah</div><div class="fs65-c-muted">3:00 PM</div></div></div><div class="rel-bg-transparent-br-1"><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div></div><div class="rel-bg-transparent-br-1"><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div></div><div class="rel-bg-transparent-br-1"><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div></div><div class="rel-bg-blue-2-br-1"><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="abs-t4px-r2px-l2px-bg-blue-13-br15-p-1-16-bl-3-blue-pointer" onclick="openEventModal('e5',14)"><div class="fs7-fw7-c-blue-lh-13">Morning Standup</div><div class="fs65-c-muted">9:00 AM</div></div></div><div class="rel-bg-transparent-br-1"><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div></div><div class="rel-bg-transparent-br-1-none"><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div><div class="h56-bb"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── AGENDA VIEW ─────────────────────────────────────────────── -->
+          <div class="d-none" id="viewAgenda">
+            <div class="flex-col-g4" id="agendaList">
+              <div class="flex-g4-afs"><div class="w52px-tc-shrink0"><div class="icon-box-card-bg-44"><div class="fs68-fw7-c-muted-uc-lh-1">TUE</div><div class="fs1-fw9-c-body-lh-1">3</div></div></div><div class="flex-col-g2-fl1"><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-blue-pointer" onclick="openEventModal('e1',3)"><div class="icon-box-blue-13-36"><i class="bi bi-chat-square-fill fs85-c-blue"></i></div><div class="fl1"><div class="fw7-fs9-body">Team Standup</div><div class="fs75-muted-mt06">9:00 AM · 15m</div></div><div class="flex"><div class="avatar-blue-24">S</div><div class="avatar-green-24-2">M</div></div></div></div></div><div class="flex-g4-afs"><div class="w52px-tc-shrink0"><div class="icon-box-card-bg-44"><div class="fs68-fw7-c-muted-uc-lh-1">THU</div><div class="fs1-fw9-c-body-lh-1">5</div></div></div><div class="flex-col-g2-fl1"><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-purple-pointer" onclick="openEventModal('e2',5)"><div class="icon-box-purple-13-36"><i class="bi bi-people-fill fs85-c-purple"></i></div><div class="fl1"><div class="fw7-fs9-body">Q1 Planning Session</div><div class="fs75-muted-mt06">10:00 AM · 2h</div></div><div class="flex"><div class="avatar-blue-24">S</div><div class="avatar-green-24-2">M</div><div class="avatar-purple-24-3">A</div></div></div></div></div><div class="flex-g4-afs"><div class="w52px-tc-shrink0"><div class="icon-box-card-bg-44"><div class="fs68-fw7-c-muted-uc-lh-1">TUE</div><div class="fs1-fw9-c-body-lh-1">10</div></div></div><div class="flex-col-g2-fl1"><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-red-pointer" onclick="openEventModal('e3',10)"><div class="icon-box-red-13-36"><i class="bi bi-exclamation-triangle-fill fs85-c-red"></i></div><div class="fl1"><div class="fw7-fs9-body">Performance Reviews Due</div><div class="fs75-muted-mt06">EOD</div></div><div class="flex"></div></div><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-green-pointer" onclick="openEventModal('e4',10)"><div class="icon-box-green-13-36"><i class="bi bi-person-fill fs85-c-green"></i></div><div class="fl1"><div class="fw7-fs9-body">1:1 with Sarah</div><div class="fs75-muted-mt06">3:00 PM · 30m</div></div><div class="flex"><div class="avatar-blue-24">S</div></div></div></div></div><div class="flex-g4-afs"><div class="w52px-tc-shrink0"><div class="icon-box-blue-44"><div class="fs68-fw7-c-white-80-uc-lh-1">SAT</div><div class="fs1-fw9-c-white-lh-1">14</div></div></div><div class="flex-col-g2-fl1"><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-blue-pointer" onclick="openEventModal('e5',14)"><div class="icon-box-blue-13-36"><i class="bi bi-chat-square-fill fs85-c-blue"></i></div><div class="fl1"><div class="fw7-fs9-body">Morning Standup</div><div class="fs75-muted-mt06">9:00 AM · 15m</div></div><div class="flex"><div class="avatar-blue-24">S</div><div class="avatar-green-24-2">M</div><div class="avatar-red-24-2">T</div></div></div><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-pink-pointer" onclick="openEventModal('e6',14)"><div class="icon-box-pink-13-36"><i class="bi bi-building fs85-c-pink"></i></div><div class="fl1"><div class="fw7-fs9-body">Holi — Public Holiday 🎨</div><div class="fs75-muted-mt06">All Day</div></div><div class="flex"></div></div></div></div><div class="flex-g4-afs"><div class="w52px-tc-shrink0"><div class="icon-box-card-bg-44"><div class="fs68-fw7-c-muted-uc-lh-1">TUE</div><div class="fs1-fw9-c-body-lh-1">17</div></div></div><div class="flex-col-g2-fl1"><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-green-pointer" onclick="openEventModal('e7',17)"><div class="icon-box-green-13-36"><i class="bi bi-display fs85-c-green"></i></div><div class="fl1"><div class="fw7-fs9-body">Analytics Dashboard Demo</div><div class="fs75-muted-mt06">1:00 PM · 45m</div></div><div class="flex"><div class="avatar-sky-24">D</div><div class="avatar-green-24-2">M</div><div class="avatar-purple-24-3">A</div></div></div></div></div><div class="flex-g4-afs"><div class="w52px-tc-shrink0"><div class="icon-box-card-bg-44"><div class="fs68-fw7-c-muted-uc-lh-1">FRI</div><div class="fs1-fw9-c-body-lh-1">20</div></div></div><div class="flex-col-g2-fl1"><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-amber-pointer" onclick="openEventModal('e8',20)"><div class="icon-box-amber-13-36"><i class="bi bi-building fs85-c-amber"></i></div><div class="fl1"><div class="fw7-fs9-body">All-Hands Town Hall</div><div class="fs75-muted-mt06">2:00 PM · 1h</div></div><div class="flex"><div class="avatar-amber-24-2">A</div></div></div></div></div><div class="flex-g4-afs"><div class="w52px-tc-shrink0"><div class="icon-box-card-bg-44"><div class="fs68-fw7-c-muted-uc-lh-1">TUE</div><div class="fs1-fw9-c-body-lh-1">24</div></div></div><div class="flex-col-g2-fl1"><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-purple-pointer" onclick="openEventModal('e9',24)"><div class="icon-box-purple-13-36"><i class="bi bi-kanban-fill fs85-c-purple"></i></div><div class="fl1"><div class="fw7-fs9-body">Sprint Review & Retro</div><div class="fs75-muted-mt06">4:00 PM · 1h</div></div><div class="flex"><div class="avatar-blue-24">S</div><div class="avatar-green-24-2">M</div><div class="avatar-sky-24">D</div></div></div></div></div><div class="flex-g4-afs"><div class="w52px-tc-shrink0"><div class="icon-box-card-bg-44"><div class="fs68-fw7-c-muted-uc-lh-1">SAT</div><div class="fs1-fw9-c-body-lh-1">28</div></div></div><div class="flex-col-g2-fl1"><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-red-pointer" onclick="openEventModal('e10',28)"><div class="icon-box-red-13-36"><i class="bi bi-exclamation-triangle-fill fs85-c-red"></i></div><div class="fl1"><div class="fw7-fs9-body">Month-end Payroll</div><div class="fs75-muted-mt06">EOD</div></div><div class="flex"></div></div></div></div><div class="flex-g4-afs"><div class="w52px-tc-shrink0"><div class="icon-box-card-bg-44"><div class="fs68-fw7-c-muted-uc-lh-1">TUE</div><div class="fs1-fw9-c-body-lh-1">31</div></div></div><div class="flex-col-g2-fl1"><div class="card-hr agenda-ev flex-ac-g35-p-35-5-bl-4-pink-pointer" onclick="openEventModal('e11',31)"><div class="icon-box-pink-13-36"><i class="bi bi-balloon-heart-fill fs85-c-pink"></i></div><div class="fl1"><div class="fw7-fs9-body">Team Lunch 🍽️</div><div class="fs75-muted-mt06">12:30 PM · 1.5h</div></div><div class="flex"><div class="avatar-amber-24-2">A</div></div></div></div></div>
+            </div>
+          </div>
+
+        </div><!-- /cal-left -->
+
+        <!-- RIGHT: Upcoming Events + Mini Calendar ──────────────────────── -->
+        <div class="cal-right">
+
+          <!-- Upcoming Events card -->
+          <div class="card-hr">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Upcoming Events</div>
+                <div class="card-subtitle-hr">Next scheduled items</div>
+              </div>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr" onclick="setView('agenda')" title="View all agenda">
+                <i class="bi bi-arrow-right"></i>
+              </button>
+            </div>
+            <div class="card-bd pt2-pb25" id="upcomingList">
+              <div class="upcoming-ev flex-afs-g3-bg-bg-br25-p-3-35-mb2-bl-3-blue-pointer" onclick="openEventModal('e5',14)"><div class="icon-box-blue-9-32"><i class="bi bi-chat-square-fill fs8-c-blue"></i></div><div class="fl1-mnw0"><div class="fs8125-fw7-c-body-ellipsis-nowrap-ov-hidden">Morning Standup</div><div class="fs72-c-muted-mt04">Today · 9:00 AM · 15m</div></div></div><div class="upcoming-ev flex-afs-g3-bg-bg-br25-p-3-35-mb2-bl-3-pink-pointer" onclick="openEventModal('e6',14)"><div class="icon-box-pink-9-32"><i class="bi bi-building fs8-c-pink"></i></div><div class="fl1-mnw0"><div class="fs8125-fw7-c-body-ellipsis-nowrap-ov-hidden">Holi — Public Holiday 🎨</div><div class="fs72-c-muted-mt04">Today · All Day</div></div></div><div class="upcoming-ev flex-afs-g3-bg-bg-br25-p-3-35-mb2-bl-3-green-pointer" onclick="openEventModal('e7',17)"><div class="icon-box-green-9-32"><i class="bi bi-display fs8-c-green"></i></div><div class="fl1-mnw0"><div class="fs8125-fw7-c-body-ellipsis-nowrap-ov-hidden">Analytics Dashboard Demo</div><div class="fs72-c-muted-mt04">Mar 17 · 1:00 PM · 45m</div></div></div><div class="upcoming-ev flex-afs-g3-bg-bg-br25-p-3-35-mb2-bl-3-amber-pointer" onclick="openEventModal('e8',20)"><div class="icon-box-amber-9-32"><i class="bi bi-building fs8-c-amber"></i></div><div class="fl1-mnw0"><div class="fs8125-fw7-c-body-ellipsis-nowrap-ov-hidden">All-Hands Town Hall</div><div class="fs72-c-muted-mt04">Mar 20 · 2:00 PM · 1h</div></div></div><div class="upcoming-ev flex-afs-g3-bg-bg-br25-p-3-35-mb2-bl-3-purple-pointer" onclick="openEventModal('e9',24)"><div class="icon-box-purple-9-32"><i class="bi bi-kanban-fill fs8-c-purple"></i></div><div class="fl1-mnw0"><div class="fs8125-fw7-c-body-ellipsis-nowrap-ov-hidden">Sprint Review & Retro</div><div class="fs72-c-muted-mt04">Mar 24 · 4:00 PM · 1h</div></div></div><div class="upcoming-ev flex-afs-g3-bg-bg-br25-p-3-35-mb2-bl-3-red-pointer" onclick="openEventModal('e10',28)"><div class="icon-box-red-9-32"><i class="bi bi-exclamation-triangle-fill fs8-c-red"></i></div><div class="fl1-mnw0"><div class="fs8125-fw7-c-body-ellipsis-nowrap-ov-hidden">Month-end Payroll</div><div class="fs72-c-muted-mt04">Mar 28 · EOD</div></div></div>
+            </div>
+          </div>
+
+          <!-- Mini Calendar card -->
+          <div class="card-hr">
+            <div class="card-hd pb2">
+              <div class="flex-ac-g2">
+                <button class="nav-month-btn sq26px" type="button" onclick="changeMonth(-1)">
+                  <i class="bi bi-chevron-left fs65"></i>
+                </button>
+                <span class="fs8125-fw7-c-body-tc-fl1" id="miniMonthLabel">March 2026</span>
+                <button class="nav-month-btn sq26px" type="button" onclick="changeMonth(1)">
+                  <i class="bi bi-chevron-right fs65"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-bd pt15">
+              <!-- Day initials header -->
+              <div class="mini-cal-grid mb-1">
+                <div class="fs65-fw7-c-muted-p-08-0-tc-uc">S</div>
+                <div class="fs65-fw7-c-muted-p-08-0-tc-uc">M</div>
+                <div class="fs65-fw7-c-muted-p-08-0-tc-uc">T</div>
+                <div class="fs65-fw7-c-muted-p-08-0-tc-uc">W</div>
+                <div class="fs65-fw7-c-muted-p-08-0-tc-uc">T</div>
+                <div class="fs65-fw7-c-muted-p-08-0-tc-uc">F</div>
+                <div class="fs65-fw7-c-muted-p-08-0-tc-uc">S</div>
+              </div>
+              <!-- Mini grid cells — rendered by JS -->
+              <div class="mini-cal-grid" id="miniGrid"><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(1)"><div class="fs72-fw5-c-body-lh-13">1</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(2)"><div class="fs72-fw5-c-body-lh-13">2</div></div><div class="mini-day bg-primary-light-br15-p-06-0-tc-pointer" onclick="selectDay(3)"><div class="fs72-fw8-c-primary-lh-13">3</div><div class="sq4px-bg-blue-m-1px-auto-0"></div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(4)"><div class="fs72-fw5-c-body-lh-13">4</div></div><div class="mini-day bg-primary-light-br15-p-06-0-tc-pointer" onclick="selectDay(5)"><div class="fs72-fw8-c-primary-lh-13">5</div><div class="sq4px-bg-purple-m-1px-auto-0"></div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(6)"><div class="fs72-fw5-c-body-lh-13">6</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(7)"><div class="fs72-fw5-c-body-lh-13">7</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(8)"><div class="fs72-fw5-c-body-lh-13">8</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(9)"><div class="fs72-fw5-c-body-lh-13">9</div></div><div class="mini-day bg-primary-light-br15-p-06-0-tc-pointer" onclick="selectDay(10)"><div class="fs72-fw8-c-primary-lh-13">10</div><div class="sq4px-bg-red-m-1px-auto-0"></div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(11)"><div class="fs72-fw5-c-body-lh-13">11</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(12)"><div class="fs72-fw5-c-body-lh-13">12</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(13)"><div class="fs72-fw5-c-body-lh-13">13</div></div><div class="mini-day bg-blue-br15-p-06-0-tc-pointer" onclick="selectDay(14)"><div class="fs72-fw8-c-white-lh-13">14</div><div class="sq4px-bg-blue-m-1px-auto-0"></div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(15)"><div class="fs72-fw5-c-body-lh-13">15</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(16)"><div class="fs72-fw5-c-body-lh-13">16</div></div><div class="mini-day bg-primary-light-br15-p-06-0-tc-pointer" onclick="selectDay(17)"><div class="fs72-fw8-c-primary-lh-13">17</div><div class="sq4px-bg-green-m-1px-auto-0"></div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(18)"><div class="fs72-fw5-c-body-lh-13">18</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(19)"><div class="fs72-fw5-c-body-lh-13">19</div></div><div class="mini-day bg-primary-light-br15-p-06-0-tc-pointer" onclick="selectDay(20)"><div class="fs72-fw8-c-primary-lh-13">20</div><div class="sq4px-bg-amber-m-1px-auto-0"></div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(21)"><div class="fs72-fw5-c-body-lh-13">21</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(22)"><div class="fs72-fw5-c-body-lh-13">22</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(23)"><div class="fs72-fw5-c-body-lh-13">23</div></div><div class="mini-day bg-primary-light-br15-p-06-0-tc-pointer" onclick="selectDay(24)"><div class="fs72-fw8-c-primary-lh-13">24</div><div class="sq4px-bg-purple-m-1px-auto-0"></div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(25)"><div class="fs72-fw5-c-body-lh-13">25</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(26)"><div class="fs72-fw5-c-body-lh-13">26</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(27)"><div class="fs72-fw5-c-body-lh-13">27</div></div><div class="mini-day bg-primary-light-br15-p-06-0-tc-pointer" onclick="selectDay(28)"><div class="fs72-fw8-c-primary-lh-13">28</div><div class="sq4px-bg-red-m-1px-auto-0"></div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(29)"><div class="fs72-fw5-c-body-lh-13">29</div></div><div class="mini-day bg-transparent-br15-p-06-0-tc-pointer" onclick="selectDay(30)"><div class="fs72-fw5-c-body-lh-13">30</div></div><div class="mini-day bg-primary-light-br15-p-06-0-tc-pointer" onclick="selectDay(31)"><div class="fs72-fw8-c-primary-lh-13">31</div><div class="sq4px-bg-pink-m-1px-auto-0"></div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+          </div>
+
+          <!-- Quick Add Event card -->
+          <div class="card-hr">
+            <div class="card-hd">
+              <div class="card-title-hr">Quick Add</div>
+            </div>
+            <div class="card-bd">
+              <input class="hr-inp mb-2" id="quickTitle" placeholder="Event title..." />
+              <div class="grid-g2-mb2">
+                <input class="hr-inp" type="date" id="quickDate" value="2026-03-14"/>
+                <input class="hr-inp" type="time" id="quickTime" value="09:00"/>
+              </div>
+              <select class="hr-inp mb-25" id="quickType">
+                <option value="meeting">Meeting</option>
+                <option value="standup">Standup</option>
+                <option value="sprint">Sprint</option>
+                <option value="deadline">Deadline</option>
+                <option value="social">Social</option>
+                <option value="personal">Personal</option>
+              </select>
+              <button class="btn-hr btn-primary-hr w100pct-6" type="button" onclick="quickAddEvent()">
+                <i class="bi bi-plus-lg me-1"></i>Add Event
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /cal-right -->
+      </div><!-- /cal-layout -->
+
+    </div><!-- /page-inner -->
+  </main>
+</div><!-- /main-content -->
+
+<!-- ══ VIEW EVENT MODAL ══════════════════════════════════════════════════════ -->
+<div class="modal-backdrop-custom d-none" id="evOverlay" onclick="if(event.target===this)closeEvModal()">
+  <div class="ev-modal">
+    <div class="flex-ac-g3-h64px-p-0-6" id="evModalHdr"></div>
+    <div class="flex-col-g3-p-6" id="evModalBody"></div>
+    <div class="flex-ac-jsb-p-4-6-bt-1">
+      <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr" onclick="openNewEventModal()"><i class="bi bi-pencil me-1"></i>Edit</button>
+      <button class="fw7-c-white-bg-blue-br2-p-22-5-b-none-pointer" type="button" onclick="closeEvModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NEW EVENT MODAL ═══════════════════════════════════════════════════════ -->
+<div class="modal-backdrop-custom d-none" id="newEvOverlay" onclick="if(event.target===this)closeNewEvModal()">
+  <div class="new-ev-modal">
+    <!-- Header -->
+    <div class="flex-ac-jsb-p-5-6-bb-1">
+      <div>
+        <div class="fs1-fw8-c-body">New Event</div>
+        <div class="form-lbl mb0-mt08" id="newEvSubtitle">Add to your March 2026 calendar</div>
+      </div>
+      <button class="avatar-bg-32" type="button" onclick="closeNewEvModal()">
+        <i class="bi bi-x-lg fs8"></i>
+      </button>
+    </div>
+    <!-- Body -->
+    <div class="flex-col-g35-p-6-ov-y-auto">
+      <div>
+        <label class="form-lbl">Event Title *</label>
+        <input type="text" id="newEvTitle" class="hr-inp" placeholder="e.g. Q1 Planning Meeting"/>
+      </div>
+      <div class="grid-g35">
+        <div>
+          <label class="form-lbl">Date *</label>
+          <input type="date" id="newEvDate" class="hr-inp" value="2026-03-14"/>
+        </div>
+        <div>
+          <label class="form-lbl">Time</label>
+          <input type="time" id="newEvTime" class="hr-inp" value="09:00"/>
+        </div>
+      </div>
+      <div class="grid-g35">
+        <div>
+          <label class="form-lbl">Event Type</label>
+          <select id="newEvType" class="hr-inp">
+            <option value="meeting">Meeting</option>
+            <option value="standup">Standup</option>
+            <option value="sprint">Sprint / Planning</option>
+            <option value="1on1">1-on-1</option>
+            <option value="demo">Demo</option>
+            <option value="deadline">Deadline</option>
+            <option value="social">Social Event</option>
+            <option value="personal">Personal</option>
+            <option value="company">Company Event</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-lbl">Category</label>
+          <select id="newEvCat" class="hr-inp">
+            <option value="company">Company</option>
+            <option value="personal">Personal</option>
+            <option value="holiday">Holiday</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="form-lbl">Duration</label>
+        <select id="newEvDur" class="hr-inp">
+          <option value="15m">15 minutes</option>
+          <option value="30m">30 minutes</option>
+          <option value="45m">45 minutes</option>
+          <option value="1h" selected>1 hour</option>
+          <option value="1.5h">1.5 hours</option>
+          <option value="2h">2 hours</option>
+          <option value="3h">3 hours</option>
+          <option value="All Day">All Day</option>
+          <option value="—">No Duration</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-lbl">Notes (optional)</label>
+        <textarea class="hr-inp resize-none" id="newEvNotes" rows="2" placeholder="Any additional details…"></textarea>
+      </div>
+      <!-- Success message -->
+      <div class="d-none-bg-green-8-br25-p-3-4-2" id="evSuccess">
+        <i class="bi bi-check-circle-fill c-green"></i>
+        <span class="fs875-fw7-c-green">Event added to calendar!</span>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div class="flex-jfe-g25-p-4-6-bt-1">
+      <button class="fw7-c-muted-bg-transparent-br2-p-22-44-pointer" type="button" onclick="closeNewEvModal()">Cancel</button>
+      <button class="flex-ac-g2-fw7-c-white-bg-grad-blue-purple-br2-p-22-5-b-none" type="button" id="addEvBtn" onclick="submitNewEvent()">
+        <i class="bi bi-plus-lg"></i>Add Event
+      </button>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   CALENDAR — FULL JS ENGINE
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── Data ─────────────────────────────────────────────────────────────── */
+var EVENTS     = {"3": [{"id": "e1", "title": "Team Standup", "time": "9:00 AM", "dur": "15m", "color": "#5B8FF9", "type": "standup", "att": ["SC", "MJ"], "cat": "company"}], "5": [{"id": "e2", "title": "Q1 Planning Session", "time": "10:00 AM", "dur": "2h", "color": "#7C3AED", "type": "meeting", "att": ["SC", "MJ", "AP", "DK"], "cat": "company"}], "10": [{"id": "e3", "title": "Performance Reviews Due", "time": "EOD", "dur": "\u2014", "color": "#EF4444", "type": "deadline", "att": [], "cat": "company"}, {"id": "e4", "title": "1:1 with Sarah", "time": "3:00 PM", "dur": "30m", "color": "#10B981", "type": "1on1", "att": ["SC"], "cat": "personal"}], "14": [{"id": "e5", "title": "Morning Standup", "time": "9:00 AM", "dur": "15m", "color": "#5B8FF9", "type": "standup", "att": ["SC", "MJ", "TN", "DK"], "cat": "company"}, {"id": "e6", "title": "Holi \u2014 Public Holiday \ud83c\udfa8", "time": "All Day", "dur": "\u2014", "color": "#EC4899", "type": "company", "att": [], "cat": "holiday"}], "17": [{"id": "e7", "title": "Analytics Dashboard Demo", "time": "1:00 PM", "dur": "45m", "color": "#10B981", "type": "demo", "att": ["DK", "MJ", "AP"], "cat": "company"}], "20": [{"id": "e8", "title": "All-Hands Town Hall", "time": "2:00 PM", "dur": "1h", "color": "#F59E0B", "type": "company", "att": ["ALL"], "cat": "company"}], "24": [{"id": "e9", "title": "Sprint Review & Retro", "time": "4:00 PM", "dur": "1h", "color": "#7C3AED", "type": "sprint", "att": ["SC", "MJ", "DK"], "cat": "company"}], "28": [{"id": "e10", "title": "Month-end Payroll", "time": "EOD", "dur": "\u2014", "color": "#EF4444", "type": "deadline", "att": [], "cat": "company"}], "31": [{"id": "e11", "title": "Team Lunch \ud83c\udf7d\ufe0f", "time": "12:30 PM", "dur": "1.5h", "color": "#EC4899", "type": "social", "att": ["ALL"], "cat": "personal"}]};
+var AVC        = {"SC": "#5B8FF9", "MJ": "#10B981", "AP": "#7C3AED", "DK": "#0EA5E9", "ER": "#EC4899", "TN": "#EF4444", "ALL": "#F59E0B"};
+var TYPE_ICON  = {"meeting": "bi-people-fill", "sprint": "bi-kanban-fill", "1on1": "bi-person-fill", "company": "bi-building", "standup": "bi-chat-square-fill", "review": "bi-eye-fill", "deadline": "bi-exclamation-triangle-fill", "demo": "bi-display", "social": "bi-balloon-heart-fill", "holiday": "bi-calendar-heart-fill", "personal": "bi-person-heart-fill"};
+var TYPE_COLORS= {"meeting": "#5B8FF9", "sprint": "#7C3AED", "1on1": "#10B981", "company": "#F59E0B", "standup": "#5B8FF9", "deadline": "#EF4444", "demo": "#0EA5E9", "social": "#EC4899", "personal": "#10B981", "holiday": "#EC4899"};
+var MONTH_NAMES= ['January','February','March','April','May','June','July',
+                  'August','September','October','November','December'];
+var DAY_NAMES  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+/* ── State ────────────────────────────────────────────────────────────── */
+var _view     = 'month';
+var _curYear  = 2026;
+var _curMonth = 3;       // 1-based
+var _selDay   = 14;  // March 14
+var _selYear  = 2026;
+var _selMonth = 3;
+var TODAY     = 14;
+
+// The demo's EVENTS dataset only has entries for March 2026 (it's keyed
+// purely by day-of-month, with no year/month of its own). Without this
+// guard, navigating to any other month would incorrectly show March's
+// events duplicated onto whatever day number happens to match.
+function isEventMonth() { return _curYear === 2026 && _curMonth === 3; }
+
+/* ══ VIEW SWITCHER ═══════════════════════════════════════════════════════ */
+function setView(v) {
+  _view = v;
+  ['Month','Week','Agenda'].forEach(function(n) {
+    var btn = document.getElementById('v'+n);
+    btn.classList.toggle('active', n.toLowerCase() === v);
+  });
+  ['month','week','agenda'].forEach(function(n) {
+    var el = document.getElementById('view' + n.charAt(0).toUpperCase() + n.slice(1));
+    el.classList.toggle('d-none', n !== v);
+    el.style.display = '';
+  });
+}
+
+/* ══ MONTH NAVIGATION ════════════════════════════════════════════════════ */
+function changeMonth(delta) {
+  _curMonth += delta;
+  if (_curMonth > 12) { _curMonth = 1;  _curYear++; }
+  if (_curMonth < 1)  { _curMonth = 12; _curYear--; }
+  var label = MONTH_NAMES[_curMonth-1] + ' ' + _curYear;
+  document.getElementById('monthLabel').textContent    = label;
+  document.getElementById('miniMonthLabel').textContent= label;
+  document.getElementById('calSubtitle').textContent   = label + ' — Company & personal events';
+  document.getElementById('newEvSubtitle').textContent = 'Add to your ' + label + ' calendar';
+  rebuildMonthGrid();
+  rebuildMiniGrid();
+  rebuildUpcoming();
+}
+
+/* ══ BUILD MONTH GRID ════════════════════════════════════════════════════ */
+function getDaysInMonth(y, m) { return new Date(y, m, 0).getDate(); }
+function getFirstDOW(y, m)    { return new Date(y, m-1, 1).getDay(); } // Sun=0
+
+function rebuildMonthGrid() {
+  var firstDOW = getFirstDOW(_curYear, _curMonth);
+  var daysIn   = getDaysInMonth(_curYear, _curMonth);
+  var total    = Math.ceil((daysIn + firstDOW) / 7) * 7;
+  var cells    = [];
+  for (var i=0; i<total; i++) {
+    var d = i - firstDOW + 1;
+    cells.push((d>=1 && d<=daysIn) ? d : null);
+  }
+  var weeks=[];
+  for (var i=0; i<cells.length; i+=7) weeks.push(cells.slice(i,i+7));
+
+  var html='';
+  weeks.forEach(function(week, wi) {
+    var rowBdr = wi<weeks.length-1 ? '1px solid var(--body-border)' : 'none';
+    var row='';
+    week.forEach(function(day, di) {
+      var colBdr = di<6 ? '1px solid var(--body-border)' : 'none';
+      if (!day) {
+        row += '<div class="cal-cell empty" style="border-right:'+colBdr+'"></div>';
+        return;
+      }
+      var isTd  = (day===TODAY && isEventMonth());
+      var isSel = (day===_selDay && _curYear===_selYear && _curMonth===_selMonth);
+      var cellBg= isSel ? 'rgba(91,143,249,.06)' : isTd ? 'rgba(91,143,249,.03)' : 'transparent';
+      var numBg = isTd ? '#5B8FF9' : 'transparent';
+      var numCol= isTd ? '#fff' : isSel ? '#5B8FF9' : 'var(--body-text)';
+      var evs   = isEventMonth() ? (EVENTS[day]||[]) : [];
+      var pills = evs.slice(0,2).map(function(ev) {
+        return '<div class="ev-pill" onclick="event.stopPropagation();openEventModal(\'' + ev.id + '\',' + day + ')" style="background:' + ev.color + '20;color:' + ev.color + '">' + ev.title + '</div>';
+      }).join('');
+      if (evs.length>2) pills += '<div class="more-pill">+'+(evs.length-2)+' more</div>';
+      row += '<div class="cal-cell" data-day="'+day+'" onclick="selectDay('+day+')" style="border-right:'+colBdr+';background:'+cellBg+'">'
+           + '<div class="day-num" style="background:'+numBg+';color:'+numCol+'">'+day+'</div>'
+           + pills + '</div>';
+    });
+    html += '<div class="cal-week" style="border-bottom:'+rowBdr+'">'+row+'</div>';
+  });
+  document.getElementById('monthGrid').innerHTML = html;
+}
+
+/* ══ SELECT DAY ══════════════════════════════════════════════════════════ */
+function selectDay(d) {
+  _selDay = d;
+  _selYear = _curYear;
+  _selMonth = _curMonth;
+  rebuildMonthGrid();
+  var dt  = new Date(_curYear, _curMonth-1, d);
+  var lbl = dt.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('selDayLabel').textContent = lbl;
+  document.getElementById('newEvDate').value = _curYear+'-'+pad(_curMonth)+'-'+pad(d);
+  renderSelDayEvents(d);
+}
+
+function renderSelDayEvents(d) {
+  var evs = isEventMonth() ? (EVENTS[d]||[]) : [];
+  var con = document.getElementById('selDayBody');
+  if (!evs.length) {
+    con.innerHTML='<div style="text-align:center;padding:1.5rem;color:var(--body-text-muted)">'
+      +'<i class="bi bi-calendar-x" style="font-size:2rem;display:block;margin-bottom:.5rem;opacity:.4"></i>'
+      +'No events — click Add Event to create one</div>';
+    return;
+  }
+  con.innerHTML = evs.map(function(ev) {
+    var ic  = TYPE_ICON[ev.type]||'bi-calendar-event';
+    var dur = ev.dur&&ev.dur!=='—' ? ' · '+ev.dur : '';
+    var att = ev.att.slice(0,3).map(function(a) {
+      return '<div style="width:22px;height:22px;border-radius:50%;background:'+(AVC[a]||'#5B8FF9')
+        +';display:flex;align-items:center;justify-content:center;color:#fff;font-size:.58rem;font-weight:800;border:2px solid var(--body-bg);margin-left:-4px">'+a[0]+'</div>';
+    }).join('');
+    return '<div onclick="openEventModal(\'' + ev.id + '\',' + d + ')" style="display:flex;align-items:center;gap:.875rem;padding:.875rem;background:var(--body-bg);border-radius:.625rem;border:1px solid var(--body-border);cursor:pointer;border-left:4px solid '+ev.color+';margin-bottom:.625rem">'
+      +'<div style="width:34px;height:34px;border-radius:.5rem;background:'+ev.color+'20;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="bi '+ic+'" style="color:'+ev.color+';font-size:.85rem"></i></div>'
+      +'<div style="flex:1"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">'+ev.title+'</div>'
+      +'<div style="font-size:.75rem;color:var(--body-text-muted)">'+ev.time+dur+'</div></div>'
+      +'<div style="display:flex">'+att+'</div></div>';
+  }).join('');
+}
+
+/* ══ MINI CALENDAR ═══════════════════════════════════════════════════════ */
+function rebuildMiniGrid() {
+  var firstDOW = getFirstDOW(_curYear, _curMonth);
+  var daysIn   = getDaysInMonth(_curYear, _curMonth);
+  var total    = Math.ceil((daysIn + firstDOW)/7)*7;
+  var html='';
+  for (var i=0; i<total; i++) {
+    var d = i - firstDOW + 1;
+    if (d<1||d>daysIn) { html+='<div></div>'; continue; }
+    var isTd  = (d===TODAY && isEventMonth());
+    var hasEv = isEventMonth() && !!(EVENTS[d]&&EVENTS[d].length);
+    var nbg   = isTd ? '#5B8FF9' : hasEv ? 'var(--color-primary-light)' : 'transparent';
+    var ncol  = isTd ? '#fff' : hasEv ? 'var(--color-primary)' : 'var(--body-text)';
+    var fw    = (isTd||hasEv) ? '800' : '500';
+    var dot   = hasEv ? '<div style="width:4px;height:4px;border-radius:50%;background:'+(isTd?'rgba(255,255,255,.7)':EVENTS[d][0].color)+';margin:1px auto 0"></div>' : '';
+    html += '<div class="mini-day" onclick="selectDay('+d+')" style="text-align:center;cursor:pointer;padding:.15rem 0;border-radius:.35rem;background:'+nbg+'">'
+          + '<div style="font-size:.72rem;font-weight:'+fw+';color:'+ncol+';line-height:1.3">'+d+'</div>'
+          + dot+'</div>';
+  }
+  document.getElementById('miniGrid').innerHTML = html;
+}
+
+/* ══ UPCOMING EVENTS (right panel) ══════════════════════════════════════ */
+function rebuildUpcoming() {
+  var days = Object.keys(EVENTS).map(Number).sort(function(a,b){return a-b;});
+  // "Upcoming" is a from-today-forward widget, independent of whichever
+  // month the main grid happens to be showing — it should stay populated
+  // no matter where the user has navigated to, the same way a real
+  // calendar app's upcoming panel would.
+  var upcoming = [];
+  days.forEach(function(d) {
+    if (d>=TODAY) {
+      EVENTS[d].forEach(function(ev) { upcoming.push({day:d,ev:ev}); });
+    }
+  });
+  upcoming = upcoming.slice(0,8);
+  var con = document.getElementById('upcomingList');
+  if (!upcoming.length) {
+    con.innerHTML='<div style="padding:1rem;text-align:center;color:var(--body-text-muted);font-size:.875rem">No upcoming events</div>';
+    return;
+  }
+  con.innerHTML = upcoming.map(function(item) {
+    var ic  = TYPE_ICON[item.ev.type]||'bi-calendar-event';
+    var dur = item.ev.dur&&item.ev.dur!=='—' ? ' · '+item.ev.dur : '';
+    var isTd= (item.day===TODAY);
+    var dateLbl = isTd ? 'Today' : 'Mar '+item.day;
+    return '<div class="upcoming-ev" onclick="openEventModal(\'' + item.ev.id + '\',' + item.day + ')" '
+      +'style="display:flex;gap:.75rem;align-items:flex-start;padding:.75rem .875rem;border-radius:.625rem;cursor:pointer;border-left:3px solid '+item.ev.color+';background:var(--body-bg);margin-bottom:.5rem">'
+      +'<div style="width:32px;height:32px;border-radius:.5rem;background:'+item.ev.color+'18;display:flex;align-items:center;justify-content:center;flex-shrink:0">'
+      +'<i class="bi '+ic+'" style="color:'+item.ev.color+';font-size:.8rem"></i></div>'
+      +'<div style="flex:1;min-width:0">'
+      +'<div style="font-weight:700;font-size:.8125rem;color:var(--body-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+item.ev.title+'</div>'
+      +'<div style="font-size:.72rem;color:var(--body-text-muted);margin-top:.1rem">'+dateLbl+' · '+item.ev.time+dur+'</div>'
+      +'</div></div>';
+  }).join('');
+}
+
+/* ══ VIEW EVENT MODAL ════════════════════════════════════════════════════ */
+function openEventModal(evId, day) {
+  var evs = EVENTS[day]||[];
+  var ev  = evs.find(function(e){return e.id===evId;});
+  if (!ev) return;
+  var ic  = TYPE_ICON[ev.type]||'bi-calendar-event';
+  var dur = ev.dur&&ev.dur!=='—' ? ' · Duration: '+ev.dur : '';
+  // Header
+  document.getElementById('evModalHdr').style.cssText =
+    'height:64px;display:flex;align-items:center;padding:0 1.5rem;gap:.75rem;'
+    +'background:'+ev.color+'20;border-bottom:2px solid '+ev.color+'30';
+  document.getElementById('evModalHdr').innerHTML =
+    '<div style="width:38px;height:38px;border-radius:.625rem;background:'+ev.color+'30;'
+    +'display:flex;align-items:center;justify-content:center">'
+    +'<i class="bi '+ic+'" style="color:'+ev.color+';font-size:1rem"></i></div>'
+    +'<div style="font-weight:800;color:var(--body-text);font-size:1rem;flex:1">'+ev.title+'</div>'
+    +'<button type="button" onclick="closeEvModal()" style="width:30px;height:30px;border-radius:50%;border:none;background:rgba(0,0,0,.08);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--body-text-muted)">'
+    +'<i class="bi bi-x-lg" style="font-size:.75rem"></i></button>';
+  // Body rows
+  var rows = [
+    ['bi-clock',      'Time',      ev.time+dur],
+    ['bi-tag-fill',   'Type',      ev.type.charAt(0).toUpperCase()+ev.type.slice(1)],
+    ['bi-calendar3',  'Date',      'March '+day+', 2026'],
+    ev.att&&ev.att.length ? ['bi-people-fill','Attendees', ev.att.join(', ')] : null,
+    ev.notes ? ['bi-chat-left-text','Notes', ev.notes] : null,
+  ].filter(Boolean);
+  document.getElementById('evModalBody').innerHTML = rows.map(function(r) {
+    return '<div style="display:flex;gap:.75rem;align-items:flex-start">'
+      +'<i class="bi '+r[0]+'" style="color:'+ev.color+';font-size:.9rem;margin-top:.1rem;width:16px;flex-shrink:0"></i>'
+      +'<div><div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--body-text-muted);margin-bottom:.15rem">'+r[1]+'</div>'
+      +'<div style="font-size:.875rem;color:var(--body-text);font-weight:600">'+r[2]+'</div></div></div>';
+  }).join('');
+  document.getElementById('evOverlay').classList.remove('d-none');
+  document.getElementById('evOverlay').style.display='flex';
+}
+
+function closeEvModal() {
+  document.getElementById('evOverlay').classList.add('d-none');
+  document.getElementById('evOverlay').style.display='none';
+}
+
+/* ══ NEW EVENT MODAL ═════════════════════════════════════════════════════ */
+function openNewEventModal() {
+  document.getElementById('newEvOverlay').classList.remove('d-none');
+  document.getElementById('newEvOverlay').style.display='flex';
+  document.getElementById('evSuccess').style.display='none';
+  document.getElementById('newEvTitle').value='';
+  document.getElementById('newEvNotes').value='';
+  var btn=document.getElementById('addEvBtn');
+  btn.innerHTML='<i class="bi bi-plus-lg"></i>Add Event';
+  btn.style.background='linear-gradient(135deg,#5B8FF9,#7C3AED)';
+  btn.disabled=false;
+  document.getElementById('newEvTitle').style.borderColor='';
+  document.getElementById('newEvDate').style.borderColor='';
+}
+
+function openNewEventForDay() {
+  document.getElementById('newEvDate').value = _curYear+'-'+pad(_curMonth)+'-'+pad(_selDay);
+  openNewEventModal();
+}
+
+function closeNewEvModal() {
+  document.getElementById('newEvOverlay').classList.add('d-none');
+  document.getElementById('newEvOverlay').style.display='none';
+}
+
+function submitNewEvent() {
+  var title = (document.getElementById('newEvTitle').value||'').trim();
+  var date  = document.getElementById('newEvDate').value;
+  var time  = document.getElementById('newEvTime').value||'09:00';
+  var type  = document.getElementById('newEvType').value;
+  var cat   = document.getElementById('newEvCat').value;
+  var dur   = document.getElementById('newEvDur').value;
+  var notes = document.getElementById('newEvNotes').value;
+  if (!title||!date) {
+    if(!title) document.getElementById('newEvTitle').style.borderColor='#EF4444';
+    if(!date)  document.getElementById('newEvDate').style.borderColor='#EF4444';
+    return;
+  }
+  var btn = document.getElementById('addEvBtn');
+  btn.innerHTML='<div class="spinner-sm"></div>Adding…';
+  btn.disabled=true;
+  setTimeout(function() {
+    var day   = parseInt(date.split('-')[2]);
+    var color = TYPE_COLORS[type]||'#5B8FF9';
+    var h=parseInt(time.split(':')[0]), mi=time.split(':')[1];
+    var ap=h>=12?'PM':'AM'; h=h%12||12;
+    var timeFmt=h+':'+mi+' '+ap;
+    var ev={id:'e'+Date.now(),title:title,time:timeFmt,dur:dur,color:color,type:type,att:[],cat:cat,notes:notes};
+    EVENTS[day]=EVENTS[day]||[];
+    EVENTS[day].push(ev);
+    rebuildMonthGrid();
+    rebuildMiniGrid();
+    rebuildUpcoming();
+    if(_selDay===day) renderSelDayEvents(day);
+    // Agenda — rebuild
+    rebuildAgenda();
+    btn.disabled=false;
+    document.getElementById('evSuccess').style.display='flex';
+    btn.innerHTML='✓ Added!';
+    btn.style.background='#10B981';
+    setTimeout(function(){ closeNewEvModal(); },1200);
+  },1200);
+}
+
+/* ══ QUICK ADD (right panel) ═════════════════════════════════════════════ */
+function quickAddEvent() {
+  var title = (document.getElementById('quickTitle').value||'').trim();
+  var date  = document.getElementById('quickDate').value;
+  var time  = document.getElementById('quickTime').value||'09:00';
+  var type  = document.getElementById('quickType').value;
+  if (!title||!date) return;
+  var day   = parseInt(date.split('-')[2]);
+  var color = TYPE_COLORS[type]||'#5B8FF9';
+  var h=parseInt(time.split(':')[0]), mi=time.split(':')[1];
+  var ap=h>=12?'PM':'AM'; h=h%12||12;
+  var timeFmt=h+':'+mi+' '+ap;
+  var ev={id:'e'+Date.now(),title:title,time:timeFmt,dur:'1h',color:color,type:type,att:[],cat:'company',notes:''};
+  EVENTS[day]=EVENTS[day]||[];
+  EVENTS[day].push(ev);
+  document.getElementById('quickTitle').value='';
+  rebuildMonthGrid(); rebuildMiniGrid(); rebuildUpcoming(); rebuildAgenda();
+  if(_selDay===day) renderSelDayEvents(day);
+}
+
+/* ══ AGENDA REBUILD ══════════════════════════════════════════════════════ */
+function rebuildAgenda() {
+  var days = Object.keys(EVENTS).map(Number).filter(function(d){
+    return EVENTS[d]&&EVENTS[d].length;
+  }).sort(function(a,b){return a-b;});
+  if (!days.length) {
+    document.getElementById('agendaList').innerHTML='<div class="card-hr" style="padding:3rem;text-align:center;color:var(--body-text-muted)">No upcoming events</div>';
+    return;
+  }
+  document.getElementById('agendaList').innerHTML = days.map(function(d) {
+    var dt = new Date(2026, 2, d); // events are always March 2026, regardless of the currently-viewed month
+    var dow= ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getDay()];
+    var isTd = (d===TODAY);
+    var boxBg = isTd?'#5B8FF9':'var(--card-bg)';
+    var boxBdr= isTd?'#5B8FF9':'var(--body-border)';
+    var nCol  = isTd?'#fff':'var(--body-text)';
+    var dCol  = isTd?'rgba(255,255,255,.8)':'var(--body-text-muted)';
+    var evs   = (EVENTS[d]||[]).map(function(ev) {
+      var ic  = TYPE_ICON[ev.type]||'bi-calendar-event';
+      var dur = ev.dur&&ev.dur!=='—'?' · '+ev.dur:'';
+      var att = ev.att.slice(0,3).map(function(a){
+        return '<div style="width:24px;height:24px;border-radius:50%;background:'+(AVC[a]||'#5B8FF9')+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:800;border:2px solid var(--card-bg);margin-left:-.375rem">'+a[0]+'</div>';
+      }).join('');
+      return '<div class="card-hr agenda-ev" onclick="openEventModal(\'' + ev.id + '\',' + d + ')" '
+        +'style="padding:.875rem 1.25rem;display:flex;align-items:center;gap:.875rem;cursor:pointer;border-left:4px solid '+ev.color+'">'
+        +'<div style="width:36px;height:36px;border-radius:.5rem;background:'+ev.color+'20;display:flex;align-items:center;justify-content:center;flex-shrink:0">'
+        +'<i class="bi '+ic+'" style="color:'+ev.color+';font-size:.85rem"></i></div>'
+        +'<div style="flex:1"><div style="font-weight:700;font-size:.9rem;color:var(--body-text)">'+ev.title+'</div>'
+        +'<div style="font-size:.75rem;color:var(--body-text-muted);margin-top:.15rem">'+ev.time+dur+'</div></div>'
+        +'<div style="display:flex">'+att+'</div></div>';
+    }).join('');
+    return '<div style="display:flex;gap:1rem;align-items:flex-start">'
+      +'<div style="width:52px;text-align:center;flex-shrink:0">'
+      +'<div style="width:44px;height:44px;border-radius:.625rem;background:'+boxBg+';border:1.5px solid '+boxBdr+';display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto">'
+      +'<div style="font-size:.68rem;font-weight:700;color:'+dCol+';line-height:1;text-transform:uppercase">'+dow+'</div>'
+      +'<div style="font-size:1rem;font-weight:900;color:'+nCol+';line-height:1">'+d+'</div>'
+      +'</div></div>'
+      +'<div style="flex:1;display:flex;flex-direction:column;gap:.5rem">'+evs+'</div></div>';
+  }).join('');
+}
+
+/* ══ SEARCH ══════════════════════════════════════════════════════════════ */
+function searchEvents(q) {
+  q=q.toLowerCase().trim();
+  document.querySelectorAll('.ev-pill,.agenda-ev,.upcoming-ev').forEach(function(el) {
+    el.style.display=(!q||el.textContent.toLowerCase().includes(q))?'':'none';
+  });
+}
+
+/* ══ HELPERS ═════════════════════════════════════════════════════════════ */
+function pad(n) { return n<10?'0'+n:String(n); }
+</script>
+</body>
+</html>

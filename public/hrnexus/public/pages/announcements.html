@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Announcements — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Company-wide announcements board for policy updates, events, and internal communications."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html"><div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div><div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div></a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Announcements</span></nav>
+      <div class="search-wrap"><i class="bi bi-search search-icon-i"></i><input type="search" class="search-input" placeholder="Search announcements..."/></div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel"><i class="bi bi-bell-fill"></i><span class="badge-dot"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- PAGE HEADER -->
+      <div class="page-header">
+        <div>
+          <h1 class="fs16-fw9-c-body-m-0">Announcements</h1>
+          <p class="fs85-c-muted-m-1-0-0">Company-wide communications, policies, and updates</p>
+        </div>
+        <button class="flex-ac-g2-fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none-pointer" type="button" onclick="openNewModal()"><i class="bi bi-plus-lg"></i>New Announcement</button>
+      </div>
+
+      <!-- STATS STRIP -->
+      <div class="grid-cols-auto-fill-mn160-g4-mb6">
+        <div class="card-hr flex-ac-g35-p-4-5"><div class="icon-box-blue-9-40"><i class="bi bi-megaphone-fill fs11-c-blue"></i></div><div><div class="fs14-fw9-c-body-lh-1" id="statTotal">6</div><div class="fs75-fw6-muted">Total Posts</div></div></div>
+        <div class="card-hr flex-ac-g35-p-4-5"><div class="icon-box-red-9-40"><i class="bi bi-pin-fill fs11-c-red"></i></div><div><div class="fs14-fw9-c-body-lh-1" id="statPinned">2</div><div class="fs75-fw6-muted">Pinned</div></div></div>
+        <div class="card-hr flex-ac-g35-p-4-5"><div class="icon-box-amber-9-40"><i class="bi bi-exclamation-circle-fill fs11-c-amber"></i></div><div><div class="fs14-fw9-c-body-lh-1" id="statHigh">3</div><div class="fs75-fw6-muted">High Priority</div></div></div>
+        <div class="card-hr flex-ac-g35-p-4-5"><div class="icon-box-green-9-40"><i class="bi bi-bell-fill fs11-c-green"></i></div><div><div class="fs14-fw9-c-body-lh-1">3</div><div class="fs75-fw6-muted">Unread</div></div></div>
+      </div>
+
+      <!-- FILTER BAR + TABS -->
+      <div class="flex-ac-jsb-wrap-g3-mb5">
+        <!-- Tab buttons — exact React -->
+        <div class="flex-g1-bg-bg-br25-p-1-b-1">
+          <button type="button" class="ann-tab active" id="ann-tab-all"    onclick="setAnnTab('all')">All</button>
+          <button type="button" class="ann-tab"        id="ann-tab-pinned" onclick="setAnnTab('pinned')">Pinned</button>
+          <button type="button" class="ann-tab"        id="ann-tab-saved"  onclick="setAnnTab('saved')">Saved</button>
+        </div>
+        <div class="flex-ac-wrap-g3">
+          <!-- Search -->
+          <div class="pos-rel">
+            <i class="bi bi-search abs-t50pct-l3-c-muted-pe-none"></i>
+            <input class="ann-input w200px-pl9" id="annSearch" placeholder="Search…" oninput="filterAnn()"/>
+          </div>
+          <!-- Category dropdown -->
+          <select class="ann-input pointer-2" id="annCatFilter" onchange="filterAnn()">
+            <option value="All">All</option>
+<option value="Company">Company</option>
+<option value="Policy">Policy</option>
+<option value="Achievement">Achievement</option>
+<option value="IT & Operations">IT & Operations</option>
+<option value="Benefits">Benefits</option>
+<option value="Team Update">Team Update</option>
+<option value="General">General</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- POSTS LIST -->
+      <div class="grid-g4" id="annList">
+<div class="ann-card card-hr p-6-bl-4-red-pointer-trans" data-ann-id="1" data-cat="Company" data-prio="high" data-pinned="1" onmouseover="this.style.transform='translateX(2px)'" onmouseout="this.style.transform='translateX(0)'">
+  <!-- Header row -->
+  <div class="flex-afs-jsb-g4-mb35">
+    <div class="fl1">
+      <div class="flex-ac-wrap-g2-mb2">
+        <span class="badge-red-10-xs-fs72-if-g1-p06-2"><i class="bi bi-pin-fill"></i>Pinned</span>
+        <span class="badge-blue-9-xs-fs72-p06-2">Company</span>
+        <span class="badge-red-9-xs-fs72-p06-2">🔴 High Priority</span>
+      </div>
+      <h3 class="fs1-fw8-c-body-m-0-lh-135" onclick="openViewModal(1)">Company Town Hall — Q1 2026 Results & Q2 Roadmap</h3>
+    </div>
+    <!-- Action buttons -->
+    <div class="flex-g15-shrink0">
+      <button class="ann-bookmark-btn icon-box-blue-10-32" type="button" data-ann-id="1" onclick="toggleBookmark(1)">
+        <i class="bi bi-bookmark-fill fs8"></i>
+      </button>
+      <button class="ann-pin-btn icon-box-red-10-32" type="button" data-ann-id="1" onclick="togglePin(1)">
+        <i class="bi bi-pin-fill fs8"></i>
+      </button>
+    </div>
+  </div>
+  <!-- Preview text -->
+  <p class="fs82-c-muted-m-0-0-35-lh-16" onclick="openViewModal(1)">Dear Team,  We are thrilled to share that Q1 2026 was our strongest quarter yet. Revenue grew 34% year-over-year, we onboarded 12 new enterprise clients, and ou…</p>
+  <!-- Footer -->
+  <div class="flex-ac-jsb-wrap-g2">
+    <div class="flex-ac-g25">
+      <div class="avatar-blue-15-32">NS</div>
+      <div>
+        <span class="fs8-fw7-c-body">Neha Sharma</span>
+        <span class="fs75-c-muted-ml15">· Chief HR Officer</span>
+      </div>
+      <span class="fs75-muted">· 15 Mar 2026, 09:00</span>
+    </div>
+    <div class="flex-g35-ac">
+      <span class="fs75-muted"><i class="bi bi-eye mr-1"></i>198</span>
+      <button class="ann-like-btn flex-ac-g12-fs75-fw4-c-muted-bg-none-b-none-pointer" type="button" data-ann-id="1" data-liked="0" onclick="toggleLike(1)">
+        <i class="bi bi-heart" data-ann-id="1"></i><span class="like-count" data-ann-id="1">42</span>
+      </button>
+      <span class="fs75-muted"><i class="bi bi-paperclip mr-08"></i>2</span>
+      <button class="fs78-fw7-c-blue-bg-blue-10-br15-p-12-3-b-none-pointer" type="button" onclick="openViewModal(1)">Read more</button>
+    </div>
+  </div>
+</div>
+<div class="ann-card card-hr p-6-bl-4-red-pointer-trans" data-ann-id="2" data-cat="Policy" data-prio="high" data-pinned="0" onmouseover="this.style.transform='translateX(2px)'" onmouseout="this.style.transform='translateX(0)'">
+  <!-- Header row -->
+  <div class="flex-afs-jsb-g4-mb35">
+    <div class="fl1">
+      <div class="flex-ac-wrap-g2-mb2">
+        
+        <span class="badge-purple-9-xs-fs72-p06-2">Policy</span>
+        <span class="badge-red-9-xs-fs72-p06-2">🔴 High Priority</span>
+      </div>
+      <h3 class="fs1-fw8-c-body-m-0-lh-135" onclick="openViewModal(2)">New Hybrid Work Policy Effective April 1, 2026</h3>
+    </div>
+    <!-- Action buttons -->
+    <div class="flex-g15-shrink0">
+      <button class="ann-bookmark-btn icon-box-transparent-32" type="button" data-ann-id="2" onclick="toggleBookmark(2)">
+        <i class="bi bi-bookmark fs8"></i>
+      </button>
+      <button class="ann-pin-btn icon-box-transparent-32" type="button" data-ann-id="2" onclick="togglePin(2)">
+        <i class="bi bi-pin fs8"></i>
+      </button>
+    </div>
+  </div>
+  <!-- Preview text -->
+  <p class="fs82-c-muted-m-0-0-35-lh-16" onclick="openViewModal(2)">Following extensive feedback from our employee surveys and leadership discussions, we are updating our Hybrid Work Policy effective April 1, 2026.  Key Changes:…</p>
+  <!-- Footer -->
+  <div class="flex-ac-jsb-wrap-g2">
+    <div class="flex-ac-g25">
+      <div class="avatar-purple-15-32">PN</div>
+      <div>
+        <span class="fs8-fw7-c-body">Priya Nair</span>
+        <span class="fs75-c-muted-ml15">· HR Manager</span>
+      </div>
+      <span class="fs75-muted">· 14 Mar 2026, 11:30</span>
+    </div>
+    <div class="flex-g35-ac">
+      <span class="fs75-muted"><i class="bi bi-eye mr-1"></i>156</span>
+      <button class="ann-like-btn flex-ac-g12-fs75-fw7-c-red-bg-none-b-none-pointer" type="button" data-ann-id="2" data-liked="1" onclick="toggleLike(2)">
+        <i class="bi bi-heart-fill" data-ann-id="2"></i><span class="like-count" data-ann-id="2">39</span>
+      </button>
+      <span class="fs75-muted"><i class="bi bi-paperclip mr-08"></i>1</span>
+      <button class="fs78-fw7-c-blue-bg-blue-10-br15-p-12-3-b-none-pointer" type="button" onclick="openViewModal(2)">Read more</button>
+    </div>
+  </div>
+</div>
+<div class="ann-card card-hr p-6-bl-4-blue-pointer-trans" data-ann-id="3" data-cat="Achievement" data-prio="normal" data-pinned="1" onmouseover="this.style.transform='translateX(2px)'" onmouseout="this.style.transform='translateX(0)'">
+  <!-- Header row -->
+  <div class="flex-afs-jsb-g4-mb35">
+    <div class="fl1">
+      <div class="flex-ac-wrap-g2-mb2">
+        <span class="badge-red-10-xs-fs72-if-g1-p06-2"><i class="bi bi-pin-fill"></i>Pinned</span>
+        <span class="badge-green-9-xs-fs72-p06-2">Achievement</span>
+        <span class="badge-blue-9-xs-fs72-p06-2">🔵 Normal</span>
+      </div>
+      <h3 class="fs1-fw8-c-body-m-0-lh-135" onclick="openViewModal(3)">🎉 HRNexus Wins "Best Workplace 2026" Award!</h3>
+    </div>
+    <!-- Action buttons -->
+    <div class="flex-g15-shrink0">
+      <button class="ann-bookmark-btn icon-box-transparent-32" type="button" data-ann-id="3" onclick="toggleBookmark(3)">
+        <i class="bi bi-bookmark fs8"></i>
+      </button>
+      <button class="ann-pin-btn icon-box-red-10-32" type="button" data-ann-id="3" onclick="togglePin(3)">
+        <i class="bi bi-pin-fill fs8"></i>
+      </button>
+    </div>
+  </div>
+  <!-- Preview text -->
+  <p class="fs82-c-muted-m-0-0-35-lh-16" onclick="openViewModal(3)">We are absolutely thrilled to announce that HRNexus has been recognised as one of India's Best Workplaces 2026 by Great Place to Work® India!  This award is a r…</p>
+  <!-- Footer -->
+  <div class="flex-ac-jsb-wrap-g2">
+    <div class="flex-ac-g25">
+      <div class="avatar-green-15-32">RM</div>
+      <div>
+        <span class="fs8-fw7-c-body">Rajiv Menon</span>
+        <span class="fs75-c-muted-ml15">· CEO</span>
+      </div>
+      <span class="fs75-muted">· 13 Mar 2026, 14:00</span>
+    </div>
+    <div class="flex-g35-ac">
+      <span class="fs75-muted"><i class="bi bi-eye mr-1"></i>247</span>
+      <button class="ann-like-btn flex-ac-g12-fs75-fw4-c-muted-bg-none-b-none-pointer" type="button" data-ann-id="3" data-liked="0" onclick="toggleLike(3)">
+        <i class="bi bi-heart" data-ann-id="3"></i><span class="like-count" data-ann-id="3">89</span>
+      </button>
+      
+      <button class="fs78-fw7-c-blue-bg-blue-10-br15-p-12-3-b-none-pointer" type="button" onclick="openViewModal(3)">Read more</button>
+    </div>
+  </div>
+</div>
+<div class="ann-card card-hr p-6-bl-4-blue-pointer-trans" data-ann-id="4" data-cat="IT & Operations" data-prio="normal" data-pinned="0" onmouseover="this.style.transform='translateX(2px)'" onmouseout="this.style.transform='translateX(0)'">
+  <!-- Header row -->
+  <div class="flex-afs-jsb-g4-mb35">
+    <div class="fl1">
+      <div class="flex-ac-wrap-g2-mb2">
+        
+        <span class="badge-amber-9-xs-fs72-p06-2">IT & Operations</span>
+        <span class="badge-blue-9-xs-fs72-p06-2">🔵 Normal</span>
+      </div>
+      <h3 class="fs1-fw8-c-body-m-0-lh-135" onclick="openViewModal(4)">IT Maintenance Window — March 16 (Sun) 11PM–3AM IST</h3>
+    </div>
+    <!-- Action buttons -->
+    <div class="flex-g15-shrink0">
+      <button class="ann-bookmark-btn icon-box-transparent-32" type="button" data-ann-id="4" onclick="toggleBookmark(4)">
+        <i class="bi bi-bookmark fs8"></i>
+      </button>
+      <button class="ann-pin-btn icon-box-transparent-32" type="button" data-ann-id="4" onclick="togglePin(4)">
+        <i class="bi bi-pin fs8"></i>
+      </button>
+    </div>
+  </div>
+  <!-- Preview text -->
+  <p class="fs82-c-muted-m-0-0-35-lh-16" onclick="openViewModal(4)">Our IT team will be performing scheduled maintenance on Sunday, March 16, 2026 between 11:00 PM and 3:00 AM IST.  Services Affected: • HRNexus Portal (this syst…</p>
+  <!-- Footer -->
+  <div class="flex-ac-jsb-wrap-g2">
+    <div class="flex-ac-g25">
+      <div class="avatar-amber-15-32">AJ</div>
+      <div>
+        <span class="fs8-fw7-c-body">Amit Joshi</span>
+        <span class="fs75-c-muted-ml15">· IT Manager</span>
+      </div>
+      <span class="fs75-muted">· 12 Mar 2026, 16:00</span>
+    </div>
+    <div class="flex-g35-ac">
+      <span class="fs75-muted"><i class="bi bi-eye mr-1"></i>134</span>
+      <button class="ann-like-btn flex-ac-g12-fs75-fw4-c-muted-bg-none-b-none-pointer" type="button" data-ann-id="4" data-liked="0" onclick="toggleLike(4)">
+        <i class="bi bi-heart" data-ann-id="4"></i><span class="like-count" data-ann-id="4">12</span>
+      </button>
+      
+      <button class="fs78-fw7-c-blue-bg-blue-10-br15-p-12-3-b-none-pointer" type="button" onclick="openViewModal(4)">Read more</button>
+    </div>
+  </div>
+</div>
+<div class="ann-card card-hr p-6-bl-4-red-pointer-trans" data-ann-id="5" data-cat="Benefits" data-prio="high" data-pinned="0" onmouseover="this.style.transform='translateX(2px)'" onmouseout="this.style.transform='translateX(0)'">
+  <!-- Header row -->
+  <div class="flex-afs-jsb-g4-mb35">
+    <div class="fl1">
+      <div class="flex-ac-wrap-g2-mb2">
+        
+        <span class="badge-sky-9-xs-fs72-p06-2">Benefits</span>
+        <span class="badge-red-9-xs-fs72-p06-2">🔴 High Priority</span>
+      </div>
+      <h3 class="fs1-fw8-c-body-m-0-lh-135" onclick="openViewModal(5)">Open Enrollment — Health Insurance 2026–27</h3>
+    </div>
+    <!-- Action buttons -->
+    <div class="flex-g15-shrink0">
+      <button class="ann-bookmark-btn icon-box-transparent-32" type="button" data-ann-id="5" onclick="toggleBookmark(5)">
+        <i class="bi bi-bookmark fs8"></i>
+      </button>
+      <button class="ann-pin-btn icon-box-transparent-32" type="button" data-ann-id="5" onclick="togglePin(5)">
+        <i class="bi bi-pin fs8"></i>
+      </button>
+    </div>
+  </div>
+  <!-- Preview text -->
+  <p class="fs82-c-muted-m-0-0-35-lh-16" onclick="openViewModal(5)">The annual open enrollment period for HRNexus Group Health Insurance (Star Health) is now open.  Enrollment Window: March 15 – March 31, 2026  This Year's Cover…</p>
+  <!-- Footer -->
+  <div class="flex-ac-jsb-wrap-g2">
+    <div class="flex-ac-g25">
+      <div class="avatar-sky-15-32">SK</div>
+      <div>
+        <span class="fs8-fw7-c-body">Sunita Kulkarni</span>
+        <span class="fs75-c-muted-ml15">· Benefits Manager</span>
+      </div>
+      <span class="fs75-muted">· 10 Mar 2026, 10:00</span>
+    </div>
+    <div class="flex-g35-ac">
+      <span class="fs75-muted"><i class="bi bi-eye mr-1"></i>189</span>
+      <button class="ann-like-btn flex-ac-g12-fs75-fw7-c-red-bg-none-b-none-pointer" type="button" data-ann-id="5" data-liked="1" onclick="toggleLike(5)">
+        <i class="bi bi-heart-fill" data-ann-id="5"></i><span class="like-count" data-ann-id="5">62</span>
+      </button>
+      <span class="fs75-muted"><i class="bi bi-paperclip mr-08"></i>2</span>
+      <button class="fs78-fw7-c-blue-bg-blue-10-br15-p-12-3-b-none-pointer" type="button" onclick="openViewModal(5)">Read more</button>
+    </div>
+  </div>
+</div>
+<div class="ann-card card-hr p-6-bl-4-blue-pointer-trans" data-ann-id="6" data-cat="Team Update" data-prio="normal" data-pinned="0" onmouseover="this.style.transform='translateX(2px)'" onmouseout="this.style.transform='translateX(0)'">
+  <!-- Header row -->
+  <div class="flex-afs-jsb-g4-mb35">
+    <div class="fl1">
+      <div class="flex-ac-wrap-g2-mb2">
+        
+        <span class="badge-pink-9-xs-fs72-p06-2">Team Update</span>
+        <span class="badge-blue-9-xs-fs72-p06-2">🔵 Normal</span>
+      </div>
+      <h3 class="fs1-fw8-c-body-m-0-lh-135" onclick="openViewModal(6)">Engineering Team — Q2 Sprint Planning Sessions</h3>
+    </div>
+    <!-- Action buttons -->
+    <div class="flex-g15-shrink0">
+      <button class="ann-bookmark-btn icon-box-transparent-32" type="button" data-ann-id="6" onclick="toggleBookmark(6)">
+        <i class="bi bi-bookmark fs8"></i>
+      </button>
+      <button class="ann-pin-btn icon-box-transparent-32" type="button" data-ann-id="6" onclick="togglePin(6)">
+        <i class="bi bi-pin fs8"></i>
+      </button>
+    </div>
+  </div>
+  <!-- Preview text -->
+  <p class="fs82-c-muted-m-0-0-35-lh-16" onclick="openViewModal(6)">Hi Engineering Team,  Q2 Sprint 1 planning sessions are scheduled for the week of March 23–27.  Please block your calendar: • Backend Squad: March 23 (Mon) 10AM…</p>
+  <!-- Footer -->
+  <div class="flex-ac-jsb-wrap-g2">
+    <div class="flex-ac-g25">
+      <div class="avatar-pink-15-32">TR</div>
+      <div>
+        <span class="fs8-fw7-c-body">Tom Reddy</span>
+        <span class="fs75-c-muted-ml15">· Engineering Lead</span>
+      </div>
+      <span class="fs75-muted">· 9 Mar 2026, 09:30</span>
+    </div>
+    <div class="flex-g35-ac">
+      <span class="fs75-muted"><i class="bi bi-eye mr-1"></i>48</span>
+      <button class="ann-like-btn flex-ac-g12-fs75-fw4-c-muted-bg-none-b-none-pointer" type="button" data-ann-id="6" data-liked="0" onclick="toggleLike(6)">
+        <i class="bi bi-heart" data-ann-id="6"></i><span class="like-count" data-ann-id="6">14</span>
+      </button>
+      
+      <button class="fs78-fw7-c-blue-bg-blue-10-br15-p-12-3-b-none-pointer" type="button" onclick="openViewModal(6)">Read more</button>
+    </div>
+  </div>
+</div>
+      </div>
+      <!-- Empty state -->
+      <div class="d-none-c-muted-p-12-tc" id="annEmpty">
+        <i class="bi bi-megaphone d-block-fs25-mb4"></i>
+        <p class="fw7">No announcements found</p>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ══ VIEW ANNOUNCEMENT MODAL — exact React ══ -->
+<div class="tr-modal-overlay d-none" id="viewModalOverlay" onclick="if(event.target===this)closeViewModal()">
+  <div class="tr-modal mw640px-ov-y-auto" onclick="event.stopPropagation()">
+    <div class="p-8" id="viewModalContent"></div>
+  </div>
+</div>
+
+<!-- ══ NEW ANNOUNCEMENT MODAL — exact React ══ -->
+<div class="tr-modal-overlay d-none" id="newModalOverlay" onclick="if(event.target===this)closeNewModal()">
+  <div class="tr-modal mw580px-ov-y-auto" onclick="event.stopPropagation()">
+    <!-- Header -->
+    <div class="flex-afs-jsb-p-6-8-bb-1">
+      <div>
+        <h2 class="fs115-fw9-c-body-m-0">New Announcement</h2>
+        <p class="fs8-c-muted-m-1-0-0">Publish a company-wide communication</p>
+      </div>
+      <button class="ghost-icon-lg" type="button" onclick="closeNewModal()">×</button>
+    </div>
+    <!-- Form -->
+    <div class="flex-col-g4-p-6-8" id="newModalForm">
+      <div>
+        <label class="d-block-fs82-fw7-c-body-mb15">Announcement Title *</label>
+        <input class="ann-input" id="newTitle" placeholder="e.g. Q2 All-Hands Meeting Invite"/>
+      </div>
+      <div class="grid-g4-2">
+        <div>
+          <label class="d-block-fs82-fw7-c-body-mb15">Category</label>
+          <select class="ann-input" id="newCat">
+            <option>General</option><option>Company</option><option>Policy</option>
+            <option>Achievement</option><option>IT &amp; Operations</option>
+            <option>Benefits</option><option>Team Update</option>
+          </select>
+        </div>
+        <div>
+          <label class="d-block-fs82-fw7-c-body-mb15">Priority</label>
+          <select class="ann-input" id="newPrio">
+            <option value="high">🔴 High</option>
+            <option value="normal" selected>🔵 Normal</option>
+            <option value="low">⚫ Low</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="d-block-fs82-fw7-c-body-mb15">Target Audience</label>
+        <select class="ann-input" id="newAudience">
+          <option value="all">All Employees</option>
+          <option value="engineering">Engineering</option>
+          <option value="sales">Sales</option>
+          <option value="marketing">Marketing</option>
+          <option value="hr">HR &amp; Admin</option>
+          <option value="finance">Finance</option>
+          <option value="management">Management Only</option>
+        </select>
+      </div>
+      <div>
+        <label class="d-block-fs82-fw7-c-body-mb15">Announcement Body *</label>
+        <textarea class="ann-input resize" id="newBody" rows="5" placeholder="Write your announcement here…"></textarea>
+      </div>
+      <div class="flex-g6-wrap">
+        <label class="flex-ac-g2-fs85-fw6-pointer">
+          <input class="sq16px-accent-blue" type="checkbox" id="newPinned" /> Pin this announcement
+        </label>
+        <label class="flex-ac-g2-fs85-fw6-pointer">
+          <input class="sq16px-accent-blue" type="checkbox" id="newEmail" /> Send Email notification
+        </label>
+        <label class="flex-ac-g2-fs85-fw6-pointer">
+          <input class="sq16px-accent-blue" type="checkbox" id="newPush" /> Send Push notification
+        </label>
+      </div>
+      <!-- Success state -->
+      <div class="d-none-p-8-0-tc" id="newSuccessState">
+        <div class="fs3-mb4">📢</div>
+        <h3 class="fw9-c-body-mb2">Announcement Published!</h3>
+        <p class="c-muted-mb5" id="newSuccessMsg">Your announcement is now live.</p>
+        <button class="fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none-pointer" type="button" onclick="closeNewModal()">Done</button>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div class="flex-jfe-g25-p-4-8-bt-1" id="newModalFooter">
+      <button type="button" class="btn-hr btn-outline-hr" onclick="closeNewModal()">Cancel</button>
+      <button class="flex-ac-g16-fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none" type="button" id="publishBtn" onclick="submitAnnouncement()"><i class="bi bi-send-fill"></i>Publish</button>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+var POSTS         = [{"id": 1, "title": "Company Town Hall \u2014 Q1 2026 Results & Q2 Roadmap", "body": "Dear Team,\n\nWe are thrilled to share that Q1 2026 was our strongest quarter yet. Revenue grew 34% year-over-year, we onboarded 12 new enterprise clients, and our team grew from 231 to 247 employees.\n\nThe Q1 Town Hall will be held on Friday, March 20, 2026 at 4:00 PM IST. All employees are expected to attend virtually or in person at the Mumbai office.\n\nThe agenda includes:\n\u2022 Q1 Financial Summary by CFO Anita Rao\n\u2022 Product Roadmap for Q2 by CPO David Kim\n\u2022 New Policy Updates by CHRO Neha Sharma\n\u2022 Open Q&A\n\nJoin link will be shared on Slack. See you there!", "author": "Neha Sharma", "role": "Chief HR Officer", "avatar": "NS", "color": "#5B8FF9", "date": "15 Mar 2026", "time": "09:00", "category": "Company", "priority": "high", "audience": "All Employees", "readCount": 198, "likes": 42, "pinned": true, "attachments": ["Q1_Results_Summary.pdf", "Town_Hall_Agenda.pptx"]}, {"id": 2, "title": "New Hybrid Work Policy Effective April 1, 2026", "body": "Following extensive feedback from our employee surveys and leadership discussions, we are updating our Hybrid Work Policy effective April 1, 2026.\n\nKey Changes:\n\u2022 Minimum 3 days in-office per week (Tuesday, Wednesday, Thursday are mandatory)\n\u2022 Flexi-hours: Core hours remain 11AM\u20134PM IST\n\u2022 Remote work allowance: \u20b95,000/month equipment stipend continues\n\u2022 International remote work: Up to 15 days per year with manager approval\n\nPlease review the full policy document attached and acknowledge by March 25, 2026. Any questions can be directed to hr@hrnexus.in.", "author": "Priya Nair", "role": "HR Manager", "avatar": "PN", "color": "#7C3AED", "date": "14 Mar 2026", "time": "11:30", "category": "Policy", "priority": "high", "audience": "All Employees", "readCount": 156, "likes": 38, "pinned": false, "attachments": ["Hybrid_Work_Policy_2026.pdf"]}, {"id": 3, "title": "\ud83c\udf89 HRNexus Wins \"Best Workplace 2026\" Award!", "body": "We are absolutely thrilled to announce that HRNexus has been recognised as one of India's Best Workplaces 2026 by Great Place to Work\u00ae India!\n\nThis award is a reflection of YOU \u2014 every team member who brings energy, creativity, and commitment to work every day. We ranked #7 in the mid-size company category, up from #19 last year.\n\nTo celebrate, we are hosting:\n\u2022 All-hands pizza party on Friday, March 20\n\u2022 \u20b910,000 team outing budget for all teams to use in April\n\u2022 Special edition GPTW merchandise for all employees\n\nThank you for making this possible. We are proud of every one of you! \ud83d\ude80", "author": "Rajiv Menon", "role": "CEO", "avatar": "RM", "color": "#10B981", "date": "13 Mar 2026", "time": "14:00", "category": "Achievement", "priority": "normal", "audience": "All Employees", "readCount": 247, "likes": 89, "pinned": true, "attachments": []}, {"id": 4, "title": "IT Maintenance Window \u2014 March 16 (Sun) 11PM\u20133AM IST", "body": "Our IT team will be performing scheduled maintenance on Sunday, March 16, 2026 between 11:00 PM and 3:00 AM IST.\n\nServices Affected:\n\u2022 HRNexus Portal (this system)\n\u2022 Email via Outlook Web\n\u2022 Slack (mobile app will work)\n\u2022 VPN access\n\nPlease save your work and log out before 10:45 PM on Sunday. All data is backed up and no data loss is expected.\n\nFor urgent issues during the window, contact it-emergency@hrnexus.in or call +91 98XXXXXXXX.", "author": "Amit Joshi", "role": "IT Manager", "avatar": "AJ", "color": "#F59E0B", "date": "12 Mar 2026", "time": "16:00", "category": "IT & Operations", "priority": "normal", "audience": "All Employees", "readCount": 134, "likes": 12, "pinned": false, "attachments": []}, {"id": 5, "title": "Open Enrollment \u2014 Health Insurance 2026\u201327", "body": "The annual open enrollment period for HRNexus Group Health Insurance (Star Health) is now open.\n\nEnrollment Window: March 15 \u2013 March 31, 2026\n\nThis Year's Coverage Updates:\n\u2022 Sum insured increased from \u20b95L to \u20b97L per employee\n\u2022 Parents coverage now available (\u20b93L, subsidised 50%)\n\u2022 Mental health sessions: 10 free sessions per year added\n\u2022 New hospitals added to cashless network in Bangalore and Pune\n\nTo enroll or update your family details, log in to the Benefits Portal by March 31. Employees who do not act will be auto-enrolled in the base plan.\n\nFor queries: benefits@hrnexus.in", "author": "Sunita Kulkarni", "role": "Benefits Manager", "avatar": "SK", "color": "#0EA5E9", "date": "10 Mar 2026", "time": "10:00", "category": "Benefits", "priority": "high", "audience": "All Employees", "readCount": 189, "likes": 61, "pinned": false, "attachments": ["Insurance_Brochure_2026.pdf", "Enrollment_Form.xlsx"]}, {"id": 6, "title": "Engineering Team \u2014 Q2 Sprint Planning Sessions", "body": "Hi Engineering Team,\n\nQ2 Sprint 1 planning sessions are scheduled for the week of March 23\u201327.\n\nPlease block your calendar:\n\u2022 Backend Squad: March 23 (Mon) 10AM\u201312PM\n\u2022 Frontend Squad: March 24 (Tue) 10AM\u201312PM\n\u2022 Mobile Squad: March 25 (Wed) 10AM\u201312PM\n\u2022 Full-team retrospective: March 27 (Fri) 3PM\u20135PM\n\nProduct roadmap items and tech debt backlog have been updated in Linear. Please review before the sessions.", "author": "Tom Reddy", "role": "Engineering Lead", "avatar": "TR", "color": "#EC4899", "date": "9 Mar 2026", "time": "09:30", "category": "Team Update", "priority": "normal", "audience": "Engineering", "readCount": 48, "likes": 14, "pinned": false, "attachments": []}];
+var PINNED        = [1,3];
+var LIKED         = [2,5];
+var BOOKMARKED    = [1];
+var PRIORITIES    = {high:'#EF4444',normal:'#5B8FF9',low:'#64748B'};
+var PRIORITY_LABELS = {high:'🔴 High Priority',normal:'🔵 Normal',low:'⚫ Low'};
+var CAT_COLORS    = {Company:'#5B8FF9',Policy:'#7C3AED',Achievement:'#10B981','IT & Operations':'#F59E0B',Benefits:'#0EA5E9','Team Update':'#EC4899',General:'#64748B'};
+
+var _annTab = 'all';
+var _annSearch = '';
+var _annCat = 'All';
+
+/* ── Tab switch ───────────────────────────────────────────────────── */
+function setAnnTab(t) {
+  _annTab = t;
+  ['all','pinned','saved'].forEach(function(id) {
+    document.getElementById('ann-tab-'+id).classList.toggle('active', id===t);
+  });
+  filterAnn();
+}
+
+/* ── Filter ───────────────────────────────────────────────────────── */
+function filterAnn() {
+  _annSearch = (document.getElementById('annSearch').value||'').toLowerCase();
+  _annCat    = document.getElementById('annCatFilter').value||'All';
+  var cards  = document.querySelectorAll('.ann-card');
+  var shown  = 0;
+  cards.forEach(function(card) {
+    var id       = parseInt(card.getAttribute('data-ann-id'));
+    var cat      = card.getAttribute('data-cat');
+    var isPinned = PINNED.includes(id);
+    var isSaved  = BOOKMARKED.includes(id);
+    var title    = card.querySelector('h3')?.textContent?.toLowerCase()||'';
+    var preview  = card.querySelector('p')?.textContent?.toLowerCase()||'';
+    var matchTab = (_annTab==='all') ||
+                   (_annTab==='pinned' && isPinned) ||
+                   (_annTab==='saved'  && isSaved);
+    var matchCat = _annCat==='All' || cat===_annCat;
+    var matchQ   = !_annSearch || title.includes(_annSearch) || preview.includes(_annSearch);
+    var show     = matchTab && matchCat && matchQ;
+    card.style.display = show ? '' : 'none';
+    if (show) shown++;
+  });
+  document.getElementById('annEmpty').style.display = shown===0 ? 'block' : 'none';
+}
+
+/* ── Toggle bookmark ──────────────────────────────────────────────── */
+function toggleBookmark(id) {
+  if (BOOKMARKED.includes(id)) BOOKMARKED = BOOKMARKED.filter(function(x){return x!==id;});
+  else BOOKMARKED.push(id);
+  var btn  = document.querySelector('.ann-bookmark-btn[data-ann-id="'+id+'"]');
+  var icon = btn?.querySelector('i');
+  var isBk = BOOKMARKED.includes(id);
+  if (btn) {
+    btn.style.borderColor = isBk ? '#5B8FF9' : 'var(--body-border)';
+    btn.style.background  = isBk ? 'rgba(91,143,249,.1)' : 'transparent';
+    btn.style.color       = isBk ? '#5B8FF9' : 'var(--body-text-muted)';
+  }
+  if (icon) icon.className = 'bi bi-bookmark'+(isBk?'-fill':'');
+  if (_annTab==='saved') filterAnn();
+}
+
+/* ── Toggle pin ───────────────────────────────────────────────────── */
+function togglePin(id) {
+  if (PINNED.includes(id)) PINNED = PINNED.filter(function(x){return x!==id;});
+  else PINNED.push(id);
+  var btn  = document.querySelector('.ann-pin-btn[data-ann-id="'+id+'"]');
+  var icon = btn?.querySelector('i');
+  var isP  = PINNED.includes(id);
+  if (btn) {
+    btn.style.borderColor = isP ? '#EF4444' : 'var(--body-border)';
+    btn.style.background  = isP ? 'rgba(239,68,68,.1)' : 'transparent';
+    btn.style.color       = isP ? '#EF4444' : 'var(--body-text-muted)';
+  }
+  if (icon) icon.className = 'bi bi-pin'+(isP?'-fill':'');
+  document.getElementById('statPinned').textContent = PINNED.length;
+  if (_annTab==='pinned') filterAnn();
+}
+
+/* ── Toggle like ──────────────────────────────────────────────────── */
+function toggleLike(id) {
+  if (LIKED.includes(id)) LIKED = LIKED.filter(function(x){return x!==id;});
+  else LIKED.push(id);
+  var post = POSTS.find(function(p){return p.id===id;});
+  var btn  = document.querySelector('.ann-like-btn[data-ann-id="'+id+'"]');
+  var icon = document.querySelector('.ann-like-btn[data-ann-id="'+id+'"] i');
+  var cnt  = document.querySelector('.like-count[data-ann-id="'+id+'"]');
+  var isL  = LIKED.includes(id);
+  if (btn)  { btn.style.color = isL?'#EF4444':'var(--body-text-muted)'; btn.style.fontWeight = isL?'700':'400'; }
+  if (icon) icon.className = 'bi bi-heart'+(isL?'-fill':'');
+  if (cnt && post)  cnt.textContent = isL ? post.likes+1 : post.likes;
+}
+
+/* ── Open view modal — exact React ───────────────────────────────── */
+function openViewModal(id) {
+  var post = POSTS.find(function(p){return p.id===id;});
+  if (!post) return;
+  var catColor  = CAT_COLORS[post.category]||'#64748B';
+  var prioColor = PRIORITIES[post.priority]||'#5B8FF9';
+  var prioLbl   = PRIORITY_LABELS[post.priority]||'🔵 Normal';
+  var isLiked   = LIKED.includes(id);
+  var likeCount = isLiked ? post.likes+1 : post.likes;
+
+  var attHtml = '';
+  if (post.attachments && post.attachments.length) {
+    attHtml = '<div style="margin-bottom:1.25rem"><div style="font-weight:700;font-size:.82rem;color:var(--body-text-muted);margin-bottom:.5rem">Attachments</div><div style="display:flex;gap:.625rem;flex-wrap:wrap">' +
+    post.attachments.map(function(att) {
+      var isPdf = att.endsWith('.pdf'); var isXls = att.endsWith('.xlsx'); var isPptx = att.endsWith('.pptx');
+      var col2 = isPdf?'#EF4444':isXls?'#10B981':'#5B8FF9';
+      var ic2  = isPdf?'bi-file-pdf-fill':isXls?'bi-file-earmark-excel-fill':'bi-file-earmark-pptx-fill';
+      return '<div style="display:flex;align-items:center;gap:.5rem;padding:.5rem .875rem;border-radius:.5rem;border:1.5px solid var(--body-border);background:var(--body-bg);cursor:pointer"><i class="bi '+ic2+'" style="color:'+col2+';font-size:.9rem"></i><span style="font-size:.78rem;font-weight:600;color:var(--body-text)">'+att+'</span><i class="bi bi-download" style="color:var(--body-text-muted);font-size:.8rem;margin-left:.25rem"></i></div>';
+    }).join('') + '</div></div>';
+  }
+
+  document.getElementById('viewModalContent').innerHTML =
+    '<div style="border-top:4px solid '+prioColor+';margin:-2rem -2rem 1.25rem;padding:1.25rem 2rem 0;background:var(--card-bg);border-radius:1.25rem 1.25rem 0 0">' +
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1.25rem">' +
+    '<div style="flex:1"><div style="display:flex;gap:.5rem;margin-bottom:.625rem;flex-wrap:wrap">'+
+    '<span style="padding:.15rem .5rem;border-radius:999px;background:'+catColor+'18;color:'+catColor+';font-size:.72rem;font-weight:700">'+post.category+'</span>'+
+    '<span style="padding:.15rem .5rem;border-radius:999px;background:'+prioColor+'18;color:'+prioColor+';font-size:.72rem;font-weight:700">'+prioLbl+'</span>'+
+    '<span style="font-size:.75rem;color:var(--body-text-muted)">'+post.audience+'</span></div>'+
+    '<h2 style="font-weight:900;color:var(--body-text);margin:0;font-size:1.2rem;line-height:1.35">'+post.title+'</h2></div>'+
+    '<button type="button" onclick="closeViewModal()" style="background:none;border:none;font-size:1.5rem;color:var(--body-text-muted);cursor:pointer;flex-shrink:0">×</button></div></div>'+
+    '<div style="display:flex;align-items:center;gap:.75rem;padding:.875rem;border-radius:.75rem;background:var(--body-bg);margin-bottom:1.25rem">'+
+    '<div style="width:44px;height:44px;border-radius:50%;background:'+post.color+'25;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;color:'+post.color+'">'+post.avatar+'</div>'+
+    '<div><div style="font-weight:800;color:var(--body-text);font-size:.9rem">'+post.author+'</div>'+
+    '<div style="font-size:.78rem;color:var(--body-text-muted)">'+post.role+' · '+post.date+' at '+post.time+'</div></div></div>'+
+    '<div style="font-size:.875rem;color:var(--body-text);line-height:1.75;white-space:pre-line;margin-bottom:1.25rem">'+post.body+'</div>'+
+    attHtml +
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:1rem;border-top:1px solid var(--body-border)">'+
+    '<div style="display:flex;gap:1rem;font-size:.8rem;color:var(--body-text-muted)">'+
+    '<span><i class="bi bi-eye" style="margin-right:.25rem"></i>'+post.readCount+' reads</span>'+
+    '<span><i class="bi bi-heart-fill" style="margin-right:.25rem;color:#EF4444"></i>'+likeCount+' likes</span></div>'+
+    '<div style="display:flex;gap:.5rem">'+
+    '<button type="button" onclick="toggleLike('+id+');updateViewModalLike('+id+')" id="viewLikeBtn" style="padding:.4rem .875rem;border-radius:.5rem;border:1.5px solid '+(isLiked?'#EF4444':'var(--body-border)')+';background:'+(isLiked?'rgba(239,68,68,.1)':'transparent')+';color:'+(isLiked?'#EF4444':'var(--body-text-muted)')+';cursor:pointer;font-weight:600;font-size:.82rem;display:flex;align-items:center;gap:.375rem">'+
+    '<i class="bi bi-heart'+(isLiked?'-fill':'')+'"></i>'+(isLiked?'Liked':'Like')+'</button>'+
+    '<button type="button" onclick="closeViewModal()" style="padding:.4rem .875rem;border-radius:.5rem;border:1.5px solid var(--body-border);background:transparent;color:var(--body-text);cursor:pointer;font-weight:600;font-size:.82rem">Close</button>'+
+    '</div></div>';
+  document.getElementById('viewModalOverlay').classList.remove('d-none');
+  document.getElementById('viewModalOverlay').style.display='flex';
+}
+function closeViewModal(){ document.getElementById('viewModalOverlay').classList.add('d-none'); document.getElementById('viewModalOverlay').style.display='none'; }
+function updateViewModalLike(id){
+  var isL = LIKED.includes(id);
+  var post= POSTS.find(function(p){return p.id===id;});
+  var btn = document.getElementById('viewLikeBtn');
+  if (!btn||!post) return;
+  btn.style.borderColor = isL?'#EF4444':'var(--body-border)';
+  btn.style.background  = isL?'rgba(239,68,68,.1)':'transparent';
+  btn.style.color       = isL?'#EF4444':'var(--body-text-muted)';
+  btn.innerHTML = '<i class="bi bi-heart'+(isL?'-fill':'')+'"></i>'+(isL?'Liked':'Like');
+}
+
+/* ── New announcement modal ───────────────────────────────────────── */
+function openNewModal() {
+  document.getElementById('newModalOverlay').classList.remove('d-none');
+  document.getElementById('newModalOverlay').style.display='flex';
+  document.getElementById('newSuccessState').style.display='none';
+  document.getElementById('newModalForm').style.display='flex';
+  document.getElementById('newModalFooter').style.display='flex';
+  document.getElementById('newTitle').value='';
+  document.getElementById('newBody').value='';
+  document.getElementById('newTitle').style.borderColor='';
+  document.getElementById('publishBtn').innerHTML='<i class="bi bi-send-fill"></i>Publish';
+  document.getElementById('publishBtn').disabled=false;
+  document.getElementById('publishBtn').style.background='#5B8FF9';
+}
+function closeNewModal(){ document.getElementById('newModalOverlay').classList.add('d-none'); document.getElementById('newModalOverlay').style.display='none'; }
+
+function submitAnnouncement() {
+  var title = (document.getElementById('newTitle').value||'').trim();
+  var body  = (document.getElementById('newBody').value||'').trim();
+  if (!title) { document.getElementById('newTitle').style.borderColor='#EF4444'; return; }
+  if (!body)  { document.getElementById('newBody').style.borderColor='#EF4444'; return; }
+  var btn = document.getElementById('publishBtn');
+  btn.innerHTML = '<span class="ann-spinner"></span>Publishing…';
+  btn.disabled  = true;
+  setTimeout(function() {
+    var cat   = document.getElementById('newCat').value;
+    var prio  = document.getElementById('newPrio').value;
+    var aud   = document.getElementById('newAudience').options[document.getElementById('newAudience').selectedIndex].text;
+    var isPinned2 = document.getElementById('newPinned').checked;
+    var now   = new Date();
+    var newPost = {
+      id: Date.now(), title:title, body:body,
+      author:'Ravindra Sharma', role:'HR Manager', avatar:'RS',
+      color: CAT_COLORS[cat]||'#5B8FF9', date:now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
+      time:now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),
+      category:cat, priority:prio, audience:aud, readCount:0, likes:0, pinned:isPinned2, attachments:[]
+    };
+    POSTS.unshift(newPost);
+    if (isPinned2) PINNED.push(newPost.id);
+    // Inject new card at top of list
+    var catColor2  = CAT_COLORS[cat]||'#64748B';
+    var prioColor2 = PRIORITIES[prio]||'#5B8FF9';
+    var prioLbl2   = PRIORITY_LABELS[prio]||'🔵 Normal';
+    var preview2   = body.replace(/\n/g,' ').substring(0,160)+'…';
+    var pinBadge2  = isPinned2?'<span style="display:inline-flex;align-items:center;gap:.25rem;padding:.15rem .5rem;border-radius:999px;background:rgba(239,68,68,.1);color:#EF4444;font-size:.72rem;font-weight:700"><i class="bi bi-pin-fill"></i>Pinned</span>':'';
+    var newCard = document.createElement('div');
+    newCard.className='ann-card card-hr';
+    newCard.setAttribute('data-ann-id',newPost.id);
+    newCard.setAttribute('data-cat',cat);
+    newCard.setAttribute('data-prio',prio);
+    newCard.setAttribute('data-pinned',isPinned2?1:0);
+    newCard.style.cssText='padding:1.5rem;border-left:4px solid '+prioColor2+';transition:transform .15s;cursor:pointer;border:1.5px solid var(--card-border)!important';
+    newCard.setAttribute('onmouseover',"this.style.transform='translateX(2px)'");
+    newCard.setAttribute('onmouseout',"this.style.transform='translateX(0)'");
+    newCard.innerHTML=
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.875rem">'+
+      '<div style="flex:1"><div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem;align-items:center">'+pinBadge2+
+      '<span style="padding:.15rem .5rem;border-radius:999px;background:'+catColor2+'18;color:'+catColor2+';font-size:.72rem;font-weight:700">'+cat+'</span>'+
+      '<span style="padding:.15rem .5rem;border-radius:999px;background:'+prioColor2+'18;color:'+prioColor2+';font-size:.72rem;font-weight:700">'+prioLbl2+'</span></div>'+
+      '<h3 onclick="openViewModal('+newPost.id+')" style="font-weight:800;font-size:1rem;color:var(--body-text);margin:0;line-height:1.35">'+title+'</h3></div>'+
+      '<div style="display:flex;gap:.375rem;flex-shrink:0">'+
+      '<button type="button" class="ann-bookmark-btn" data-ann-id="'+newPost.id+'" onclick="toggleBookmark('+newPost.id+')" style="width:32px;height:32px;border-radius:.5rem;border:1.5px solid var(--body-border);background:transparent;color:var(--body-text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="bi bi-bookmark" style="font-size:.8rem"></i></button>'+
+      '<button type="button" class="ann-pin-btn" data-ann-id="'+newPost.id+'" onclick="togglePin('+newPost.id+')" style="width:32px;height:32px;border-radius:.5rem;border:1.5px solid '+(isPinned2?'#EF4444':'var(--body-border)')+';background:'+(isPinned2?'rgba(239,68,68,.1)':'transparent')+';color:'+(isPinned2?'#EF4444':'var(--body-text-muted)')+';cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="bi bi-pin'+(isPinned2?'-fill':'')+'" style="font-size:.8rem"></i></button>'+
+      '</div></div>'+
+      '<p onclick="openViewModal('+newPost.id+')" style="font-size:.82rem;color:var(--body-text-muted);margin:0 0 .875rem;line-height:1.6">'+preview2+'</p>'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem">'+
+      '<div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:50%;background:#5B8FF925;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;color:#5B8FF9">RS</div>'+
+      '<div><span style="font-size:.8rem;font-weight:700;color:var(--body-text)">Ravindra Sharma</span><span style="font-size:.75rem;color:var(--body-text-muted);margin-left:.375rem">· HR Manager</span></div></div>'+
+      '<button type="button" onclick="openViewModal('+newPost.id+')" style="padding:.3rem .75rem;border-radius:.375rem;border:none;background:rgba(91,143,249,.1);color:#5B8FF9;font-size:.78rem;font-weight:700;cursor:pointer">Read more</button></div>';
+    var list = document.getElementById('annList');
+    list.insertBefore(newCard, list.firstChild);
+    document.getElementById('statTotal').textContent = POSTS.length;
+    document.getElementById('statPinned').textContent = PINNED.length;
+    // Show success state
+    document.getElementById('newModalForm').querySelector('[style*="display:grid"]')?.remove();
+    document.getElementById('newSuccessMsg').textContent = '"'+title+'" is now live for '+(isPinned2?aud:'all employees')+'.';
+    document.getElementById('newSuccessState').style.display='block';
+    document.getElementById('newModalFooter').style.display='none';
+  }, 1500);
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){ closeViewModal(); closeNewModal(); }
+});
+</script>
+</body></html>

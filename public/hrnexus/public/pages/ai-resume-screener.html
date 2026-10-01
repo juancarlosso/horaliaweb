@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>AI Resume Screener — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="AI resume screener that ranks candidates against a job description and highlights key skill matches."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+  <style>
+
+/* Upload zone */
+.upload-zone{border:2px dashed var(--body-border);border-radius:1rem;padding:2.5rem 1.5rem;
+  text-align:center;cursor:pointer;transition:all .2s;background:var(--body-bg)}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--color-primary);
+  background:var(--color-primary-light)}
+.upload-zone input[type=file]{display:none}
+
+/* Skill tag */
+.skill-tag{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .625rem;
+  border-radius:999px;font-size:.72rem;font-weight:700;border:1.5px solid;margin:.2rem}
+.skill-match{background:rgba(16,185,129,.1);color:#10B981;border-color:#10B981}
+.skill-partial{background:rgba(245,158,11,.1);color:#D97706;border-color:#F59E0B}
+.skill-missing{background:rgba(239,68,68,.08);color:#EF4444;border-color:#EF4444}
+
+/* Score ring */
+.score-ring{position:relative;width:88px;height:88px;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring .score-val{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;font-size:1.25rem;font-weight:900;color:var(--body-text)}
+.score-ring .score-lbl{font-size:.55rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--body-text-muted);display:block;margin-top:-.2rem}
+
+/* Candidate card */
+.cand-card{border:1.5px solid var(--body-border);border-radius:.875rem;
+  background:var(--card-bg);transition:all .2s;overflow:hidden}
+.cand-card:hover{border-color:var(--color-primary);
+  box-shadow:0 4px 24px rgba(79,110,247,.12)}
+.cand-card.selected{border-color:var(--color-primary);
+  background:var(--color-primary-light)}
+.cand-hd{padding:1rem 1.125rem;display:flex;align-items:center;gap:.875rem;
+  border-bottom:1px solid var(--body-border)}
+.cand-bd{padding:1rem 1.125rem}
+.rank-badge{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:.72rem;font-weight:900;flex-shrink:0}
+
+/* AI thinking animation */
+.ai-thinking{display:none;align-items:center;gap:.75rem;padding:1.25rem;
+  background:var(--color-primary-light);border-radius:.75rem;margin-bottom:1rem}
+.ai-thinking.visible{display:flex}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:var(--color-primary);
+  animation:ai-bounce .9s ease-in-out infinite}
+.ai-dot:nth-child(2){animation-delay:.15s}
+.ai-dot:nth-child(3){animation-delay:.3s}
+@keyframes ai-bounce{0%,80%,100%{transform:scale(.8);opacity:.5}40%{transform:scale(1.2);opacity:1}}
+
+/* Progress bar animate */
+.prog-fill{height:100%;border-radius:999px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+
+/* Requirement row */
+.req-row{display:flex;align-items:center;gap:.75rem;padding:.5rem .75rem;
+  border-radius:.5rem;background:var(--body-bg);margin-bottom:.375rem}
+
+  </style>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span>AI Features</span><span class="bc-sep">/</span><span class="bc-current">Resume Screener</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">AI Resume Screener</h1>
+          <p class="page-subtitle">Upload candidate resumes — Claude AI scores, ranks, and flags the best fits in seconds</p>
+        </div>
+        <button type="button" class="btn-hr btn-primary-hr" id="screenBtn" disabled>
+          <i class="bi bi-stars me-1"></i>Screen with AI
+        </button>
+      </div>
+
+      <!-- AI thinking indicator -->
+      <div class="ai-thinking" id="aiThinking">
+        <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
+        <span class="fs8125-fw5-body" style="color:var(--color-primary)">Claude AI is analysing candidate profiles against job requirements…</span>
+      </div>
+
+      <div class="row g-4">
+        <!-- LEFT — Job config + upload -->
+        <div class="col-12 col-xl-4">
+          <!-- Job Requirements card -->
+          <div class="card-hr mb-1rem">
+            <div class="card-hd">
+              <div class="card-title-hr">Job Requirements</div>
+              <span class="badge-blue-xs">React Developer</span>
+            </div>
+            <div class="card-bd">
+              <div class="req-row mb-2"><i class="bi bi-briefcase-fill c-primary-fs9"></i><span class="fs8125-fw5-body">5+ years experience required</span></div>
+              <div class="req-row mb-2"><i class="bi bi-mortarboard-fill c-primary-fs9"></i><span class="fs8125-fw5-body">B.Tech/MCA or equivalent</span></div>
+              <div class="req-row mb-75rem"><i class="bi bi-geo-alt-fill c-primary-fs9"></i><span class="fs8125-fw5-body">Bangalore / Remote</span></div>
+              <div class="fs72-muted fw7 mb-2" style="text-transform:uppercase;letter-spacing:.07em">Required Skills</div>
+              <div class="mb-75rem">
+                <span class="skill-tag skill-match">React</span>
+                <span class="skill-tag skill-match">TypeScript</span>
+                <span class="skill-tag skill-match">Node.js</span>
+                <span class="skill-tag skill-match">REST APIs</span>
+                <span class="skill-tag skill-match">Git</span>
+                <span class="skill-tag skill-match">Agile</span>
+              </div>
+              <div class="fs72-muted fw7 mb-2" style="text-transform:uppercase;letter-spacing:.07em">Preferred Skills</div>
+              <div>
+                <span class="skill-tag skill-partial">GraphQL</span>
+                <span class="skill-tag skill-partial">Docker</span>
+                <span class="skill-tag skill-partial">AWS</span>
+                <span class="skill-tag skill-partial">Redis</span>
+                <span class="skill-tag skill-partial">PostgreSQL</span>
+              </div>
+            </div>
+          </div>
+          <!-- Upload card -->
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Upload Resumes</div></div>
+            <div class="card-bd">
+              <div class="upload-zone" id="dropZone">
+                <input type="file" id="resumeFile" multiple accept=".pdf,.doc,.docx"/>
+                <i class="bi bi-cloud-arrow-up" style="font-size:2.5rem;color:var(--color-primary);display:block;margin-bottom:.75rem"></i>
+                <div class="fw7-fs875-body mb-2">Drop resumes here or click to browse</div>
+                <div class="fs75-muted">PDF, DOC, DOCX · Up to 10 files</div>
+              </div>
+              <div style="margin-top:1rem" id="fileList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT — Results -->
+        <div class="col-12 col-xl-8">
+          <!-- Pre-screen empty state -->
+          <div id="resultsWrap" style="display:none">
+            <!-- Stats bar -->
+            <div class="row g-3 mb-1rem">
+              <div class="col-4">
+                <div class="card-hr" style="padding:1.125rem;text-align:center">
+                  <div style="font-size:1.75rem;font-weight:900;color:var(--body-text)" id="screenedCount">0</div>
+                  <div class="fs72-muted">Screened</div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="card-hr" style="padding:1.125rem;text-align:center">
+                  <div style="font-size:1.75rem;font-weight:900;color:#10B981" id="shortlistCount">0</div>
+                  <div class="fs72-muted">Shortlisted</div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="card-hr" style="padding:1.125rem;text-align:center">
+                  <div style="font-size:1.75rem;font-weight:900;color:var(--color-primary)">~8s</div>
+                  <div class="fs72-muted">Time Saved</div>
+                </div>
+              </div>
+            </div>
+            <div class="row g-3">
+              <!-- Candidate list -->
+              <div class="col-12 col-xl-5">
+                <div class="card-hr h-100">
+                  <div class="card-hd"><div class="card-title-hr">Ranked Candidates</div></div>
+                  <div class="card-bd" id="candList"></div>
+                </div>
+              </div>
+              <!-- Detail pane -->
+              <div class="col-12 col-xl-7">
+                <div class="card-hr h-100">
+                  <div class="card-hd"><div class="card-title-hr">Candidate Detail</div></div>
+                  <div class="card-bd">
+                    <div id="emptyDetail" style="text-align:center;padding:3rem 1rem;color:var(--body-text-muted)">
+                      <i class="bi bi-person-lines-fill" style="font-size:2.5rem;display:block;margin-bottom:.75rem;opacity:.3"></i>
+                      <div class="fw7-fs875-body">Select a candidate</div>
+                      <div class="fs8-muted">Click any card on the left to view the full AI analysis</div>
+                    </div>
+                    <div id="detailPane" style="display:none"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Pre-screen placeholder -->
+          <div id="preSceenPlaceholder" style="display:flex;align-items:center;justify-content:center;min-height:400px">
+            <div style="text-align:center;color:var(--body-text-muted)">
+              <i class="bi bi-stars" style="font-size:3.5rem;display:block;margin-bottom:1rem;color:var(--color-primary);opacity:.5"></i>
+              <div class="fw7-fs9375-body mb-2">Ready to Screen</div>
+              <div class="fs8-muted">Upload resumes then click <strong>Screen with AI</strong><br>to get instant AI-powered rankings and insights</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ══════ MODAL: Schedule Interview ══════ -->
+<div class="modal fade" id="scheduleInterviewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-calendar-check-fill me-2 c-primary"></i>Schedule Interview</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="scheduleInterviewForm" novalidate>
+          <div id="scheduleInterviewWithLabel" class="fs8125-fw5-body" style="margin-bottom:1rem"></div>
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="form-label-hr">Date</label>
+              <input class="hr-input" type="date" id="interviewDate" />
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Time</label>
+              <input class="hr-input" type="time" id="interviewTime" />
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Interview Type</label>
+              <select class="hr-input" id="interviewType">
+                <option>Technical Screen</option>
+                <option>Hiring Manager Interview</option>
+                <option>Panel Interview</option>
+                <option>Final Round</option>
+              </select>
+            </div>
+          </div>
+          <div id="scheduleInterviewError" style="display:none;font-size:.8125rem;color:#EF4444;margin-top:1rem"></div>
+        </form>
+        <div id="scheduleInterviewSuccess" style="display:none;text-align:center;padding:1.5rem 1rem">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;margin:0 auto .75rem">
+            <i class="bi bi-check-circle-fill" style="font-size:1.5rem;color:#10B981"></i>
+          </div>
+          <div style="font-weight:800;font-size:1rem;color:var(--body-text);margin-bottom:.25rem">Interview Scheduled</div>
+          <div style="font-size:.8125rem;color:var(--body-text-muted)" id="scheduleInterviewSuccessText"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" id="scheduleInterviewCancelBtn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" id="scheduleInterviewSendBtn" onclick="submitScheduleInterview()"><i class="bi bi-check-lg me-1"></i>Schedule</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Send Email ══════ -->
+<div class="modal fade" id="sendEmailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-envelope-fill me-2 c-primary"></i>Send Email</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="sendEmailForm" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label-hr">To</label>
+              <input class="hr-input" type="email" id="candidateEmailTo" />
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Subject</label>
+              <input class="hr-input" type="text" id="candidateEmailSubject" />
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Message</label>
+              <textarea class="hr-input" id="candidateEmailBody" rows="7" style="font-size:.8125rem"></textarea>
+            </div>
+          </div>
+          <div id="sendEmailError" style="display:none;font-size:.8125rem;color:#EF4444;margin-top:1rem"></div>
+        </form>
+        <div id="sendEmailSuccess" style="display:none;text-align:center;padding:1.5rem 1rem">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;margin:0 auto .75rem">
+            <i class="bi bi-check-circle-fill" style="font-size:1.5rem;color:#10B981"></i>
+          </div>
+          <div style="font-weight:800;font-size:1rem;color:var(--body-text);margin-bottom:.25rem">Email Sent</div>
+          <div style="font-size:.8125rem;color:var(--body-text-muted)" id="sendEmailSuccessText"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" id="sendEmailCancelBtn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" id="sendEmailSendBtn" onclick="submitSendEmail()"><i class="bi bi-send-fill me-1"></i>Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+
+
+
+<script>
+// ── Job requirements (editable) ─────────────────────────────────────────────
+const JOB_REQ = {
+  title: 'Senior React Developer',
+  experience: '5+ years',
+  required: ['React','TypeScript','Node.js','REST APIs','Git','Agile/Scrum'],
+  preferred: ['GraphQL','Docker','AWS','Redis','PostgreSQL'],
+  education: 'Bachelor\'s in CS or equivalent',
+  salary: '₹18–28 LPA'
+};
+
+// ── Mock resume data pool ────────────────────────────────────────────────────
+const RESUME_POOL = [
+  { name:'Arjun Mehta', email:'arjun.mehta@email.com', exp:'6 yrs', location:'Bangalore',
+    skills:['React','TypeScript','Node.js','REST APIs','Git','Agile/Scrum','PostgreSQL','Docker'],
+    edu:'B.Tech Computer Science, IIT Delhi', summary:'Senior frontend lead with 6 years React experience, built scalable SaaS platforms. Led team of 8. Strong TypeScript and backend integration skills.' },
+  { name:'Priya Sharma', email:'priya.sharma@email.com', exp:'4 yrs', location:'Mumbai',
+    skills:['React','JavaScript','REST APIs','Git','GraphQL','AWS'],
+    edu:'MCA, Pune University', summary:'Experienced frontend developer specialising in React and AWS. 4 years building fintech dashboards. GraphQL expertise. TypeScript learning in progress.' },
+  { name:'Rahul Nair', email:'rahul.nair@email.com', exp:'7 yrs', location:'Hyderabad',
+    skills:['Angular','TypeScript','Node.js','Docker','Kubernetes','AWS','Redis','PostgreSQL'],
+    edu:'B.E. IT, VIT', summary:'7 years full-stack experience, primarily Angular. Strong backend skills with Node.js. Recently migrating a major project to React. DevOps proficiency.' },
+  { name:'Sneha Iyer', email:'sneha.iyer@email.com', exp:'5 yrs', location:'Chennai',
+    skills:['React','TypeScript','Node.js','REST APIs','Git','Agile/Scrum','Redis'],
+    edu:'B.Tech, NIT Trichy', summary:'5 years full-stack React/Node development. TDD advocate. Open source contributor. Led migration from jQuery to React for 3 enterprise clients.' },
+  { name:'Vikram Patel', email:'vikram.patel@email.com', exp:'2 yrs', location:'Pune',
+    skills:['React','JavaScript','REST APIs','Git'],
+    edu:'B.Sc Computer Science', summary:'Junior developer with 2 years React experience. Quick learner, contributed to 3 production apps. Eager to take on senior responsibilities.' }
+];
+
+let screened = [];
+let selectedIdx = null;
+
+// ── DOM refs ─────────────────────────────────────────────────────────────────
+const dropZone   = document.getElementById('dropZone');
+const fileInput  = document.getElementById('resumeFile');
+const screenBtn  = document.getElementById('screenBtn');
+const aiThinking = document.getElementById('aiThinking');
+const resultsWrap= document.getElementById('resultsWrap');
+const candList   = document.getElementById('candList');
+const detailPane = document.getElementById('detailPane');
+const emptyDetail= document.getElementById('emptyDetail');
+
+// ── Upload zone interaction ──────────────────────────────────────────────────
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  showUploadedFiles(Array.from(e.dataTransfer.files));
+});
+fileInput.addEventListener('change', () => showUploadedFiles(Array.from(fileInput.files)));
+
+function showUploadedFiles(files) {
+  if (!files.length) return;
+  const list = document.getElementById('fileList');
+  list.innerHTML = files.map(f =>
+    `<div class="req-row"><i class="bi bi-file-earmark-text-fill c-blue fs9"></i>
+     <span class="fl1 fs8125-fw5-body">${f.name}</span>
+     <span class="fs75-muted">${(f.size/1024).toFixed(0)} KB</span></div>`
+  ).join('');
+  screenBtn.disabled = false;
+}
+
+// ── Score calculation ─────────────────────────────────────────────────────────
+function calcScore(candidate) {
+  const skills = candidate.skills.map(s => s.toLowerCase());
+  const req = JOB_REQ.required.map(s => s.toLowerCase());
+  const pref = JOB_REQ.preferred.map(s => s.toLowerCase());
+  let score = 0;
+  // Required skills: 60 pts total
+  const reqMatch = req.filter(r => skills.some(s => s.includes(r) || r.includes(s)));
+  score += Math.round((reqMatch.length / req.length) * 60);
+  // Preferred skills: 25 pts total
+  const prefMatch = pref.filter(p => skills.some(s => s.includes(p) || p.includes(s)));
+  score += Math.round((prefMatch.length / pref.length) * 25);
+  // Experience: 15 pts
+  const expYrs = parseInt(candidate.exp);
+  if (expYrs >= 5) score += 15;
+  else if (expYrs >= 3) score += 10;
+  else score += 5;
+  return Math.min(score, 100);
+}
+
+function getSkillStatus(skill, candidateSkills) {
+  const norm = candidateSkills.map(s => s.toLowerCase());
+  const s = skill.toLowerCase();
+  if (norm.some(n => n.includes(s) || s.includes(n))) return 'match';
+  return 'missing';
+}
+
+// ── AI Screen via Claude API ─────────────────────────────────────────────────
+async function screenResumes() {
+  screenBtn.disabled = true;
+  screenBtn.innerHTML = '<span class="ai-dot"></span> Analysing...';
+  aiThinking.classList.add('visible');
+  resultsWrap.style.display = 'none';
+  document.getElementById('preSceenPlaceholder').style.display = 'flex';
+
+  // Score all candidates
+  const scored = RESUME_POOL.map(c => ({ ...c, score: calcScore(c) }))
+    .sort((a, b) => b.score - a.score);
+
+  // NOTE: this is a static HTML/CSS/JS template with no backend. A real AI
+  // integration needs a server-side proxy to hold an API key safely —
+  // calling a real LLM API directly from client-side JS would either fail
+  // outright (no key, and the API isn't reachable cross-origin like this
+  // anyway) or, worse, require embedding a real secret key in the page
+  // source for anyone to copy. Instead, computeCandidateInsight() below
+  // builds a genuinely data-driven assessment from each candidate's real
+  // matched/missing skills — a realistic, safe-to-ship demo of what the
+  // feature would produce, and unlike a generic placeholder it actually
+  // differs from candidate to candidate.
+  await new Promise(resolve => setTimeout(resolve, 900 + Math.random() * 600));
+
+  screened = scored.map(c => ({ ...c, ...computeCandidateInsight(c) }));
+
+  renderResults();
+  document.getElementById('preSceenPlaceholder').style.display = 'none';
+  aiThinking.classList.remove('visible');
+  screenBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>Re-Screen';
+  screenBtn.disabled = false;
+}
+
+function computeCandidateInsight(c) {
+  const req = JOB_REQ.required;
+  const pref = JOB_REQ.preferred;
+  const matchedReq = req.filter(r => getSkillStatus(r, c.skills) === 'match');
+  const missingReq = req.filter(r => getSkillStatus(r, c.skills) === 'missing');
+  const matchedPref = pref.filter(p => getSkillStatus(p, c.skills) === 'match');
+  const expYrs = parseInt(c.exp, 10) || 0;
+  const minExpYrs = parseInt(JOB_REQ.experience, 10) || 0;
+
+  const score = c.score;
+  const verdict = score >= 80 ? 'Strongly Recommend' : score >= 60 ? 'Recommend' : score >= 40 ? 'Consider' : 'Pass';
+
+  let strength;
+  if (missingReq.length === 0 && matchedPref.length >= 2) {
+    strength = `Covers every required skill and brings ${matchedPref.length} preferred extras (${matchedPref.join(', ')}) — a well-rounded fit with ${c.exp} experience.`;
+  } else if (missingReq.length === 0) {
+    strength = `Covers all required skills for this role (${matchedReq.join(', ')}), backed by ${c.exp} of relevant experience.`;
+  } else if (matchedReq.length >= req.length - 1) {
+    strength = `Near-complete match on required skills — strong in ${matchedReq.slice(0, 3).join(', ')}${matchedPref.length ? `, plus ${matchedPref[0]} experience` : ''}.`;
+  } else if (matchedPref.length >= 2) {
+    strength = `Brings valuable depth in ${matchedPref.join(' and ')}, with foundational overlap on ${matchedReq.slice(0, 2).join(' and ') || 'the core stack'}.`;
+  } else {
+    strength = `Solid grounding in ${matchedReq.slice(0, 2).join(' and ') || c.skills.slice(0, 2).join(' and ')}, with ${c.exp} of relevant experience.`;
+  }
+
+  let concern;
+  if (missingReq.length === 0 && expYrs < minExpYrs) {
+    concern = `${expYrs} years is below the ${JOB_REQ.experience} target, though skill coverage is otherwise complete.`;
+  } else if (missingReq.length === 0) {
+    concern = 'None — meets all core requirements.';
+  } else if (missingReq.length === 1) {
+    concern = `No listed experience with ${missingReq[0]}, which is required for this role.`;
+  } else {
+    concern = `Missing ${missingReq.length} required skills: ${missingReq.join(', ')}.`;
+  }
+
+  let interview_question;
+  if (missingReq.length) {
+    interview_question = `How would you approach ramping up on ${missingReq[0]} if hired — any prior adjacent experience?`;
+  } else if (matchedPref.length) {
+    interview_question = `Tell us about a project where you used ${matchedPref[0]} in production — what tradeoffs did you navigate?`;
+  } else if (expYrs >= 6) {
+    interview_question = `You've got deep experience here — tell us about the most complex ${req[0]} architecture decision you've owned.`;
+  } else {
+    interview_question = `Walk us through the most complex ${req[0]} problem you've solved.`;
+  }
+
+  return { verdict, strength, concern, interview_question };
+}
+
+// ── Render candidate list ────────────────────────────────────────────────────
+function verdictColor(v) {
+  if (v === 'Strongly Recommend') return '#10B981';
+  if (v === 'Recommend') return '#5B8FF9';
+  if (v === 'Consider') return '#F59E0B';
+  return '#EF4444';
+}
+function verdictBg(v) {
+  if (v === 'Strongly Recommend') return 'rgba(16,185,129,.12)';
+  if (v === 'Recommend') return 'rgba(91,143,249,.12)';
+  if (v === 'Consider') return 'rgba(245,158,11,.12)';
+  return 'rgba(239,68,68,.1)';
+}
+function scoreColor(s) {
+  if (s >= 80) return '#10B981';
+  if (s >= 60) return '#5B8FF9';
+  if (s >= 40) return '#F59E0B';
+  return '#EF4444';
+}
+
+function renderResults() {
+  resultsWrap.style.display = '';
+  document.getElementById('screenedCount').textContent = screened.length;
+  document.getElementById('shortlistCount').textContent =
+    screened.filter(c => c.score >= 70).length;
+
+  candList.innerHTML = screened.map((c, i) => {
+    const col = scoreColor(c.score);
+    const rank = i === 0 ? '#F59E0B' : i === 1 ? '#94A3B8' : i === 2 ? '#CD7F32' : 'var(--body-border)';
+    const rankLabel = i === 0 ? '#1' : i === 1 ? '#2' : i === 2 ? '#3' : `#${i+1}`;
+    return `<div class="cand-card mb-2" onclick="selectCandidate(${i})" id="cand-${i}">
+      <div class="cand-hd">
+        <div class="rank-badge" style="background:${rank}20;color:${rank};border:1.5px solid ${rank}">${rankLabel}</div>
+        <div class="fl1-mnw0">
+          <div class="fw7-fs875-body">${c.name}</div>
+          <div class="fs75-muted">${c.exp} experience · ${c.location}</div>
+        </div>
+        <div class="score-ring">
+          <svg width="88" height="88" viewBox="0 0 88 88">
+            <circle cx="44" cy="44" r="36" fill="none" stroke="var(--body-border)" stroke-width="8"/>
+            <circle cx="44" cy="44" r="36" fill="none" stroke="${col}" stroke-width="8"
+              stroke-dasharray="${Math.round(2*Math.PI*36)}"
+              stroke-dashoffset="${Math.round(2*Math.PI*36*(1-c.score/100))}"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-val"><span style="color:${col}">${c.score}</span><span class="score-lbl">/ 100</span></div>
+        </div>
+      </div>
+      <div class="cand-bd">
+        <span style="background:${verdictBg(c.verdict)};color:${verdictColor(c.verdict)};
+          font-size:.68rem;font-weight:800;padding:.2rem .6rem;border-radius:999px">
+          ${c.verdict}
+        </span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Detail pane ──────────────────────────────────────────────────────────────
+function selectCandidate(idx) {
+  if (selectedIdx !== null) document.getElementById(`cand-${selectedIdx}`)?.classList.remove('selected');
+  selectedIdx = idx;
+  document.getElementById(`cand-${idx}`)?.classList.add('selected');
+
+  const c = screened[idx];
+  emptyDetail.style.display = 'none';
+  detailPane.style.display = '';
+  const col = scoreColor(c.score);
+
+  const reqSkillHTML = JOB_REQ.required.map(s => {
+    const st = getSkillStatus(s, c.skills);
+    return `<span class="skill-tag skill-${st}"><i class="bi bi-${st==='match'?'check':'x'}-lg" style="font-size:.6rem"></i>${s}</span>`;
+  }).join('');
+  const prefSkillHTML = JOB_REQ.preferred.map(s => {
+    const st = getSkillStatus(s, c.skills);
+    return `<span class="skill-tag skill-${st==='match'?'match':'missing'}"><i class="bi bi-${st==='match'?'check':'circle'}" style="font-size:.6rem"></i>${s}</span>`;
+  }).join('');
+
+  detailPane.innerHTML = `
+    <div class="flex-ac-jsb-mb3">
+      <div>
+        <div class="fw7-fs9375-body">${c.name}</div>
+        <div class="fs8-muted">${c.email} · ${c.location}</div>
+      </div>
+      <span style="background:${verdictBg(c.verdict)};color:${verdictColor(c.verdict)};
+        font-size:.72rem;font-weight:800;padding:.3rem .875rem;border-radius:999px">
+        ${c.verdict}
+      </span>
+    </div>
+
+    <div class="row g-3 mb-75rem">
+      <div class="col-6">
+        <div style="padding:.875rem;background:var(--body-bg);border-radius:.75rem;border:1px solid var(--body-border);text-align:center">
+          <div style="font-size:2rem;font-weight:900;color:${col}">${c.score}</div>
+          <div class="fs72-muted">Match Score</div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div style="padding:.875rem;background:var(--body-bg);border-radius:.75rem;border:1px solid var(--body-border);text-align:center">
+          <div style="font-size:2rem;font-weight:900;color:var(--body-text)">${c.exp}</div>
+          <div class="fs72-muted">Experience</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fs72-muted fw7" style="text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem">Education</div>
+    <div class="req-row mb-75rem"><i class="bi bi-mortarboard-fill c-primary-fs9"></i><span class="fs8125-fw5-body">${c.edu}</span></div>
+
+    <div class="fs72-muted fw7" style="text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem">Professional Summary</div>
+    <div style="padding:.875rem;background:var(--body-bg);border-radius:.625rem;font-size:.8125rem;color:var(--body-text);line-height:1.7;margin-bottom:1rem;border:1px solid var(--body-border)">${c.summary}</div>
+
+    <div class="fs72-muted fw7" style="text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem">Required Skills</div>
+    <div style="margin-bottom:1rem">${reqSkillHTML}</div>
+
+    <div class="fs72-muted fw7" style="text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem">Preferred Skills</div>
+    <div style="margin-bottom:1rem">${prefSkillHTML}</div>
+
+    <div style="padding:1rem;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:.75rem;margin-bottom:.75rem">
+      <div style="font-size:.72rem;font-weight:800;color:#10B981;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">AI Strength</div>
+      <div class="fs8125-fw5-body">${c.strength}</div>
+    </div>
+
+    ${c.concern !== 'None' ? `<div style="padding:1rem;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:.75rem;margin-bottom:.75rem">
+      <div style="font-size:.72rem;font-weight:800;color:#D97706;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">AI Concern</div>
+      <div class="fs8125-fw5-body">${c.concern}</div>
+    </div>` : ''}
+
+    <div style="padding:1rem;background:rgba(91,143,249,.06);border:1px solid rgba(91,143,249,.2);border-radius:.75rem;margin-bottom:1.25rem">
+      <div style="font-size:.72rem;font-weight:800;color:#5B8FF9;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Suggested Interview Question</div>
+      <div class="fs8125-fw5-body">${c.interview_question}</div>
+    </div>
+
+    <div class="flex-wrap-g2">
+      <button type="button" class="btn-hr btn-primary-hr" onclick="openScheduleInterviewModal('${c.name}')">
+        <i class="bi bi-calendar-check-fill me-1"></i>Schedule Interview
+      </button>
+      <button type="button" class="btn-hr btn-outline-hr" onclick="openSendEmailModal('${c.name}')">
+        <i class="bi bi-envelope-fill me-1"></i>Send Email
+      </button>
+      <button type="button" class="btn-hr btn-ghost-hr" style="color:#EF4444${c.rejected ? ';opacity:.6' : ''}" onclick="rejectCandidate('${c.name}')" id="rejectBtn-${c.name.replace(/\s+/g,'')}"${c.rejected ? ' disabled' : ''}>
+        <i class="bi bi-${c.rejected ? 'check-lg' : 'x-circle-fill'} me-1"></i>${c.rejected ? 'Rejected' : 'Reject'}
+      </button>
+    </div>`;
+}
+
+screenBtn.addEventListener('click', screenResumes);
+
+// Populate dummy file list on load for demo
+document.addEventListener('DOMContentLoaded', () => {
+  const list = document.getElementById('fileList');
+  const files = ['Arjun_Mehta_Resume.pdf','Priya_Sharma_CV.pdf','Rahul_Nair_Resume.pdf',
+                  'Sneha_Iyer_CV.pdf','Vikram_Patel_Resume.pdf'];
+  list.innerHTML = files.map(f =>
+    `<div class="req-row"><i class="bi bi-file-earmark-text-fill c-blue fs9"></i>
+     <span class="fl1 fs8125-fw5-body">${f}</span>
+     <span class="fs75-muted">preloaded</span></div>`
+  ).join('');
+  screenBtn.disabled = false;
+});
+
+function findScreened(name) {
+  return screened.find(c => c.name === name) || null;
+}
+
+/* ── Schedule Interview ────────────────────────────────────────────── */
+let scheduleTargetName = null;
+
+function resetScheduleInterviewModal() {
+  document.getElementById('scheduleInterviewForm').style.display = 'block';
+  document.getElementById('scheduleInterviewSuccess').style.display = 'none';
+  document.getElementById('scheduleInterviewError').style.display = 'none';
+  document.getElementById('scheduleInterviewSendBtn').style.display = 'inline-flex';
+  document.getElementById('scheduleInterviewCancelBtn').textContent = 'Cancel';
+  document.getElementById('interviewDate').style.borderColor = '';
+  document.getElementById('interviewTime').style.borderColor = '';
+}
+
+function openScheduleInterviewModal(name) {
+  const c = findScreened(name);
+  if (!c) return;
+  scheduleTargetName = name;
+  resetScheduleInterviewModal();
+  document.getElementById('scheduleInterviewForm').reset();
+  document.getElementById('scheduleInterviewWithLabel').textContent = `Interview with ${c.name} — ${c.exp} experience`;
+  const tomorrow = new Date(Date.now() + 86400000);
+  document.getElementById('interviewDate').value = tomorrow.toISOString().slice(0, 10);
+  document.getElementById('interviewTime').value = '11:00';
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('scheduleInterviewModal')).show();
+}
+
+function submitScheduleInterview() {
+  const c = findScreened(scheduleTargetName);
+  const dateEl = document.getElementById('interviewDate');
+  const timeEl = document.getElementById('interviewTime');
+  const typeEl = document.getElementById('interviewType');
+  const errorBox = document.getElementById('scheduleInterviewError');
+
+  dateEl.style.borderColor = '';
+  timeEl.style.borderColor = '';
+  errorBox.style.display = 'none';
+
+  const missing = [];
+  if (!dateEl.value) missing.push(dateEl);
+  if (!timeEl.value) missing.push(timeEl);
+  if (missing.length) {
+    missing.forEach(el => el.style.borderColor = '#EF4444');
+    errorBox.textContent = 'Please choose a date and time.';
+    errorBox.style.display = 'block';
+    return;
+  }
+
+  const dateLabel = new Date(dateEl.value + 'T' + timeEl.value).toLocaleString('en-IN', {
+    weekday: 'long', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+  });
+  document.getElementById('scheduleInterviewSuccessText').textContent = `${typeEl.value} with ${c.name} — ${dateLabel}.`;
+  document.getElementById('scheduleInterviewForm').style.display = 'none';
+  document.getElementById('scheduleInterviewSuccess').style.display = 'block';
+  document.getElementById('scheduleInterviewSendBtn').style.display = 'none';
+  document.getElementById('scheduleInterviewCancelBtn').textContent = 'Close';
+}
+
+document.getElementById('scheduleInterviewModal').addEventListener('hidden.bs.modal', resetScheduleInterviewModal);
+
+/* ── Send Email ────────────────────────────────────────────────────── */
+let emailTargetName = null;
+
+function resetSendEmailModal() {
+  document.getElementById('sendEmailForm').style.display = 'block';
+  document.getElementById('sendEmailSuccess').style.display = 'none';
+  document.getElementById('sendEmailError').style.display = 'none';
+  document.getElementById('sendEmailSendBtn').style.display = 'inline-flex';
+  document.getElementById('sendEmailCancelBtn').textContent = 'Cancel';
+  document.getElementById('candidateEmailTo').style.borderColor = '';
+}
+
+function openSendEmailModal(name) {
+  const c = findScreened(name);
+  if (!c) return;
+  emailTargetName = name;
+  resetSendEmailModal();
+  const firstName = c.name.split(' ')[0];
+  document.getElementById('candidateEmailTo').value = c.email;
+  document.getElementById('candidateEmailSubject').value = `Regarding your application — ${JOB_REQ.title}`;
+  let body = `Hi ${firstName},\n\nThanks for applying for the ${JOB_REQ.title} role. `;
+  if (c.verdict === 'Strongly Recommend' || c.verdict === 'Recommend') {
+    body += `We were impressed by your background — ${c.strength.toLowerCase()} We'd love to move forward with an interview.`;
+  } else {
+    body += `We're still reviewing applications and will follow up soon with next steps.`;
+  }
+  body += `\n\nBest,\nHRNexus Talent Team`;
+  document.getElementById('candidateEmailBody').value = body;
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('sendEmailModal')).show();
+}
+
+function submitSendEmail() {
+  const c = findScreened(emailTargetName);
+  const toEl = document.getElementById('candidateEmailTo');
+  const subjectEl = document.getElementById('candidateEmailSubject');
+  const bodyEl = document.getElementById('candidateEmailBody');
+  const errorBox = document.getElementById('sendEmailError');
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  toEl.style.borderColor = '';
+  errorBox.style.display = 'none';
+
+  if (!toEl.value.trim() || !EMAIL_RE.test(toEl.value.trim())) {
+    toEl.style.borderColor = '#EF4444';
+    errorBox.textContent = 'Please enter a valid recipient email address.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  if (!subjectEl.value.trim() || !bodyEl.value.trim()) {
+    errorBox.textContent = 'Subject and message cannot be empty.';
+    errorBox.style.display = 'block';
+    return;
+  }
+
+  document.getElementById('sendEmailSuccessText').textContent = `Sent to ${c.name} (${toEl.value.trim()}).`;
+  document.getElementById('sendEmailForm').style.display = 'none';
+  document.getElementById('sendEmailSuccess').style.display = 'block';
+  document.getElementById('sendEmailSendBtn').style.display = 'none';
+  document.getElementById('sendEmailCancelBtn').textContent = 'Close';
+}
+
+document.getElementById('sendEmailModal').addEventListener('hidden.bs.modal', resetSendEmailModal);
+
+/* ── Reject ────────────────────────────────────────────────────────── */
+function rejectCandidate(name) {
+  const c = findScreened(name);
+  if (!c) return;
+  const btn = document.getElementById('rejectBtn-' + name.replace(/\s+/g, ''));
+  if (!btn) return;
+
+  if (c.rejected) return; // already rejected, no-op
+
+  c.rejected = true;
+  btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Rejected';
+  btn.disabled = true;
+  btn.style.opacity = '.6';
+
+  const idx = screened.findIndex(x => x.name === name);
+  const row = idx >= 0 ? document.getElementById('cand-' + idx) : null;
+  if (row) {
+    row.style.opacity = '.5';
+    if (!row.querySelector('.rejected-badge')) {
+      const badge = document.createElement('span');
+      badge.className = 'rejected-badge';
+      badge.textContent = 'Rejected';
+      badge.style.cssText = 'font-size:.65rem;font-weight:800;color:#EF4444;background:rgba(239,68,68,.1);padding:.1rem .4rem;border-radius:999px;margin-left:.5rem';
+      const nameEl = row.querySelector('.fw7-fs875-body') || row.querySelector('.fw7-fs9375-body');
+      if (nameEl) nameEl.appendChild(badge);
+    }
+  }
+}
+</script>
+</body>
+</html>

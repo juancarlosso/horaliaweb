@@ -1,0 +1,13 @@
+// forest theme — compile: npm run build:themes
+// Usage: <html class="theme-forest"> + <link href="/dist/css/themes/forest.min.css">
+.theme-forest {
+  --color-primary:              #059669;
+  --color-primary-dark:         #047857;
+  --color-primary-light:        rgba(5, 150, 105, 0.09);
+  --color-primary-glow:         rgba(5, 150, 105, 0.18);
+  --color-secondary:            #10B981;
+  --sidebar-item-active-border: #059669;
+  --sidebar-item-active:        rgba(5, 150, 105, 0.14);
+  --sidebar-bg:                 #0D1F17;
+  --sidebar-bg2:                #132A1F;
+}

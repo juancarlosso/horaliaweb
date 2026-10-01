@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Carousel — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Carousel component reference for cycling through slides of content."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle>
+        <i class="bi bi-list fs125"></i>
+      </button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar">
+        <span>HRNexus</span><span class="bc-sep">/</span>
+        <span>UI Components</span><span class="bc-sep">/</span>
+        <span class="bc-current">Carousel</span>
+      </nav>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-inner">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Carousel</h1>
+          <p class="page-subtitle">10 carousel variants — hero, cards, fade, testimonials, thumbnails, vertical, lightbox & more</p>
+        </div>
+      </div>
+
+      <!-- ══ 1. HERO GRADIENT ════════════════════════════════════ -->
+      <div class="sl">1 — Hero Gradient Carousel</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div>
+            <div class="card-title-hr">Hero Gradient Carousel</div>
+            <div class="card-subtitle-hr">Auto-advances every 4 s — click arrows or dots to navigate</div>
+          </div>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" id="c1-play" onclick="C1.togglePause()" title="Pause">
+            <i class="bi bi-pause-fill"></i>
+          </button>
+        </div>
+        <div class="card-bd p-0">
+          <div class="hc-wrap h240px" id="c1">
+            <div class="hc-track" id="c1-track">
+              <div class="hc-slide flex-col-ac-jfc-h240px-bg-grad-blue-purple-p-8-tc">
+                <div class="icon-box-white-15-52"><i class="bi bi-people-fill fs1375-c-white"></i></div>
+                <h3 class="fs1625-fw9-c-white-mb2-lh-12">Build Better Teams</h3>
+                <p class="mw400px-fs9375-c-white-80-mb5-lh-165">Streamline HR workflows with intelligent automation and real-time workforce insights</p>
+                <button class="fw7-c-white-bg-white-22-br25-p-2-5-b-1-pointer" type="button">Get Started <i class="bi bi-arrow-right ms-1"></i></button>
+              </div>
+              <div class="hc-slide flex-col-ac-jfc-h240px-bg-grad-green-sky-p-8-tc">
+                <div class="icon-box-white-15-52"><i class="bi bi-graph-up-arrow fs1375-c-white"></i></div>
+                <h3 class="fs1625-fw9-c-white-mb2-lh-12">Track Performance</h3>
+                <p class="mw400px-fs9375-c-white-80-mb5-lh-165">Real-time analytics, 360° reviews and workforce insights — all in one dashboard</p>
+                <button class="fw7-c-white-bg-white-22-br25-p-2-5-b-1-pointer" type="button">Explore Analytics <i class="bi bi-arrow-right ms-1"></i></button>
+              </div>
+              <div class="hc-slide flex-col-ac-jfc-h240px-bg-grad-amber-red-p-8-tc">
+                <div class="icon-box-white-15-52"><i class="bi bi-credit-card-fill fs1375-c-white"></i></div>
+                <h3 class="fs1625-fw9-c-white-mb2-lh-12">Automate Payroll</h3>
+                <p class="mw400px-fs9375-c-white-80-mb5-lh-165">Accurate, on-time payroll with zero errors every month — PF, TDS, ESI handled automatically</p>
+                <button class="fw7-c-white-bg-white-22-br25-p-2-5-b-1-pointer" type="button">Learn More <i class="bi bi-arrow-right ms-1"></i></button>
+              </div>
+              <div class="hc-slide flex-col-ac-jfc-h240px-bg-grad-pink-purple-p-8-tc">
+                <div class="icon-box-white-15-52"><i class="bi bi-shield-check-fill fs1375-c-white"></i></div>
+                <h3 class="fs1625-fw9-c-white-mb2-lh-12">Enterprise Security</h3>
+                <p class="mw400px-fs9375-c-white-80-mb5-lh-165">SOC 2 certified, AES-256 encrypted, RBAC with 12 built-in roles and full audit trails</p>
+                <button class="fw7-c-white-bg-white-22-br25-p-2-5-b-1-pointer" type="button">Security Docs <i class="bi bi-arrow-right ms-1"></i></button>
+              </div>
+            </div>
+            <button type="button" class="hc-btn lft" onclick="C1.move(-1)"><i class="bi bi-chevron-left"></i></button>
+            <button type="button" class="hc-btn rgt" onclick="C1.move(1)"><i class="bi bi-chevron-right"></i></button>
+            <div class="hc-dots" id="c1-dots"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 2. MULTI-CARD CAROUSEL ══════════════════════════════ -->
+      <div class="sl">2 — Multi-Card Carousel (3 per view)</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Employee Highlights</div>
+          <div class="card-subtitle-hr">Shows 3 cards simultaneously</div>
+        </div>
+        <div class="card-bd">
+          <div class="rel-p-0-6">
+            <div class="cc-outer">
+              <div class="cc-track" id="c2-track">
+                <div class="cc-card">
+                  <div class="card-hr p-5-tc">
+                    <div class="avatar-blue-purple-56-3">SC</div>
+                    <div class="fw7-fs9375-body">Sarah Chen</div>
+                    <div class="fs78-c-muted-mt06">Senior UX Designer</div>
+                    <div class="fs1625-fw9-c-green-m-25-0-06">94</div>
+                    <div class="fs72-muted">/100 Performance</div>
+                    <div class="h4px-bg-border-br999px-mt25-ov-hidden"><div class="w94pct-h100pct-bg-green-br999px"></div></div>
+                  </div>
+                </div>
+                <div class="cc-card">
+                  <div class="card-hr p-5-tc">
+                    <div class="avatar-green-sky-56-3">MJ</div>
+                    <div class="fw7-fs9375-body">Marcus Johnson</div>
+                    <div class="fs78-c-muted-mt06">Backend Engineer</div>
+                    <div class="fs1625-fw9-c-blue-m-25-0-06">88</div>
+                    <div class="fs72-muted">/100 Performance</div>
+                    <div class="h4px-bg-border-br999px-mt25-ov-hidden"><div class="w88pct-h100pct-bg-blue-br999px"></div></div>
+                  </div>
+                </div>
+                <div class="cc-card">
+                  <div class="card-hr p-5-tc">
+                    <div class="avatar-amber-red-56-2">PN</div>
+                    <div class="fw7-fs9375-body">Priya Nair</div>
+                    <div class="fs78-c-muted-mt06">Product Manager</div>
+                    <div class="fs1625-fw9-c-green-m-25-0-06">91</div>
+                    <div class="fs72-muted">/100 Performance</div>
+                    <div class="h4px-bg-border-br999px-mt25-ov-hidden"><div class="w91pct-h100pct-bg-green-br999px"></div></div>
+                  </div>
+                </div>
+                <div class="cc-card">
+                  <div class="card-hr p-5-tc">
+                    <div class="avatar-sky-blue-56">DK</div>
+                    <div class="fw7-fs9375-body">David Kim</div>
+                    <div class="fs78-c-muted-mt06">Data Analyst</div>
+                    <div class="fs1625-fw9-c-amber-m-25-0-06">79</div>
+                    <div class="fs72-muted">/100 Performance</div>
+                    <div class="h4px-bg-border-br999px-mt25-ov-hidden"><div class="w79pct-h100pct-bg-amber-br999px"></div></div>
+                  </div>
+                </div>
+                <div class="cc-card">
+                  <div class="card-hr p-5-tc">
+                    <div class="avatar-purple-pink-56">ER</div>
+                    <div class="fw7-fs9375-body">Emily Rodriguez</div>
+                    <div class="fs78-c-muted-mt06">HR Specialist</div>
+                    <div class="fs1625-fw9-c-blue-m-25-0-06">85</div>
+                    <div class="fs72-muted">/100 Performance</div>
+                    <div class="h4px-bg-border-br999px-mt25-ov-hidden"><div class="w85pct-h100pct-bg-blue-br999px"></div></div>
+                  </div>
+                </div>
+                <div class="cc-card">
+                  <div class="card-hr p-5-tc">
+                    <div class="avatar-red-amber-56-2">TN</div>
+                    <div class="fw7-fs9375-body">Tom Nakamura</div>
+                    <div class="fs78-c-muted-mt06">DevOps Engineer</div>
+                    <div class="fs1625-fw9-c-blue-m-25-0-06">82</div>
+                    <div class="fs72-muted">/100 Performance</div>
+                    <div class="h4px-bg-border-br999px-mt25-ov-hidden"><div class="w82pct-h100pct-bg-blue-br999px"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="cc-btn lft" onclick="C2.move(-1)"><i class="bi bi-chevron-left"></i></button>
+            <button type="button" class="cc-btn rgt" onclick="C2.move(1)"><i class="bi bi-chevron-right"></i></button>
+          </div>
+          <div class="prog-rail" id="c2-prog"></div>
+        </div>
+      </div>
+
+      <!-- ══ 3+4: FADE  &  THUMBNAIL side by side ══════════════════ -->
+      <div class="row g-4 mb-2">
+
+        <!-- 3. FADE -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">3 — Fade Transition</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Crossfade Carousel</div>
+              <div class="card-subtitle-hr">Opacity transition instead of slide</div>
+            </div>
+            <div class="card-bd">
+              <div class="hc-wrap hc-fade h210px-bg-bg" id="c3">
+                <div class="hc-track">
+                  <div class="hc-slide vis flex-col-ac-jfc-h210px-p-6-tc">
+                    <i class="bi bi-calendar-check-fill fs25-c-blue-mb3"></i>
+                    <div class="fs10625-fw8-c-body">Attendance — March 2026</div>
+                    <div class="fs8125-c-muted-mt12">94.2% overall attendance rate this month</div>
+                    <div class="fs225-fw9-c-blue-mt2-lh-1">94.2%</div>
+                  </div>
+                  <div class="hc-slide flex-col-ac-jfc-h210px-p-6-tc">
+                    <i class="bi bi-people-fill fs25-c-green-mb3"></i>
+                    <div class="fs10625-fw8-c-body">Headcount — Q4 2024</div>
+                    <div class="fs8125-c-muted-mt12">128 active employees · 12 new hires this month</div>
+                    <div class="fs225-fw9-c-green-mt2-lh-1">128</div>
+                  </div>
+                  <div class="hc-slide flex-col-ac-jfc-h210px-p-6-tc">
+                    <i class="bi bi-star-fill fs25-c-amber-mb3"></i>
+                    <div class="fs10625-fw8-c-body">Performance Score — Q4</div>
+                    <div class="fs8125-c-muted-mt12">Team average across all 6 departments</div>
+                    <div class="fs225-fw9-c-amber-mt2-lh-1">88.2</div>
+                  </div>
+                </div>
+                <button type="button" class="hc-btn lft c-muted-bg-black-8-bc-border" onclick="C3.move(-1)"><i class="bi bi-chevron-left"></i></button>
+                <button type="button" class="hc-btn rgt c-muted-bg-black-8-bc-border" onclick="C3.move(1)"><i class="bi bi-chevron-right"></i></button>
+                <div class="hc-dots dk" id="c3-dots"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. THUMBNAIL -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">4 — Thumbnail Navigation</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Thumbnail Carousel</div>
+              <div class="card-subtitle-hr">Click a thumbnail to jump to that slide</div>
+            </div>
+            <div class="card-bd">
+              <div class="hc-wrap h160px-mb25" id="c4">
+                <div class="hc-track" id="c4-track">
+                  <div class="hc-slide flex-col-ac-jfc-h160px-bg-grad-blue-purple-p-6-tc">
+                    <div class="fs125-fw8-c-white">Sprint 24 Overview</div>
+                    <div class="fs875-c-white-75-mt15">14 tickets · 6 squads · On track</div>
+                  </div>
+                  <div class="hc-slide flex-col-ac-jfc-h160px-bg-grad-green-sky-p-6-tc">
+                    <div class="fs125-fw8-c-white">Payroll — December</div>
+                    <div class="fs875-c-white-75-mt15">₹1.24Cr · 128 employees · Dec 28</div>
+                  </div>
+                  <div class="hc-slide flex-col-ac-jfc-h160px-bg-grad-amber-red-p-6-tc">
+                    <div class="fs125-fw8-c-white">Leave Requests</div>
+                    <div class="fs875-c-white-75-mt15">14 pending · 3 urgent · Review needed</div>
+                  </div>
+                  <div class="hc-slide flex-col-ac-jfc-h160px-bg-grad-pink-purple-p-6-tc">
+                    <div class="fs125-fw8-c-white">Holiday Party 🎉</div>
+                    <div class="fs875-c-white-75-mt15">Dec 22 · 6 PM · Rooftop · 128 RSVP'd</div>
+                  </div>
+                </div>
+                <button type="button" class="hc-btn lft" onclick="C4.move(-1)"><i class="bi bi-chevron-left"></i></button>
+                <button type="button" class="hc-btn rgt" onclick="C4.move(1)"><i class="bi bi-chevron-right"></i></button>
+              </div>
+              <!-- Thumbnails -->
+              <div class="flex-g6px" id="c4-thumbs">
+                <div class="flex-ac-jfc-h44px-bg-grad-blue-purple-br2-b-2-pointer-trans" onclick="C4.goto(0)"><span class="fs6-fw7-c-white">Sprint</span></div>
+                <div class="flex-ac-jfc-h44px-bg-grad-green-sky-br2-b-2-pointer-trans" onclick="C4.goto(1)"><span class="fs6-fw7-c-white">Payroll</span></div>
+                <div class="flex-ac-jfc-h44px-bg-grad-amber-red-br2-b-2-pointer-trans" onclick="C4.goto(2)"><span class="fs6-fw7-c-white">Leave</span></div>
+                <div class="flex-ac-jfc-h44px-bg-grad-pink-purple-br2-b-2-pointer-trans" onclick="C4.goto(3)"><span class="fs6-fw7-c-white">Party</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 5. TESTIMONIALS ══════════════════════════════════════ -->
+      <div class="sl">5 — Testimonials Carousel</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Employee Testimonials</div>
+          <div class="card-subtitle-hr">Auto-cycles every 5 s — centered full-width layout</div>
+        </div>
+        <div class="card-bd">
+          <div class="hc-wrap bg-bg-br35" id="c5">
+            <div class="hc-track" id="c5-track">
+              <div class="hc-slide flex-col-ac-p-8-12-tc">
+                <div class="fs35-c-primary-mb25-lh-8-op18">"</div>
+                <p class="mw580px-fs1-c-body-mb6-lh-18">"HRNexus completely transformed how we handle payroll and performance reviews. What used to take 3 days now takes 3 hours. Our HR team finally has time for strategic work."</p>
+                <div class="flex-ac-g3">
+                  <div class="avatar-blue-purple-44-4">AP</div>
+                  <div class="tl"><div class="fw7-body">Aisha Patel</div><div class="fs78-muted">Marketing Lead</div></div>
+                </div>
+              </div>
+              <div class="hc-slide flex-col-ac-p-8-12-tc">
+                <div class="fs35-c-primary-mb25-lh-8-op18">"</div>
+                <p class="mw580px-fs1-c-body-mb6-lh-18">"The real-time attendance tracking with geo-fencing is a game changer for our remote teams. Managers now have full visibility without micromanaging. Highly recommend."</p>
+                <div class="flex-ac-g3">
+                  <div class="avatar-green-sky-44-3">MJ</div>
+                  <div class="tl"><div class="fw7-body">Marcus Johnson</div><div class="fs78-muted">Backend Engineer</div></div>
+                </div>
+              </div>
+              <div class="hc-slide flex-col-ac-p-8-12-tc">
+                <div class="fs35-c-primary-mb25-lh-8-op18">"</div>
+                <p class="mw580px-fs1-c-body-mb6-lh-18">"Performance reviews used to be dreaded. Now with 360° feedback and visual dashboards, employees actually look forward to review season. Transparency builds real trust."</p>
+                <div class="flex-ac-g3">
+                  <div class="avatar-purple-pink-44-3">ER</div>
+                  <div class="tl"><div class="fw7-body">Emily Rodriguez</div><div class="fs78-muted">HR Specialist</div></div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="hc-btn lft c-muted-bg-black-7-bc-border" onclick="C5.move(-1)"><i class="bi bi-chevron-left"></i></button>
+            <button type="button" class="hc-btn rgt c-muted-bg-black-7-bc-border" onclick="C5.move(1)"><i class="bi bi-chevron-right"></i></button>
+            <div class="hc-dots dk" id="c5-dots"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 6+7: PROGRESS BAR  &  MINIMAL EXTERNAL ARROWS ════════ -->
+      <div class="row g-4 mb-2">
+
+        <!-- 6. PROGRESS BAR -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">6 — Progress Bar Timer</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Animated Progress Indicator</div>
+              <div class="card-subtitle-hr">Fill bar shows time remaining — click to jump</div>
+            </div>
+            <div class="card-bd">
+              <div class="hc-wrap h180px" id="c6">
+                <div class="hc-track" id="c6-track">
+                  <div class="hc-slide flex-ac-g6-h180px-bg-grad-sidebar-navy-sidebar-navy2-p-6">
+                    <div class="icon-box-blue-20-50"><i class="bi bi-people-fill fs1375-c-blue"></i></div>
+                    <div><div class="fs10625-fw8-c-white">Employee Directory</div><div class="fs8125-c-white-50-mt15-lh-165">128 active employees across 6 departments. Search, filter, and manage your entire workforce from one dashboard.</div></div>
+                  </div>
+                  <div class="hc-slide flex-ac-g6-h180px-bg-grad-green-dk2-green-dk3-p-6">
+                    <div class="icon-box-green-20-50"><i class="bi bi-clock-fill fs1375-c-green"></i></div>
+                    <div><div class="fs10625-fw8-c-white">Attendance Tracking</div><div class="fs8125-c-white-50-mt15-lh-165">Real-time punch in/out with geo-fencing. 94.2% average this month. Zero manual data entry required.</div></div>
+                  </div>
+                  <div class="hc-slide flex-ac-g6-h180px-bg-grad-purple-dk-indigo-dk-p-6">
+                    <div class="icon-box-purple-30-50"><i class="bi bi-bar-chart-fill fs1375-c-violet-lt"></i></div>
+                    <div><div class="fs10625-fw8-c-white">Analytics Dashboard</div><div class="fs8125-c-white-50-mt15-lh-165">30+ pre-built reports, real-time KPIs, and AI-powered insights to drive data-driven decisions.</div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="prog-rail" id="c6-prog"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. MINIMAL EXTERNAL ARROWS + CAPTION -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">7 — Minimal with External Arrows</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Minimal Caption Carousel</div>
+              <div class="card-subtitle-hr">Navigation outside the slide, caption below</div>
+            </div>
+            <div class="card-bd">
+              <div class="flex-ac-g25">
+                <button class="avatar-bg-34" type="button" onclick="C7.move(-1)" onmouseover="this.style.borderColor='var(--color-primary)';this.style.color='var(--color-primary)'" onmouseout="this.style.borderColor='var(--body-border)';this.style.color='var(--body-text-muted)'"><i class="bi bi-chevron-left"></i></button>
+                <div class="hc-wrap h150px-br35-fl1" id="c7">
+                  <div class="hc-track" id="c7-track">
+                    <div class="hc-slide flex-col-ac-jfc-h150px-bg-blue-7-p-5-tc">
+                      <i class="bi bi-award-fill fs2-c-blue-mb2"></i>
+                      <div class="fw7-fs9375-body">Top Performer — Q4</div>
+                      <div class="fs78-c-muted-mt08">Aisha Patel · 96/100</div>
+                    </div>
+                    <div class="hc-slide flex-col-ac-jfc-h150px-bg-green-7-p-5-tc">
+                      <i class="bi bi-trophy-fill fs2-c-green-mb2"></i>
+                      <div class="fw7-fs9375-body">Most Improved — Q4</div>
+                      <div class="fs78-c-muted-mt08">David Kim · +12 pts vs Q3</div>
+                    </div>
+                    <div class="hc-slide flex-col-ac-jfc-h150px-bg-amber-7-p-5-tc">
+                      <i class="bi bi-star-fill fs2-c-amber-mb2"></i>
+                      <div class="fw7-fs9375-body">Team Excellence Award</div>
+                      <div class="fs78-c-muted-mt08">Engineering · Zero-downtime sprint</div>
+                    </div>
+                  </div>
+                </div>
+                <button class="avatar-bg-34" type="button" onclick="C7.move(1)" onmouseover="this.style.borderColor='var(--color-primary)';this.style.color='var(--color-primary)'" onmouseout="this.style.borderColor='var(--body-border)';this.style.color='var(--body-text-muted)'"><i class="bi bi-chevron-right"></i></button>
+              </div>
+              <div class="mt35-tc">
+                <div class="fs8125-muted" id="c7-cap">Top Performer — Q4 · Aisha Patel</div>
+                <div class="hc-dots dk iflex-mt2" id="c7-dots"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 8+9: VERTICAL  &  ANNOUNCEMENT TICKER ════════════════ -->
+      <div class="row g-4 mb-2">
+
+        <!-- 8. VERTICAL -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">8 — Vertical Carousel</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Vertical Slide Carousel</div>
+              <div class="card-subtitle-hr">Scrolls up/down — auto-advances every 4 s</div>
+            </div>
+            <div class="card-bd">
+              <div class="mb2-tc">
+                <button class="iflex-sq32px-c-muted-bg-bg-b-1-pointer" type="button" onclick="C8.move(-1)"><i class="bi bi-chevron-up"></i></button>
+              </div>
+              <div class="vc-port">
+                <div class="vc-track" id="c8-track">
+                  <div class="vc-slide flex-ac-g5-bg-blue-6-br35-p-6">
+                    <div class="icon-box-blue-12-46"><i class="bi bi-calendar-check-fill fs1125-c-blue"></i></div>
+                    <div><div class="fw7-fs9375-body">Performance Reviews Due</div><div class="fs8-c-muted-mt1-lh-16">Q4 reviews deadline Dec 20. 68 employees pending self-assessment submission.</div></div>
+                  </div>
+                  <div class="vc-slide flex-ac-g5-bg-green-6-p-6">
+                    <div class="icon-box-green-12-46"><i class="bi bi-credit-card-fill fs1125-c-green"></i></div>
+                    <div><div class="fw7-fs9375-body">Payroll Processing</div><div class="fs8-c-muted-mt1-lh-16">December payroll ₹1.24Cr disbursed to 128 employees. All transactions verified.</div></div>
+                  </div>
+                  <div class="vc-slide flex-ac-g5-bg-amber-6-p-6">
+                    <div class="icon-box-amber-12-46"><i class="bi bi-megaphone-fill fs1125-c-amber"></i></div>
+                    <div><div class="fw7-fs9375-body">Holiday Party Confirmed</div><div class="fs8-c-muted-mt1-lh-16">Annual party Dec 22 at 6 PM — The Rooftop, West 48th. RSVP by Dec 19.</div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt2-tc">
+                <button class="iflex-sq32px-c-muted-bg-bg-b-1-pointer" type="button" onclick="C8.move(1)"><i class="bi bi-chevron-down"></i></button>
+              </div>
+              <div class="flex-jfc-g6px-mt15" id="c8-dots">
+                <div class="sq6px-bg-primary-pointer-trans" onclick="C8.goto(0)"></div>
+                <div class="sq6px-bg-border-pointer-trans" onclick="C8.goto(1)"></div>
+                <div class="sq6px-bg-border-pointer-trans" onclick="C8.goto(2)"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. ANNOUNCEMENT TICKER -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">9 — Announcement Ticker</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Announcement Banner</div>
+              <div class="card-subtitle-hr">Compact auto-cycling company announcements</div>
+            </div>
+            <div class="card-bd p-0">
+              <div id="c9-wrap">
+                <div class="ticker-item on bt-1">
+                  <div class="icon-box-blue-12-32"><i class="bi bi-megaphone-fill fs8-c-blue"></i></div>
+                  <div class="fl1-mnw0"><div class="fw7-fs875-body">Q4 Performance Reviews Open</div><div class="fs78-c-muted-mt04">Complete your self-assessment by December 20th</div></div>
+                  <span class="badge-blue-10-xs-fs65-p08-2">1 / 4</span>
+                </div>
+                <div class="ticker-item bt-1">
+                  <div class="icon-box-green-12-32"><i class="bi bi-calendar-event-fill fs8-c-green"></i></div>
+                  <div class="fl1-mnw0"><div class="fw7-fs875-body">Holiday Party — Dec 22nd 🎉</div><div class="fs78-c-muted-mt04">RSVP by December 19. +1 guests welcome!</div></div>
+                  <span class="badge-green-10-xs-fs65-p08-2">2 / 4</span>
+                </div>
+                <div class="ticker-item bt-1">
+                  <div class="icon-box-amber-12-32"><i class="bi bi-exclamation-triangle-fill fs8-c-amber"></i></div>
+                  <div class="fl1-mnw0"><div class="fw7-fs875-body">Leave Requests Close Dec 14</div><div class="fs78-c-muted-mt04">Submit holiday leave by tomorrow to guarantee approval</div></div>
+                  <span class="badge-amber-10-xs-fs65-p08-2">3 / 4</span>
+                </div>
+                <div class="ticker-item bt-1">
+                  <div class="icon-box-purple-12-32"><i class="bi bi-shield-check-fill fs8-c-purple"></i></div>
+                  <div class="fl1-mnw0"><div class="fw7-fs875-body">Security: Enable 2FA Today</div><div class="fs78-c-muted-mt04">MFA mandatory for all admin accounts from Dec 31</div></div>
+                  <span class="badge-purple-10-xs-fs65-p08-2">4 / 4</span>
+                </div>
+              </div>
+              <div class="flex-ac-jsb-p-25-55-bt-1">
+                <div class="ticker-dots" id="c9-dots">
+                  <div class="ticker-dot on" onclick="C9.goto(0)"></div>
+                  <div class="ticker-dot" onclick="C9.goto(1)"></div>
+                  <div class="ticker-dot" onclick="C9.goto(2)"></div>
+                  <div class="ticker-dot" onclick="C9.goto(3)"></div>
+                </div>
+                <div class="flex-g1">
+                  <button class="avatar-bg-26" type="button" onclick="C9.move(-1)"><i class="bi bi-chevron-left"></i></button>
+                  <button class="avatar-bg-26" type="button" onclick="C9.move(1)"><i class="bi bi-chevron-right"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 10. FULLSCREEN LIGHTBOX ═══════════════════════════════ -->
+      <div class="sl">10 — Fullscreen Lightbox</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Lightbox Carousel</div>
+          <div class="card-subtitle-hr">Click any panel → fullscreen overlay. Arrow keys and Esc supported.</div>
+        </div>
+        <div class="card-bd">
+          <div class="row g-2 mb-75rem">
+            <div class="col-6 col-sm-3">
+              <div class="flex-ac-jfc-rel-h90px-bg-grad-blue-purple-br3-ov-hidden" onclick="LB.open(0)" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="bi bi-zoom-in fs1375-c-white-80"></i>
+              </div>
+            </div>
+            <div class="col-6 col-sm-3">
+              <div class="flex-ac-jfc-h90px-bg-grad-green-sky-br3-pointer-trans-shadow" onclick="LB.open(1)" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="bi bi-zoom-in fs1375-c-white-80"></i>
+              </div>
+            </div>
+            <div class="col-6 col-sm-3">
+              <div class="flex-ac-jfc-h90px-bg-grad-amber-red-br3-pointer-trans-shadow" onclick="LB.open(2)" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="bi bi-zoom-in fs1375-c-white-80"></i>
+              </div>
+            </div>
+            <div class="col-6 col-sm-3">
+              <div class="flex-ac-jfc-h90px-bg-grad-pink-purple-br3-pointer-trans" onclick="LB.open(3)" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="bi bi-zoom-in fs1375-c-white-80"></i>
+              </div>
+            </div>
+          </div>
+          <p class="fs8125-c-muted-m-0"><i class="bi bi-info-circle me-1"></i>Click any panel above. Use <kbd>←</kbd><kbd>→</kbd> arrow keys to navigate, <kbd>Esc</kbd> to close.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Lightbox overlay -->
+<div class="lb-overlay" id="lb-overlay" onclick="if(event.target===this)LB.close()">
+  <button type="button" class="lb-close" onclick="LB.close()"><i class="bi bi-x-lg"></i></button>
+  <button type="button" class="lb-nav lft" onclick="LB.move(-1)"><i class="bi bi-chevron-left"></i></button>
+  <div class="lb-card" id="lb-card">
+    <div class="flex-col-ac-jfc-h440px-p-12-tc" id="lb-body"></div>
+  </div>
+  <button type="button" class="lb-nav rgt" onclick="LB.move(1)"><i class="bi bi-chevron-right"></i></button>
+  <div class="lb-foot" id="lb-foot"></div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CAROUSEL ENGINE — single-source factory
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function makeCarousel(opts) {
+  /* opts: id, dotsId, auto(ms), thumbsId, capId, capList, onUpdate(idx,n) */
+  var id      = opts.id;
+  var track   = document.getElementById(id + '-track');
+  if (!track) return {};
+  var slides  = track.children;
+  var n       = slides.length;
+  var cur     = 0;
+  var timer   = null;
+  var paused  = false;
+
+  function buildDots() {
+    var el = document.getElementById(opts.dotsId || (id + '-dots'));
+    if (!el) return;
+    el.innerHTML = '';
+    for (var i = 0; i < n; i++) {
+      var d = document.createElement('div');
+      d.className = 'hc-dot' + (i === 0 ? ' on' : '');
+      d.setAttribute('data-i', i);
+      el.appendChild(d);
+      (function(idx){ d.onclick = function(){ goto(idx); }; })(i);
+    }
+  }
+
+  function updateDots(idx) {
+    var el = document.getElementById(opts.dotsId || (id + '-dots'));
+    if (!el) return;
+    var ds = el.querySelectorAll('.hc-dot');
+    ds.forEach(function(d, i){ d.classList.toggle('on', i === idx); });
+  }
+
+  function updateThumbs(idx) {
+    if (!opts.thumbsId) return;
+    var thumbs = document.querySelectorAll('#' + opts.thumbsId + ' > div');
+    thumbs.forEach(function(t, i){
+      t.style.opacity = i === idx ? '1' : '.5';
+      t.style.borderColor = i === idx ? 'var(--color-primary)' : 'transparent';
+    });
+  }
+
+  function updateCap(idx) {
+    if (!opts.capId || !opts.capList) return;
+    var el = document.getElementById(opts.capId);
+    if (el) el.textContent = opts.capList[idx] || '';
+  }
+
+  function render(idx) {
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    updateDots(idx);
+    updateThumbs(idx);
+    updateCap(idx);
+    if (opts.onUpdate) opts.onUpdate(idx, n);
+  }
+
+  function goto(idx) {
+    cur = ((idx % n) + n) % n;
+    render(cur);
+  }
+
+  function move(dir) { goto(cur + dir); }
+
+  function startAuto() {
+    if (!opts.auto) return;
+    timer = setInterval(function(){ if (!paused) move(1); }, opts.auto);
+  }
+
+  function togglePause() {
+    paused = !paused;
+    var btn = document.getElementById(id + '-play');
+    if (btn) btn.innerHTML = paused
+      ? '<i class="bi bi-play-fill"></i>'
+      : '<i class="bi bi-pause-fill"></i>';
+    if (btn) btn.title = paused ? 'Resume' : 'Pause';
+  }
+
+  buildDots();
+  startAuto();
+
+  return { move: move, goto: goto, togglePause: togglePause };
+}
+
+/* ── Fade carousel factory ────────────────────────────────────── */
+function makeFade(opts) {
+  var id     = opts.id;
+  var wrap   = document.getElementById(id);
+  if (!wrap) return {};
+  var slides = wrap.querySelectorAll('.hc-slide');
+  var n      = slides.length;
+  var cur    = 0;
+
+  function buildDots() {
+    var el = document.getElementById(id + '-dots');
+    if (!el) return;
+    el.innerHTML = '';
+    for (var i = 0; i < n; i++) {
+      var d = document.createElement('div');
+      d.className = 'hc-dot' + (i === 0 ? ' on' : '');
+      el.appendChild(d);
+      (function(idx){ d.onclick = function(){ goto(idx); }; })(i);
+    }
+  }
+
+  function goto(idx) {
+    slides[cur].classList.remove('vis');
+    cur = ((idx % n) + n) % n;
+    slides[cur].classList.add('vis');
+    var dots = wrap.querySelectorAll('.hc-dot');
+    dots.forEach(function(d, i){ d.classList.toggle('on', i === cur); });
+  }
+
+  function move(dir) { goto(cur + dir); }
+
+  buildDots();
+  if (opts.auto) setInterval(function(){ move(1); }, opts.auto);
+  return { move: move, goto: goto };
+}
+
+/* ── Card carousel factory ────────────────────────────────────── */
+function makeCardCar(opts) {
+  var id    = opts.id;
+  var track = document.getElementById(id + '-track');
+  if (!track) return {};
+  var cards = track.querySelectorAll('.cc-card');
+  var n     = cards.length;
+  var vis   = opts.visible || 3;
+  var cur   = 0;
+  var max   = Math.max(0, n - vis);
+
+  function buildProg() {
+    var el = document.getElementById(id + '-prog');
+    if (!el) return;
+    el.innerHTML = '';
+    for (var i = 0; i <= max; i++) {
+      var seg = document.createElement('div');
+      seg.className = 'prog-seg' + (i === 0 ? ' on' : '');
+      el.appendChild(seg);
+      (function(idx){ seg.onclick = function(){ goto(idx); }; })(i);
+    }
+  }
+
+  function goto(idx) {
+    cur = Math.max(0, Math.min(idx, max));
+    var W   = track.parentElement.offsetWidth;
+    var gap = 16;
+    var sw  = (W - gap * (vis - 1)) / vis;
+    track.style.transform = 'translateX(-' + (cur * (sw + gap)) + 'px)';
+    var segs = document.querySelectorAll('#' + id + '-prog .prog-seg');
+    segs.forEach(function(s, i){ s.classList.toggle('on', i === cur); });
+  }
+
+  function move(dir) { goto(cur + dir); }
+
+  buildProg();
+  return { move: move, goto: goto };
+}
+
+/* ── Vertical carousel factory ────────────────────────────────── */
+function makeVert(opts) {
+  var id     = opts.id;
+  var track  = document.getElementById(id + '-track');
+  if (!track) return {};
+  var slides = track.children;
+  var n      = slides.length;
+  var cur    = 0;
+  var H      = 200; /* fixed height per slide */
+
+  function goto(idx) {
+    cur = ((idx % n) + n) % n;
+    track.style.transform = 'translateY(-' + (cur * H) + 'px)';
+    var dots = document.querySelectorAll('#' + id + '-dots > div');
+    dots.forEach(function(d, i){
+      d.style.background = i === cur ? 'var(--color-primary)' : 'var(--body-border)';
+      d.style.width = i === cur ? '18px' : '6px';
+      d.style.borderRadius = '999px';
+    });
+  }
+
+  function move(dir) { goto(cur + dir); }
+
+  if (opts.auto) setInterval(function(){ move(1); }, opts.auto);
+  return { move: move, goto: goto };
+}
+
+/* ── Announcement ticker factory ─────────────────────────────── */
+function makeTicker(opts) {
+  var items = document.querySelectorAll('#' + opts.wrapId + ' .ticker-item');
+  var n     = items.length;
+  var cur   = 0;
+
+  function goto(idx) {
+    items[cur].classList.remove('on');
+    cur = ((idx % n) + n) % n;
+    items[cur].classList.add('on');
+    var dots = document.querySelectorAll('#' + opts.dotsId + ' .ticker-dot');
+    dots.forEach(function(d, i){ d.classList.toggle('on', i === cur); });
+  }
+
+  function move(dir) { goto(cur + dir); }
+
+  if (opts.auto) setInterval(function(){ move(1); }, opts.auto);
+  return { move: move, goto: goto };
+}
+
+/* ── Lightbox ─────────────────────────────────────────────────── */
+var LB = (function(){
+  var data = [
+    { bg:'linear-gradient(135deg,#5B8FF9,#7C3AED)', icon:'bi-people-fill',     title:'Build Better Teams',    sub:'Streamline your HR workflows with intelligent automation and real-time workforce insights.' },
+    { bg:'linear-gradient(135deg,#10B981,#0EA5E9)', icon:'bi-graph-up-arrow',  title:'Track Performance',     sub:'Real-time analytics, 360° reviews and workforce insights — all in one unified dashboard.' },
+    { bg:'linear-gradient(135deg,#F59E0B,#EF4444)', icon:'bi-credit-card-fill',title:'Automate Payroll',      sub:'Accurate, on-time payroll every month. PF, ESI, TDS handled automatically with full audit trails.' },
+    { bg:'linear-gradient(135deg,#EC4899,#7C3AED)', icon:'bi-shield-check-fill',title:'Enterprise Security', sub:'SOC 2 certified, AES-256 encrypted, RBAC with 12 built-in roles and comprehensive audit logs.' }
+  ];
+  var cur = 0;
+  var overlay = document.getElementById('lb-overlay');
+
+  function render() {
+    var d = data[cur];
+    document.getElementById('lb-body').style.background = d.bg;
+    document.getElementById('lb-body').innerHTML =
+      '<i class="bi ' + d.icon + '" style="font-size:3.5rem;color:rgba(255,255,255,.9);margin-bottom:1.25rem"></i>' +
+      '<h2 style="color:#fff;font-weight:900;font-size:2rem;margin-bottom:.625rem">' + d.title + '</h2>' +
+      '<p style="color:rgba(255,255,255,.72);font-size:1rem;max-width:480px;line-height:1.75;margin:0">' + d.sub + '</p>';
+    var foot = document.getElementById('lb-foot');
+    foot.innerHTML = '';
+    data.forEach(function(_, i){
+      var dot = document.createElement('div');
+      dot.className = 'lb-fd' + (i === cur ? ' on' : '');
+      (function(idx){ dot.onclick = function(){ cur = idx; render(); }; })(i);
+      foot.appendChild(dot);
+    });
+  }
+
+  function open(idx) { cur = idx; overlay.classList.add('open'); render(); document.addEventListener('keydown', onKey); }
+  function close()   { overlay.classList.remove('open'); document.removeEventListener('keydown', onKey); }
+  function move(dir) { cur = ((cur + dir + data.length) % data.length); render(); }
+  function onKey(e)  { if (e.key==='Escape') close(); if (e.key==='ArrowRight') move(1); if (e.key==='ArrowLeft') move(-1); }
+
+  return { open: open, close: close, move: move };
+})();
+
+/* ── Init all carousels ───────────────────────────────────────── */
+var C1 = makeCarousel({ id:'c1', auto:4000 });
+var C2 = makeCardCar({ id:'c2', visible:3 });
+var C3 = makeFade({ id:'c3', auto:3500 });
+var C4 = makeCarousel({ id:'c4', thumbsId:'c4-thumbs', auto:5000 });
+var C5 = makeCarousel({ id:'c5', auto:5000 });
+var C7 = makeCarousel({ id:'c7', auto:4000,
+  capId:'c7-cap',
+  capList:['Top Performer — Q4 · Aisha Patel','Most Improved — Q4 · David Kim','Team Excellence Award · Engineering'] });
+var C8 = makeVert({ id:'c8', auto:4000 });
+var C9 = makeTicker({ wrapId:'c9-wrap', dotsId:'c9-dots', auto:3500 });
+
+/* ── Progress fill carousel (C6) ─────────────────────────────── */
+var C6 = (function(){
+  var carouselId = 'c6';
+  var track = document.getElementById(carouselId + '-track');
+  var segs  = [];
+  var n     = track ? track.children.length : 0;
+  var cur   = 0;
+  var delay = 4000;
+  var timer = null;
+  var fill  = null;
+
+  function buildProg() {
+    var el = document.getElementById(carouselId + '-prog');
+    if (!el) return;
+    el.innerHTML = '';
+    for (var i = 0; i < n; i++) {
+      var seg = document.createElement('div');
+      seg.className = 'prog-seg';
+      var f = document.createElement('div');
+      f.className = 'prog-fill';
+      seg.appendChild(f);
+      el.appendChild(seg);
+      segs.push(seg);
+      (function(idx){ seg.onclick = function(){ goto(idx); }; })(i);
+    }
+  }
+
+  function render(idx) {
+    if (!track) return;
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    segs.forEach(function(s, i){
+      s.classList.remove('on');
+      var f = s.querySelector('.prog-fill');
+      f.style.transition = 'none';
+      f.style.width = i < idx ? '100%' : '0%';
+    });
+  }
+
+  function startFill() {
+    clearInterval(timer);
+    if (!segs[cur]) return;
+    segs[cur].classList.add('on');
+    var f = segs[cur].querySelector('.prog-fill');
+    f.style.transition = 'none'; f.style.width = '0%';
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        f.style.transition = 'width ' + delay + 'ms linear';
+        f.style.width = '100%';
+      });
+    });
+    timer = setTimeout(function(){ goto((cur + 1) % n); }, delay);
+  }
+
+  function goto(idx) {
+    clearTimeout(timer);
+    cur = ((idx % n) + n) % n;
+    render(cur);
+    requestAnimationFrame(startFill);
+  }
+
+  buildProg();
+  requestAnimationFrame(startFill);
+  return { goto: goto, move: function(d){ goto(cur + d); } };
+})();
+</script>
+</body>
+</html>

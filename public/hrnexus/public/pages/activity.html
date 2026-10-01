@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Activity Log — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="A chronological activity log tracking employee actions, approvals, and system events across HRNexus."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb">
+        <span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Activity Log</span>
+      </nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content"><div class="page-inner">
+  <div class="page-header">
+    <div><h1 class="page-title">Activity Log</h1><p class="page-subtitle">Complete audit trail of HR events and actions</p></div>
+    <div class="flex-g2">
+      <button type="button" class="btn-hr btn-outline-hr" onclick="handleExportActivity()"><i class="bi bi-download me-1"></i>Export</button>
+      <div class="pos-rel-inline">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-funnel me-1"></i>Filter<span id="filterActiveLabel"></span></button>
+        <ul class="dropdown-menu dropdown-menu-end" id="activityFilterMenu">
+          <li><a class="dropdown-item active" href="#" onclick="event.preventDefault();filterActivity('All',this)">All Categories</a></li>
+          <li><a class="dropdown-item" href="#" onclick="event.preventDefault();filterActivity('HR',this)">HR</a></li>
+          <li><a class="dropdown-item" href="#" onclick="event.preventDefault();filterActivity('Performance',this)">Performance</a></li>
+          <li><a class="dropdown-item" href="#" onclick="event.preventDefault();filterActivity('Payroll',this)">Payroll</a></li>
+          <li><a class="dropdown-item" href="#" onclick="event.preventDefault();filterActivity('L&amp;D',this)">L&amp;D</a></li>
+          <li><a class="dropdown-item" href="#" onclick="event.preventDefault();filterActivity('Recruitment',this)">Recruitment</a></li>
+          <li><a class="dropdown-item" href="#" onclick="event.preventDefault();filterActivity('Policy',this)">Policy</a></li>
+          <li><a class="dropdown-item" href="#" onclick="event.preventDefault();filterActivity('Org',this)">Org</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-xl-8">
+      <div class="card-hr anim-fiu d2">
+        <div class="card-hd">
+          <div><div class="card-title-hr">All Activity</div><div class="card-subtitle-hr">10 events recorded</div></div>
+          <div class="tab-bar flex-2">
+            <button type="button" class="tab-btn active">Timeline</button>
+            <button type="button" class="tab-btn">Table</button>
+          </div>
+        </div>
+        <div class="card-bd" id="actTimeline"><div class="tl-item" data-category="HR">
+  <div class="tl-icon c-blue-bg-blue-15"><i class="bi bi-person-plus-fill"></i></div>
+  <div class="tl-body">
+    <div class="flex-ac-wrap-g2-mb1">
+      <div class="tl-title m-0">New employee onboarded</div>
+      <span class="badge-blue-xs">HR</span>
+    </div>
+    <div class="tl-meta">Tom Nakamura • Engineering</div>
+    <div class="tl-desc">Completed all onboarding tasks, system access granted, welcome email sent.</div>
+    <div class="tl-meta mt-1"><i class="bi bi-clock me-1"></i>2h ago</div>
+  </div>
+</div><div class="tl-item" data-category="Performance">
+  <div class="tl-icon c-green-bg-green-15"><i class="bi bi-award-fill"></i></div>
+  <div class="tl-body">
+    <div class="flex-ac-wrap-g2-mb1">
+      <div class="tl-title m-0">Performance review completed</div>
+      <span class="badge-green-xs">Performance</span>
+    </div>
+    <div class="tl-meta">Aisha Patel • Marketing</div>
+    <div class="tl-desc">Q4 review finalized. Score: 96/100 — Exceptional. Bonus approved: $750.</div>
+    <div class="tl-meta mt-1"><i class="bi bi-clock me-1"></i>5h ago</div>
+  </div>
+</div><div class="tl-item" data-category="Payroll">
+  <div class="tl-icon c-amber-bg-amber-15"><i class="bi bi-credit-card-fill"></i></div>
+  <div class="tl-body">
+    <div class="flex-ac-wrap-g2-mb1">
+      <div class="tl-title m-0">Payroll processed</div>
+      <span class="badge-amber-xs">Payroll</span>
+    </div>
+    <div class="tl-meta">All departments • 128 employees</div>
+    <div class="tl-desc">December 2024 payroll disbursed. Total: $1.24M. 2 processing errors resolved.</div>
+    <div class="tl-meta mt-1"><i class="bi bi-clock me-1"></i>8h ago</div>
+  </div>
+</div><div class="tl-item" data-category="HR">
+  <div class="tl-icon c-red-bg-red-15"><i class="bi bi-calendar2-x-fill"></i></div>
+  <div class="tl-body">
+    <div class="flex-ac-wrap-g2-mb1">
+      <div class="tl-title m-0">Leave request approved</div>
+      <span class="badge-blue-xs">HR</span>
+    </div>
+    <div class="tl-meta">Sarah Chen • Product</div>
+    <div class="tl-desc">Annual leave approved: Dec 20–27 (5 days). Manager: Jane Doe.</div>
+    <div class="tl-meta mt-1"><i class="bi bi-clock me-1"></i>1d ago</div>
+  </div>
+</div><div class="tl-item" data-category="L&D">
+  <div class="tl-icon c-purple-bg-purple-15"><i class="bi bi-mortarboard-fill"></i></div>
+  <div class="tl-body">
+    <div class="flex-ac-wrap-g2-mb1">
+      <div class="tl-title m-0">Training completed</div>
+      <span class="badge-purple-10-xs-fs72-p05-2">L&D</span>
+    </div>
+    <div class="tl-meta">Engineering Team • 18 members</div>
+    <div class="tl-desc">Advanced React Architecture Workshop — all 18 members certified.</div>
+    <div class="tl-meta mt-1"><i class="bi bi-clock me-1"></i>2d ago</div>
+  </div>
+</div><div class="tl-item" data-category="Recruitment">
+  <div class="tl-icon c-blue-bg-blue-15"><i class="bi bi-person-plus-fill"></i></div>
+  <div class="tl-body">
+    <div class="flex-ac-wrap-g2-mb1">
+      <div class="tl-title m-0">Job posting published</div>
+      <span class="badge-sky-10-xs-fs72-p05-2">Recruitment</span>
+    </div>
+    <div class="tl-meta">Engineering • Senior iOS Developer</div>
+    <div class="tl-desc">Position posted on LinkedIn, Naukri, and internal portal. 42 applications received.</div>
+    <div class="tl-meta mt-1"><i class="bi bi-clock me-1"></i>3d ago</div>
+  </div>
+</div><div class="tl-item" data-category="Performance">
+  <div class="tl-icon c-sky-bg-sky-15"><i class="bi bi-graph-up-arrow"></i></div>
+  <div class="tl-body">
+    <div class="flex-ac-wrap-g2-mb1">
+      <div class="tl-title m-0">Performance review cycle started</div>
+      <span class="badge-green-xs">Performance</span>
+    </div>
+    <div class="tl-meta">All departments • Q4 2024</div>
+    <div class="tl-desc">Q4 performance reviews initiated for 128 employees. Due date: Dec 20.</div>
+    <div class="tl-meta mt-1"><i class="bi bi-clock me-1"></i>5d ago</div>
+  </div>
+</div><div class="tl-item" data-category="Policy">
+  <div class="tl-icon c-green-bg-green-15"><i class="bi bi-shield-check-fill"></i></div>
+  <div class="tl-body">
+    <div class="flex-ac-wrap-g2-mb1">
+      <div class="tl-title m-0">Policy updated</div>
+      <span class="badge-muted-blue-10-xs-fs72-p05-2">Policy</span>
+    </div>
+    <div class="tl-meta">HR Handbook v3.2</div>
+    <div class="tl-desc">Hybrid work policy updated. Effective from Jan 1, 2025. All employees notified.</div>
+    <div class="tl-meta mt-1"><i class="bi bi-clock me-1"></i>1w ago</div>
+  </div>
+</div><div class="tl-item" data-category="HR">
+  <div class="tl-icon c-red-bg-red-15"><i class="bi bi-person-x-fill"></i></div>
+  <div class="tl-body">
+    <div class="flex-ac-wrap-g2-mb1">
+      <div class="tl-title m-0">Employee separation processed</div>
+      <span class="badge-blue-xs">HR</span>
+    </div>
+    <div class="tl-meta">Ryan O'Brien • Sales</div>
+    <div class="tl-desc">Separation processed. Exit interview completed. Equipment returned. Final settlement: $45,200.</div>
+    <div class="tl-meta mt-1"><i class="bi bi-clock me-1"></i>1w ago</div>
+  </div>
+</div><div class="tl-item" data-category="Org">
+  <div class="tl-icon c-amber-bg-amber-15"><i class="bi bi-building"></i></div>
+  <div class="tl-body">
+    <div class="flex-ac-wrap-g2-mb1">
+      <div class="tl-title m-0">Department restructuring</div>
+      <span class="badge-pink-10-xs-fs72-p05-2">Org</span>
+    </div>
+    <div class="tl-meta">Engineering • Org change</div>
+    <div class="tl-desc">Backend and DevOps teams merged into Platform Engineering. 4 new roles created.</div>
+    <div class="tl-meta mt-1"><i class="bi bi-clock me-1"></i>2w ago</div>
+  </div>
+</div></div>
+        <div class="table-wrap d-none" id="actTable">
+          <table class="hr-table">
+            <thead><tr><th></th><th>Event</th><th>Details</th><th>Category</th><th>Time</th></tr></thead>
+            <tbody><tr data-category="HR">
+  <td><div class="icon-box-blue-lg"><i class="bi bi-person-plus-fill c-blue-fs875"></i></div></td>
+  <td>
+    <div class="fw6-mb05">New employee onboarded</div>
+    <div class="fs75-muted">Tom Nakamura • Engineering</div>
+  </td>
+  <td class="mw300px-fs8125-c-muted">Completed all onboarding tasks, system access granted, welcome email sent.</td>
+  <td><span class="badge-blue-xs">HR</span></td>
+  <td class="fs8125-c-muted-nowrap">2h ago</td>
+</tr><tr data-category="Performance">
+  <td><div class="icon-box-green-15-36"><i class="bi bi-award-fill c-green-fs875"></i></div></td>
+  <td>
+    <div class="fw6-mb05">Performance review completed</div>
+    <div class="fs75-muted">Aisha Patel • Marketing</div>
+  </td>
+  <td class="mw300px-fs8125-c-muted">Q4 review finalized. Score: 96/100 — Exceptional. Bonus approved: $750.</td>
+  <td><span class="badge-green-xs">Performance</span></td>
+  <td class="fs8125-c-muted-nowrap">5h ago</td>
+</tr><tr data-category="Payroll">
+  <td><div class="icon-box-amber-15-36"><i class="bi bi-credit-card-fill c-amber-fs875"></i></div></td>
+  <td>
+    <div class="fw6-mb05">Payroll processed</div>
+    <div class="fs75-muted">All departments • 128 employees</div>
+  </td>
+  <td class="mw300px-fs8125-c-muted">December 2024 payroll disbursed. Total: $1.24M. 2 processing errors resolved.</td>
+  <td><span class="badge-amber-xs">Payroll</span></td>
+  <td class="fs8125-c-muted-nowrap">8h ago</td>
+</tr><tr data-category="HR">
+  <td><div class="icon-box-red-15-36"><i class="bi bi-calendar2-x-fill c-red-fs875"></i></div></td>
+  <td>
+    <div class="fw6-mb05">Leave request approved</div>
+    <div class="fs75-muted">Sarah Chen • Product</div>
+  </td>
+  <td class="mw300px-fs8125-c-muted">Annual leave approved: Dec 20–27 (5 days). Manager: Jane Doe.</td>
+  <td><span class="badge-blue-xs">HR</span></td>
+  <td class="fs8125-c-muted-nowrap">1d ago</td>
+</tr><tr data-category="L&D">
+  <td><div class="icon-box-purple-15-36"><i class="bi bi-mortarboard-fill c-purple-fs875"></i></div></td>
+  <td>
+    <div class="fw6-mb05">Training completed</div>
+    <div class="fs75-muted">Engineering Team • 18 members</div>
+  </td>
+  <td class="mw300px-fs8125-c-muted">Advanced React Architecture Workshop — all 18 members certified.</td>
+  <td><span class="badge-purple-10-xs-fs72-p05-2">L&D</span></td>
+  <td class="fs8125-c-muted-nowrap">2d ago</td>
+</tr><tr data-category="Recruitment">
+  <td><div class="icon-box-blue-lg"><i class="bi bi-person-plus-fill c-blue-fs875"></i></div></td>
+  <td>
+    <div class="fw6-mb05">Job posting published</div>
+    <div class="fs75-muted">Engineering • Senior iOS Developer</div>
+  </td>
+  <td class="mw300px-fs8125-c-muted">Position posted on LinkedIn, Naukri, and internal portal. 42 applications received.</td>
+  <td><span class="badge-sky-10-xs-fs72-p05-2">Recruitment</span></td>
+  <td class="fs8125-c-muted-nowrap">3d ago</td>
+</tr><tr data-category="Performance">
+  <td><div class="icon-box-sky-15-36"><i class="bi bi-graph-up-arrow c-cyan-fs875"></i></div></td>
+  <td>
+    <div class="fw6-mb05">Performance review cycle started</div>
+    <div class="fs75-muted">All departments • Q4 2024</div>
+  </td>
+  <td class="mw300px-fs8125-c-muted">Q4 performance reviews initiated for 128 employees. Due date: Dec 20.</td>
+  <td><span class="badge-green-xs">Performance</span></td>
+  <td class="fs8125-c-muted-nowrap">5d ago</td>
+</tr><tr data-category="Policy">
+  <td><div class="icon-box-green-15-36"><i class="bi bi-shield-check-fill c-green-fs875"></i></div></td>
+  <td>
+    <div class="fw6-mb05">Policy updated</div>
+    <div class="fs75-muted">HR Handbook v3.2</div>
+  </td>
+  <td class="mw300px-fs8125-c-muted">Hybrid work policy updated. Effective from Jan 1, 2025. All employees notified.</td>
+  <td><span class="badge-muted-blue-10-xs-fs72-p05-2">Policy</span></td>
+  <td class="fs8125-c-muted-nowrap">1w ago</td>
+</tr><tr data-category="HR">
+  <td><div class="icon-box-red-15-36"><i class="bi bi-person-x-fill c-red-fs875"></i></div></td>
+  <td>
+    <div class="fw6-mb05">Employee separation processed</div>
+    <div class="fs75-muted">Ryan O'Brien • Sales</div>
+  </td>
+  <td class="mw300px-fs8125-c-muted">Separation processed. Exit interview completed. Equipment returned. Final settlement: $45,200.</td>
+  <td><span class="badge-blue-xs">HR</span></td>
+  <td class="fs8125-c-muted-nowrap">1w ago</td>
+</tr><tr data-category="Org">
+  <td><div class="icon-box-amber-15-36"><i class="bi bi-building c-amber-fs875"></i></div></td>
+  <td>
+    <div class="fw6-mb05">Department restructuring</div>
+    <div class="fs75-muted">Engineering • Org change</div>
+  </td>
+  <td class="mw300px-fs8125-c-muted">Backend and DevOps teams merged into Platform Engineering. 4 new roles created.</td>
+  <td><span class="badge-pink-10-xs-fs72-p05-2">Org</span></td>
+  <td class="fs8125-c-muted-nowrap">2w ago</td>
+</tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="card-hr anim-fiu d3">
+        <div class="card-hd"><div class="card-title-hr">Activity by Category</div></div>
+        <div class="card-bd">
+          <div class="flex-col-g3">
+            <div>
+              <div class="flex-jsb-mb14">
+                <span class="fs845-fw5">HR</span>
+                <span class="fs845-fw7">3</span>
+              </div>
+              <div class="prog-sm"><div class="w30pct-h100pct-bg-blue-br999px-trans"></div></div>
+            </div><div>
+              <div class="flex-jsb-mb14">
+                <span class="fs845-fw5">Performance</span>
+                <span class="fs845-fw7">2</span>
+              </div>
+              <div class="prog-sm"><div class="w20pct-h100pct-bg-green-br999px-trans"></div></div>
+            </div><div>
+              <div class="flex-jsb-mb14">
+                <span class="fs845-fw5">Payroll</span>
+                <span class="fs845-fw7">1</span>
+              </div>
+              <div class="prog-sm"><div class="w10pct-h100pct-bg-amber-br999px-trans"></div></div>
+            </div><div>
+              <div class="flex-jsb-mb14">
+                <span class="fs845-fw5">L&D</span>
+                <span class="fs845-fw7">1</span>
+              </div>
+              <div class="prog-sm"><div class="w10pct-h100pct-bg-purple-br999px-trans"></div></div>
+            </div><div>
+              <div class="flex-jsb-mb14">
+                <span class="fs845-fw5">Recruitment</span>
+                <span class="fs845-fw7">1</span>
+              </div>
+              <div class="prog-sm"><div class="w10pct-h100pct-bg-sky-br999px-trans"></div></div>
+            </div><div>
+              <div class="flex-jsb-mb14">
+                <span class="fs845-fw5">Policy</span>
+                <span class="fs845-fw7">1</span>
+              </div>
+              <div class="prog-sm"><div class="w10pct-h100pct-bg-muted-blue-br999px-trans"></div></div>
+            </div><div>
+              <div class="flex-jsb-mb14">
+                <span class="fs845-fw5">Org</span>
+                <span class="fs845-fw7">1</span>
+              </div>
+              <div class="prog-sm"><div class="w10pct-h100pct-bg-pink-br999px-trans"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></main>
+</div>
+  <script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+(function(){
+  var tabs=document.querySelectorAll('.card-hd .tab-bar .tab-btn');
+  var tl=document.getElementById('actTimeline'), tb=document.getElementById('actTable');
+  if(!tl||!tb) return;
+  tabs.forEach(function(t){ t.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.remove('active');}); t.classList.add('active');
+    var showTimeline = t.textContent.trim()==='Timeline';
+    tl.classList.toggle('d-none', !showTimeline);
+    tb.classList.toggle('d-none', showTimeline);
+    tl.style.display='';
+    tb.style.display='';
+  });});
+})();
+
+/* ── Toast helper ── */
+function showToast(message, kind) {
+  var bg = kind === 'success' ? 'linear-gradient(135deg,#10B981,#06B6D4)' : 'linear-gradient(135deg,#4F6EF7,#8B5CF6)';
+  var icon = kind === 'success' ? 'bi-check-circle-fill' : 'bi-download';
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:' + bg + ';color:#fff;padding:.875rem 1.25rem;border-radius:.875rem;font-size:.875rem;font-weight:700;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:.625rem;opacity:0;transition:opacity .25s';
+  toast.innerHTML = '<i class="bi ' + icon + '"></i><span>' + message + '</span>';
+  document.body.appendChild(toast);
+  requestAnimationFrame(function () { toast.style.opacity = '1'; });
+  setTimeout(function () {
+    toast.style.opacity = '0';
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 3000);
+}
+
+/* ── Filter by category: filters both the Timeline and Table views
+      together, so switching tabs never loses the active filter ── */
+var _activeCategory = 'All';
+
+function filterActivity(cat, linkEl) {
+  _activeCategory = cat;
+
+  document.querySelectorAll('#activityFilterMenu .dropdown-item').forEach(function(a) {
+    a.classList.remove('active');
+  });
+  linkEl.classList.add('active');
+
+  var label = document.getElementById('filterActiveLabel');
+  label.textContent = cat === 'All' ? '' : (' \u2014 ' + cat);
+
+  var shown = 0;
+  document.querySelectorAll('#actTimeline .tl-item').forEach(function(item) {
+    var match = cat === 'All' || item.getAttribute('data-category') === cat;
+    item.style.display = match ? '' : 'none';
+    if (match) shown++;
+  });
+  document.querySelectorAll('#actTable tbody tr').forEach(function(row) {
+    var match = cat === 'All' || row.getAttribute('data-category') === cat;
+    row.style.display = match ? '' : 'none';
+  });
+
+  showToast(cat === 'All' ? 'Showing all activity' : ('Filtered to ' + cat + ' (' + shown + ' events)'), 'success');
+}
+
+/* ── Export ── */
+function handleExportActivity() {
+  var label = _activeCategory === 'All' ? 'Activity Log' : (_activeCategory + ' activity');
+  showToast(label + ' exported as CSV', 'success');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Attendance Tracking — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Daily attendance tracking with check-in/check-out records, punctuality stats, and absence trends."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<style id="page-css">
+
+/* ── Live check-in wall ── */
+.checkin-wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem}
+.checkin-tile{background:var(--card-bg);border:1px solid var(--card-border);border-radius:1rem;
+  padding:.875rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  text-align:center;transition:all .18s;cursor:pointer;position:relative}
+.checkin-tile:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(79,110,247,.12)}
+.checkin-tile.in{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.04)}
+.checkin-tile.out{border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.03)}
+.checkin-tile.wfh{border-color:rgba(79,110,247,.3);background:rgba(79,110,247,.04)}
+.checkin-tile.late{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.03)}
+.checkin-tile.absent{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.04)}
+.ci-badge.absent{background:#EF4444;color:#fff}
+.ci-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-weight:800;font-size:.85rem;color:#fff;flex-shrink:0}
+.ci-name{font-size:.8rem;font-weight:700;color:var(--body-text);line-height:1.2}
+.ci-time{font-size:.7rem;color:var(--body-text-muted)}
+.ci-badge{position:absolute;top:.625rem;right:.625rem;font-size:.58rem;font-weight:800;
+  padding:.1rem .4rem;border-radius:999px}
+.ci-badge.in{background:#10B981;color:#fff}
+.ci-badge.out{background:#EF4444;color:#fff}
+.ci-badge.wfh{background:#4F6EF7;color:#fff}
+.ci-badge.late{background:#F59E0B;color:#fff}
+/* ── Heatmap calendar ── */
+.hm-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.hm-day-hd{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--body-text-muted);text-align:center;padding:.25rem 0}
+.hm-cell{aspect-ratio:1;border-radius:.5rem;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-size:.7rem;font-weight:600;
+  cursor:pointer;transition:all .12s;position:relative;border:1px solid transparent}
+.hm-cell:hover{transform:scale(1.12);z-index:2;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.hm-cell.today{border-color:var(--color-primary)!important;box-shadow:0 0 0 2px rgba(79,110,247,.2)}
+.hm-cell.prev{opacity:.28}
+.hm-pct{font-size:.6rem;font-weight:700}
+.hm-100{background:linear-gradient(135deg,#10B981,#06B6D4);color:#fff}
+.hm-95{background:rgba(16,185,129,.7);color:#fff}
+.hm-90{background:rgba(79,110,247,.6);color:#fff}
+.hm-85{background:rgba(79,110,247,.35);color:var(--body-text)}
+.hm-80{background:rgba(245,158,11,.4);color:var(--body-text)}
+.hm-below{background:rgba(239,68,68,.35);color:#fff}
+.hm-off{background:var(--body-bg);color:var(--body-text-muted);cursor:default}
+.hm-off:hover{transform:none;box-shadow:none}
+/* ── Shift timeline bar ── */
+.shift-row{display:grid;grid-template-columns:140px 1fr 80px;align-items:center;
+  gap:.875rem;padding:.5rem 0;border-bottom:1px solid var(--body-bg)}
+.shift-row:last-child{border:none}
+.shift-bar-wrap{height:10px;border-radius:999px;background:var(--body-border);
+  position:relative;overflow:visible}
+.shift-bar{height:100%;border-radius:999px;position:absolute}
+.shift-marker{position:absolute;top:-4px;width:2px;height:18px;background:var(--color-primary);
+  opacity:.5}
+/* ── Department attendance rings ── */
+.dept-ring-row{display:flex;gap:1.25rem;flex-wrap:wrap}
+.dept-ring{display:flex;flex-direction:column;align-items:center;gap:.375rem}
+.dept-ring svg{transform:rotate(-90deg)}
+.dept-ring-val{position:absolute;font-size:.72rem;font-weight:900;color:var(--body-text)}
+.dept-ring-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.dept-ring-lbl{font-size:.7rem;font-weight:700;color:var(--body-text-muted);text-align:center}
+/* ── Live clock ── */
+.live-clock{font-size:2.5rem;font-weight:900;color:var(--body-text);
+  letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.live-date-str{font-size:.875rem;color:var(--body-text-muted);font-weight:500;margin-top:.25rem}
+/* ── Tooltip ── */
+.hm-tooltip{position:fixed;background:var(--sidebar-bg);color:#E8ECFF;
+  font-size:.72rem;font-weight:600;padding:.375rem .75rem;border-radius:.5rem;
+  pointer-events:none;opacity:0;transition:opacity .12s;z-index:2000;
+  white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.28)}
+.hm-tooltip.show{opacity:1}
+/* Status dot legend */
+.legend-item{display:inline-flex;align-items:center;gap:.375rem;font-size:.75rem;
+  color:var(--body-text-muted);font-weight:500}
+.legend-swatch{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+  </style>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span>HR Core</span><span class="bc-sep">/</span><span class="bc-current">Attendance Tracking</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- ── Page header ── -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Attendance Tracking</h1>
+          <p class="page-subtitle">Live workforce presence, monthly heatmap &amp; shift analytics — all updating in real time</p>
+        </div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <select class="hr-inp" style="padding:.4rem .875rem;width:auto">
+            <option>January 2025</option><option>December 2024</option><option>November 2024</option>
+          </select>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#exportAttendanceModal"><i class="bi bi-download me-1"></i>Export</button>
+          <button type="button" class="btn-hr btn-primary-hr" data-bs-toggle="modal" data-bs-target="#markAttendanceModal"><i class="bi bi-check2-square me-1"></i>Mark Attendance</button>
+        </div>
+      </div>
+      <!-- ── KPI ribbon ── -->
+      <div class="stats-ribbon" style="margin-bottom:1.5rem">
+        <div class="stats-ribbon-cell">
+          <div class="stats-ribbon-val" style="color:#10B981">261</div>
+          <div class="stats-ribbon-lbl">Present Today</div>
+          <div class="stats-ribbon-delta" style="color:#10B981">▲ 92.0%</div>
+        </div>
+        <div class="stats-ribbon-cell">
+          <div class="stats-ribbon-val" style="color:#4F6EF7">38</div>
+          <div class="stats-ribbon-lbl">Working Remote</div>
+          <div class="stats-ribbon-delta" style="color:var(--body-text-muted)">13.4%</div>
+        </div>
+        <div class="stats-ribbon-cell">
+          <div class="stats-ribbon-val" style="color:#F59E0B">12</div>
+          <div class="stats-ribbon-lbl">Late Arrivals</div>
+          <div class="stats-ribbon-delta" style="color:#EF4444">▲ +3 vs avg</div>
+        </div>
+        <div class="stats-ribbon-cell">
+          <div class="stats-ribbon-val" style="color:#EF4444">11</div>
+          <div class="stats-ribbon-lbl">Absences</div>
+          <div class="stats-ribbon-delta" style="color:#10B981">▼ -2 vs avg</div>
+        </div>
+        <div class="stats-ribbon-cell">
+          <div class="stats-ribbon-val">9.2h</div>
+          <div class="stats-ribbon-lbl">Avg Work Hours</div>
+          <div class="stats-ribbon-delta" style="color:#10B981">▲ +0.3h</div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-1rem">
+        <!-- Live check-in panel -->
+        <div class="col-12 col-xl-7">
+          <div class="card-hr">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Live Check-in Wall</div>
+                <div class="card-subtitle-hr">Who's in, remote, late, or absent right now</div>
+              </div>
+              <span class="badge-st st-active" style="display:flex;align-items:center;gap:.35rem">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse-dot 1.4s infinite;display:inline-block"></span>Live
+              </span>
+            </div>
+            <div class="card-bd">
+              <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem">
+                <span class="legend-item"><span class="legend-swatch" style="background:#10B981"></span>In Office</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#4F6EF7"></span>WFH</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#F59E0B"></span>Late</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#EF4444"></span>Absent</span>
+              </div>
+              <div class="checkin-wall" id="checkinWall"><div class="checkin-tile in">
+  <span class="ci-badge in">In Office</span>
+  <div class="ci-avatar cov-2">SC</div>
+  <div class="ci-name">Sarah Chen</div>
+  <div class="ci-time">09:02</div>
+</div><div class="checkin-tile in">
+  <span class="ci-badge in">In Office</span>
+  <div class="ci-avatar cov-1">MJ</div>
+  <div class="ci-name">Marcus Johnson</div>
+  <div class="ci-time">09:18</div>
+</div><div class="checkin-tile in">
+  <span class="ci-badge in">In Office</span>
+  <div class="ci-avatar cov-4">PN</div>
+  <div class="ci-name">Priya Nair</div>
+  <div class="ci-time">08:55</div>
+</div><div class="checkin-tile late">
+  <span class="ci-badge late">Late</span>
+  <div class="ci-avatar cov-5">AI</div>
+  <div class="ci-name">Aisha Iyer</div>
+  <div class="ci-time">09:45</div>
+</div><div class="checkin-tile wfh">
+  <span class="ci-badge wfh">WFH</span>
+  <div class="ci-avatar cov-8">KR</div>
+  <div class="ci-name">Kavita Rao</div>
+  <div class="ci-time">10:12</div>
+</div><div class="checkin-tile out">
+  <span class="ci-badge out">On Leave</span>
+  <div class="ci-avatar cov-7">RD</div>
+  <div class="ci-name">Ravi Das</div>
+  <div class="ci-time">—</div>
+</div><div class="checkin-tile in">
+  <span class="ci-badge in">In Office</span>
+  <div class="ci-avatar cov-4">NS</div>
+  <div class="ci-name">Neha Singh</div>
+  <div class="ci-time">09:01</div>
+</div><div class="checkin-tile wfh">
+  <span class="ci-badge wfh">WFH</span>
+  <div class="ci-avatar cov-6">AM</div>
+  <div class="ci-name">Arjun Mehta</div>
+  <div class="ci-time">09:33</div>
+</div><div class="checkin-tile out">
+  <span class="ci-badge out">Day Off</span>
+  <div class="ci-avatar cov-3">TN</div>
+  <div class="ci-name">Tom Nakamura</div>
+  <div class="ci-time">—</div>
+</div><div class="checkin-tile in">
+  <span class="ci-badge in">In Office</span>
+  <div class="ci-avatar cov-5">DS</div>
+  <div class="ci-name">Deepika Sharma</div>
+  <div class="ci-time">09:07</div>
+</div><div class="checkin-tile in">
+  <span class="ci-badge in">In Office</span>
+  <div class="ci-avatar cov-1">VP</div>
+  <div class="ci-name">Vikram Patel</div>
+  <div class="ci-time">09:22</div>
+</div><div class="checkin-tile in">
+  <span class="ci-badge in">In Office</span>
+  <div class="ci-avatar cov-2">RK</div>
+  <div class="ci-name">Rohit Kulkarni</div>
+  <div class="ci-time">09:14</div>
+</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Clock-in panel + dept rings -->
+        <div class="col-12 col-xl-5">
+          <div class="card-hr mb-1rem">
+            <div class="card-hd"><div class="card-title-hr">My Attendance Today</div></div>
+            <div class="card-bd" style="text-align:center;padding:1.5rem">
+              <div class="live-clock" id="liveClock">—</div>
+              <div class="live-date-str" id="liveDateStr">—</div>
+              <div style="display:flex;gap:.5rem;justify-content:center;margin-top:1.5rem">
+                <button type="button" class="btn-hr btn-success-hr" style="flex:1" id="checkInBtn">
+                  <i class="bi bi-box-arrow-in-right me-1"></i>Check In
+                </button>
+                <button type="button" class="btn-hr btn-danger-hr" style="flex:1" id="checkOutBtn">
+                  <i class="bi bi-box-arrow-right me-1"></i>Check Out
+                </button>
+              </div>
+              <div style="margin-top:1rem;padding:.75rem;background:var(--body-bg);border-radius:.75rem;border:1px solid var(--body-border)">
+                <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--body-text-muted);margin-bottom:.375rem">Today's Log</div>
+                <div style="display:flex;justify-content:space-between;font-size:.8125rem">
+                  <span style="color:var(--body-text-muted)">Check In</span><span style="font-weight:700;color:#10B981">09:02 AM</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:.8125rem;margin-top:.25rem">
+                  <span style="color:var(--body-text-muted)">Check Out</span><span style="font-weight:700;color:var(--body-text-muted)">Pending</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:.8125rem;margin-top:.25rem">
+                  <span style="color:var(--body-text-muted)">Hours So Far</span><span style="font-weight:700;color:#4F6EF7" id="hoursWorked">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Dept Attendance Rate</div><span class="badge-blue-xs">Today</span></div>
+            <div class="card-bd">
+              <div class="dept-ring-row"><div class="dept-ring">
+  <div class="dept-ring-wrap">
+    <svg width="72" height="72" viewBox="0 0 72 72">
+      <circle cx="36" cy="36" r="30" fill="none" stroke="var(--body-border)" stroke-width="7"/>
+      <circle cx="36" cy="36" r="30" fill="none" stroke="#4F6EF7" stroke-width="7"
+        stroke-dasharray="177.2 188.5" stroke-linecap="round"/>
+    </svg>
+    <span class="dept-ring-val" style="position:absolute">94%</span>
+  </div>
+  <div class="dept-ring-lbl">Engineering</div>
+</div><div class="dept-ring">
+  <div class="dept-ring-wrap">
+    <svg width="72" height="72" viewBox="0 0 72 72">
+      <circle cx="36" cy="36" r="30" fill="none" stroke="var(--body-border)" stroke-width="7"/>
+      <circle cx="36" cy="36" r="30" fill="none" stroke="#10B981" stroke-width="7"
+        stroke-dasharray="184.7 188.5" stroke-linecap="round"/>
+    </svg>
+    <span class="dept-ring-val" style="position:absolute">98%</span>
+  </div>
+  <div class="dept-ring-lbl">Product</div>
+</div><div class="dept-ring">
+  <div class="dept-ring-wrap">
+    <svg width="72" height="72" viewBox="0 0 72 72">
+      <circle cx="36" cy="36" r="30" fill="none" stroke="var(--body-border)" stroke-width="7"/>
+      <circle cx="36" cy="36" r="30" fill="none" stroke="#F59E0B" stroke-width="7"
+        stroke-dasharray="162.1 188.5" stroke-linecap="round"/>
+    </svg>
+    <span class="dept-ring-val" style="position:absolute">86%</span>
+  </div>
+  <div class="dept-ring-lbl">Sales</div>
+</div><div class="dept-ring">
+  <div class="dept-ring-wrap">
+    <svg width="72" height="72" viewBox="0 0 72 72">
+      <circle cx="36" cy="36" r="30" fill="none" stroke="var(--body-border)" stroke-width="7"/>
+      <circle cx="36" cy="36" r="30" fill="none" stroke="#06B6D4" stroke-width="7"
+        stroke-dasharray="173.4 188.5" stroke-linecap="round"/>
+    </svg>
+    <span class="dept-ring-val" style="position:absolute">92%</span>
+  </div>
+  <div class="dept-ring-lbl">Marketing</div>
+</div><div class="dept-ring">
+  <div class="dept-ring-wrap">
+    <svg width="72" height="72" viewBox="0 0 72 72">
+      <circle cx="36" cy="36" r="30" fill="none" stroke="var(--body-border)" stroke-width="7"/>
+      <circle cx="36" cy="36" r="30" fill="none" stroke="#8B5CF6" stroke-width="7"
+        stroke-dasharray="188.5 188.5" stroke-linecap="round"/>
+    </svg>
+    <span class="dept-ring-val" style="position:absolute">100%</span>
+  </div>
+  <div class="dept-ring-lbl">HR</div>
+</div><div class="dept-ring">
+  <div class="dept-ring-wrap">
+    <svg width="72" height="72" viewBox="0 0 72 72">
+      <circle cx="36" cy="36" r="30" fill="none" stroke="var(--body-border)" stroke-width="7"/>
+      <circle cx="36" cy="36" r="30" fill="none" stroke="#EF4444" stroke-width="7"
+        stroke-dasharray="167.8 188.5" stroke-linecap="round"/>
+    </svg>
+    <span class="dept-ring-val" style="position:absolute">89%</span>
+  </div>
+  <div class="dept-ring-lbl">Finance</div>
+</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Heatmap calendar -->
+        <div class="col-12 col-xl-7">
+          <div class="card-hr">
+            <div class="card-hd">
+              <div><div class="card-title-hr">Monthly Attendance Heatmap</div><div class="card-subtitle-hr">Click a day to see individual records</div></div>
+              <div style="display:flex;align-items:center;gap:.5rem">
+                <span class="legend-item"><span class="legend-swatch" style="background:linear-gradient(135deg,#10B981,#06B6D4)"></span>100%</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:rgba(79,110,247,.5)"></span>≥85%</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:rgba(245,158,11,.4)"></span>≥80%</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:rgba(239,68,68,.35)"></span>&lt;80%</span>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="hm-grid"><div class="hm-day-hd">Mon</div><div class="hm-day-hd">Tue</div><div class="hm-day-hd">Wed</div><div class="hm-day-hd">Thu</div><div class="hm-day-hd">Fri</div><div class="hm-day-hd">Sat</div><div class="hm-day-hd">Sun</div><div class="hm-cell hm-off prev"></div><div class="hm-cell hm-off prev"></div><div class="hm-cell hm-below" title="Jan 1 · 75%">1<div class="hm-pct">75</div></div><div class="hm-cell hm-100" title="Jan 2 · 100%">2<div class="hm-pct">100</div></div><div class="hm-cell hm-100" title="Jan 3 · 100%">3<div class="hm-pct">100</div></div><div class="hm-cell hm-off">4</div><div class="hm-cell hm-off">5</div><div class="hm-cell hm-95" title="Jan 6 · 95%">6<div class="hm-pct">95</div></div><div class="hm-cell hm-95" title="Jan 7 · 95%">7<div class="hm-pct">95</div></div><div class="hm-cell hm-95" title="Jan 8 · 95%">8<div class="hm-pct">95</div></div><div class="hm-cell hm-100" title="Jan 9 · 100%">9<div class="hm-pct">100</div></div><div class="hm-cell hm-100" title="Jan 10 · 100%">10<div class="hm-pct">100</div></div><div class="hm-cell hm-off">11</div><div class="hm-cell hm-off">12</div><div class="hm-cell hm-below" title="Jan 13 · 75%">13<div class="hm-pct">75</div></div><div class="hm-cell hm-85" title="Jan 14 · 85%">14<div class="hm-pct">85</div></div><div class="hm-cell hm-100" title="Jan 15 · 100%">15<div class="hm-pct">100</div></div><div class="hm-cell hm-80" title="Jan 16 · 80%">16<div class="hm-pct">80</div></div><div class="hm-cell hm-90" title="Jan 17 · 90%">17<div class="hm-pct">90</div></div><div class="hm-cell hm-off">18</div><div class="hm-cell hm-off">19</div><div class="hm-cell hm-100" title="Jan 20 · 100%">20<div class="hm-pct">100</div></div><div class="hm-cell hm-100" title="Jan 21 · 100%">21<div class="hm-pct">100</div></div><div class="hm-cell hm-100" title="Jan 22 · 100%">22<div class="hm-pct">100</div></div><div class="hm-cell hm-95" title="Jan 23 · 95%">23<div class="hm-pct">95</div></div><div class="hm-cell hm-95" title="Jan 24 · 95%">24<div class="hm-pct">95</div></div><div class="hm-cell hm-off">25</div><div class="hm-cell hm-off">26</div><div class="hm-cell hm-85" title="Jan 27 · 85%">27<div class="hm-pct">85</div></div><div class="hm-cell hm-80" title="Jan 28 · 80%">28<div class="hm-pct">80</div></div><div class="hm-cell hm-100" title="Jan 29 · 100%">29<div class="hm-pct">100</div></div><div class="hm-cell hm-85" title="Jan 30 · 85%">30<div class="hm-pct">85</div></div><div class="hm-cell hm-95" title="Jan 31 · 95%">31<div class="hm-pct">95</div></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Shift timeline -->
+        <div class="col-12 col-xl-5">
+          <div class="card-hr h-100">
+            <div class="card-hd"><div class="card-title-hr">Shift Timeline</div><span class="badge-green-xs">Today</span></div>
+            <div class="card-bd">
+              <div style="display:flex;gap:.5rem;margin-bottom:.875rem;font-size:.65rem;color:var(--body-text-muted);font-weight:600;padding-left:140px">
+                <span style="flex:1;text-align:left">8am</span><span style="flex:1;text-align:center">12pm</span><span style="flex:1;text-align:right">8pm</span>
+              </div>
+              <div class="shift-row">
+  <div style="display:flex;align-items:center;gap:.625rem">
+    <div class="ci-avatar cov-2" style="width:30px;height:30px;font-size:.65rem;flex-shrink:0">SC</div>
+    <span style="font-size:.8rem;font-weight:700;color:var(--body-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sarah</span>
+  </div>
+  <div class="shift-bar-wrap">
+    <div class="shift-bar" style="left:8.3%;width:77.1%;background:#10B981;opacity:.7"></div>
+    <div class="shift-marker" style="left:8.3%"></div><!-- 9am marker -->
+  </div>
+  <div style="text-align:right;font-size:.75rem;font-weight:700;color:var(--body-text)">9.2h</div>
+</div><div class="shift-row">
+  <div style="display:flex;align-items:center;gap:.625rem">
+    <div class="ci-avatar cov-1" style="width:30px;height:30px;font-size:.65rem;flex-shrink:0">MJ</div>
+    <span style="font-size:.8rem;font-weight:700;color:var(--body-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Marcus</span>
+  </div>
+  <div class="shift-bar-wrap">
+    <div class="shift-bar" style="left:10.8%;width:80.8%;background:#4F6EF7;opacity:.7"></div>
+    <div class="shift-marker" style="left:8.3%"></div><!-- 9am marker -->
+  </div>
+  <div style="text-align:right;font-size:.75rem;font-weight:700;color:var(--body-text)">9.7h</div>
+</div><div class="shift-row">
+  <div style="display:flex;align-items:center;gap:.625rem">
+    <div class="ci-avatar cov-4" style="width:30px;height:30px;font-size:.65rem;flex-shrink:0">PN</div>
+    <span style="font-size:.8rem;font-weight:700;color:var(--body-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Priya</span>
+  </div>
+  <div class="shift-bar-wrap">
+    <div class="shift-bar" style="left:7.7%;width:73.6%;background:#10B981;opacity:.7"></div>
+    <div class="shift-marker" style="left:8.3%"></div><!-- 9am marker -->
+  </div>
+  <div style="text-align:right;font-size:.75rem;font-weight:700;color:var(--body-text)">8.8h</div>
+</div><div class="shift-row">
+  <div style="display:flex;align-items:center;gap:.625rem">
+    <div class="ci-avatar cov-5" style="width:30px;height:30px;font-size:.65rem;flex-shrink:0">AI</div>
+    <span style="font-size:.8rem;font-weight:700;color:var(--body-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Aisha</span>
+  </div>
+  <div class="shift-bar-wrap">
+    <div class="shift-bar" style="left:14.6%;width:72.9%;background:#F59E0B;opacity:.7"></div>
+    <div class="shift-marker" style="left:8.3%"></div><!-- 9am marker -->
+  </div>
+  <div style="text-align:right;font-size:.75rem;font-weight:700;color:var(--body-text)">8.8h</div>
+</div><div class="shift-row">
+  <div style="display:flex;align-items:center;gap:.625rem">
+    <div class="ci-avatar cov-8" style="width:30px;height:30px;font-size:.65rem;flex-shrink:0">KR</div>
+    <span style="font-size:.8rem;font-weight:700;color:var(--body-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Kavita</span>
+  </div>
+  <div class="shift-bar-wrap">
+    <div class="shift-bar" style="left:18.3%;width:56.7%;background:#4F6EF7;opacity:.7"></div>
+    <div class="shift-marker" style="left:8.3%"></div><!-- 9am marker -->
+  </div>
+  <div style="text-align:right;font-size:.75rem;font-weight:700;color:var(--body-text)">6.8h</div>
+</div>
+              <div style="margin-top:1.25rem;padding:.875rem;background:var(--body-bg);border-radius:.75rem;border:1px solid var(--body-border)">
+                <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--body-text-muted);margin-bottom:.625rem">Shift Summary</div>
+                <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+                  <div style="text-align:center"><div style="font-size:1.25rem;font-weight:900;color:#10B981">9.1h</div><div style="font-size:.68rem;color:var(--body-text-muted)">Avg Duration</div></div>
+                  <div style="text-align:center"><div style="font-size:1.25rem;font-weight:900;color:#4F6EF7">09:13</div><div style="font-size:.68rem;color:var(--body-text-muted)">Avg Check-in</div></div>
+                  <div style="text-align:center"><div style="font-size:1.25rem;font-weight:900;color:#8B5CF6">18:18</div><div style="font-size:.68rem;color:var(--body-text-muted)">Avg Check-out</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ══════ MODAL: Export Attendance ══════ -->
+<div class="modal fade" id="exportAttendanceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-download me-2 c-primary"></i>Export Attendance</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-1rem">
+          <div class="form-label-hr">Report Type</div>
+          <select class="hr-inp" id="attExportType">
+            <option>Monthly Attendance Summary</option>
+            <option>Live Check-in Log</option>
+            <option>Shift Timeline</option>
+            <option>Department Attendance Rate</option>
+          </select>
+        </div>
+        <div class="row g-3 mb-1rem">
+          <div class="col-6">
+            <div class="form-label-hr">From</div>
+            <input type="date" class="hr-inp" id="attExportFrom" value="2025-01-01"/>
+          </div>
+          <div class="col-6">
+            <div class="form-label-hr">To</div>
+            <input type="date" class="hr-inp" id="attExportTo" value="2025-01-31"/>
+          </div>
+        </div>
+        <div>
+          <div class="form-label-hr mb-1">Format</div>
+          <div style="display:flex;gap:.625rem">
+            <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.625rem .75rem;border:1.5px solid var(--color-primary);border-radius:.625rem;cursor:pointer;background:var(--color-primary-light)">
+              <input type="radio" name="attExportFormat" value="PDF" checked/>
+              <i class="bi bi-filetype-pdf" style="color:#EF4444"></i><span style="font-size:.8125rem;font-weight:700">PDF</span>
+            </label>
+            <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.625rem .75rem;border:1.5px solid var(--card-border);border-radius:.625rem;cursor:pointer">
+              <input type="radio" name="attExportFormat" value="Excel"/>
+              <i class="bi bi-filetype-xlsx" style="color:#10B981"></i><span style="font-size:.8125rem;font-weight:700">Excel</span>
+            </label>
+            <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.625rem .75rem;border:1.5px solid var(--card-border);border-radius:.625rem;cursor:pointer">
+              <input type="radio" name="attExportFormat" value="CSV"/>
+              <i class="bi bi-filetype-csv" style="color:#F59E0B"></i><span style="font-size:.8125rem;font-weight:700">CSV</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="handleExportAttendance()"><i class="bi bi-download me-1"></i>Download Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Mark Attendance ══════ -->
+<div class="modal fade" id="markAttendanceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-check2-square me-2 c-primary"></i>Mark Attendance</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-1rem">
+          <div class="form-label-hr">Employee Name <span style="color:#EF4444">*</span></div>
+          <input type="text" class="hr-inp" id="maEmployeeName" placeholder="e.g. Rahul Verma"/>
+        </div>
+        <div class="row g-3 mb-1rem">
+          <div class="col-6">
+            <div class="form-label-hr">Status</div>
+            <select class="hr-inp" id="maStatus">
+              <option value="in">In Office</option>
+              <option value="wfh">WFH</option>
+              <option value="late">Late</option>
+              <option value="absent">Absent</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <div class="form-label-hr">Check-in Time</div>
+            <input type="time" class="hr-inp" id="maTime"/>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="handleMarkAttendance()"><i class="bi bi-check2-square me-1"></i>Mark Attendance</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}</style>
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+function tick(){
+  var now=new Date();
+  var t=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
+  var d=now.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('liveClock').textContent=t;
+  document.getElementById('liveDateStr').textContent=d;
+  var diff=now-new Date(now.toDateString()+' 09:02:00');
+  if(diff>0){var h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000);document.getElementById('hoursWorked').textContent=h+'h '+m+'m';}
+}
+tick(); setInterval(tick,1000);
+
+/* ── Toast helper ── */
+function showToast(message, kind) {
+  var bg = kind === 'success' ? 'linear-gradient(135deg,#10B981,#06B6D4)' : 'linear-gradient(135deg,#4F6EF7,#8B5CF6)';
+  var icon = kind === 'success' ? 'bi-check-circle-fill' : 'bi-download';
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:' + bg + ';color:#fff;padding:.875rem 1.25rem;border-radius:.875rem;font-size:.875rem;font-weight:700;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:.625rem;opacity:0;transition:opacity .25s';
+  toast.innerHTML = '<i class="bi ' + icon + '"></i><span>' + message + '</span>';
+  document.body.appendChild(toast);
+  requestAnimationFrame(function () { toast.style.opacity = '1'; });
+  setTimeout(function () {
+    toast.style.opacity = '0';
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 3000);
+}
+
+/* ── Export Attendance ── */
+function handleExportAttendance() {
+  var type = document.getElementById('attExportType').value;
+  var fmt = document.querySelector('input[name="attExportFormat"]:checked').value;
+  var modalEl = document.getElementById('exportAttendanceModal');
+  bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+  showToast(type + ' exported as ' + fmt, 'success');
+}
+
+/* ── Mark Attendance ── */
+var CI_LABEL = { in: 'In Office', wfh: 'WFH', late: 'Late', absent: 'Absent' };
+var CI_COV = ['cov-1','cov-2','cov-3','cov-4','cov-5','cov-6','cov-7','cov-8'];
+
+function handleMarkAttendance() {
+  var nameEl = document.getElementById('maEmployeeName');
+  var name = nameEl.value.trim();
+  if (!name) {
+    nameEl.style.borderColor = '#EF4444';
+    nameEl.focus();
+    return;
+  }
+
+  var status = document.getElementById('maStatus').value;
+  var timeEl = document.getElementById('maTime');
+  var time = timeEl.value;
+  if (!time) {
+    var now = new Date();
+    time = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+  } else {
+    var parts = time.split(':');
+    var h = parseInt(parts[0], 10);
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    var h12 = h % 12 || 12;
+    time = ('0' + h12).slice(-2) + ':' + parts[1];
+  }
+
+  var initials = name.split(/\s+/).map(function (w) { return w[0]; }).join('').toUpperCase().slice(0, 2);
+  var cov = CI_COV[Math.floor(Math.random() * CI_COV.length)];
+
+  var tile = document.createElement('div');
+  tile.className = 'checkin-tile ' + status;
+  tile.innerHTML =
+    '<span class="ci-badge ' + status + '">' + CI_LABEL[status] + '</span>' +
+    '<div class="ci-avatar ' + cov + '">' + initials + '</div>' +
+    '<div class="ci-name">' + name + '</div>' +
+    '<div class="ci-time">' + (status === 'absent' ? '—' : time) + '</div>';
+
+  document.getElementById('checkinWall').prepend(tile);
+
+  var modalEl = document.getElementById('markAttendanceModal');
+  bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+  nameEl.value = '';
+  nameEl.style.borderColor = '';
+  timeEl.value = '';
+  document.getElementById('maStatus').value = 'in';
+
+  showToast(name + ' marked as ' + CI_LABEL[status], 'success');
+}
+</script>
+</body>
+</html>

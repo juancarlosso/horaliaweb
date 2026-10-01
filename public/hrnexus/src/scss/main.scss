@@ -1,0 +1,73 @@
+// =============================================================================
+// HRNexus Bootstrap Admin Dashboard v4.0 — "Standalone" SCSS Entry
+// =============================================================================
+//
+// NOTE: this is NOT the entry point used by the default `npm run build`.
+// Every page in public/pages/ loads Bootstrap separately from the jsDelivr
+// CDN, and loads HRNexus's own styles from dist/css/hrnexus-core.css, which
+// is built from src/scss/core.scss (no bundled Bootstrap) — see that file.
+//
+// This file (main.scss) is for anyone who wants a single, fully
+// self-contained stylesheet — Bootstrap + HRNexus in one file, no CDN
+// dependency. Build it with `npm run build:scss:standalone`; it outputs to
+// dist/css/hrnexus.min.css, which no shipped page currently references.
+//
+// ARCHITECTURE (Dart Sass 1.80+ / Bootstrap 5.3 compatible):
+// ────────────────────────────────────────────────────────────
+// • OUR files  → @use / @forward (modern module system, zero warnings)
+// • Bootstrap  → single @use entry point with our vars passed via `with:`
+//                Bootstrap handles its own internal @import ordering.
+//                --quiet-deps silences Bootstrap's own deprecation warnings.
+//
+// CUSTOMISE: Edit src/scss/abstracts/_variables.scss
+//            Change $primary to re-colour everything.
+// =============================================================================
+
+// ── Step 1: Our abstracts (variables + mixins via forwarding hub) ─────────────
+@use 'abstracts' as *;
+
+// ── Step 2: Bootstrap 5 — single entry with our theme overrides ───────────────
+// Passing vars via `with:` overrides Bootstrap !default declarations.
+// Bootstrap's own @import chain runs correctly inside its entry file.
+// --quiet-deps in npm scripts silences Bootstrap's own deprecation warnings.
+@use 'bootstrap/scss/bootstrap' with (
+  $font-family-sans-serif: ('DM Sans', 'Plus Jakarta Sans', system-ui, sans-serif),
+  $font-family-monospace:  ('JetBrains Mono', 'Fira Code', monospace),
+  $body-bg:                #F4F5FA,
+  $body-color:             #1C1F3B,
+  $border-radius:          0.5rem,
+  $border-radius-sm:       0.375rem,
+  $border-radius-lg:       0.875rem,
+  $border-radius-xl:       1rem,
+  $primary:                #4F6EF7,
+  $secondary:              #8B5CF6,
+  $success:                #10B981,
+  $danger:                 #EF4444,
+  $warning:                #F59E0B,
+  $info:                   #06B6D4
+);
+
+// ── Step 3: CSS custom properties (design tokens → :root vars) ────────────────
+@use 'abstracts/tokens';
+
+// ── Step 4: Base reset + animations ──────────────────────────────────────────
+@use 'base/reset';
+@use 'base/animations';
+
+// ── Step 5: Layout ────────────────────────────────────────────────────────────
+@use 'layout/sidebar';
+@use 'layout/topbar';
+@use 'layout/content';
+@use 'layout/responsive';
+
+// ── Step 6: Components ────────────────────────────────────────────────────────
+@use 'components/cards';
+@use 'components/ui';
+
+// ── Step 7: Theme presets (all 4 themes, class-based) ────────────────────────
+// Apply: <html class="theme-rose">
+// Or lazy-load: <link href="/dist/css/themes/rose.min.css">
+@use 'themes/presets';
+
+// ── Step 8: Page-specific SCSS (add your pages here) ─────────────────────────
+// @use 'pages/my-page';

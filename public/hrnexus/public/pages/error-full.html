@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Error 403 — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Error 403 access-denied page with a full-page layout."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body class="bg-body-var"><div class="flex-col-ac-jfc-rel-bg-bg-p-8-tc-ov-hidden">
+  <div class="abs-t-80px-l-100px-sq400px-bg-red-6"></div>
+  <div class="abs-r200px-b100px-sq300px-bg-amber-6"></div>
+  <div class="pos-rel-z1">
+    <div class="avatar-red-10-80-2">
+      <i class="bi bi-exclamation-triangle-fill fs2-c-red"></i>
+    </div>
+    <div class="fs875-fw7-c-red-mb4-uc">403 Forbidden</div>
+    <h1 class="fw9-c-body-mb35-lh-115">Access Denied</h1>
+    <p class="mw440px-fs1-c-muted-m-0-auto-8-lh-165">You don&rsquo;t have permission to view this page. Contact your administrator if you believe this is a mistake.</p>
+    <div class="flex-jfc-wrap-g3-mb8">
+      <a href="../index.html" class="btn-hr btn-primary-hr"><i class="bi bi-house me-1"></i>Go to Dashboard</a>
+      <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#contactAdminModal"><i class="bi bi-envelope me-1"></i>Contact Admin</button>
+    </div>
+    <div class="flex-jfc-wrap-g8">
+      <a href="faq.html" class="flex-col-ac-g15-c-muted-bg-none-b-none-pointer" style="text-decoration:none"><i class="bi bi-question-circle fs125"></i><span class="fs8-fw6">Help Center</span></a>
+      <button class="flex-col-ac-g15-c-muted-bg-none-b-none-pointer" type="button" data-bs-toggle="modal" data-bs-target="#documentationModal"><i class="bi bi-book fs125"></i><span class="fs8-fw6">Documentation</span></button>
+      <button class="flex-col-ac-g15-c-muted-bg-none-b-none-pointer" type="button" data-bs-toggle="modal" data-bs-target="#liveChatModal"><i class="bi bi-chat-dots fs125"></i><span class="fs8-fw6">Live Chat</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Contact Admin ══════ -->
+<div class="modal fade" id="contactAdminModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-envelope-fill me-2 c-primary"></i>Contact Admin</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="adminRequestForm" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label-hr">Your Email <span class="c-red">*</span></label>
+              <input class="hr-input" type="email" id="adminEmail" placeholder="you@company.com"/>
+            </div>
+            <div class="col-md-8">
+              <label class="form-label-hr">Resource You Were Trying to Access</label>
+              <input class="hr-input" type="text" id="adminResource" value="403 Forbidden — Access Denied page" disabled/>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label-hr">Urgency</label>
+              <select class="hr-input" id="adminUrgency">
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Why do you need access? <span class="c-red">*</span></label>
+              <textarea class="hr-input" id="adminReason" rows="3" placeholder="Briefly explain what you were trying to do and why you need this access..."></textarea>
+            </div>
+          </div>
+          <div id="adminRequestError" style="display:none;font-size:.8125rem;color:#EF4444;margin-top:1rem"></div>
+        </form>
+        <div id="adminRequestSuccess" style="display:none;text-align:center;padding:2rem 1rem">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem">
+            <i class="bi bi-check-circle-fill" style="font-size:1.75rem;color:#10B981"></i>
+          </div>
+          <div style="font-weight:800;font-size:1.05rem;color:var(--body-text);margin-bottom:.375rem">Request Sent to Admin</div>
+          <div style="font-size:.8125rem;color:var(--body-text-muted);max-width:380px;margin:0 auto">
+            Your access request has been forwarded to your workspace administrator for review. Request ID: <strong style="color:var(--body-text)" id="adminRequestId">REQ-0000</strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" id="adminCancelBtn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" id="adminSendBtn" onclick="sendAdminRequest()"><i class="bi bi-send-fill me-1"></i>Send Request</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Documentation ══════ -->
+<div class="modal fade" id="documentationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-book-fill me-2 c-primary"></i>Documentation — Access &amp; Permissions</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <details class="doc-topic" open>
+          <summary>Understanding Role-Based Access Control</summary>
+          <p>HRNexus assigns every user one of four roles — Employee, Manager, HR Operations, or Admin — and each role unlocks a different set of pages and actions. If a page is greyed out or returns a 403 error, your current role doesn't include permission for it. Your role is shown under your name in the profile menu.</p>
+        </details>
+        <details class="doc-topic">
+          <summary>Common Reasons for Access Denial</summary>
+          <p>The three most common causes: (1) your role was recently changed and permissions haven't propagated yet — try signing out and back in; (2) the page belongs to a module your organisation hasn't enabled, such as Billing or Integrations; (3) you're trying to view another employee's private records, which is restricted to their direct manager and HR Operations by default.</p>
+        </details>
+        <details class="doc-topic">
+          <summary>How to Request Additional Permissions</summary>
+          <p>Use the <strong>Contact Admin</strong> button on this page, or ask your manager to submit a role-change request from <em>Settings → Company → Team Roles</em>. Include what you need access to and why — requests with a clear business reason are approved faster.</p>
+        </details>
+        <details class="doc-topic">
+          <summary>Admin Approval Workflow &amp; Timelines</summary>
+          <p>Access requests are routed to your workspace's designated Admins. Most requests are reviewed within one business day. You'll receive an email once a decision is made; approved access takes effect immediately, no re-login required.</p>
+        </details>
+        <details class="doc-topic">
+          <summary>Managing Team Roles (for Admins)</summary>
+          <p>Admins can review, approve, or deny pending access requests, and change any team member's role directly from <em>Settings → Company → Team Roles</em>. Changes take effect immediately and are logged in the audit trail under <em>Settings → Security → Activity Log</em>.</p>
+        </details>
+      </div>
+      <div class="modal-footer">
+        <a href="faq.html" class="btn-hr btn-outline-hr"><i class="bi bi-question-circle me-1"></i>Visit Help Center</a>
+        <button type="button" class="btn-hr btn-primary-hr" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Live Chat ══════ -->
+<div class="modal fade" id="liveChatModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="height:min(600px,85vh);display:flex;flex-direction:column">
+      <div class="modal-header">
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <span style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#4F6EF7,#8B5CF6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;flex-shrink:0"><i class="bi bi-headset"></i></span>
+          <div>
+            <h5 class="modal-title fw-bold" style="margin:0;line-height:1.3">HRNexus Support</h5>
+            <span class="online-badge-lt">Online</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="chatMessages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:.75rem">
+        <div class="ai-bubble">👋 Hi there! I see you hit an access-denied error. Tell me what you were trying to reach and I'll help sort it out.</div>
+      </div>
+      <div class="modal-footer" style="border-top:1px solid var(--body-border);display:block">
+        <div class="ai-input-wrap" style="width:100%">
+          <input type="text" id="chatInput" placeholder="Type your message..." autocomplete="off"/>
+          <button type="button" class="ai-send-btn" onclick="sendChatMessage()" aria-label="Send"><i class="bi bi-send-fill" style="font-size:.8rem"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.doc-topic{border-bottom:1px solid var(--body-border);padding:.875rem 0}
+.doc-topic:last-child{border-bottom:none}
+.doc-topic summary{cursor:pointer;font-weight:700;font-size:.9rem;color:var(--body-text);list-style:none;display:flex;align-items:center;gap:.5rem}
+.doc-topic summary::before{content:'\\f4fe';font-family:bootstrap-icons;font-size:.7rem;color:var(--body-text-muted);transition:transform .15s}
+.doc-topic[open] summary::before{transform:rotate(90deg)}
+.doc-topic summary::-webkit-details-marker{display:none}
+.doc-topic p{margin:.625rem 0 0;font-size:.8125rem;line-height:1.6;color:var(--body-text-muted)}
+</style>
+
+  <script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ── Contact Admin ──────────────────────────────────────────────────── */
+function clearAdminFieldErrors() {
+  ['adminEmail', 'adminReason'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.borderColor = '';
+  });
+  var errorBox = document.getElementById('adminRequestError');
+  if (errorBox) { errorBox.style.display = 'none'; errorBox.textContent = ''; }
+}
+
+function sendAdminRequest() {
+  clearAdminFieldErrors();
+
+  var emailEl = document.getElementById('adminEmail');
+  var reasonEl = document.getElementById('adminReason');
+  var errorBox = document.getElementById('adminRequestError');
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  var missing = [];
+  if (!emailEl.value.trim()) missing.push(emailEl);
+  if (!reasonEl.value.trim()) missing.push(reasonEl);
+
+  if (missing.length) {
+    missing.forEach(function(el) { el.style.borderColor = '#EF4444'; });
+    errorBox.textContent = 'Please fill in both required fields.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  if (!EMAIL_RE.test(emailEl.value.trim())) {
+    emailEl.style.borderColor = '#EF4444';
+    errorBox.textContent = 'Please enter a valid email address.';
+    errorBox.style.display = 'block';
+    return;
+  }
+
+  var reqId = 'REQ-' + Math.floor(10000 + Math.random() * 90000);
+  document.getElementById('adminRequestId').textContent = reqId;
+
+  document.getElementById('adminRequestForm').style.display = 'none';
+  document.getElementById('adminRequestSuccess').style.display = 'block';
+  document.getElementById('adminSendBtn').style.display = 'none';
+  document.getElementById('adminCancelBtn').textContent = 'Close';
+}
+
+function resetAdminModal() {
+  var form = document.getElementById('adminRequestForm');
+  if (form) form.reset();
+  clearAdminFieldErrors();
+  document.getElementById('adminRequestForm').style.display = 'block';
+  document.getElementById('adminRequestSuccess').style.display = 'none';
+  document.getElementById('adminSendBtn').style.display = 'inline-flex';
+  document.getElementById('adminCancelBtn').textContent = 'Cancel';
+}
+
+var contactAdminModalEl = document.getElementById('contactAdminModal');
+if (contactAdminModalEl) {
+  contactAdminModalEl.addEventListener('hidden.bs.modal', resetAdminModal);
+}
+
+/* ── Live Chat ──────────────────────────────────────────────────────── */
+var AGENT_REPLIES = [
+  "Thanks for the details. Let me check your role and the resource you need.",
+  "I can see this page requires a role that isn't currently assigned to you — I'll loop in your admin.",
+  "Got it. In the meantime, does your manager know you need this? That can speed up approval.",
+  "I've noted this down and flagged it for review. Anything else I can help with?"
+];
+var _agentReplyIndex = 0;
+
+function appendChatBubble(text, outgoing) {
+  var wrap = document.getElementById('chatMessages');
+  var bubble = document.createElement('div');
+  bubble.className = outgoing ? 'ai-bubble-out' : 'ai-bubble';
+  bubble.textContent = text;
+  wrap.appendChild(bubble);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function sendChatMessage() {
+  var input = document.getElementById('chatInput');
+  var text = input.value.trim();
+  if (!text) return;
+  appendChatBubble(text, true);
+  input.value = '';
+
+  var wrap = document.getElementById('chatMessages');
+  var typing = document.createElement('div');
+  typing.className = 'ai-bubble';
+  typing.id = 'chatTypingIndicator';
+  typing.style.color = 'var(--body-text-muted)';
+  typing.innerHTML = '<i class="bi bi-three-dots"></i> typing…';
+  wrap.appendChild(typing);
+  wrap.scrollTop = wrap.scrollHeight;
+
+  setTimeout(function() {
+    var t = document.getElementById('chatTypingIndicator');
+    if (t) t.remove();
+    appendChatBubble(AGENT_REPLIES[_agentReplyIndex % AGENT_REPLIES.length], false);
+    _agentReplyIndex++;
+  }, 1100);
+}
+
+document.getElementById('chatInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); sendChatMessage(); }
+});
+
+var liveChatModalEl = document.getElementById('liveChatModal');
+if (liveChatModalEl) {
+  liveChatModalEl.addEventListener('hidden.bs.modal', function() {
+    document.getElementById('chatMessages').innerHTML =
+      '<div class="ai-bubble">👋 Hi there! I see you hit an access-denied error. Tell me what you were trying to reach and I\'ll help sort it out.</div>';
+    _agentReplyIndex = 0;
+  });
+}
+</script>
+</body>
+</html>

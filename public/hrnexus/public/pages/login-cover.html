@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Sign In — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Split-screen sign-in page with a branded hero panel alongside the login form."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body class="bg-body-var">
+<div class="flex-3">
+  <div class="flex-col-jfc-rel-bg-grad-sidebar-navy-sidebar-navy2-p-12">
+    <div class="abs-t-100px-r-100px-sq400px-bg-primary-8"></div>
+    <div class="abs-b-50px-l-50px-sq250px-bg-violet-6"></div>
+    <div class="pos-rel-z1">
+      <a class="iflex-mb12-tdn" href="../index.html">
+        <div class="icon-box-primary-violet-40">
+          <i class="bi bi-people-fill fs11-c-white"></i>
+        </div>
+        <span class="fs125-fw8-c-white">HRNexus</span>
+      </a>
+      <h2 class="fs2-fw8-c-white-m-0-0-4-lh-13">The HR platform<br>built for modern teams</h2>
+      <p class="fs1-c-white-60-m-0-0-10-lh-16">Manage your entire workforce from one beautiful dashboard.</p>
+      <div class="flex-col-g35">
+        <div class="flex-ac-g35-c-white-80"><div class="avatar-primary-25-32"><i class="bi bi-check-lg c-primary-lt"></i></div><span class="fs9">HR & payroll management</span></div>
+        <div class="flex-ac-g35-c-white-80"><div class="avatar-primary-25-32"><i class="bi bi-check-lg c-primary-lt"></i></div><span class="fs9">Real-time analytics & reports</span></div>
+        <div class="flex-ac-g35-c-white-80"><div class="avatar-primary-25-32"><i class="bi bi-check-lg c-primary-lt"></i></div><span class="fs9">Recruitment & onboarding</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-col-jfc-w480px-bg-bg-p-12-ov-y-auto-shrink0">
+    <div class="w100pct-mw380px-m-0-auto">
+      <h1 class="fs1625-fw8-c-body-m-0-0-2">Welcome back 👋</h1>
+      <p class="fs9-c-muted-m-0-0-8">Enter your credentials to access your HR dashboard.</p>
+      <div class="flex-col-g5">
+  <div>
+    <label class="form-label-hr">Email address</label>
+    <input class="hr-input" type="email" id="loginEmail" placeholder="ravindra@hrnexus.com" autocomplete="email" required/>
+  </div>
+  <div>
+    <div class="flex-jsb-ac-mb2">
+      <label class="form-label-hr m-0">Password</label>
+      <a class="fs8125-fw6-c-primary-tdn" href="../pages/forgot-password.html">Forgot password?</a>
+    </div>
+    <input class="hr-input" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required/>
+  </div>
+  <div class="flex-ac-g25">
+    <input class="accent-primary" type="checkbox" id="rememberMe" />
+    <label class="fs845-c-muted" for="rememberMe">Remember me for 30 days</label>
+  </div>
+  <div id="loginError" role="alert" aria-live="polite" style="display:none;font-size:.8125rem;color:#EF4444;margin-bottom:.5rem"></div>
+  <button type="button" class="btn-hr btn-primary-hr w100pct-tdn" onclick="submitLogin()">
+    <i class="bi bi-box-arrow-in-right me-2"></i>Sign in to HRNexus
+  </button>
+  <div class="flex-ac-g3-m-1-0">
+    <div class="divider-h"></div>
+    <span class="fs75-muted">or continue with</span>
+    <div class="divider-h"></div>
+  </div>
+  <div class="flex-g3">
+    <a class="btn-hr btn-outline-hr fl1-jfc" href="../index.html"><i class="bi bi-google me-1"></i>Google</a>
+    <a class="btn-hr btn-outline-hr fl1-jfc" href="../index.html"><i class="bi bi-microsoft me-1"></i>Microsoft</a>
+  </div>
+</div>
+      <p class="fs845-c-muted-mt6-tc">Don't have an account? <a class="fw6-c-primary-tdn" href="../pages/register-cover.html">Sign up</a></p>
+    </div>
+  </div>
+</div>
+  <script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+function submitLogin() {
+  var email = document.getElementById('loginEmail');
+  var password = document.getElementById('loginPassword');
+  var errorBox = document.getElementById('loginError');
+  var emailValue = email.value.trim();
+  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  email.style.borderColor = '';
+  password.style.borderColor = '';
+  errorBox.style.display = 'none';
+  errorBox.textContent = '';
+
+  if (!emailValue || !password.value) {
+    if (!emailValue) email.style.borderColor = '#EF4444';
+    if (!password.value) password.style.borderColor = '#EF4444';
+    errorBox.textContent = 'Please enter your email address and password.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  if (!emailRe.test(emailValue)) {
+    email.style.borderColor = '#EF4444';
+    errorBox.textContent = 'Please enter a valid email address.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  window.location.href = '../index.html';
+}
+</script>
+</body>
+</html>

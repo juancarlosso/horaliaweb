@@ -1,0 +1,84 @@
+// =============================================================================
+// HRNexus — CSS Custom Properties (design tokens → runtime variables)
+// Sourced from React dashboard inline styles and CSS custom properties.
+// =============================================================================
+@use 'variables' as *;
+@use 'sass:color';
+
+:root {
+  // Layout
+  --sidebar-width:      #{$sidebar-width};
+  --sidebar-collapsed:  #{$sidebar-collapsed};
+  --topbar-height:      #{$topbar-height};
+  --card-radius:        #{$card-radius};
+
+  // Brand colours
+  --color-primary:       #{$primary};
+  --color-primary-dark:  #{$primary-dark};
+  --color-primary-light: #{$primary-light};
+  --color-primary-glow:  #{$primary-glow};
+  --color-secondary:     #{$secondary};
+  --color-success:       #{$success};
+  --color-danger:        #{$danger};
+  --color-warning:       #{$warning};
+  --color-info:          #{$info};
+  --color-accent:        #{$accent};
+
+  // Sidebar
+  --sidebar-bg:                 #{$sidebar-bg};
+  --sidebar-bg2:                #{$sidebar-bg2};
+  --sidebar-text:               #{$sidebar-text};
+  --sidebar-text-hover:         #{$sidebar-text-hover};
+  --sidebar-item-active:        #{$sidebar-active-bg};
+  --sidebar-item-active-border: #{$sidebar-active-border};
+  --sidebar-border:             #{$sidebar-border};
+  --sidebar-section-color:      #{$sidebar-section};
+
+  // Topbar
+  --topbar-bg:     #{$topbar-bg};
+  --topbar-border: #{$topbar-border};
+  --topbar-shadow: 0 1px 0 #{$topbar-border}, 0 2px 8px #{rgba($primary, 0.04)};
+
+  // Body / surface
+  --body-bg:           #{$body-bg};
+  --body-bg2:          #{$body-bg2};
+  --body-text:         #{$body-color};
+  --body-text-muted:   #{$body-text-muted};
+  --body-border:       #{$body-border};
+  --body-border-strong:#{$body-border-strong};
+  --card-bg:           #{$card-bg};
+  --card-bg2:          #{$card-bg2};
+  --card-border:       #{$card-border};
+  --card-shadow:       #{$card-shadow};
+  --card-shadow-hover: #{$card-shadow-hover};
+
+  // Typography
+  --font:      #{$font-primary};
+  --font-mono: #{$font-mono};
+
+  // Motion
+  --transition-fast:    #{$transition-fast};
+  --transition-base:    #{$transition-base};
+  --transition-sidebar: #{$transition-sidebar};
+}
+
+// ── Dark theme (Bootstrap 5 native dark mode) ─────────────────────────────────
+[data-bs-theme="dark"] {
+  --sidebar-bg:    #{$dark-sidebar-bg};
+  --sidebar-bg2:   #{$dark-sidebar-bg2};
+  --sidebar-border:rgba(255, 255, 255, 0.04);
+  --topbar-bg:     #{$dark-topbar-bg};
+  --topbar-border: #{$dark-topbar-border};
+  --topbar-shadow: 0 1px 0 #{$dark-topbar-border}, 0 2px 8px rgba(0, 0, 0, 0.3);
+  --body-bg:       #{$dark-body-bg};
+  --body-bg2:      #{$dark-body-bg2};
+  --body-text:     #{$dark-body-text};
+  --body-text-muted:#{$dark-body-muted};
+  --body-border:   #{$dark-body-border};
+  --body-border-strong:#{$dark-card-border};
+  --card-bg:       #{$dark-card-bg};
+  --card-bg2:      #{$dark-card-bg2};
+  --card-border:   #{$dark-card-border};
+  --card-shadow:   0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --card-shadow-hover: 0 4px 24px #{rgba($primary, 0.22)};
+}

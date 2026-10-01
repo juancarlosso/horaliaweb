@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Team Chat &#8212; HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Team chat interface with conversation threads and message history."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Team Chat</span></nav>
+      <div class="search-wrap"><i class="bi bi-search search-icon-i"></i><input type="search" class="search-input" placeholder="Search messages..."/></div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel"><i class="bi bi-bell-fill"></i><span class="badge-dot"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+      <div class="page-header mb-1rem">
+        <div><h1 class="page-title">Team Chat</h1><p class="page-subtitle">Real-time messaging across your organisation</p></div>
+        <button type="button" class="btn-hr btn-primary-hr" data-bs-toggle="modal" data-bs-target="#newMsgModal"><i class="bi bi-pencil-square me-1"></i>New Message</button>
+      </div>
+      <div class="card-hr chat-wrap">
+        <!-- Left sidebar: channels + DMs -->
+        <div class="chat-sidebar">
+          <div class="p-75rem">
+            <div class="pos-rel">
+              <i class="bi bi-search abs-input-icon-l2"></i>
+              <input class="hr-input fs8-pt16-pb16-pl8" placeholder="Search channels..." oninput="searchChannels(this.value)"/>
+            </div>
+          </div>
+          <div class="ov-y-auto-fl1">
+            <div class="ch-section-label">Channels</div>
+<button type="button" class="ch-item" id="ch-general" data-ch="general" onclick="setChannel('general',null)"><i class="bi bi-hash"></i><span class="ch-label"># general</span></button>
+<button type="button" class="ch-item" id="ch-engineering" data-ch="engineering" onclick="setChannel('engineering',null)"><i class="bi bi-hash"></i><span class="ch-label"># engineering</span><span class="unread-badge2">3</span></button>
+<button type="button" class="ch-item" id="ch-design" data-ch="design" onclick="setChannel('design',null)"><i class="bi bi-hash"></i><span class="ch-label"># design-team</span></button>
+<button type="button" class="ch-item" id="ch-hr" data-ch="hr" onclick="setChannel('hr',null)"><i class="bi bi-hash"></i><span class="ch-label"># hr-updates</span><span class="unread-badge2">2</span></button>
+            <div class="ch-section-label mt-2">Direct Messages</div>
+<button type="button" class="dm-item" id="dm-dm1" data-dm="dm1" onclick="setChannel(null,'dm1')"><div class="pos-rel-fs0"><div class="avatar-blue-purple-28">SC</div><div class="online-dot"></div></div><div class="mnw0-tl-fl1"><div class="flex-jsb-ac"><span class="dm-name fs8-fw5">Sarah</span><span class="fs65-c-muted">10:42 AM</span></div><div class="fs72-c-muted-ellipsis-nowrap-ov-hidden">Can you review the Figma file?</div></div><span class="badge-red-xs-fs6-p04-14">2</span></button>
+<button type="button" class="dm-item" id="dm-dm2" data-dm="dm2" onclick="setChannel(null,'dm2')"><div class="pos-rel-fs0"><div class="avatar-green-sky-28-2">MJ</div><div class="online-dot"></div></div><div class="mnw0-tl-fl1"><div class="flex-jsb-ac"><span class="dm-name fs8-fw5">Marcus</span><span class="fs65-c-muted">9:31 AM</span></div><div class="fs72-c-muted-ellipsis-nowrap-ov-hidden">Auth PR is ready for review</div></div></button>
+<button type="button" class="dm-item" id="dm-dm3" data-dm="dm3" onclick="setChannel(null,'dm3')"><div class="pos-rel-fs0"><div class="avatar-red-amber-28">TN</div><div class="offline-dot"></div></div><div class="mnw0-tl-fl1"><div class="flex-jsb-ac"><span class="dm-name fs8-fw5">Tom</span><span class="fs65-c-muted">Yesterday</span></div><div class="fs72-c-muted-ellipsis-nowrap-ov-hidden">Deployment notes attached</div></div><span class="badge-red-xs-fs6-p04-14">1</span></button>
+<button type="button" class="dm-item" id="dm-dm4" data-dm="dm4" onclick="setChannel(null,'dm4')"><div class="pos-rel-fs0"><div class="avatar-green-purple-28">AP</div><div class="online-dot"></div></div><div class="mnw0-tl-fl1"><div class="flex-jsb-ac"><span class="dm-name fs8-fw5">Aisha</span><span class="fs65-c-muted">Yesterday</span></div><div class="fs72-c-muted-ellipsis-nowrap-ov-hidden">Thanks! Will review tonight</div></div></button>
+<button type="button" class="dm-item" id="dm-dm5" data-dm="dm5" onclick="setChannel(null,'dm5')"><div class="pos-rel-fs0"><div class="avatar-purple-pink-28">ER</div><div class="offline-dot"></div></div><div class="mnw0-tl-fl1"><div class="flex-jsb-ac"><span class="dm-name fs8-fw5">Emily</span><span class="fs65-c-muted">Mon</span></div><div class="fs72-c-muted-ellipsis-nowrap-ov-hidden">Leave form sent to your email</div></div></button>
+          </div>
+        </div>
+        <!-- Main chat area -->
+        <div class="chat-main">
+          <!-- Chat header -->
+          <div class="chat-header" id="chatHeader">
+            <div class="icon-box-primary-light-34" id="chatHeaderIcon"><i class="bi bi-hash fs1125-c-primary"></i></div>
+            <div id="chatHeaderInfo"><div class="fw7-fs9375"># general</div><div class="fs75-muted">12 members</div></div>
+            <div class="ml-auto-flex-g15">
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Search"><i class="bi bi-search"></i></button>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Call"><i class="bi bi-telephone"></i></button>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Video"><i class="bi bi-camera-video"></i></button>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Add"><i class="bi bi-person-plus"></i></button>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+            </div>
+          </div>
+          <!-- Message containers -->
+<div class="msgs-pane flex-col-g35-p-4-5-ov-y-auto-fl1" id="msgs-general"><div class="flex-g3-3"><div class="avatar-green-purple-34">AP</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Aisha Patel</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Good morning everyone! 👋 Quick reminder — Q4 performance reviews are due by Dec 20th.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:14 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">👍 5</span><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">✅ 3</span></div></div></div></div>
+<div class="flex-g3-3"><div class="avatar-green-sky-34">MJ</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Marcus Johnson</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Thanks for the heads up Aisha. Already have mine drafted. Is the form the same as last quarter?</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:22 AM</span></div></div></div>
+<div class="flex-g3-3"><div class="avatar-purple-pink-34">ER</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Emily Rodriguez</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Yes, same form! I'll send the link to everyone shortly. Also — holiday party is confirmed for Dec 22nd at 6pm 🎉</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:25 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">🎉 8</span><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">❤️ 4</span></div></div></div></div>
+<div class="flex-g3-3"><div class="avatar-sky-blue-34">DK</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">David Kim</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Great news on the party! Will there be a +1 option this year?</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:31 AM</span></div></div></div>
+<div class="flex-g3-3"><div class="avatar-blue-purple-34">SC</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Sarah Chen</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Just finished the new onboarding designs. Sharing a preview in #design-team — feedback welcome! The new flow cuts 3 steps from the current process.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:45 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">🔥 6</span><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">👀 4</span></div></div></div></div>
+<div class="flex-g3-3"><div class="avatar-red-amber-34">TN</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Tom Nakamura</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Deployed the infrastructure updates this morning. Response times are down 40%. No downtime during the migration 🚀</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">10:02 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">🚀 9</span><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">💪 5</span></div></div></div></div>
+<div class="flex-g3-3"><div class="avatar-green-purple-34">AP</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Aisha Patel</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">@Tom amazing work on that deployment! The whole team was counting on smooth execution. Well done 👏</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">10:15 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">👏 7</span></div></div></div></div></div><div class="msgs-pane d-none-p-4-5-ov-y-auto-fl1" id="msgs-engineering"><div class="flex-g3-3"><div class="avatar-red-amber-34">TN</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Tom Nakamura</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Morning team. Sprint 24 starts today. Board is updated — 14 tickets in the backlog. Let's aim to close the auth refactor by Wed.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">8:30 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">👍 4</span></div></div></div></div>
+<div class="flex-g3-3"><div class="avatar-green-sky-34">MJ</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Marcus Johnson</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">On it. I'll pair with David on the auth work this morning. Should be done before lunch.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">8:45 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">💪 3</span></div></div></div></div>
+<div class="flex-g3-3"><div class="avatar-sky-blue-34">DK</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">David Kim</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Sounds good Marcus. Also found a weird edge case with the JWT refresh — will log a ticket and share the repro steps.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:00 AM</span></div></div></div></div><div class="msgs-pane d-none-p-4-5-ov-y-auto-fl1" id="msgs-design"><div class="flex-g3-3"><div class="avatar-blue-purple-34">SC</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Sarah Chen</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Here's the preview of the onboarding redesign. Main changes: simplified step 2, removed redundant fields, added progress indicator.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:50 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">😍 5</span><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">🔥 6</span></div></div></div></div>
+<div class="flex-g3-3"><div class="avatar-green-purple-34">AP</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Aisha Patel</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Love the progress indicator! That was the #1 feedback from user testing. When can we get this into dev?</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">10:05 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">✅ 4</span></div></div></div></div></div><div class="msgs-pane d-none-p-4-5-ov-y-auto-fl1" id="msgs-hr"><div class="flex-g3-3"><div class="avatar-purple-pink-34">ER</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Emily Rodriguez</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Performance review links are live. Please complete by Dec 20th. Self-review + peer review for everyone.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:00 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">👍 6</span></div></div></div></div>
+<div class="flex-g3-3"><div class="avatar-green-purple-34">AP</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Aisha Patel</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Also a reminder that holiday leave requests close Dec 14th. We have limited slots left for Dec 26-31.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:10 AM</span><div class="flex-g1"><span class="fs75-bg-bg-br999px-p-06-16-b-1-pointer">🙏 8</span></div></div></div></div></div><div class="msgs-pane d-none-p-4-5-ov-y-auto-fl1" id="msgs-dm1"><div class="flex-g3-3"><div class="avatar-blue-purple-34">SC</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Sarah Chen</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Hey! I pushed the new Figma file for the onboarding redesign. Can you review when you get a chance?</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">10:30 AM</span></div></div></div>
+<div class="flex-g3-2"><div class="avatar-blue-primary-dk2-34">YO</div><div class="flex-col-afe-mw72pct"><div class="fs875-c-white-bg-primary-p-25-35-lh-15-b-none-shadow">Sure! Just finished a meeting. Sending you my feedback in a few minutes.</div><div class="flex-ac-g2-mt1"><span class="fs7-muted">10:35 AM</span></div></div></div>
+<div class="flex-g3-3"><div class="avatar-blue-purple-34">SC</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Sarah Chen</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Amazing, thank you! Pay special attention to the mobile flow — that's the tricky part.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">10:38 AM</span></div></div></div>
+<div class="flex-g3-3"><div class="avatar-blue-purple-34">SC</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Sarah Chen</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Can you review the Figma file?</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">10:42 AM</span></div></div></div></div><div class="msgs-pane d-none-p-4-5-ov-y-auto-fl1" id="msgs-dm2"><div class="flex-g3-3"><div class="avatar-green-sky-34">MJ</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Marcus Johnson</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Morning! The auth refactor is done. PR is up — should be a straightforward review.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:15 AM</span></div></div></div>
+<div class="flex-g3-2"><div class="avatar-blue-primary-dk2-34">YO</div><div class="flex-col-afe-mw72pct"><div class="fs875-c-white-bg-primary-p-25-35-lh-15-b-none-shadow">Great timing. I'll look at it right after standup.</div><div class="flex-ac-g2-mt1"><span class="fs7-muted">9:20 AM</span></div></div></div>
+<div class="flex-g3-3"><div class="avatar-green-sky-34">MJ</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Marcus Johnson</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Auth PR is ready for review</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:31 AM</span></div></div></div></div><div class="msgs-pane d-none-p-4-5-ov-y-auto-fl1" id="msgs-dm3"><div class="flex-g3-3"><div class="avatar-red-amber-34">TN</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Tom Nakamura</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Heads up, I'm running the infra migration tonight around 9pm. Should be a quiet window.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">6:10 PM</span></div></div></div><div class="flex-g3-2"><div class="avatar-blue-primary-dk2-34">YO</div><div class="flex-col-afe-mw72pct"><div class="fs875-c-white-bg-primary-p-25-35-lh-15-b-none-shadow">Thanks for the heads up. Let me know if you need anyone on standby.</div><div class="flex-ac-g2-mt1"><span class="fs7-muted">6:14 PM</span></div></div></div><div class="flex-g3-3"><div class="avatar-red-amber-34">TN</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Tom Nakamura</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Should be fine solo, but I'll ping if anything looks off. Migration went clean, no downtime.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:52 PM</span></div></div></div><div class="flex-g3-3"><div class="avatar-red-amber-34">TN</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Tom Nakamura</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Deployment notes attached</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">9:53 PM</span></div></div></div></div><div class="msgs-pane d-none-p-4-5-ov-y-auto-fl1" id="msgs-dm4"><div class="flex-g3-2"><div class="avatar-blue-primary-dk2-34">YO</div><div class="flex-col-afe-mw72pct"><div class="fs875-c-white-bg-primary-p-25-35-lh-15-b-none-shadow">Hey Aisha, sent over the Q4 campaign brief for review whenever you get a chance.</div><div class="flex-ac-g2-mt1"><span class="fs7-muted">4:20 PM</span></div></div></div><div class="flex-g3-3"><div class="avatar-green-purple-34">AP</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Aisha Patel</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Perfect timing, I was just about to ask for it. Taking a look now.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">4:31 PM</span></div></div></div><div class="flex-g3-3"><div class="avatar-green-purple-34">AP</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Aisha Patel</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Thanks! Will review tonight</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">4:32 PM</span></div></div></div></div><div class="msgs-pane d-none-p-4-5-ov-y-auto-fl1" id="msgs-dm5"><div class="flex-g3-2"><div class="avatar-blue-primary-dk2-34">YO</div><div class="flex-col-afe-mw72pct"><div class="fs875-c-white-bg-primary-p-25-35-lh-15-b-none-shadow">Hi Emily, could you send over the leave application form? Planning some time off in December.</div><div class="flex-ac-g2-mt1"><span class="fs7-muted">11:05 AM</span></div></div></div><div class="flex-g3-3"><div class="avatar-purple-pink-34">ER</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Emily Rodriguez</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Of course! Just a heads up, slots for Dec 26-31 are filling up fast this year.</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">11:20 AM</span></div></div></div><div class="flex-g3-3"><div class="avatar-purple-pink-34">ER</div><div class="flex-col-afs-mw72pct"><div class="fs75-fw7-c-body-mb1">Emily Rodriguez</div><div class="fs875-c-body-bg-card-bg-p-25-35-lh-15-b-1-shadow">Leave form sent to your email</div><div class="flex-ac-g2-mt1-2"><span class="fs7-muted">11:22 AM</span></div></div></div></div>
+          <!-- Input area -->
+          <div class="chat-input-area">
+            <div class="chat-input-wrap" id="chatInputWrap">
+              <div class="flex-g1-shrink0">
+                <button class="c-muted-bg-none-br15-p-1-b-none-pointer" type="button" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--body-text-muted)'"><i class="bi bi-paperclip"></i></button>
+                <button class="c-muted-bg-none-br15-p-1-b-none-pointer" type="button" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--body-text-muted)'"><i class="bi bi-image"></i></button>
+                <button class="c-muted-bg-none-br15-p-1-b-none-pointer" type="button" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--body-text-muted)'"><i class="bi bi-emoji-smile"></i></button>
+              </div>
+              <input id="chatMsgInput" placeholder="Message # general..." onkeydown="if(event.key==='Enter')sendMsg()" oninput="updateSendBtn()" />
+              <button type="button" class="send-btn" id="sendBtn" onclick="sendMsg()"><i class="bi bi-send-fill fs75"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- New Message Modal -->
+<div class="modal fade" id="newMsgModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2 c-primary"></i>New Message</h5><button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button></div>
+    <div class="modal-body"><div class="row g-3">
+      <div class="col-12"><label class="form-label-hr">To</label>
+        <select class="hr-input"><option>Sarah Chen</option><option>Marcus Johnson</option><option>Tom Nakamura</option><option>Aisha Patel</option><option>Emily Rodriguez</option></select></div>
+      <div class="col-12"><label class="form-label-hr">Message</label><textarea class="hr-input" rows="4" placeholder="Type your message..."></textarea></div>
+    </div></div>
+    <div class="modal-footer"><button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn-hr btn-primary-hr" data-bs-dismiss="modal"><i class="bi bi-send me-1"></i>Send</button></div>
+  </div></div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ── Data ─────────────────────────────────────────────────────────── */
+var MESSAGES  = {"general": [{"id": 1, "from": "Aisha Patel", "init": "AP", "bg": "linear-gradient(135deg,#10B981,#7C3AED)", "time": "9:14 AM", "text": "Good morning everyone! \ud83d\udc4b Quick reminder \u2014 Q4 performance reviews are due by Dec 20th.", "reactions": [{"e": "\ud83d\udc4d", "n": 5}, {"e": "\u2705", "n": 3}]}, {"id": 2, "from": "Marcus Johnson", "init": "MJ", "bg": "linear-gradient(135deg,#10B981,#0EA5E9)", "time": "9:22 AM", "text": "Thanks for the heads up Aisha. Already have mine drafted. Is the form the same as last quarter?", "reactions": []}, {"id": 3, "from": "Emily Rodriguez", "init": "ER", "bg": "linear-gradient(135deg,#7C3AED,#EC4899)", "time": "9:25 AM", "text": "Yes, same form! I'll send the link to everyone shortly. Also \u2014 holiday party is confirmed for Dec 22nd at 6pm \ud83c\udf89", "reactions": [{"e": "\ud83c\udf89", "n": 8}, {"e": "\u2764\ufe0f", "n": 4}]}, {"id": 4, "from": "David Kim", "init": "DK", "bg": "linear-gradient(135deg,#0EA5E9,#5B8FF9)", "time": "9:31 AM", "text": "Great news on the party! Will there be a +1 option this year?", "reactions": []}, {"id": 5, "from": "Sarah Chen", "init": "SC", "bg": "linear-gradient(135deg,#5B8FF9,#7C3AED)", "time": "9:45 AM", "text": "Just finished the new onboarding designs. Sharing a preview in #design-team \u2014 feedback welcome! The new flow cuts 3 steps from the current process.", "reactions": [{"e": "\ud83d\udd25", "n": 6}, {"e": "\ud83d\udc40", "n": 4}]}, {"id": 6, "from": "Tom Nakamura", "init": "TN", "bg": "linear-gradient(135deg,#EF4444,#F59E0B)", "time": "10:02 AM", "text": "Deployed the infrastructure updates this morning. Response times are down 40%. No downtime during the migration \ud83d\ude80", "reactions": [{"e": "\ud83d\ude80", "n": 9}, {"e": "\ud83d\udcaa", "n": 5}]}, {"id": 7, "from": "Aisha Patel", "init": "AP", "bg": "linear-gradient(135deg,#10B981,#7C3AED)", "time": "10:15 AM", "text": "@Tom amazing work on that deployment! The whole team was counting on smooth execution. Well done \ud83d\udc4f", "reactions": [{"e": "\ud83d\udc4f", "n": 7}]}], "engineering": [{"id": 1, "from": "Tom Nakamura", "init": "TN", "bg": "linear-gradient(135deg,#EF4444,#F59E0B)", "time": "8:30 AM", "text": "Morning team. Sprint 24 starts today. Board is updated \u2014 14 tickets in the backlog. Let's aim to close the auth refactor by Wed.", "reactions": [{"e": "\ud83d\udc4d", "n": 4}]}, {"id": 2, "from": "Marcus Johnson", "init": "MJ", "bg": "linear-gradient(135deg,#10B981,#0EA5E9)", "time": "8:45 AM", "text": "On it. I'll pair with David on the auth work this morning. Should be done before lunch.", "reactions": [{"e": "\ud83d\udcaa", "n": 3}]}, {"id": 3, "from": "David Kim", "init": "DK", "bg": "linear-gradient(135deg,#0EA5E9,#5B8FF9)", "time": "9:00 AM", "text": "Sounds good Marcus. Also found a weird edge case with the JWT refresh \u2014 will log a ticket and share the repro steps.", "reactions": []}], "design": [{"id": 1, "from": "Sarah Chen", "init": "SC", "bg": "linear-gradient(135deg,#5B8FF9,#7C3AED)", "time": "9:50 AM", "text": "Here's the preview of the onboarding redesign. Main changes: simplified step 2, removed redundant fields, added progress indicator.", "reactions": [{"e": "\ud83d\ude0d", "n": 5}, {"e": "\ud83d\udd25", "n": 6}]}, {"id": 2, "from": "Aisha Patel", "init": "AP", "bg": "linear-gradient(135deg,#10B981,#7C3AED)", "time": "10:05 AM", "text": "Love the progress indicator! That was the #1 feedback from user testing. When can we get this into dev?", "reactions": [{"e": "\u2705", "n": 4}]}], "hr": [{"id": 1, "from": "Emily Rodriguez", "init": "ER", "bg": "linear-gradient(135deg,#7C3AED,#EC4899)", "time": "9:00 AM", "text": "Performance review links are live. Please complete by Dec 20th. Self-review + peer review for everyone.", "reactions": [{"e": "\ud83d\udc4d", "n": 6}]}, {"id": 2, "from": "Aisha Patel", "init": "AP", "bg": "linear-gradient(135deg,#10B981,#7C3AED)", "time": "9:10 AM", "text": "Also a reminder that holiday leave requests close Dec 14th. We have limited slots left for Dec 26-31.", "reactions": [{"e": "\ud83d\ude4f", "n": 8}]}]};
+var DM_MSGS   = {"dm1": [{"id": 1, "from": "Sarah Chen", "init": "SC", "bg": "linear-gradient(135deg,#5B8FF9,#7C3AED)", "time": "10:30 AM", "text": "Hey! I pushed the new Figma file for the onboarding redesign. Can you review when you get a chance?", "me": false}, {"id": 2, "from": "You", "init": "YO", "bg": "linear-gradient(135deg,#5B8FF9,#3B6FD9)", "time": "10:35 AM", "text": "Sure! Just finished a meeting. Sending you my feedback in a few minutes.", "me": true}, {"id": 3, "from": "Sarah Chen", "init": "SC", "bg": "linear-gradient(135deg,#5B8FF9,#7C3AED)", "time": "10:38 AM", "text": "Amazing, thank you! Pay special attention to the mobile flow \u2014 that's the tricky part.", "me": false}, {"id": 4, "from": "Sarah Chen", "init": "SC", "bg": "linear-gradient(135deg,#5B8FF9,#7C3AED)", "time": "10:42 AM", "text": "Can you review the Figma file?", "me": false}], "dm2": [{"id": 1, "from": "Marcus Johnson", "init": "MJ", "bg": "linear-gradient(135deg,#10B981,#0EA5E9)", "time": "9:15 AM", "text": "Morning! The auth refactor is done. PR is up \u2014 should be a straightforward review.", "me": false}, {"id": 2, "from": "You", "init": "YO", "bg": "linear-gradient(135deg,#5B8FF9,#3B6FD9)", "time": "9:20 AM", "text": "Great timing. I'll look at it right after standup.", "me": true}, {"id": 3, "from": "Marcus Johnson", "init": "MJ", "bg": "linear-gradient(135deg,#10B981,#0EA5E9)", "time": "9:31 AM", "text": "Auth PR is ready for review", "me": false}]};
+var DMS       = [{"id": "dm1", "name": "Sarah Chen", "init": "SC", "bg": "linear-gradient(135deg,#5B8FF9,#7C3AED)", "role": "UX Designer", "online": true, "unread": 2, "lastMsg": "Can you review the Figma file?", "time": "10:42 AM"}, {"id": "dm2", "name": "Marcus Johnson", "init": "MJ", "bg": "linear-gradient(135deg,#10B981,#0EA5E9)", "role": "Backend Eng", "online": true, "unread": 0, "lastMsg": "Auth PR is ready for review", "time": "9:31 AM"}, {"id": "dm3", "name": "Tom Nakamura", "init": "TN", "bg": "linear-gradient(135deg,#EF4444,#F59E0B)", "role": "DevOps", "online": false, "unread": 1, "lastMsg": "Deployment notes attached", "time": "Yesterday"}, {"id": "dm4", "name": "Aisha Patel", "init": "AP", "bg": "linear-gradient(135deg,#10B981,#7C3AED)", "role": "Marketing Lead", "online": true, "unread": 0, "lastMsg": "Thanks! Will review tonight", "time": "Yesterday"}, {"id": "dm5", "name": "Emily Rodriguez", "init": "ER", "bg": "linear-gradient(135deg,#7C3AED,#EC4899)", "role": "HR Specialist", "online": false, "unread": 0, "lastMsg": "Leave form sent to your email", "time": "Mon"}];
+var CHANNELS  = [{"id": "general", "label": "# general", "unread": 0, "icon": "bi-hash"}, {"id": "engineering", "label": "# engineering", "unread": 3, "icon": "bi-hash"}, {"id": "design", "label": "# design-team", "unread": 0, "icon": "bi-hash"}, {"id": "hr", "label": "# hr-updates", "unread": 2, "icon": "bi-hash"}];
+var _ch = 'general', _dm = null;
+
+/* ── Switch channel/DM ──────────────────────────────────────────── */
+function setChannel(chId, dmId) {
+  _ch = chId; _dm = dmId;
+  // Hide all panes
+  document.querySelectorAll('.msgs-pane').forEach(function(p){ p.style.display='none'; });
+  var paneId = dmId ? 'msgs-'+dmId : 'msgs-'+chId;
+  var pane = document.getElementById(paneId);
+  if (pane) { pane.style.display='flex'; pane.scrollTop=pane.scrollHeight; }
+  // Update active buttons
+  document.querySelectorAll('.ch-item,.dm-item').forEach(function(b){ b.classList.remove('active'); });
+  var activeId = dmId ? 'dm-'+dmId : 'ch-'+chId;
+  var activeBtn = document.getElementById(activeId);
+  if (activeBtn) {
+    activeBtn.classList.add('active');
+    // Opening a channel/DM should clear its unread indicator, same as
+    // any real chat app — this previously never happened.
+    var badge = activeBtn.querySelector('.unread-badge2, .badge-red-xs-fs6-p04-14');
+    if (badge) badge.remove();
+  }
+  // Update header
+  updateHeader(chId, dmId);
+  // Update input placeholder
+  var input = document.getElementById('chatMsgInput');
+  var name = dmId ? (DMS.find(function(d){return d.id===dmId;})||{name:'DM'}).name : (CHANNELS.find(function(c){return c.id===chId;})||{label:chId}).label;
+  if (input) input.placeholder = 'Message ' + name + '...';
+}
+
+function updateHeader(chId, dmId) {
+  var icon = document.getElementById('chatHeaderIcon');
+  var info = document.getElementById('chatHeaderInfo');
+  if (!icon || !info) return;
+  if (dmId) {
+    var dm = DMS.find(function(d){return d.id===dmId;});
+    if (!dm) return;
+    var onlineColor = dm.online ? '#10B981' : '#94A3B8';
+    var onlineText  = dm.online ? 'Online' : dm.role;
+    icon.style.background = dm.bg;
+    icon.style.borderRadius = '50%';
+    icon.innerHTML = '<span style="font-size:.8rem;font-weight:700;color:white">'+dm.init+'</span>';
+    info.innerHTML = '<div style="font-weight:700;font-size:.9375rem">'+dm.name+'</div><div style="font-size:.75rem;color:'+onlineColor+'">'+onlineText+'</div>';
+  } else {
+    icon.style.background = 'var(--color-primary-light)';
+    icon.style.borderRadius = '.625rem';
+    icon.innerHTML = '<i class="bi bi-hash" style="color:var(--color-primary);font-size:1.125rem"></i>';
+    var ch = CHANNELS.find(function(c){return c.id===chId;});
+    info.innerHTML = '<div style="font-weight:700;font-size:.9375rem">'+( ch?ch.label:chId )+'</div><div style="font-size:.75rem;color:var(--body-text-muted)">12 members</div>';
+  }
+}
+
+/* ── Send message ────────────────────────────────────────────────── */
+function sendMsg() {
+  var input = document.getElementById('chatMsgInput');
+  var text  = input ? input.value.trim() : '';
+  if (!text) return;
+  var paneId = _dm ? 'msgs-'+_dm : 'msgs-'+_ch;
+  var pane   = document.getElementById(paneId);
+  if (!pane) return;
+  var now  = new Date();
+  var time = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  var bubble = document.createElement('div');
+  bubble.style.cssText = 'display:flex;gap:.75rem;flex-direction:row-reverse';
+  bubble.innerHTML =
+    '<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#5B8FF9,#3B6FD9);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:.8rem;flex-shrink:0;margin-top:.25rem">YO</div>'+
+    '<div style="max-width:72%;display:flex;flex-direction:column;align-items:flex-end">'+
+    '<div style="background:var(--color-primary);color:white;padding:.625rem .875rem;border-radius:1rem 1rem 0 1rem;box-shadow:0 2px 8px rgba(91,143,249,.35);font-size:.875rem;line-height:1.5">'+
+    text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>'+
+    '<div style="display:flex;align-items:center;gap:.5rem;margin-top:.25rem"><span style="font-size:.7rem;color:var(--body-text-muted)">'+time+'</span></div>'+
+    '</div>';
+  pane.appendChild(bubble);
+  pane.scrollTop = pane.scrollHeight;
+  input.value = '';
+  updateSendBtn();
+}
+
+function updateSendBtn() {
+  var input = document.getElementById('chatMsgInput');
+  var btn   = document.getElementById('sendBtn');
+  if (!input || !btn) return;
+  var has = input.value.trim().length > 0;
+  btn.classList.toggle('active', has);
+}
+
+function searchChannels(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.ch-item,.dm-item').forEach(function(btn){
+    var text = btn.textContent.toLowerCase();
+    btn.style.display = (!q || text.includes(q)) ? '' : 'none';
+  });
+}
+
+/* ── Init: activate general channel + scroll msgs ─────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  setChannel('general', null);
+  var ch1 = document.getElementById('ch-general');
+  if (ch1) ch1.classList.add('active');
+});
+</script>
+</body>
+</html>

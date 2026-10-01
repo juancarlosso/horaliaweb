@@ -1,0 +1,113 @@
+@use '../abstracts' as *;
+@use 'sass:color';
+
+.topbar {
+  height: var(--topbar-height);
+  background: var(--topbar-bg);
+  border-bottom: 1px solid var(--topbar-border);
+  box-shadow: var(--topbar-shadow);
+  display: flex; align-items: center;
+  padding: 0 1.5rem; gap: 1rem;
+  position: sticky; top: 0;
+  z-index: $z-topbar;
+  transition: background $transition-base, border-color $transition-base;
+}
+
+.topbar-left  { display: flex; align-items: center; gap: 0.875rem; flex: 1; min-width: 0; }
+.topbar-right { display: flex; align-items: center; gap: 0.375rem; }
+
+// ── Icon buttons ──────────────────────────────────────────────────────────────
+.btn-top-icon {
+  width: 36px; height: 36px; border-radius: 0.5625rem;
+  border: 1px solid var(--body-border); background: var(--card-bg);
+  color: var(--body-text-muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all $transition-fast;
+  font-size: 0.9375rem; position: relative; font-family: var(--font);
+
+  &:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--color-primary-light);
+    box-shadow: 0 0 0 3px var(--color-primary-glow);
+  }
+  @include focus-ring;
+}
+
+.badge-dot {
+  position: absolute; top: 6px; right: 6px;
+  width: 7px; height: 7px;
+  background: $danger; border-radius: 50%;
+  border: 2px solid var(--card-bg);
+}
+
+// ── Search ────────────────────────────────────────────────────────────────────
+.topbar-search { position: relative; flex: 1; max-width: 280px; }
+
+.topbar-search-icon {
+  position: absolute; left: 0.875rem; top: 50%;
+  transform: translateY(-50%);
+  color: var(--body-text-muted);
+  font-size: 0.8125rem; pointer-events: none;
+}
+
+.topbar-search-input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.375rem;
+  border: 1px solid var(--body-border);
+  border-radius: 2rem;
+  background: var(--body-bg);
+  color: var(--body-text);
+  font-size: 0.845rem; font-family: var(--font);
+  transition: all $transition-fast; outline: none;
+
+  &::placeholder { color: var(--body-text-muted); }
+  &:focus {
+    border-color: var(--color-primary);
+    background: var(--card-bg);
+    box-shadow: 0 0 0 3px var(--color-primary-glow);
+  }
+}
+
+// ── Breadcrumb ────────────────────────────────────────────────────────────────
+.topbar-breadcrumb {
+  font-size: 0.775rem; color: var(--body-text-muted);
+  display: flex; align-items: center; gap: 0.2rem;
+  white-space: nowrap; flex-shrink: 0;
+}
+.bc-sep     { opacity: 0.5; }
+.bc-current { color: var(--body-text); font-weight: $font-weight-bold; }
+
+// ── Avatar ────────────────────────────────────────────────────────────────────
+.topbar-avatar {
+  width: 36px; height: 36px; border-radius: 0.5625rem;
+  background: linear-gradient(135deg, $primary, $secondary);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: $font-weight-black; font-size: 0.8125rem;
+  cursor: pointer;
+  border: 2px solid rgba($primary, 0.25);
+  transition: all $transition-fast;
+
+  &:hover { box-shadow: 0 0 0 3px rgba($primary, 0.25); }
+}
+
+// ── Dropdown panels ───────────────────────────────────────────────────────────
+.hr-panel {
+  position: absolute; top: calc(100% + 10px); right: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--body-border);
+  border-radius: 0.875rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+  z-index: $z-popup; overflow: hidden;
+  animation: fade-in-down 0.18s cubic-bezier(0.4, 0, 0.2, 1) both;
+  @include scrollbar;
+}
+
+// ── Dark / light toggle icons ─────────────────────────────────────────────────
+.theme-icon-light { display: block; }
+.theme-icon-dark  { display: none; }
+
+[data-bs-theme="dark"] {
+  .theme-icon-light { display: none; }
+  .theme-icon-dark  { display: block; }
+}

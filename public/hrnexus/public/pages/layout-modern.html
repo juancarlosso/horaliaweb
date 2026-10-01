@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Modern Sidebar Layout — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Modern sidebar layout variant with refreshed spacing and typography."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+
+<style id="layout-css">
+/* Override default sidebar */
+.sidebar { display: none !important; }
+.main-content { margin-left: 0 !important; }
+
+/* Modern sidebar — gradient background with glass cards */
+.sb-modern {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: 260px; z-index: 1000;
+  background: linear-gradient(160deg, #0F0C29, #302b63, #24243e);
+  display: flex; flex-direction: column;
+  transition: width .28s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
+.sb-modern.slim { width: 72px; }
+
+/* Brand area with glow */
+.sbm-brand {
+  display: flex; align-items: center; gap: .875rem;
+  padding: 1.25rem 1.125rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  text-decoration: none; flex-shrink: 0;
+}
+.sbm-logo {
+  width: 38px; height: 38px; border-radius: 12px; flex-shrink: 0;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 1rem;
+  box-shadow: 0 0 20px rgba(102,126,234,.5);
+}
+.sbm-name { font-size: 1rem; font-weight: 800; color: #fff; letter-spacing: -.02em; }
+.sbm-tag  { font-size: .6rem; color: rgba(255,255,255,.4); letter-spacing: .1em;
+  text-transform: uppercase; font-weight: 600; }
+
+/* Section labels */
+.sbm-section {
+  font-size: .6rem; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(255,255,255,.28);
+  padding: .875rem 1.125rem .3rem;
+}
+.sb-modern.slim .sbm-section,
+.sb-modern.slim .sbm-name,
+.sb-modern.slim .sbm-tag { display: none; }
+
+/* Nav wrapper */
+.sbm-nav { flex: 1; overflow-y: auto; padding: .5rem .75rem;
+  scrollbar-width: none; }
+.sbm-nav::-webkit-scrollbar { display: none; }
+
+/* Nav item — glass pill */
+.sbm-li { margin-bottom: 2px; }
+.sbm-lnk {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .6rem .875rem; border-radius: .875rem;
+  color: rgba(255,255,255,.55); font-size: .845rem; font-weight: 500;
+  text-decoration: none; cursor: pointer; transition: all .15s;
+  background: transparent; border: none; width: 100%; text-align: left;
+  font-family: var(--font); white-space: nowrap; position: relative;
+}
+.sbm-lnk:hover { background: rgba(255,255,255,.08); color: rgba(255,255,255,.9); }
+.sbm-lnk.active {
+  background: linear-gradient(135deg, rgba(102,126,234,.35), rgba(118,75,162,.35));
+  color: #fff; font-weight: 700;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.12) inset;
+}
+.sbm-lnk.active .sbm-icon { color: #a78bfa; filter: drop-shadow(0 0 6px rgba(167,139,250,.6)); }
+.sbm-icon { width: 20px; height: 20px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+.sbm-text { flex: 1; }
+.sbm-badge { background: linear-gradient(135deg,#667eea,#764ba2);
+  color: #fff; font-size: .6rem; font-weight: 800;
+  padding: .1rem .4rem; border-radius: 999px; }
+.sbm-chevron { font-size: .6rem; color: rgba(255,255,255,.3); transition: transform .22s; }
+.sbm-lnk.open .sbm-chevron { transform: rotate(90deg); }
+
+/* Group children */
+.sbm-children { max-height: 0; overflow: hidden; transition: max-height .28s; }
+.sbm-children.open { max-height: 600px; }
+.sbm-child {
+  display: flex; align-items: center; gap: .625rem;
+  padding: .45rem .875rem .45rem 2.375rem;
+  border-radius: .625rem; color: rgba(255,255,255,.45);
+  font-size: .8rem; font-weight: 500; text-decoration: none;
+  transition: all .13s; cursor: pointer; background: none;
+  border: none; width: 100%; font-family: var(--font); white-space: nowrap;
+}
+.sbm-child:hover { background: rgba(255,255,255,.06); color: rgba(255,255,255,.8); }
+.sbm-child.active { color: #a78bfa; font-weight: 700; }
+.sbm-child::before { content: ''; width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(255,255,255,.25); flex-shrink: 0; }
+.sbm-child.active::before { background: #a78bfa; box-shadow: 0 0 6px rgba(167,139,250,.7); }
+
+/* Slim mode */
+.sb-modern.slim .sbm-text, .sb-modern.slim .sbm-badge,
+.sb-modern.slim .sbm-chevron { display: none; }
+.sb-modern.slim .sbm-lnk { justify-content: center; padding: .625rem; border-radius: .75rem; }
+.sb-modern.slim .sbm-children { max-height: 0 !important; }
+
+/* Sidebar footer — user card */
+.sbm-footer {
+  padding: .875rem; border-top: 1px solid rgba(255,255,255,.06);
+  flex-shrink: 0;
+}
+.sbm-user {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .75rem .875rem; border-radius: .875rem;
+  background: rgba(255,255,255,.06); cursor: pointer;
+  transition: background .15s;
+}
+.sbm-user:hover { background: rgba(255,255,255,.1); }
+.sbm-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 800; font-size: .875rem;
+}
+.sbm-uname { font-size: .845rem; font-weight: 700; color: rgba(255,255,255,.9); }
+.sbm-urole { font-size: .72rem; color: rgba(255,255,255,.4); }
+.sb-modern.slim .sbm-footer { padding: .625rem .75rem; }
+.sb-modern.slim .sbm-uname, .sb-modern.slim .sbm-urole { display: none; }
+.sb-modern.slim .sbm-user { justify-content: center; padding: .625rem; }
+
+/* Main content area */
+.main-modern {
+  margin-left: 260px; min-height: 100vh;
+  background: var(--body-bg);
+  display: flex; flex-direction: column;
+  transition: margin-left .28s cubic-bezier(.4,0,.2,1);
+}
+.main-modern.slim { margin-left: 72px; }
+.topbar-modern {
+  position: sticky; top: 0; z-index: 999;
+  height: var(--topbar-height); display: flex; align-items: center;
+  padding: 0 1.5rem; gap: 1rem;
+  background: var(--topbar-bg); border-bottom: 1px solid var(--topbar-border);
+  box-shadow: var(--topbar-shadow);
+}
+</style>
+</head>
+<body>
+
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<nav class="sb-modern" id="sbModern">
+  <a class="sbm-brand" href="../index.html">
+    <div class="sbm-logo"><i class="bi bi-people-fill"></i></div>
+    <div><div class="sbm-name">HRNexus</div><div class="sbm-tag">Admin Suite</div></div>
+  </a>
+  <div class="sbm-nav">
+<div class="sbm-section">Navigation</div>
+<div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-grid-1x2-fill"></i></span>
+    <span class="sbm-text">Dashboards</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="../index.html" class="sbm-child">Main Dashboard</a><a href="dashboard-ecommerce.html" class="sbm-child">E-Commerce</a><a href="dashboard-employees.html" class="sbm-child">Employees</a><a href="dashboard-leads.html" class="sbm-child">Leads</a><a href="dashboard-hr.html" class="sbm-child">HR</a><a href="dashboard-it.html" class="sbm-child">IT Admin</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-people-fill"></i></span>
+    <span class="sbm-text">HR Core</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="employees.html" class="sbm-child">Employees</a><a href="recruitment.html" class="sbm-child">Recruitment</a><a href="attendance.html" class="sbm-child">Attendance</a><a href="leaves.html" class="sbm-child">Leave Mgmt</a><a href="payroll.html" class="sbm-child">Payroll</a><a href="performance.html" class="sbm-child">Performance</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-chat-square-text-fill"></i></span>
+    <span class="sbm-text">Communication</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="chat.html" class="sbm-child">Team Chat</a><a href="email.html" class="sbm-child">Email</a><a href="calendar.html" class="sbm-child">Calendar</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-gear-fill"></i></span>
+    <span class="sbm-text">Operations</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="training.html" class="sbm-child">Training & Dev</a><a href="announcements.html" class="sbm-child">Announcements</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-files"></i></span>
+    <span class="sbm-text">Pages</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="pricing.html" class="sbm-child">Pricing Plans</a><a href="faq.html" class="sbm-child">FAQ</a><a href="coming-soon.html" class="sbm-child">Coming Soon</a><a href="profile.html" class="sbm-child">Employee Profile</a><a href="roles.html" class="sbm-child">Roles & Permissions</a><a href="blog-grid.html" class="sbm-child">Blog Grid</a><a href="blog-list.html" class="sbm-child">Blog List</a><a href="blog-detail.html" class="sbm-child">Blog Detail</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-exclamation-octagon-fill"></i></span>
+    <span class="sbm-text">Error Pages</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="error-simple.html" class="sbm-child">Error: Simple</a><a href="error-cover.html" class="sbm-child">Error: Cover</a><a href="error-full.html" class="sbm-child">Error: Full</a><a href="under-construction-1.html" class="sbm-child">Under Construction 1</a><a href="under-construction-2.html" class="sbm-child">Under Construction 2</a><a href="under-construction-3.html" class="sbm-child">Under Construction 3</a><a href="blank.html" class="sbm-child">Blank Page</a><a href="activity.html" class="sbm-child">Activity Log</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-folder-fill"></i></span>
+    <span class="sbm-text">Files & Billing</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="files.html" class="sbm-child">File Manager</a><a href="invoice-classic.html" class="sbm-child">Invoice: Classic</a><a href="invoice-modern.html" class="sbm-child">Invoice: Modern</a><a href="invoice-minimal.html" class="sbm-child">Invoice: Minimal</a><a href="invoice-create.html" class="sbm-child">Create Invoice</a><a href="invoice-manager.html" class="sbm-child">Invoice Manager</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span>
+    <span class="sbm-text">UI Components</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="ui-accordion.html" class="sbm-child">Accordion</a><a href="ui-alerts.html" class="sbm-child">Alerts</a><a href="ui-badge.html" class="sbm-child">Badge</a><a href="ui-buttons.html" class="sbm-child">Buttons</a><a href="ui-cards.html" class="sbm-child">Cards</a><a href="ui-carousel.html" class="sbm-child">Carousel</a><a href="ui-modal.html" class="sbm-child">Modal</a><a href="ui-tabs.html" class="sbm-child">Tabs</a><a href="ui-typography.html" class="sbm-child">Typography</a><a href="avatars.html" class="sbm-child">Avatars</a><a href="card-designs.html" class="sbm-child">Card Designs</a><a href="drag-drop.html" class="sbm-child">Drag & Drop</a><a href="swiper.html" class="sbm-child">Swiper Sliders</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-emoji-smile-fill"></i></span>
+    <span class="sbm-text">Icons</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="icons-bootstrap.html" class="sbm-child">Bootstrap Icons</a><a href="icons-lucide.html" class="sbm-child">Lucide Icons</a><a href="icons-fontawesome.html" class="sbm-child">Font Awesome</a><a href="icons-flaticon.html" class="sbm-child">Flaticon</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-table"></i></span>
+    <span class="sbm-text">Forms & Tables</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="form-elements.html" class="sbm-child">Form Elements</a><a href="form-layouts.html" class="sbm-child">Form Layouts</a><a href="tables-bootstrap.html" class="sbm-child">Bootstrap Tables</a><a href="tables-datatable.html" class="sbm-child">DataTables</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-shield-lock-fill"></i></span>
+    <span class="sbm-text">Authentication</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="login-basic.html" class="sbm-child">Login: Basic</a><a href="login-cover.html" class="sbm-child">Login: Cover</a><a href="login-frame.html" class="sbm-child">Login: Frame</a><a href="register-basic.html" class="sbm-child">Register: Basic</a><a href="register-cover.html" class="sbm-child">Register: Cover</a><a href="forgot-password.html" class="sbm-child">Forgot Password</a><a href="new-password.html" class="sbm-child">New Password</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-pie-chart-fill"></i></span>
+    <span class="sbm-text">Chart & Map Libs</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="chart-libs.html" class="sbm-child">Chart Libraries</a><a href="map-libs.html" class="sbm-child">Map Libraries</a><a href="sidebar-menu.html" class="sbm-child">Sidebar Menu</a></div>
+</div><div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-layout-three-columns"></i></span>
+    <span class="sbm-text">Layouts</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="layout-horizontal.html" class="sbm-child">Horizontal</a><a href="layout-detached.html" class="sbm-child">Detached Sidebar</a><a href="layout-modern.html" class="sbm-child active">Modern Sidebar</a><a href="layout-twocol.html" class="sbm-child">Two Column Sidebar</a><a href="layout-hover.html" class="sbm-child">Hover Sidebar</a><a href="layout-boxed.html" class="sbm-child">Boxed Layout</a></div>
+</div><div class="sbm-section">Intelligence</div>
+<div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-stars"></i></span>
+    <span class="sbm-text">AI Features</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="ai-resume-screener.html" class="sbm-child">Resume Screener</a><a href="ai-attrition-risk.html" class="sbm-child">Attrition Risk</a><a href="ai-performance-summary.html" class="sbm-child">Performance AI</a><a href="ai-hr-chatbot.html" class="sbm-child">HR Chatbot</a></div>
+</div><div class="sbm-section">Data</div>
+<div class="sbm-li">
+  <button type="button" class="sbm-lnk" onclick="sbmToggle(this)">
+    <span class="sbm-icon"><i class="bi bi-bar-chart-fill"></i></span>
+    <span class="sbm-text">Analytics</span>
+    <i class="bi bi-chevron-right sbm-chevron"></i>
+  </button>
+  <div class="sbm-children"><a href="analytics.html" class="sbm-child">Analytics</a><a href="reports.html" class="sbm-child">Reports</a></div>
+</div>  </div>
+  <div class="sbm-footer">
+    <div class="sbm-user">
+      <div class="sbm-avatar">R</div>
+      <div><div class="sbm-uname">Ravindra S.</div><div class="sbm-urole">HR Manager</div></div>
+    </div>
+  
+</div>
+</nav>
+<div class="main-modern" id="mainModern">
+  <header class="topbar-modern">
+    <button type="button" class="btn-icon-top" id="sbmToggleBtn" aria-label="Toggle sidebar">
+      <i class="bi bi-list" style="font-size:1.25rem"></i>
+    </button>
+    <nav class="breadcrumb-bar" aria-label="Breadcrumb">
+      <span>HRNexus</span><span class="bc-sep">/</span>
+      <span>Layouts</span><span class="bc-sep">/</span>
+      <span class="bc-current">Modern Sidebar</span>
+    </nav>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:.375rem">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications"><i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span></button>
+    <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-w260" id="profile-panel">
+        <div class="card-bd p-45">
+          <div class="flex-ac-g35-mb4">
+            <div class="icon-box-primary-violet-48-fs1125">R</div>
+            <div>
+              <div class="fw7-fs9375-body">Ravindra S.</div>
+              <div class="fs775-muted">HR Manager</div>
+              <div class="flex-ac-g1-mt05">
+                <span class="d-iblock-sq6px-bg-green"></span>
+                <span class="fs7-fw6-c-green">Online</span>
+              </div>
+            </div>
+          </div>
+          <div class="divider-hr m-2-0"></div>
+          <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+          <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+          <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help &amp; Support</a>
+          <div class="divider-hr m-2-0"></div>
+          <div class="flex-ac-jsb-p-1-0">
+            <span class="fs8-muted">Appearance</span>
+            <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+              <i class="bi bi-sun-fill theme-icon-light"></i>
+              <i class="bi bi-moon-fill theme-icon-dark"></i>
+            </button>
+          </div>
+          <div class="divider-hr m-2-0"></div>
+          <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+            <i class="bi bi-box-arrow-right"></i> Sign Out
+          </a>
+        </div>
+      </div>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <div class="page-content">
+    <div class="page-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Modern Sidebar Layout</h1>
+          <p class="page-subtitle">Deep gradient sidebar with glassmorphism item styling, glow effects on active items, purple accent palette, and a built-in user profile card at the bottom.</p>
+        </div>
+        <div style="display:flex;gap:.5rem">
+          <button type="button" class="btn-hr btn-outline-hr">
+            <i class="bi bi-grid me-1"></i>Switch Layout
+          </button>
+          <button type="button" class="btn-hr btn-primary-hr">
+            <i class="bi bi-plus-lg me-1"></i>Add Employee
+          </button>
+        </div>
+      </div>
+      <!-- Stat cards row -->
+      <div class="row g-3 mb-1rem">
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-blue">
+            <div class="stat-icon" style="background:rgba(79,110,247,.12);color:#4F6EF7"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-value">284</div>
+            <div class="stat-label">Total Employees</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+12 this month</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-green">
+            <div class="stat-icon" style="background:rgba(16,185,129,.12);color:#10B981"><i class="bi bi-calendar-check-fill"></i></div>
+            <div class="stat-value">96.2%</div>
+            <div class="stat-label">Attendance</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+1.4%</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-amber">
+            <div class="stat-icon" style="background:rgba(245,158,11,.12);color:#F59E0B"><i class="bi bi-credit-card-fill"></i></div>
+            <div class="stat-value">₹2.84Cr</div>
+            <div class="stat-label">Monthly Payroll</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-check-circle-fill"></i>Processed</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-violet">
+            <div class="stat-icon" style="background:rgba(139,92,246,.12);color:#8B5CF6"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="stat-value">4.2%</div>
+            <div class="stat-label">Attrition</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-down-right"></i>-0.8%</div>
+          </div>
+        </div>
+      </div>
+      <!-- Content row -->
+      <div class="row g-4">
+        <div class="col-12 col-xl-8">
+          <div class="card-hr">
+            <div class="card-hd">
+              <div class="card-title-hr">Employee Directory</div>
+              <span class="badge-primary-xs">Active</span>
+            </div>
+            <div class="table-wrap">
+              <table class="hr-table">
+                <thead><tr><th>Name</th><th>Department</th><th>Role</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#4F6EF7,#8B5CF6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">SC</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Sarah Chen</div><div style="font-size:.72rem;color:var(--body-text-muted)">sarah.chen@hr.io</div></div></div></td><td>Product</td><td>Sr UX Designer</td><td><span class="badge-st st-active">Active</span></td></tr>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#10B981,#06B6D4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">MJ</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Marcus Johnson</div><div style="font-size:.72rem;color:var(--body-text-muted)">m.johnson@hr.io</div></div></div></td><td>Engineering</td><td>Backend Lead</td><td><span class="badge-st st-active">Active</span></td></tr>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#F59E0B,#EF4444);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">PN</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Priya Nair</div><div style="font-size:.72rem;color:var(--body-text-muted)">p.nair@hr.io</div></div></div></td><td>Product</td><td>Product Manager</td><td><span class="badge-st st-active">Active</span></td></tr>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#8B5CF6,#EC4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">RD</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Ravi Das</div><div style="font-size:.72rem;color:var(--body-text-muted)">r.das@hr.io</div></div></div></td><td>Engineering</td><td>DevOps Engineer</td><td><span class="badge-st st-pending">On Leave</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-xl-4">
+          <div class="card-hr mb-1rem">
+            <div class="card-hd"><div class="card-title-hr">Quick Actions</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.5rem">
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-person-plus-fill" style="color:var(--color-primary)"></i>Add New Employee</button>
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-calendar-check-fill" style="color:#10B981"></i>Mark Attendance</button>
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-credit-card-fill" style="color:#F59E0B"></i>Run Payroll</button>
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-graph-up-arrow" style="color:#8B5CF6"></i>View Analytics</button>
+            </div>
+          </div>
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Department Split</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.625rem">
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Engineering</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:34%;height:100%;background:linear-gradient(90deg,#4F6EF7,#8B5CF6);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">96</span></div>
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Product</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:19%;height:100%;background:linear-gradient(90deg,#10B981,#06B6D4);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">54</span></div>
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Sales</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:16%;height:100%;background:linear-gradient(90deg,#F59E0B,#F97316);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">46</span></div>
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">HR</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:9%;height:100%;background:linear-gradient(90deg,#8B5CF6,#EC4899);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">26</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+var sbm    = document.getElementById('sbModern');
+var mm     = document.getElementById('mainModern');
+var popup  = document.getElementById('sb-main-popup');
+var popupOpenBtn = null;
+
+document.getElementById('sbmToggleBtn').addEventListener('click', function() {
+  sbm.classList.toggle('slim');
+  mm.classList.toggle('slim');
+  closeFlyout();
+});
+
+/* ── Single-open accordion ──────────────────────────────────────────
+   Opening one group now closes any other open group first, instead of
+   letting multiple groups stay open independently. */
+function sbmToggle(btn) {
+  var children = btn.nextElementSibling;
+  if (!children) return;
+
+  // Collapsed sidebar: pop the submenu out to the right instead of
+  // expanding inline (there's no room for labels when slim).
+  if (sbm.classList.contains('slim')) {
+    if (popupOpenBtn === btn) { closeFlyout(); return; }
+    closeFlyout();
+    openFlyoutFor(btn, children);
+    return;
+  }
+
+  var willOpen = !children.classList.contains('open');
+
+  document.querySelectorAll('.sbm-children.open').forEach(function(c) {
+    if (c !== children) c.classList.remove('open');
+  });
+  document.querySelectorAll('.sbm-lnk.open').forEach(function(b) {
+    if (b !== btn) b.classList.remove('open');
+  });
+
+  children.classList.toggle('open', willOpen);
+  btn.classList.toggle('open', willOpen);
+}
+
+/* ── Flyout popup for the collapsed/slim sidebar ────────────────────
+   Clicking a group icon while collapsed shows a real flyout menu,
+   positioned from the icon's actual on-screen location, instead of
+   doing nothing (the group bodies are force-collapsed when slim). */
+function closeFlyout() {
+  popup.classList.remove('visible');
+  popup.setAttribute('aria-hidden', 'true');
+  if (popupOpenBtn) popupOpenBtn.classList.remove('open', 'popup-open');
+  popupOpenBtn = null;
+}
+
+function openFlyoutFor(btn, children) {
+  var title = btn.querySelector('.sbm-text')?.textContent?.trim() || '';
+  var links = children.querySelectorAll('.sbm-child');
+
+  var html = title ? '<div class="popup-title">' + title + '</div>' : '';
+  links.forEach(function(link) {
+    // Clone each real sidebar link so the flyout always matches the actual
+    // sbm-children content (labels, hrefs) rather than duplicating it by
+    // hand and risking the two falling out of sync.
+    html += link.cloneNode(true).outerHTML;
+  });
+  popup.innerHTML = html;
+
+  // Make it paint (invisibly) before measuring — offsetHeight reads 0
+  // while display:none, which would silently break the overflow checks
+  // below for icons near the bottom of the sidebar.
+  popup.style.visibility = 'hidden';
+  popup.classList.add('visible');
+  var popupHeight = popup.offsetHeight;
+
+  var rect = btn.getBoundingClientRect();
+  popup.style.left = Math.round(rect.right + 8) + 'px';
+
+  var spaceBelow = window.innerHeight - rect.top - 16;
+  var spaceAbove = rect.bottom - 16;
+  if (popupHeight > spaceBelow && spaceAbove >= popupHeight) {
+    // Not enough room to grow downward from the icon — flip to anchor
+    // from its bottom edge and grow upward instead, so the whole
+    // submenu stays on screen.
+    popup.style.top = 'auto';
+    popup.style.bottom = Math.round(window.innerHeight - rect.bottom) + 'px';
+  } else {
+    popup.style.bottom = 'auto';
+    var top = Math.round(rect.top);
+    var maxTop = window.innerHeight - popupHeight - 16;
+    popup.style.top = Math.max(8, Math.min(top, maxTop)) + 'px';
+  }
+
+  popup.style.visibility = '';
+  popup.setAttribute('aria-hidden', 'false');
+  btn.classList.add('popup-open', 'open');
+  popupOpenBtn = btn;
+}
+
+document.addEventListener('click', function(e) {
+  if (popupOpenBtn && !popup.contains(e.target) && !popupOpenBtn.contains(e.target)) {
+    closeFlyout();
+  }
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeFlyout();
+});
+window.addEventListener('resize', closeFlyout);
+
+// On narrow screens, the full 260px-wide sidebar leaves very little room
+// for actual page content. Start collapsed there instead — every group is
+// still fully reachable via the flyout popup above, which is tap-friendly
+// and doesn't depend on hover.
+if (window.innerWidth <= 900) {
+  sbm.classList.add('slim');
+  mm.classList.add('slim');
+}
+</script>
+</body>
+</html>

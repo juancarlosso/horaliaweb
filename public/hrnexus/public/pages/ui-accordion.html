@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Accordion — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Accordion component reference with collapsible content sections."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar">
+        <i class="bi bi-list fs125"></i>
+      </button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb">
+        <span>HRNexus</span><span class="bc-sep">/</span>
+        <span>UI Components</span><span class="bc-sep">/</span>
+        <span class="bc-current">Accordion</span>
+      </nav>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Accordion</h1>
+          <p class="page-subtitle">12 accordion variants — collapsible panels for every use case</p>
+        </div>
+        <div class="flex-g2-wrap">
+          <button type="button" class="btn-hr btn-outline-hr" onclick="expandAll()">
+            <i class="bi bi-arrows-expand me-1"></i>Expand All
+          </button>
+          <button type="button" class="btn-hr btn-outline-hr" onclick="collapseAll()">
+            <i class="bi bi-arrows-collapse me-1"></i>Collapse All
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-4">
+
+        <!-- ── 1. Default Accordion ──────────────────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Default Accordion</div>
+                <div class="card-subtitle-hr">One panel open at a time (exclusive)</div>
+              </div>
+              <span class="badge bg-primary bg-opacity-10 text-primary fs72-fw7-br999px-p-1-25">Exclusive</span>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group" data-exclusive="true">
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span><i class="bi bi-building me-2 c-primary"></i>What is HRNexus?</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    HRNexus is a comprehensive HR management platform that helps teams manage employees, payroll, attendance, performance reviews, and more — all in one unified dashboard built for modern enterprises.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span><i class="bi bi-credit-card me-2 c-green"></i>How does payroll processing work?</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Payroll is processed automatically at month-end. The system calculates gross pay, PF/ESI/TDS deductions, and net disbursements — then generates payslips for every employee with full audit trails.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span><i class="bi bi-upload me-2 c-amber"></i>Can I import existing employee data?</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Yes! HRNexus supports bulk import via CSV or Excel. Download the template, fill in data, and upload. The system validates fields automatically and highlights errors before committing changes.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span><i class="bi bi-calendar2-check me-2 c-purple"></i>What leave policies are supported?</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Annual, Sick, Maternity/Paternity, Casual, Compensatory, and fully custom leave types defined per your company policy. Carry-forward rules and holiday calendars per region are also supported.
+                  </div>
+                </div>
+                <div class="acc-item mb0">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span><i class="bi bi-graph-up-arrow me-2 c-red"></i>How are performance reviews managed?</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Reviews run on configurable cycles — monthly, quarterly, or annually. Managers rate on predefined KPIs, peers submit 360° feedback, and the platform aggregates scores into visual dashboards.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 2. Multi-Open Accordion ───────────────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Multi-Open Accordion</div>
+                <div class="card-subtitle-hr">Multiple panels can be open simultaneously</div>
+              </div>
+              <span class="badge bg-success bg-opacity-10 text-success fs72-fw7-br999px-p-1-25">Multi</span>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group" data-exclusive="false">
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span>🏖️ Annual Leave Policy</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    Full-time employees accrue 1.5 days/month (18 days/year). Unused leave carries over up to a maximum of 30 days. Requests must be submitted at least 3 business days in advance.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span>🤒 Sick Leave Policy</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    10 days per year (non-carry-forward). Medical certificate required for absences exceeding 3 consecutive days. Sick leave cannot be encashed and is separate from casual leave.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>👶 Maternity / Paternity Leave</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Maternity: 26 weeks fully paid for the first two children. Paternity: 15 days paid leave. Adoption leave: 12 weeks. All types include job security and return-to-work guarantees.
+                  </div>
+                </div>
+                <div class="acc-item mb0">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>🔄 Compensatory Off Policy</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Comp-off is granted for weekend/holiday work. Requests must be raised within 7 days of the worked day and consumed within 60 days. Unconsumed comp-off expires automatically.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 3. Flush Accordion ─────────────────────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Flush Accordion</div>
+                <div class="card-subtitle-hr">No borders or rounded corners — minimal line separators</div>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group acc-flush" data-exclusive="true">
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span>Remote Work Guidelines</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    Employees may work remotely up to 3 days/week. Core hours 10 AM – 3 PM IST must be observed. VPN connection required for internal systems. Weekly team syncs remain in-person.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>Expense Reimbursement Policy</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Submit claims within 30 days with original receipts. Travel: economy class for domestic, business for international. Meal cap ₹2,000/day. Approved expenses reimbursed within 15 working days.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>Code of Conduct Summary</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    All employees must maintain professional conduct, respect confidentiality agreements, avoid conflicts of interest, and report policy violations to HR. Violations may result in disciplinary action.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>Equipment & IT Policy</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Company equipment must be used for work purposes only. Software installations require IT approval. Report lost or stolen devices to IT Security within 2 hours. Devices must be returned upon separation.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 4. Coloured Border Accordion ──────────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Coloured Border Accordion</div>
+                <div class="card-subtitle-hr">Left border colour indicates category or priority</div>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group acc-colored" data-exclusive="true">
+                <div class="acc-item blue">
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span class="fw7-cblue">
+                      <i class="bi bi-info-circle-fill me-2"></i>Engineering — Sprint 24 Goals
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    Close auth refactor PR, deploy analytics dashboard v2 to staging, reduce P1 bug count to zero, complete AWS cost audit, and onboard 3 new engineers to the codebase by end of sprint.
+                  </div>
+                </div>
+                <div class="acc-item green">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span class="c-green-fw7">
+                      <i class="bi bi-check-circle-fill me-2"></i>HR — Q4 Priorities
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Complete 128 performance reviews, process December payroll, update leave policy for 2025 holiday calendar, run 3 onboarding sessions, and finalize compensation benchmarking report.
+                  </div>
+                </div>
+                <div class="acc-item amber">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span class="fw7-c-amber-dk">
+                      <i class="bi bi-exclamation-triangle-fill me-2"></i>Finance — Pending Actions
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Q4 payroll reconciliation due Dec 15, vendor invoices pending approval (₹4.2L), budget variance report for Nov due to CFO, and TDS filing deadline Dec 7.
+                  </div>
+                </div>
+                <div class="acc-item red mb0">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span class="fw7-c-red-dk">
+                      <i class="bi bi-exclamation-octagon-fill me-2"></i>Security — Critical Alerts
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Admin access audit required for 14 inactive accounts, MFA not enabled on 6 admin users, SSL certificate renewal due in 12 days, and 2 unpatched CVEs on legacy services.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 5. FAQ Style ────────────────────────────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">FAQ Style Accordion</div>
+                <div class="card-subtitle-hr">Numbered question badges with background fill</div>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group acc-faq" data-exclusive="true">
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span class="flex-ac-g3">
+                      <span class="q-badge">Q1</span>
+                      <span>How do I reset my HRNexus password?</span>
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show pl12">
+                    Click "Forgot Password" on the login screen. Enter your registered email address and you'll receive a reset link within 2 minutes. Links expire after 30 minutes for security.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span class="flex-ac-g3">
+                      <span class="q-badge">Q2</span>
+                      <span>Can I access HRNexus on mobile?</span>
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body pl12">
+                    Yes! HRNexus is fully responsive and works on all modern mobile browsers. Native iOS and Android apps are available on the App Store and Google Play for an optimised experience.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span class="flex-ac-g3">
+                      <span class="q-badge">Q3</span>
+                      <span>Is my company data secure in HRNexus?</span>
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body pl12">
+                    HRNexus uses AES-256 encryption at rest, TLS 1.3 in transit, and is ISO 27001 certified. Data is hosted on AWS with 99.9% uptime SLA, daily backups, and SOC 2 Type II compliance.
+                  </div>
+                </div>
+                <div class="acc-item mb0">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span class="flex-ac-g3">
+                      <span class="q-badge">Q4</span>
+                      <span>How do I add a new employee?</span>
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body pl12">
+                    Navigate to Employees → Add Employee. Fill in personal details, role, department, compensation, and joining date. The system auto-sends welcome email and creates the employee portal account.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 6. Step / Timeline Accordion ──────────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Step / Timeline Accordion</div>
+                <div class="card-subtitle-hr">Numbered steps — completed steps shown in green</div>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group acc-steps" data-exclusive="false">
+                <div class="acc-item done">
+                  <span class="step-num"><i class="bi bi-check-lg"></i></span>
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span class="fw7-cgreen">Step 1 — Account Setup <span class="fs75-c-green-bg-green-10-br999px-p-04-18-ml15">Completed</span></span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    Company profile configured, admin account created, SSO integration with Google Workspace enabled. 128 employee records imported via CSV batch upload. All fields validated successfully.
+                  </div>
+                </div>
+                <div class="acc-item done">
+                  <span class="step-num"><i class="bi bi-check-lg"></i></span>
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span class="fw7-cgreen">Step 2 — Payroll Configuration <span class="fs75-c-green-bg-green-10-br999px-p-04-18-ml15">Completed</span></span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    Pay grades defined for 6 departments, PF/ESI/TDS rules configured per statutory requirements, bank account details uploaded for all employees, first payroll run completed on Dec 1.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <span class="step-num c-primary-bg-primary-light">3</span>
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span class="fw7-cprimary">Step 3 — Performance Review Setup <span class="fs75-c-primary-bg-primary-light-br999px-p-04-18-ml15">In Progress</span></span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    KPI templates created for Engineering, Product, and HR departments. Q4 review cycle initiated for 42 Engineering employees. Peer review assignments pending for 86 employees.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <span class="step-num c-muted-bg-border">4</span>
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span class="c-muted">Step 4 — Analytics & Reporting</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Configure custom dashboards, set up automated monthly reports to leadership, enable real-time attendance heatmaps, and connect to BI tools via the HRNexus REST API.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 7. Icon Left Accordion ─────────────────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Icon Left Accordion</div>
+                <div class="card-subtitle-hr">Chevron on the left, content flows right</div>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group acc-icon-left" data-exclusive="true">
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <i class="bi bi-chevron-down acc-icon c-primary"></i>
+                    <span class="flex-ac-g2-fl1">
+                      <span class="icon-box-blue-10-32-2">
+                        <i class="bi bi-people-fill c-blue-fs875"></i>
+                      </span>
+                      Employee Directory
+                    </span>
+                  </button>
+                  <div class="acc-body show pl12">
+                    Browse, search, and filter all 128 employees by department, role, or status. View profile cards with contact details, reporting structure, and employment history at a glance.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <i class="bi bi-chevron-down acc-icon c-muted"></i>
+                    <span class="flex-ac-g2-fl1">
+                      <span class="icon-box-green-10-32">
+                        <i class="bi bi-calendar-check-fill c-green-fs875"></i>
+                      </span>
+                      Attendance Tracking
+                    </span>
+                  </button>
+                  <div class="acc-body pl12">
+                    Real-time punch-in/out via web, mobile, or biometric devices. Geo-fencing for remote employees. Automatic overtime calculation, late-arrival alerts, and monthly attendance heatmaps.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <i class="bi bi-chevron-down acc-icon c-muted"></i>
+                    <span class="flex-ac-g2-fl1">
+                      <span class="icon-box-amber-10-32">
+                        <i class="bi bi-bar-chart-fill c-amber-fs875"></i>
+                      </span>
+                      Analytics Dashboard
+                    </span>
+                  </button>
+                  <div class="acc-body pl12">
+                    30+ pre-built reports covering headcount trends, attrition risk, hiring velocity, cost-per-hire, and payroll analytics. Export to PDF, CSV, or push to Slack channels automatically.
+                  </div>
+                </div>
+                <div class="acc-item mb0">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <i class="bi bi-chevron-down acc-icon c-muted"></i>
+                    <span class="flex-ac-g2-fl1">
+                      <span class="icon-box-purple-10-32">
+                        <i class="bi bi-shield-check-fill c-purple-fs875"></i>
+                      </span>
+                      Roles & Permissions
+                    </span>
+                  </button>
+                  <div class="acc-body pl12">
+                    Fine-grained RBAC with 12 default roles (Super Admin, HR Manager, Department Head, etc.) and fully custom roles. Field-level permissions, audit logs, and IP allowlisting per role.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 8. Filled / Solid Header Accordion ─────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Filled Header Accordion</div>
+                <div class="card-subtitle-hr">Active header fills with primary colour</div>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group acc-filled" data-exclusive="true">
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span>🚀 Product Roadmap — Q1 2026</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    <strong>January:</strong> Launch mobile app v2.0 with offline support.<br>
+                    <strong>February:</strong> AI-powered attrition prediction engine.<br>
+                    <strong>March:</strong> WhatsApp / Slack bot integrations for leave requests.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>📊 Q4 2025 — Achieved Milestones</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Launched Analytics Dashboard v2 with real-time data pipeline (was 24hr lag). Deployed Kubernetes-based infrastructure cutting costs 28%. Achieved SOC 2 Type II certification. Grew to 420 enterprise clients.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>💡 Feature Requests — Under Review</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Biometric integration (87 votes), Expense management module (72 votes), Org chart builder (65 votes), Multi-currency payroll (58 votes), and Custom workflow builder (54 votes). All under active evaluation.
+                  </div>
+                </div>
+                <div class="acc-item mb0">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>🔧 Known Issues — In Progress</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Safari pivot table rendering glitch (fix in v3.2.1), PDF export slow for datasets &gt;10K rows (optimization underway), timezone edge case for midnight shift attendance (patch ETA Dec 20).
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 9. Shadow Card Accordion ───────────────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Shadow Card Accordion</div>
+                <div class="card-subtitle-hr">Floating card style with hover shadow lift</div>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group acc-shadow" data-exclusive="true">
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger open border-radius-3" onclick="toggleItem(this)">
+                    <span class="flex-ac-g3">
+                      <span class="icon-box-blue-purple-36">
+                        <i class="bi bi-people-fill fs85-c-white"></i>
+                      </span>
+                      <span>
+                        <span class="d-block-fs9375-fw7">Team Members — Engineering</span>
+                        <span class="fs75-muted">42 active engineers across 6 squads</span>
+                      </span>
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show pt4-bt-1">
+                    <div class="row g-2">
+                      <div class="col-6"><div class="fs8125-bg-bg-br2-p-2-3"><strong>Backend</strong> — 12 engineers</div></div>
+                      <div class="col-6"><div class="fs8125-bg-bg-br2-p-2-3"><strong>Frontend</strong> — 10 engineers</div></div>
+                      <div class="col-6"><div class="fs8125-bg-bg-br2-p-2-3"><strong>DevOps</strong> — 8 engineers</div></div>
+                      <div class="col-6"><div class="fs8125-bg-bg-br2-p-2-3"><strong>QA</strong> — 12 engineers</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger br3" onclick="toggleItem(this)">
+                    <span class="flex-ac-g3">
+                      <span class="icon-box-green-sky-36">
+                        <i class="bi bi-graph-up-arrow fs85-c-white"></i>
+                      </span>
+                      <span>
+                        <span class="d-block-fs9375-fw6">Performance Snapshot</span>
+                        <span class="fs75-muted">Q4 2025 team average: 88.2/100</span>
+                      </span>
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body pt4-bt-1">
+                    Top performer: Aisha Patel (96/100). 3 employees flagged for performance improvement plans. Average productivity score up 3.4 points vs Q3. Leadership scores improved across all departments.
+                  </div>
+                </div>
+                <div class="acc-item mb0">
+                  <button type="button" class="acc-trigger br3" onclick="toggleItem(this)">
+                    <span class="flex-ac-g3">
+                      <span class="icon-box-amber-red-36">
+                        <i class="bi bi-exclamation-triangle-fill fs85-c-white"></i>
+                      </span>
+                      <span>
+                        <span class="d-block-fs9375-fw6">Open Action Items</span>
+                        <span class="fs75-c-red-dk">7 items require immediate attention</span>
+                      </span>
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body pt4-bt-1">
+                    Security audit overdue (3 days), 6 pending performance reviews (deadline Dec 20), payroll reconciliation for Nov pending CFO sign-off, 2 onboarding sessions unscheduled, IT audit of admin accounts needed.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 10. Animated Accordion ─────────────────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Smooth Animated Accordion</div>
+                <div class="card-subtitle-hr">CSS max-height transition for buttery-smooth expand/collapse</div>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group acc-animated" data-exclusive="true">
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span>🌏 Global Compliance Updates</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    GDPR: Data retention policy updated to 7 years for employee records. India: New DPDP Act compliance deadline extended to March 2026. USA: FLSA overtime rule change effective Jan 2025 — salary threshold raised to $684/week.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>⚡ API Rate Limits & Quotas</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Free tier: 1,000 API calls/day. Professional: 50,000 calls/day. Enterprise: unlimited with dedicated rate limit configuration. WebSocket connections limited to 5 concurrent per session across all tiers.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>📱 Notification Preferences</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Configure alerts for: leave request updates, payroll processing, attendance anomalies, performance review due dates, and system maintenance windows. Delivery via email, SMS, Slack, or push notification.
+                  </div>
+                </div>
+                <div class="acc-item mb0">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span>🔗 Integrations Catalogue</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Native integrations: Slack, Microsoft Teams, Google Workspace, Zoho Books, Tally, QuickBooks, Jira, GitHub, and Darwinbox. REST API + Webhooks for custom integrations. Zapier connector with 200+ app templates available.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 11. Dark / Inverted Accordion ──────────────────────── -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100 bg-sb-bg-bc-white-7">
+            <div class="card-hd bc-white-7">
+              <div>
+                <div class="card-title-hr c-white-90">Dark / Inverted Accordion</div>
+                <div class="card-subtitle-hr c-white-45">Accordion on dark background — sidebar/modal usage</div>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group acc-dark" data-exclusive="true">
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger open" onclick="toggleItem(this)">
+                    <span><i class="bi bi-terminal me-2"></i>System Requirements</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show">
+                    Node.js 18+, PostgreSQL 14+, Redis 6+, minimum 4 vCPU / 8 GB RAM for production. Recommended: 8 vCPU / 16 GB RAM for 200+ concurrent users. Docker Compose and Kubernetes Helm charts provided.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span><i class="bi bi-key-fill me-2"></i>Environment Variables</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Required: DATABASE_URL, REDIS_URL, JWT_SECRET, SMTP_HOST, SMTP_PORT, S3_BUCKET, AWS_REGION. Optional: SLACK_WEBHOOK, SENTRY_DSN, GOOGLE_CLIENT_ID, AZURE_AD_TENANT_ID. See .env.example for full reference.
+                  </div>
+                </div>
+                <div class="acc-item">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span><i class="bi bi-shield-lock-fill me-2"></i>Security Configuration</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Enable CORS with allowed origins list, set CSP headers, configure rate limiting (default: 100 req/min per IP), enable 2FA enforcement for admin accounts, rotate JWT secrets every 90 days.
+                  </div>
+                </div>
+                <div class="acc-item mb0">
+                  <button type="button" class="acc-trigger" onclick="toggleItem(this)">
+                    <span><i class="bi bi-arrow-repeat me-2"></i>Backup & Recovery</span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body">
+                    Automated daily snapshots to S3. Point-in-time recovery up to 35 days. Cross-region replication to secondary datacenter. RTO: 4 hours, RPO: 1 hour. Quarterly DR drills with documented runbook.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 12. Nested Accordion ────────────────────────────────── -->
+        <div class="col-12">
+          <div class="card-hr">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Nested Accordion</div>
+                <div class="card-subtitle-hr">Parent sections with expandable child subsections — ideal for documentation and multi-level content</div>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="acc-group acc-nested" data-exclusive="true">
+                <div class="acc-item bl-3-blue">
+                  <button type="button" class="acc-trigger open p-35-5-35-4" onclick="toggleItem(this)">
+                    <span class="fs1-fw7-c-blue">
+                      <i class="bi bi-people-fill me-2"></i>HR Core Features
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body show p-0-5-35-4">
+                    <div class="acc-nested-child">
+                      <div class="acc-group" data-exclusive="false">
+                        <div class="acc-item">
+                          <button type="button" class="acc-trigger fs875-p-25-35" onclick="toggleItem(this)">
+                            <span><i class="bi bi-person-vcard me-2 c-blue"></i>Employee Management</span>
+                            <i class="bi bi-chevron-down acc-icon"></i>
+                          </button>
+                          <div class="acc-body fs8125-p-1-35-3">
+                            360° employee profiles, org chart builder, digital document vault, skill matrix, succession planning, and automated offboarding workflows with exit interview automation.
+                          </div>
+                        </div>
+                        <div class="acc-item">
+                          <button type="button" class="acc-trigger fs875-p-25-35" onclick="toggleItem(this)">
+                            <span><i class="bi bi-calendar2-check me-2 c-green"></i>Leave Management</span>
+                            <i class="bi bi-chevron-down acc-icon"></i>
+                          </button>
+                          <div class="acc-body fs8125-p-1-35-3">
+                            Multi-level approval workflows, automatic balance calculations, holiday calendar per region, leave encashment, and team calendar to avoid coverage conflicts.
+                          </div>
+                        </div>
+                        <div class="acc-item mb0">
+                          <button type="button" class="acc-trigger fs875-p-25-35" onclick="toggleItem(this)">
+                            <span><i class="bi bi-clock-history me-2 c-amber"></i>Attendance Tracking</span>
+                            <i class="bi bi-chevron-down acc-icon"></i>
+                          </button>
+                          <div class="acc-body fs8125-p-1-35-3">
+                            Web, mobile, biometric, and GPS-based punch options. Shift scheduling, overtime automation, regularisation requests, and daily attendance reports to department heads.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="acc-item bl-3-green">
+                  <button type="button" class="acc-trigger p-35-5-35-4" onclick="toggleItem(this)">
+                    <span class="fs1-fw6">
+                      <i class="bi bi-bar-chart-fill me-2 c-green"></i>Analytics & Reporting
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body p-0-5-35-4">
+                    <div class="acc-nested-child">
+                      <div class="acc-group" data-exclusive="false">
+                        <div class="acc-item">
+                          <button type="button" class="acc-trigger fs875-p-25-35" onclick="toggleItem(this)">
+                            <span><i class="bi bi-speedometer2 me-2 c-green"></i>Executive Dashboard</span>
+                            <i class="bi bi-chevron-down acc-icon"></i>
+                          </button>
+                          <div class="acc-body fs8125-p-1-35-3">
+                            Real-time KPIs: headcount, attrition rate, time-to-hire, cost-per-hire, absenteeism index, payroll cost ratio. Drill-down by department, region, or employee level.
+                          </div>
+                        </div>
+                        <div class="acc-item mb0">
+                          <button type="button" class="acc-trigger fs875-p-25-35" onclick="toggleItem(this)">
+                            <span><i class="bi bi-file-earmark-bar-graph me-2 c-purple"></i>Custom Reports Builder</span>
+                            <i class="bi bi-chevron-down acc-icon"></i>
+                          </button>
+                          <div class="acc-body fs8125-p-1-35-3">
+                            Drag-and-drop report builder with 60+ data fields. Schedule reports to email recipients, export in PDF/Excel/CSV, and embed in external BI tools via iframe or API.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="acc-item mb0-bl-3-purple">
+                  <button type="button" class="acc-trigger p-35-5-35-4" onclick="toggleItem(this)">
+                    <span class="fs1-fw6">
+                      <i class="bi bi-shield-lock-fill me-2 c-purple"></i>Security & Administration
+                    </span>
+                    <i class="bi bi-chevron-down acc-icon"></i>
+                  </button>
+                  <div class="acc-body p-0-5-35-4">
+                    <div class="acc-nested-child">
+                      <div class="acc-group" data-exclusive="false">
+                        <div class="acc-item">
+                          <button type="button" class="acc-trigger fs875-p-25-35" onclick="toggleItem(this)">
+                            <span><i class="bi bi-person-lock me-2 c-purple"></i>Access Control</span>
+                            <i class="bi bi-chevron-down acc-icon"></i>
+                          </button>
+                          <div class="acc-body fs8125-p-1-35-3">
+                            RBAC with 12 pre-built roles and unlimited custom roles. Field-level visibility rules, IP allowlisting, session management, and comprehensive audit trails with 365-day retention.
+                          </div>
+                        </div>
+                        <div class="acc-item mb0">
+                          <button type="button" class="acc-trigger fs875-p-25-35" onclick="toggleItem(this)">
+                            <span><i class="bi bi-activity me-2 c-red"></i>Audit & Compliance</span>
+                            <i class="bi bi-chevron-down acc-icon"></i>
+                          </button>
+                          <div class="acc-body fs8125-p-1-35-3">
+                            Tamper-proof audit logs for all data changes, SOC 2 Type II certified, GDPR/DPDP compliant. Automated compliance reports for statutory filings: PF, ESI, TDS, and Form 16.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /row -->
+    </div><!-- /page-inner -->
+  </main>
+</div><!-- /main-content -->
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ── Core toggle function ────────────────────────────────────────── */
+function toggleItem(btn) {
+  var group     = btn.closest('.acc-group');
+  var item      = btn.closest('.acc-item');
+  var body      = btn.nextElementSibling;
+  var isOpen    = btn.classList.contains('open');
+  var exclusive = group && group.dataset.exclusive !== 'false';
+
+  if (exclusive && !isOpen) {
+    /* Close all siblings first — but only triggers that actually belong
+       to THIS group. querySelectorAll on a container matches every
+       descendant, so a nested accordion living inside a sibling's body
+       would otherwise get its own (independent) open/closed state wiped
+       out any time an unrelated sibling in the outer group is toggled. */
+    group.querySelectorAll('.acc-trigger.open').forEach(function(t) {
+      if (t !== btn && t.closest('.acc-group') === group) {
+        t.classList.remove('open');
+        var b = t.nextElementSibling;
+        if (b) b.classList.remove('show');
+      }
+    });
+  }
+
+  btn.classList.toggle('open', !isOpen);
+  if (body) body.classList.toggle('show', !isOpen);
+}
+
+/* ── Expand / Collapse All ───────────────────────────────────────── */
+function expandAll() {
+  document.querySelectorAll('.acc-trigger:not(.open)').forEach(function(btn) {
+    btn.classList.add('open');
+    var b = btn.nextElementSibling;
+    if (b) b.classList.add('show');
+  });
+}
+
+function collapseAll() {
+  document.querySelectorAll('.acc-trigger.open').forEach(function(btn) {
+    btn.classList.remove('open');
+    var b = btn.nextElementSibling;
+    if (b) b.classList.remove('show');
+  });
+}
+</script>
+</body>
+</html>

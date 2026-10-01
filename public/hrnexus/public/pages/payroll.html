@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Payroll Management — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Payroll management table with salary breakdowns, deductions, and department-wise cost summaries."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<style id="page-css">
+
+/* ── Waterfall chart bars ── */
+.wf-chart{display:flex;flex-direction:column;gap:.625rem}
+.wf-row{display:flex;align-items:center;gap:.75rem}
+.wf-label{font-size:.8rem;font-weight:600;color:var(--body-text);min-width:130px;flex-shrink:0}
+.wf-bar-wrap{flex:1;height:28px;background:var(--body-border);border-radius:.375rem;overflow:hidden;position:relative}
+.wf-bar{height:100%;border-radius:.375rem;display:flex;align-items:center;padding-left:.625rem;
+  font-size:.72rem;font-weight:800;color:#fff;white-space:nowrap;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.wf-amt{font-size:.8rem;font-weight:800;color:var(--body-text);min-width:70px;text-align:right;flex-shrink:0}
+/* ── Payslip card ── */
+.payslip{background:var(--card-bg);border:1px solid var(--card-border);border-radius:1.25rem;overflow:hidden}
+.payslip-header{padding:1.5rem;background:linear-gradient(135deg,var(--color-primary),#8B5CF6);
+  color:#fff;display:flex;align-items:flex-start;justify-content:space-between}
+.payslip-company{font-size:.75rem;font-weight:700;opacity:.8;text-transform:uppercase;letter-spacing:.08em}
+.payslip-title{font-size:1.125rem;font-weight:900;margin:.25rem 0 .125rem}
+.payslip-period{font-size:.8rem;opacity:.75}
+.payslip-badge{background:rgba(255,255,255,.2);padding:.35rem .875rem;border-radius:999px;
+  font-size:.72rem;font-weight:800;backdrop-filter:blur(4px)}
+.payslip-body{padding:1.25rem}
+.payslip-emp-row{display:flex;align-items:center;gap:.875rem;padding-bottom:1rem;
+  border-bottom:1px solid var(--card-border);margin-bottom:1rem}
+.payslip-row{display:flex;justify-content:space-between;align-items:center;
+  padding:.4rem 0;border-bottom:1px dashed var(--body-border)}
+.payslip-row:last-child{border:none}
+.payslip-row-key{font-size:.8rem;color:var(--body-text-muted)}
+.payslip-row-val{font-size:.8rem;font-weight:700;color:var(--body-text)}
+.payslip-section-hd{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--body-text-muted);padding:.625rem 0 .25rem;margin-top:.375rem}
+.payslip-total{display:flex;justify-content:space-between;padding:.875rem;
+  background:var(--color-primary-light);border-radius:.875rem;margin-top:.875rem}
+.payslip-total-key{font-size:.875rem;font-weight:700;color:var(--color-primary)}
+.payslip-total-val{font-size:1.125rem;font-weight:900;color:var(--color-primary)}
+/* ── Compliance status ── */
+.comp-item{display:flex;align-items:center;gap:.875rem;padding:.875rem;
+  border-radius:.875rem;border:1px solid var(--card-border);background:var(--card-bg);
+  transition:all .15s;margin-bottom:.625rem}
+.comp-item:hover{border-color:var(--color-primary);box-shadow:0 4px 16px rgba(79,110,247,.08)}
+.comp-item:last-child{margin-bottom:0}
+.comp-icon{width:44px;height:44px;border-radius:.75rem;display:flex;align-items:center;
+  justify-content:center;font-size:1.1rem;flex-shrink:0}
+.comp-status{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:.25rem}
+/* ── Run summary ribbon ── */
+.run-ribbon{display:flex;gap:1px;background:var(--card-border);border-radius:1rem;overflow:hidden}
+.run-cell{flex:1;padding:1rem 1.25rem;background:var(--card-bg);text-align:center}
+.run-val{font-size:1.375rem;font-weight:900;line-height:1}
+.run-lbl{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--body-text-muted);margin-top:.25rem}
+/* ── Employee payroll table ── */
+.pay-dept-pill{display:inline-block;padding:.15rem .5rem;border-radius:999px;
+  font-size:.65rem;font-weight:700;border:1px solid}
+
+  </style>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span>HR Core</span><span class="bc-sep">/</span><span class="bc-current">Payroll</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- ── Page header ── -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Payroll Management</h1>
+          <p class="page-subtitle">December 2025 payroll — CTC breakdown, payslips, compliance &amp; statutory filings</p>
+        </div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#payrollReportModal"><i class="bi bi-file-earmark-pdf me-1"></i>Payroll Report</button>
+          <button type="button" class="btn-hr btn-success-hr" data-bs-toggle="modal" data-bs-target="#runPayrollModal"><i class="bi bi-play-fill me-1"></i>Run Payroll</button>
+        </div>
+      </div>
+      <!-- ── Run summary ── -->
+      <div class="run-ribbon mb-1rem">
+        <div class="run-cell"><div class="run-val" style="color:var(--body-text)">284</div><div class="run-lbl">Employees</div></div>
+        <div class="run-cell"><div class="run-val" style="color:#4F6EF7">₹3.42Cr</div><div class="run-lbl">Gross Payroll</div></div>
+        <div class="run-cell"><div class="run-val" style="color:#EF4444">−₹58.4L</div><div class="run-lbl">Deductions</div></div>
+        <div class="run-cell"><div class="run-val" style="color:#10B981">₹2.84Cr</div><div class="run-lbl">Net Disbursed</div></div>
+        <div class="run-cell"><div class="run-val" style="color:#F59E0B">Dec 28</div><div class="run-lbl">Process Date</div></div>
+        <div class="run-cell"><div class="run-val" style="color:#10B981">100%</div><div class="run-lbl">Completion</div></div>
+      </div>
+
+      <div class="row g-4 mb-1rem">
+        <!-- CTC Waterfall -->
+        <div class="col-12 col-xl-6">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div><div class="card-title-hr">CTC Breakdown — Sample Employee</div><div class="card-subtitle-hr">Marcus Johnson · Backend Lead · ₹32L CTC</div></div>
+              <span class="badge-blue-xs">Dec 2025</span>
+            </div>
+            <div class="card-bd">
+              <div class="wf-chart"><div class="wf-row">
+  <span class="wf-label">Basic Salary</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:100%;background:#4F6EF7">
+      
+    </div>
+  </div>
+  <span class="wf-amt" style="">₹1,20,000</span>
+</div><div class="wf-row">
+  <span class="wf-label">HRA</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:45%;background:#8B5CF6">
+      
+    </div>
+  </div>
+  <span class="wf-amt" style="">₹54,000</span>
+</div><div class="wf-row">
+  <span class="wf-label">Conveyance</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:3%;background:#06B6D4">
+      
+    </div>
+  </div>
+  <span class="wf-amt" style="">₹3,200</span>
+</div><div class="wf-row">
+  <span class="wf-label">Medical</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:1%;background:#10B981">
+      
+    </div>
+  </div>
+  <span class="wf-amt" style="">₹1,250</span>
+</div><div class="wf-row">
+  <span class="wf-label">Special Allowance</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:35%;background:#5B8FF9">
+      
+    </div>
+  </div>
+  <span class="wf-amt" style="">₹42,500</span>
+</div><div class="wf-row">
+  <span class="wf-label">Performance Bonus</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:15%;background:#F59E0B">
+      
+    </div>
+  </div>
+  <span class="wf-amt" style="">₹18,000</span>
+</div><div class="wf-row">
+  <span class="wf-label">PF Deduction</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:12%;background:#EF4444">
+      
+    </div>
+  </div>
+  <span class="wf-amt" style="color:#EF4444">−₹14,400</span>
+</div><div class="wf-row">
+  <span class="wf-label">ESI</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:2%;background:#EF4444">
+      
+    </div>
+  </div>
+  <span class="wf-amt" style="color:#EF4444">−₹2,812</span>
+</div><div class="wf-row">
+  <span class="wf-label">Income Tax</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:19%;background:#EF4444">
+      
+    </div>
+  </div>
+  <span class="wf-amt" style="color:#EF4444">−₹22,500</span>
+</div><div class="wf-row">
+  <span class="wf-label">Prof. Tax</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:0%;background:#EF4444">
+      
+    </div>
+  </div>
+  <span class="wf-amt" style="color:#EF4444">−₹200</span>
+</div><div class="wf-row">
+  <span class="wf-label">Net Take-Home</span>
+  <div class="wf-bar-wrap">
+    <div class="wf-bar" style="width:100%;background:linear-gradient(90deg,#10B981,#06B6D4)">
+      Net
+    </div>
+  </div>
+  <span class="wf-amt" style="color:#10B981">₹1,99,038</span>
+</div></div>
+              <div style="margin-top:1.25rem;padding:1rem;background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(6,182,212,.06));border-radius:.875rem;border:1px solid rgba(16,185,129,.2);display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#10B981">Net Monthly Take-Home</div>
+                  <div style="font-size:1.5rem;font-weight:900;color:#10B981;margin-top:.25rem">₹1,99,038</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:.72rem;color:var(--body-text-muted)">Effective Tax Rate</div>
+                  <div style="font-size:1.125rem;font-weight:800;color:var(--body-text)">9.4%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sample payslip -->
+        <div class="col-12 col-xl-6">
+          <div class="payslip">
+            <div class="payslip-header">
+              <div>
+                <div class="payslip-company">HRNexus Technologies Pvt. Ltd.</div>
+                <div class="payslip-title">Pay Slip — December 2025</div>
+                <div class="payslip-period">Period: Dec 1 – Dec 31, 2025 · 31 working days</div>
+              </div>
+              <span class="payslip-badge">PAID</span>
+            </div>
+            <div class="payslip-body">
+              <div class="payslip-emp-row">
+                <div class="av cov-1" style="width:44px;height:44px;font-size:.85rem">MJ</div>
+                <div>
+                  <div style="font-weight:800;font-size:.9375rem;color:var(--body-text)">Marcus Johnson</div>
+                  <div style="font-size:.75rem;color:var(--body-text-muted)">Backend Lead · Engineering · EMP-0043</div>
+                  <div style="font-size:.72rem;color:var(--body-text-muted);margin-top:.125rem">PAN: ABCMJ1234F · PF: MH/PUN/0099876</div>
+                </div>
+              </div>
+              <div class="payslip-section-hd">Earnings</div>
+              <div class="payslip-row"><span class="payslip-row-key">Basic Salary</span><span class="payslip-row-val">₹1,20,000</span></div>
+              <div class="payslip-row"><span class="payslip-row-key">HRA</span><span class="payslip-row-val">₹54,000</span></div>
+              <div class="payslip-row"><span class="payslip-row-key">Conveyance</span><span class="payslip-row-val">₹3,200</span></div>
+              <div class="payslip-row"><span class="payslip-row-key">Special Allowance</span><span class="payslip-row-val">₹42,500</span></div>
+              <div class="payslip-row"><span class="payslip-row-key">Performance Bonus</span><span class="payslip-row-val">₹18,000</span></div>
+              <div class="payslip-row" style="border:none;font-weight:700"><span class="payslip-row-key" style="font-weight:700;color:var(--body-text)">Gross Earnings</span><span class="payslip-row-val" style="color:#4F6EF7">₹2,37,700</span></div>
+              <div class="payslip-section-hd" style="color:#EF4444">Deductions</div>
+              <div class="payslip-row"><span class="payslip-row-key">Provident Fund (12%)</span><span class="payslip-row-val" style="color:#EF4444">−₹14,400</span></div>
+              <div class="payslip-row"><span class="payslip-row-key">ESI (0.75%)</span><span class="payslip-row-val" style="color:#EF4444">−₹1,783</span></div>
+              <div class="payslip-row"><span class="payslip-row-key">Income Tax (TDS)</span><span class="payslip-row-val" style="color:#EF4444">−₹22,500</span></div>
+              <div class="payslip-row"><span class="payslip-row-key">Professional Tax</span><span class="payslip-row-val" style="color:#EF4444">−₹200</span></div>
+              <div class="payslip-total">
+                <span class="payslip-total-key">💰 Net Take-Home Pay</span>
+                <span class="payslip-total-val">₹1,98,817</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Employee Payroll Table ── -->
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Employee Payroll Register</div>
+          <div style="display:flex;gap:.5rem">
+            <select class="hr-inp" style="padding:.35rem .75rem;font-size:.8rem;width:auto"><option>Dec 2025</option><option>Nov 2025</option></select>
+            <button class="btn-hr btn-outline-hr btn-sm-hr" type="button" data-bs-toggle="modal" data-bs-target="#exportRegisterModal"><i class="bi bi-download me-1"></i>Export</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="hr-table">
+            <thead><tr><th>Employee</th><th>Department</th><th>Annual CTC</th><th>Gross Pay</th><th>Deductions</th><th>Net Pay</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody><tr>
+  <td><div style="display:flex;align-items:center;gap:.625rem">
+    <div class="av cov-2" style="width:32px;height:32px;font-size:.7rem;flex-shrink:0">SC</div>
+    <div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Sarah Chen</div></div>
+  </div></td>
+  <td><span class="pay-dept-pill dept-prd">Product</span></td>
+  <td style="font-weight:700;color:var(--body-text)">₹18.5L</td>
+  <td style="font-weight:700;color:var(--body-text)">₹1,54,167</td>
+  <td style="font-weight:700;color:#EF4444">₹17,850</td>
+  <td style="font-weight:800;font-size:.9375rem;color:#10B981">₹1,36,317</td>
+  <td><span class="badge-st st-active">Processed</span></td>
+  <td><button class="btn-hr btn-ghost-hr btn-sm-hr" type="button" onclick="handleViewPayslip(0)"><i class="bi bi-file-earmark-arrow-down me-1"></i>Payslip</button></td>
+</tr><tr>
+  <td><div style="display:flex;align-items:center;gap:.625rem">
+    <div class="av cov-1" style="width:32px;height:32px;font-size:.7rem;flex-shrink:0">MJ</div>
+    <div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Marcus Johnson</div></div>
+  </div></td>
+  <td><span class="pay-dept-pill dept-eng">Engineering</span></td>
+  <td style="font-weight:700;color:var(--body-text)">₹32L</td>
+  <td style="font-weight:700;color:var(--body-text)">₹2,66,667</td>
+  <td style="font-weight:700;color:#EF4444">₹34,200</td>
+  <td style="font-weight:800;font-size:.9375rem;color:#10B981">₹2,32,467</td>
+  <td><span class="badge-st st-active">Processed</span></td>
+  <td><button class="btn-hr btn-ghost-hr btn-sm-hr" type="button" onclick="handleViewPayslip(1)"><i class="bi bi-file-earmark-arrow-down me-1"></i>Payslip</button></td>
+</tr><tr>
+  <td><div style="display:flex;align-items:center;gap:.625rem">
+    <div class="av cov-4" style="width:32px;height:32px;font-size:.7rem;flex-shrink:0">PN</div>
+    <div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Priya Nair</div></div>
+  </div></td>
+  <td><span class="pay-dept-pill dept-prd">Product</span></td>
+  <td style="font-weight:700;color:var(--body-text)">₹24L</td>
+  <td style="font-weight:700;color:var(--body-text)">₹2,00,000</td>
+  <td style="font-weight:700;color:#EF4444">₹26,400</td>
+  <td style="font-weight:800;font-size:.9375rem;color:#10B981">₹1,73,600</td>
+  <td><span class="badge-st st-active">Processed</span></td>
+  <td><button class="btn-hr btn-ghost-hr btn-sm-hr" type="button" onclick="handleViewPayslip(2)"><i class="bi bi-file-earmark-arrow-down me-1"></i>Payslip</button></td>
+</tr><tr>
+  <td><div style="display:flex;align-items:center;gap:.625rem">
+    <div class="av cov-7" style="width:32px;height:32px;font-size:.7rem;flex-shrink:0">RD</div>
+    <div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Ravi Das</div></div>
+  </div></td>
+  <td><span class="pay-dept-pill dept-eng">Engineering</span></td>
+  <td style="font-weight:700;color:var(--body-text)">₹20L</td>
+  <td style="font-weight:700;color:var(--body-text)">₹1,66,667</td>
+  <td style="font-weight:700;color:#EF4444">₹21,000</td>
+  <td style="font-weight:800;font-size:.9375rem;color:#10B981">₹1,45,667</td>
+  <td><span class="badge-st st-pending">On Hold</span></td>
+  <td><button class="btn-hr btn-ghost-hr btn-sm-hr" type="button" onclick="handleViewPayslip(3)"><i class="bi bi-file-earmark-arrow-down me-1"></i>Payslip</button></td>
+</tr><tr>
+  <td><div style="display:flex;align-items:center;gap:.625rem">
+    <div class="av cov-5" style="width:32px;height:32px;font-size:.7rem;flex-shrink:0">AI</div>
+    <div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Aisha Iyer</div></div>
+  </div></td>
+  <td><span class="pay-dept-pill dept-mkt">Marketing</span></td>
+  <td style="font-weight:700;color:var(--body-text)">₹22L</td>
+  <td style="font-weight:700;color:var(--body-text)">₹1,83,333</td>
+  <td style="font-weight:700;color:#EF4444">₹23,160</td>
+  <td style="font-weight:800;font-size:.9375rem;color:#10B981">₹1,60,173</td>
+  <td><span class="badge-st st-active">Processed</span></td>
+  <td><button class="btn-hr btn-ghost-hr btn-sm-hr" type="button" onclick="handleViewPayslip(4)"><i class="bi bi-file-earmark-arrow-down me-1"></i>Payslip</button></td>
+</tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── Compliance ── -->
+      <div class="card-hr">
+        <div class="card-hd">
+          <div><div class="card-title-hr">Statutory Compliance</div><div class="card-subtitle-hr">India-specific PF, ESI, TDS, PT &amp; Gratuity status</div></div>
+          <span class="badge-green-xs">4/5 Filed</span>
+        </div>
+        <div class="card-bd"><div class="comp-item">
+  <div class="comp-icon" style="background:rgba(79,110,247,.1);color:#4F6EF7"><i class="bi bi-bank2"></i></div>
+  <div style="flex:1;min-width:0">
+    <div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Provident Fund (PF)</div>
+    <div style="font-size:.75rem;color:var(--body-text-muted)">₹8,05,248 filed</div>
+    <div style="font-size:.72rem;color:var(--body-text-muted);margin-top:.125rem">EPFO Form 12A submitted</div>
+  </div>
+  <div class="comp-status">
+    <span style="font-size:.72rem;font-weight:800;color:#10B981;background:#10B98118;padding:.2rem .6rem;border-radius:999px">Filed</span>
+  </div>
+</div><div class="comp-item">
+  <div class="comp-icon" style="background:rgba(16,185,129,.1);color:#10B981"><i class="bi bi-heart-pulse-fill"></i></div>
+  <div style="flex:1;min-width:0">
+    <div style="font-weight:700;font-size:.875rem;color:var(--body-text)">ESI Contribution</div>
+    <div style="font-size:.75rem;color:var(--body-text-muted)">₹3,24,108 filed</div>
+    <div style="font-size:.72rem;color:var(--body-text-muted);margin-top:.125rem">ESI challan paid on time</div>
+  </div>
+  <div class="comp-status">
+    <span style="font-size:.72rem;font-weight:800;color:#10B981;background:#10B98118;padding:.2rem .6rem;border-radius:999px">Filed</span>
+  </div>
+</div><div class="comp-item">
+  <div class="comp-icon" style="background:rgba(245,158,11,.1);color:#F59E0B"><i class="bi bi-receipt-cutoff"></i></div>
+  <div style="flex:1;min-width:0">
+    <div style="font-weight:700;font-size:.875rem;color:var(--body-text)">TDS (Income Tax)</div>
+    <div style="font-size:.75rem;color:var(--body-text-muted)">₹18,42,600 deducted</div>
+    <div style="font-size:.72rem;color:var(--body-text-muted);margin-top:.125rem">Form 24Q Q3 due Jan 31</div>
+  </div>
+  <div class="comp-status">
+    <span style="font-size:.72rem;font-weight:800;color:#F59E0B;background:#F59E0B18;padding:.2rem .6rem;border-radius:999px">Due Soon</span>
+  </div>
+</div><div class="comp-item">
+  <div class="comp-icon" style="background:rgba(239,68,68,.1);color:#EF4444"><i class="bi bi-building"></i></div>
+  <div style="flex:1;min-width:0">
+    <div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Professional Tax</div>
+    <div style="font-size:.75rem;color:var(--body-text-muted)">₹56,800 paid</div>
+    <div style="font-size:.72rem;color:var(--body-text-muted);margin-top:.125rem">MH PT paid Dec 28</div>
+  </div>
+  <div class="comp-status">
+    <span style="font-size:.72rem;font-weight:800;color:#10B981;background:#10B98118;padding:.2rem .6rem;border-radius:999px">Paid</span>
+  </div>
+</div><div class="comp-item">
+  <div class="comp-icon" style="background:rgba(139,92,246,.1);color:#8B5CF6"><i class="bi bi-wallet2"></i></div>
+  <div style="flex:1;min-width:0">
+    <div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Gratuity Reserve</div>
+    <div style="font-size:.75rem;color:var(--body-text-muted)">₹12,40,000 accrued</div>
+    <div style="font-size:.72rem;color:var(--body-text-muted);margin-top:.125rem">Actuary reviewed Q3</div>
+  </div>
+  <div class="comp-status">
+    <span style="font-size:.72rem;font-weight:800;color:#10B981;background:#10B98118;padding:.2rem .6rem;border-radius:999px">On Track</span>
+  </div>
+</div></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+
+<!-- ══════ MODAL: Payroll Report ══════ -->
+<div class="modal fade" id="payrollReportModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-file-earmark-pdf me-2 c-primary"></i>Payroll Report</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-1rem">
+          <div class="form-label-hr">Report Type</div>
+          <select class="hr-inp" id="prType">
+            <option>Full Payroll Summary</option>
+            <option>CTC Breakdown by Employee</option>
+            <option>Deductions &amp; Statutory Filings</option>
+            <option>Department-wise Cost Report</option>
+          </select>
+        </div>
+        <div class="row g-3 mb-1rem">
+          <div class="col-6">
+            <div class="form-label-hr">From</div>
+            <input type="date" class="hr-inp" id="prFrom" value="2025-12-01"/>
+          </div>
+          <div class="col-6">
+            <div class="form-label-hr">To</div>
+            <input type="date" class="hr-inp" id="prTo" value="2025-12-31"/>
+          </div>
+        </div>
+        <div>
+          <div class="form-label-hr mb-1">Format</div>
+          <div style="display:flex;gap:.625rem">
+            <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.625rem .75rem;border:1.5px solid var(--color-primary);border-radius:.625rem;cursor:pointer;background:var(--color-primary-light)">
+              <input type="radio" name="prFormat" value="PDF" checked/>
+              <i class="bi bi-filetype-pdf" style="color:#EF4444"></i><span style="font-size:.8125rem;font-weight:700">PDF</span>
+            </label>
+            <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.625rem .75rem;border:1.5px solid var(--card-border);border-radius:.625rem;cursor:pointer">
+              <input type="radio" name="prFormat" value="Excel"/>
+              <i class="bi bi-filetype-xlsx" style="color:#10B981"></i><span style="font-size:.8125rem;font-weight:700">Excel</span>
+            </label>
+            <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.625rem .75rem;border:1.5px solid var(--card-border);border-radius:.625rem;cursor:pointer">
+              <input type="radio" name="prFormat" value="CSV"/>
+              <i class="bi bi-filetype-csv" style="color:#F59E0B"></i><span style="font-size:.8125rem;font-weight:700">CSV</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="handlePayrollReport()"><i class="bi bi-download me-1"></i>Download Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Run Payroll (confirmation) ══════ -->
+<div class="modal fade" id="runPayrollModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-play-fill me-2" style="color:#10B981"></i>Run Payroll</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:.875rem;color:var(--body-text);margin-bottom:1rem">You're about to process payroll for <strong>December 2025</strong>. This will calculate final pay for all employees below. Review before confirming:</p>
+        <div class="run-ribbon" style="margin-bottom:0">
+          <div class="run-cell"><div class="run-val" style="color:var(--body-text)">284</div><div class="run-lbl">Employees</div></div>
+          <div class="run-cell"><div class="run-val" style="color:#4F6EF7">₹3.42Cr</div><div class="run-lbl">Gross Payroll</div></div>
+          <div class="run-cell"><div class="run-val" style="color:#EF4444">−₹58.4L</div><div class="run-lbl">Deductions</div></div>
+          <div class="run-cell"><div class="run-val" style="color:#10B981">₹2.84Cr</div><div class="run-lbl">Net Disbursed</div></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-success-hr" onclick="handleRunPayroll()"><i class="bi bi-play-fill me-1"></i>Confirm &amp; Run Payroll</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Export Payroll Register ══════ -->
+<div class="modal fade" id="exportRegisterModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-download me-2 c-primary"></i>Export Payroll Register</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-1rem">
+          <div class="form-label-hr">Period</div>
+          <select class="hr-inp" id="erPeriod">
+            <option>Dec 2025</option>
+            <option>Nov 2025</option>
+          </select>
+        </div>
+        <div>
+          <div class="form-label-hr mb-1">Format</div>
+          <div style="display:flex;gap:.625rem">
+            <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.625rem .75rem;border:1.5px solid var(--color-primary);border-radius:.625rem;cursor:pointer;background:var(--color-primary-light)">
+              <input type="radio" name="erFormat" value="Excel" checked/>
+              <i class="bi bi-filetype-xlsx" style="color:#10B981"></i><span style="font-size:.8125rem;font-weight:700">Excel</span>
+            </label>
+            <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.625rem .75rem;border:1.5px solid var(--card-border);border-radius:.625rem;cursor:pointer">
+              <input type="radio" name="erFormat" value="CSV"/>
+              <i class="bi bi-filetype-csv" style="color:#F59E0B"></i><span style="font-size:.8125rem;font-weight:700">CSV</span>
+            </label>
+            <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.625rem .75rem;border:1.5px solid var(--card-border);border-radius:.625rem;cursor:pointer">
+              <input type="radio" name="erFormat" value="PDF"/>
+              <i class="bi bi-filetype-pdf" style="color:#EF4444"></i><span style="font-size:.8125rem;font-weight:700">PDF</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="handleExportRegister()"><i class="bi bi-download me-1"></i>Export</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Employee Payslip ══════ -->
+<div class="modal fade" id="payslipModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border:none;background:transparent;box-shadow:none">
+      <div class="payslip">
+        <div class="payslip-header">
+          <div>
+            <div class="payslip-company">HRNexus Technologies Pvt. Ltd.</div>
+            <div class="payslip-title">Pay Slip — December 2025</div>
+            <div class="payslip-period">Period: Dec 1 – Dec 31, 2025 · 31 working days</div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="payslip-body">
+          <div class="payslip-emp-row">
+            <div class="av" id="psAvatar" style="width:44px;height:44px;font-size:.85rem"></div>
+            <div>
+              <div style="font-weight:800;font-size:.9375rem;color:var(--body-text)" id="psName"></div>
+              <div style="font-size:.75rem;color:var(--body-text-muted)" id="psMeta"></div>
+              <div style="font-size:.72rem;color:var(--body-text-muted);margin-top:.125rem" id="psStatus"></div>
+            </div>
+          </div>
+          <div class="payslip-section-hd">Earnings</div>
+          <div class="payslip-row"><span class="payslip-row-key" style="font-weight:700;color:var(--body-text)">Gross Earnings</span><span class="payslip-row-val" id="psGross" style="color:#4F6EF7"></span></div>
+          <div class="payslip-section-hd" style="color:#EF4444">Deductions</div>
+          <div class="payslip-row"><span class="payslip-row-key">PF, ESI, Tax &amp; Other Deductions</span><span class="payslip-row-val" id="psDeductions" style="color:#EF4444"></span></div>
+          <div class="payslip-total">
+            <span class="payslip-total-key">💰 Net Take-Home Pay</span>
+            <span class="payslip-total-val" id="psNet"></span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="background:var(--card-bg);border:1px solid var(--card-border);border-top:none;border-radius:0 0 1.25rem 1.25rem">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="handleDownloadPayslip()"><i class="bi bi-download me-1"></i>Download PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ── Toast helper ── */
+function showToast(message, kind) {
+  var bg = kind === 'success' ? 'linear-gradient(135deg,#10B981,#06B6D4)' : 'linear-gradient(135deg,#4F6EF7,#8B5CF6)';
+  var icon = kind === 'success' ? 'bi-check-circle-fill' : 'bi-download';
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:' + bg + ';color:#fff;padding:.875rem 1.25rem;border-radius:.875rem;font-size:.875rem;font-weight:700;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:.625rem;opacity:0;transition:opacity .25s';
+  toast.innerHTML = '<i class="bi ' + icon + '"></i><span>' + message + '</span>';
+  document.body.appendChild(toast);
+  requestAnimationFrame(function () { toast.style.opacity = '1'; });
+  setTimeout(function () {
+    toast.style.opacity = '0';
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 3000);
+}
+
+/* ── Payroll Report ── */
+function handlePayrollReport() {
+  var type = document.getElementById('prType').value;
+  var fmt = document.querySelector('input[name="prFormat"]:checked').value;
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('payrollReportModal')).hide();
+  showToast(type + ' exported as ' + fmt, 'success');
+}
+
+/* ── Run Payroll ── */
+function handleRunPayroll() {
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('runPayrollModal')).hide();
+  showToast('Payroll run initiated for December 2025 — 284 employees, \u20B92.84Cr net disbursed', 'success');
+}
+
+/* ── Export Payroll Register ── */
+function handleExportRegister() {
+  var period = document.getElementById('erPeriod').value;
+  var fmt = document.querySelector('input[name="erFormat"]:checked').value;
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('exportRegisterModal')).hide();
+  showToast('Payroll register (' + period + ') exported as ' + fmt, 'success');
+}
+
+/* ── Employee Payslip (per-row data, matches the Employee Payroll Register table exactly) ── */
+var PAYSLIP_DATA = [
+  { initials: 'SC', cov: 'cov-2', name: 'Sarah Chen',    meta: 'Product · EMP-0012',      status: 'Processed', gross: '₹1,54,167', deductions: '−₹17,850', net: '₹1,36,317' },
+  { initials: 'MJ', cov: 'cov-1', name: 'Marcus Johnson',meta: 'Backend Lead · Engineering · EMP-0043', status: 'Processed', gross: '₹2,66,667', deductions: '−₹34,200', net: '₹2,32,467' },
+  { initials: 'PN', cov: 'cov-4', name: 'Priya Nair',    meta: 'Product · EMP-0027',      status: 'Processed', gross: '₹2,00,000', deductions: '−₹26,400', net: '₹1,73,600' },
+  { initials: 'RD', cov: 'cov-7', name: 'Ravi Das',      meta: 'Engineering · EMP-0058',  status: 'On Hold',   gross: '₹1,66,667', deductions: '−₹21,000', net: '₹1,45,667' },
+  { initials: 'AI', cov: 'cov-5', name: 'Aisha Iyer',    meta: 'Marketing · EMP-0071',    status: 'Processed', gross: '₹1,83,333', deductions: '−₹23,160', net: '₹1,60,173' }
+];
+var CURRENT_PAYSLIP = null;
+
+function handleViewPayslip(i) {
+  var d = PAYSLIP_DATA[i];
+  if (!d) return;
+  CURRENT_PAYSLIP = d;
+
+  var avatar = document.getElementById('psAvatar');
+  avatar.textContent = d.initials;
+  avatar.className = 'av ' + d.cov;
+  avatar.style.width = '44px'; avatar.style.height = '44px'; avatar.style.fontSize = '.85rem';
+
+  document.getElementById('psName').textContent = d.name;
+  document.getElementById('psMeta').textContent = d.meta;
+  document.getElementById('psStatus').textContent = 'Status: ' + d.status;
+  document.getElementById('psGross').textContent = d.gross;
+  document.getElementById('psDeductions').textContent = d.deductions;
+  document.getElementById('psNet').textContent = d.net;
+
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('payslipModal')).show();
+}
+
+function handleDownloadPayslip() {
+  if (!CURRENT_PAYSLIP) return;
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('payslipModal')).hide();
+  showToast(CURRENT_PAYSLIP.name + '\u2019s payslip downloaded as PDF', 'success');
+}
+</script>
+</body>
+</html>

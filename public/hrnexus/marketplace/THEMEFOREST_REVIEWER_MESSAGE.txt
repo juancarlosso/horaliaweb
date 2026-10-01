@@ -1,0 +1,13 @@
+Hello ThemeForest Review Team,
+
+Thank you for reviewing HRNexus | Bootstrap 5 HR & Admin Dashboard HTML Template.
+
+This submission contains a professionally organized Bootstrap 5 admin dashboard template with 89 HTML pages, responsive layouts, dark mode, theme presets, HR/recruitment/employee workflows, UI components, forms, tables, invoices, authentication screens and supporting documentation.
+
+The package includes editable SCSS source under /src, production assets under /dist, documentation, asset/credit information and a QA report.
+
+The template is an original HR/admin dashboard UI and is not intended to impersonate or replicate another marketplace item.
+
+Third-party resources used by the template are documented in documentation/ASSETS_AND_CREDITS.md.
+
+Thank you for your time and review.

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Create Invoice — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Invoice creation form for generating new billing documents with line items."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb">
+        <span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Create Invoice</span>
+      </nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content"><div class="page-inner">
+  <div class="page-header">
+    <div><h1 class="page-title">Create Invoice</h1><p class="page-subtitle">INV-2024-0043</p></div>
+    <div class="flex-g2">
+      <button type="button" class="btn-hr btn-outline-hr" onclick="openPreview()"><i class="bi bi-eye me-1"></i>Preview</button>
+      <a href="../pages/invoice-classic.html" class="btn-hr btn-primary-hr"><i class="bi bi-floppy me-1"></i>Save Invoice</a>
+    </div>
+  </div>
+  <div class="row g-4">
+    <div class="col-xl-8">
+      <div class="card-hr mb-1rem">
+        <div class="card-hd"><div class="card-title-hr">Invoice Details</div></div>
+        <div class="card-bd"><div class="row g-3">
+          <div class="col-md-6"><label class="form-label-hr">Invoice Number</label><input class="hr-input" id="invNumber" value="INV-2024-0043"/></div>
+          <div class="col-md-6"><label class="form-label-hr">Issue Date</label><input class="hr-input" id="invIssueDate" type="date" value="2024-12-13"/></div>
+          <div class="col-md-6"><label class="form-label-hr">Due Date</label><input class="hr-input" id="invDueDate" type="date" value="2025-01-12"/></div>
+          <div class="col-md-6"><label class="form-label-hr">Currency</label><select class="hr-input" id="invCurrency"><option>USD ($)</option><option>INR (₹)</option><option>EUR (€)</option></select></div>
+        </div></div>
+      </div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd"><div class="card-title-hr">Bill To</div></div>
+        <div class="card-bd"><div class="row g-3">
+          <div class="col-12"><label class="form-label-hr">Company Name</label><input class="hr-input" id="billCompany" placeholder="Acme Corp India Pvt. Ltd."/></div>
+          <div class="col-md-6"><label class="form-label-hr">Contact Name</label><input class="hr-input" id="billContact" placeholder="Priya Finance"/></div>
+          <div class="col-md-6"><label class="form-label-hr">Email</label><input class="hr-input" id="billEmail" type="email" placeholder="finance@acmecorp.in"/></div>
+          <div class="col-12"><label class="form-label-hr">Address</label><textarea class="hr-input" id="billAddress" rows="2" placeholder="101 BKC, Bandra, Mumbai 400051"></textarea></div>
+        </div></div>
+      </div>
+      <div class="card-hr">
+        <div class="card-hd"><div class="card-title-hr">Line Items</div></div>
+        <div class="card-bd p-0">
+          <table class="w100pct-4">
+            <thead><tr class="bg-body-var">
+              <th class="fs72-fw7-c-muted-p-3-4-tl-uc">Description</th>
+              <th class="fs72-fw7-c-muted-p-3-tc-uc">Qty</th>
+              <th class="fs72-fw7-c-muted-p-3-tr-uc">Rate</th>
+              <th class="fs72-fw7-c-muted-p-3-tr-uc">Tax</th>
+              <th class="fs72-fw7-c-muted-p-3-tr-uc">Amount</th>
+              <th class="w36px-p-3"></th>
+            </tr></thead>
+            <tbody id="lineItemsBody"><tr><td class="p-2"><input class="hr-input fs845" type="text" value="HR Software License — Enterprise (Annual)" /></td><td class="w60px-p-2"><input class="hr-input w60px-fs845-tc" type="number" value="1" /></td><td class="w100px-p-2"><input class="hr-input w100px-fs845-tr" type="number" value="8400" /></td><td class="w60px-p-2"><select class="hr-input w60px-fs845"><option>18%</option><option>12%</option><option>5%</option><option>0%</option></select></td><td class="w100px-fs9-fw6-p-2-tr">$8,400</td><td class="w36px-p-2"><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr"><i class="bi bi-trash3"></i></button></td></tr><tr><td class="p-2"><input class="hr-input fs845" type="text" value="Payroll Processing Module" /></td><td class="w60px-p-2"><input class="hr-input w60px-fs845-tc" type="number" value="1" /></td><td class="w100px-p-2"><input class="hr-input w100px-fs845-tr" type="number" value="2400" /></td><td class="w60px-p-2"><select class="hr-input w60px-fs845"><option>18%</option><option>12%</option><option>5%</option><option>0%</option></select></td><td class="w100px-fs9-fw6-p-2-tr">$2,400</td><td class="w36px-p-2"><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr"><i class="bi bi-trash3"></i></button></td></tr><tr><td class="p-2"><input class="hr-input fs845" type="text" value="Employee Onboarding Module" /></td><td class="w60px-p-2"><input class="hr-input w60px-fs845-tc" type="number" value="1" /></td><td class="w100px-p-2"><input class="hr-input w100px-fs845-tr" type="number" value="1800" /></td><td class="w60px-p-2"><select class="hr-input w60px-fs845"><option>18%</option><option>12%</option><option>5%</option><option>0%</option></select></td><td class="w100px-fs9-fw6-p-2-tr">$1,800</td><td class="w36px-p-2"><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr"><i class="bi bi-trash3"></i></button></td></tr><tr><td class="p-2"><input class="hr-input fs845" type="text" value="Analytics & Reporting Dashboard" /></td><td class="w60px-p-2"><input class="hr-input w60px-fs845-tc" type="number" value="1" /></td><td class="w100px-p-2"><input class="hr-input w100px-fs845-tr" type="number" value="1200" /></td><td class="w60px-p-2"><select class="hr-input w60px-fs845"><option>18%</option><option>12%</option><option>5%</option><option>0%</option></select></td><td class="w100px-fs9-fw6-p-2-tr">$1,200</td><td class="w36px-p-2"><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr"><i class="bi bi-trash3"></i></button></td></tr><tr><td class="p-2"><input class="hr-input fs845" type="text" value="Premium Support & SLA (12 months)" /></td><td class="w60px-p-2"><input class="hr-input w60px-fs845-tc" type="number" value="1" /></td><td class="w100px-p-2"><input class="hr-input w100px-fs845-tr" type="number" value="900" /></td><td class="w60px-p-2"><select class="hr-input w60px-fs845"><option>18%</option><option>12%</option><option>5%</option><option>0%</option></select></td><td class="w100px-fs9-fw6-p-2-tr">$900</td><td class="w36px-p-2"><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr"><i class="bi bi-trash3"></i></button></td></tr></tbody>
+          </table>
+          <div class="p-35-55-bt-1">
+            <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr"><i class="bi bi-plus-lg me-1"></i>Add Line Item</button>
+          </div>
+          <div class="flex-jfe-p-4-55-bt-1">
+            <div class="w280px">
+              <div class="flex-jsb-fs9-mb2"><span class="c-muted">Subtotal</span><span class="fw6" id="invSubtotal">$14,700</span></div>
+              <div class="flex-jsb-fs9-mb2"><span class="c-muted">Tax</span><span class="fw6" id="invTax">$2,646</span></div>
+              <div class="flex-jsb-fs1125-fw8-pt3-mt2-bt-2-border"><span>Total</span><span class="c-primary" id="invTotal">$17,346</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="card-hr mb-1rem">
+        <div class="card-hd"><div class="card-title-hr">Template</div></div>
+        <div class="card-bd">
+          <div class="flex-col-g2">
+            <label class="flex-ac-g3-br25-p-25-b-2-pointer"><input class="accent-primary" type="radio" name="tmpl" checked/><span class="fs845-fw6">Classic</span></label>
+            <label class="flex-ac-g3-br25-p-25-b-1-pointer"><input class="accent-primary" type="radio" name="tmpl" /><span class="fs845-fw6">Modern</span></label>
+            <label class="flex-ac-g3-br25-p-25-b-1-pointer"><input class="accent-primary" type="radio" name="tmpl" /><span class="fs845-fw6">Minimal</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="card-hr">
+        <div class="card-hd"><div class="card-title-hr">Notes</div></div>
+        <div class="card-bd"><textarea class="hr-input" id="invNotes" rows="4" placeholder="Payment terms, bank details, or any other notes..."></textarea></div>
+      </div>
+    </div>
+  </div>
+</div></main>
+</div>
+
+<!-- ══════ MODAL: Invoice Preview ══════ -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-eye-fill me-2 c-primary"></i>Invoice Preview</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="invoicePreviewArea" style="padding:.5rem">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem">
+            <div>
+              <div style="font-size:1.375rem;font-weight:800;color:var(--body-text)">HRNexus Technologies Pvt. Ltd.</div>
+              <div style="font-size:.8125rem;color:var(--body-text-muted);margin-top:.25rem">401, Corporate Heights, Andheri East, Mumbai 400069</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:1.125rem;font-weight:800;color:var(--color-primary)">INVOICE</div>
+              <div style="font-size:.8125rem;color:var(--body-text-muted);margin-top:.25rem" id="pvNumber"></div>
+            </div>
+          </div>
+          <div class="row g-3" style="margin-bottom:1.5rem">
+            <div class="col-6">
+              <div class="form-label-hr" style="margin-bottom:.25rem">Bill To</div>
+              <div style="font-weight:700;font-size:.9rem;color:var(--body-text)" id="pvCompany"></div>
+              <div style="font-size:.8125rem;color:var(--body-text-muted)" id="pvContact"></div>
+              <div style="font-size:.8125rem;color:var(--body-text-muted)" id="pvEmail"></div>
+              <div style="font-size:.8125rem;color:var(--body-text-muted);white-space:pre-line" id="pvAddress"></div>
+            </div>
+            <div class="col-6" style="text-align:right">
+              <div style="font-size:.8125rem;color:var(--body-text-muted)">Issue Date: <strong style="color:var(--body-text)" id="pvIssueDate"></strong></div>
+              <div style="font-size:.8125rem;color:var(--body-text-muted)">Due Date: <strong style="color:var(--body-text)" id="pvDueDate"></strong></div>
+              <div style="font-size:.8125rem;color:var(--body-text-muted)">Template: <strong style="color:var(--body-text)" id="pvTemplate"></strong></div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="hr-table">
+              <thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Tax</th><th>Amount</th></tr></thead>
+              <tbody id="pvLineItems"></tbody>
+            </table>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:1.25rem">
+            <div style="min-width:220px">
+              <div style="display:flex;justify-content:space-between;font-size:.8125rem;color:var(--body-text-muted);padding:.3rem 0">Subtotal<span id="pvSubtotal"></span></div>
+              <div style="display:flex;justify-content:space-between;font-size:.8125rem;color:var(--body-text-muted);padding:.3rem 0">Tax<span id="pvTax"></span></div>
+              <div style="display:flex;justify-content:space-between;font-size:1rem;font-weight:800;color:var(--color-primary);padding:.5rem 0;border-top:1px solid var(--body-border);margin-top:.25rem">Total<span id="pvTotal"></span></div>
+            </div>
+          </div>
+          <div id="pvNotesWrap" style="margin-top:1.5rem;display:none">
+            <div class="form-label-hr" style="margin-bottom:.25rem">Notes</div>
+            <div style="font-size:.8125rem;color:var(--body-text-muted);white-space:pre-line" id="pvNotes"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+function getCurrencySymbol() {
+  var v = document.getElementById('invCurrency').value;
+  if (v.indexOf('INR') === 0) return '₹';
+  if (v.indexOf('EUR') === 0) return '€';
+  return '$';
+}
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  var d = new Date(iso + 'T00:00:00');
+  if (isNaN(d.getTime())) return iso;
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function openPreview() {
+  var sym = getCurrencySymbol();
+
+  document.getElementById('pvNumber').textContent = '#' + (document.getElementById('invNumber').value.trim() || 'Untitled');
+  document.getElementById('pvCompany').textContent = document.getElementById('billCompany').value.trim() || '(No company name entered)';
+  document.getElementById('pvContact').textContent = document.getElementById('billContact').value.trim();
+  document.getElementById('pvEmail').textContent = document.getElementById('billEmail').value.trim();
+  document.getElementById('pvAddress').textContent = document.getElementById('billAddress').value.trim();
+  document.getElementById('pvIssueDate').textContent = formatDate(document.getElementById('invIssueDate').value);
+  document.getElementById('pvDueDate').textContent = formatDate(document.getElementById('invDueDate').value);
+
+  var selectedTmpl = document.querySelector('input[name="tmpl"]:checked');
+  document.getElementById('pvTemplate').textContent = selectedTmpl
+    ? selectedTmpl.closest('label').textContent.trim()
+    : 'Classic';
+
+  var rows = document.querySelectorAll('#lineItemsBody tr');
+  var subtotal = 0, taxTotal = 0;
+  var lineItemsHtml = '';
+  rows.forEach(function(row) {
+    var descEl = row.querySelector('input[type="text"]');
+    var qtyEl = row.querySelectorAll('input[type="number"]')[0];
+    var rateEl = row.querySelectorAll('input[type="number"]')[1];
+    var taxEl = row.querySelector('select');
+    if (!descEl || !qtyEl || !rateEl) return;
+
+    var desc = descEl.value.trim() || '(Untitled item)';
+    var qty = parseFloat(qtyEl.value) || 0;
+    var rate = parseFloat(rateEl.value) || 0;
+    var taxPct = taxEl ? parseFloat(taxEl.value) || 0 : 0;
+    var lineAmount = qty * rate;
+    var lineTax = lineAmount * (taxPct / 100);
+
+    subtotal += lineAmount;
+    taxTotal += lineTax;
+
+    lineItemsHtml += '<tr>' +
+      '<td>' + escapeHtml(desc) + '</td>' +
+      '<td>' + qty + '</td>' +
+      '<td>' + sym + rate.toLocaleString() + '</td>' +
+      '<td>' + taxPct + '%</td>' +
+      '<td>' + sym + lineAmount.toLocaleString() + '</td>' +
+      '</tr>';
+  });
+  document.getElementById('pvLineItems').innerHTML = lineItemsHtml || '<tr><td colspan="5" style="text-align:center;color:var(--body-text-muted)">No line items added yet</td></tr>';
+
+  var total = subtotal + taxTotal;
+  document.getElementById('pvSubtotal').textContent = sym + subtotal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+  document.getElementById('pvTax').textContent = sym + taxTotal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+  document.getElementById('pvTotal').textContent = sym + total.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+
+  var notes = document.getElementById('invNotes').value.trim();
+  document.getElementById('pvNotesWrap').style.display = notes ? 'block' : 'none';
+  document.getElementById('pvNotes').textContent = notes;
+
+  var modalEl = document.getElementById('previewModal');
+  var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  modal.show();
+}
+</script>
+</body>
+</html>

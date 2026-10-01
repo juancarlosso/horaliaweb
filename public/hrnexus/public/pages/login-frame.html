@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Sign In (Framed) — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="A bordered, framed sign-in layout for HRNexus — decorative corner accents and a dot-grid backdrop around a centered login card."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+
+  <style id="page-css">
+/* ── Login Frame — decorative bordered variant ── */
+.lf-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:2rem 1.25rem;position:relative;overflow:hidden;
+  background-image:radial-gradient(circle,var(--body-border) 1px,transparent 1px);
+  background-size:22px 22px;background-position:-11px -11px}
+[data-bs-theme=dark] .lf-screen{background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px)}
+.lf-glow{position:absolute;width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle,rgba(79,110,247,.14),transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0}
+.lf-wrap{position:relative;z-index:1;width:100%;max-width:420px}
+.lf-frame{position:relative;padding:1.5rem}
+.lf-corner{position:absolute;width:28px;height:28px;border:2px solid var(--color-primary);opacity:.55}
+.lf-corner.tl{top:0;left:0;border-right:none;border-bottom:none;border-radius:.625rem 0 0 0}
+.lf-corner.tr{top:0;right:0;border-left:none;border-bottom:none;border-radius:0 .625rem 0 0}
+.lf-corner.bl{bottom:0;left:0;border-right:none;border-top:none;border-radius:0 0 0 .625rem}
+.lf-corner.br{bottom:0;right:0;border-left:none;border-top:none;border-radius:0 0 .625rem 0}
+.lf-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:1.25rem;
+  box-shadow:0 24px 64px -12px rgba(30,35,90,.16),0 1px 2px rgba(30,35,90,.04);
+  padding:2.25rem 2rem;text-align:center}
+[data-bs-theme=dark] .lf-card{box-shadow:0 24px 64px -12px rgba(0,0,0,.5)}
+.lf-badge{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;
+  border-radius:1rem;background:linear-gradient(135deg,#4F6EF7,#8B5CF6);color:#fff;font-size:1.25rem;
+  box-shadow:0 8px 24px rgba(79,110,247,.4);margin-bottom:1rem}
+.lf-title{font-size:1.375rem;font-weight:800;color:var(--body-text);margin-bottom:.25rem;letter-spacing:-.02em}
+.lf-sub{font-size:.845rem;color:var(--body-text-muted);margin-bottom:1.5rem}
+.lf-form{text-align:left}
+.lf-footer{text-align:center;margin-top:1.25rem;font-size:.845rem;color:var(--body-text-muted)}
+.lf-footer a{font-weight:700}
+.lf-back{position:absolute;top:1.75rem;left:1.75rem;z-index:2;display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.8rem;font-weight:600;color:var(--body-text-muted)}
+.lf-back:hover{color:var(--color-primary);text-decoration:none}
+  </style>
+</head>
+<body class="bg-body-var">
+<a class="lf-back" href="../index.html"><i class="bi bi-arrow-left"></i>Back to home</a>
+<div class="lf-screen">
+  <div class="lf-glow" aria-hidden="true"></div>
+  <div class="lf-wrap anim-fiu">
+    <div class="lf-frame">
+      <span class="lf-corner tl" aria-hidden="true"></span>
+      <span class="lf-corner tr" aria-hidden="true"></span>
+      <span class="lf-corner bl" aria-hidden="true"></span>
+      <span class="lf-corner br" aria-hidden="true"></span>
+      <div class="lf-card">
+        <div class="lf-badge"><i class="bi bi-people-fill"></i></div>
+        <h1 class="lf-title">Sign in to HRNexus</h1>
+        <p class="lf-sub">Enter your credentials to access your dashboard</p>
+        <div class="lf-form flex-col-g5">
+          <div>
+            <label class="form-label-hr">Email address</label>
+            <input class="hr-input" type="email" id="loginEmail" placeholder="ravindra@hrnexus.com" autocomplete="email" required/>
+          </div>
+          <div>
+            <div class="flex-jsb-ac-mb2">
+              <label class="form-label-hr m-0">Password</label>
+              <a class="fs8125-fw6-c-primary-tdn" href="../pages/forgot-password.html">Forgot password?</a>
+            </div>
+            <input class="hr-input" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required/>
+          </div>
+          <div class="flex-ac-g25">
+            <input class="accent-primary" type="checkbox" id="rememberMe"/>
+            <label class="fs845-c-muted" for="rememberMe">Remember me for 30 days</label>
+          </div>
+          <div id="loginError" role="alert" aria-live="polite" style="display:none;font-size:.8125rem;color:#EF4444;margin-bottom:.5rem"></div>
+          <button type="button" class="btn-hr btn-primary-hr w100pct-tdn" onclick="submitLogin()">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Sign in to HRNexus
+          </button>
+          <div class="flex-ac-g3-m-1-0">
+            <div class="divider-h"></div>
+            <span class="fs75-muted">or continue with</span>
+            <div class="divider-h"></div>
+          </div>
+          <div class="flex-g3">
+            <a class="btn-hr btn-outline-hr fl1-jfc" href="../index.html"><i class="bi bi-google me-1"></i>Google</a>
+            <a class="btn-hr btn-outline-hr fl1-jfc" href="../index.html"><i class="bi bi-microsoft me-1"></i>Microsoft</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="lf-footer">Don't have an account? <a href="../pages/register-cover.html">Sign up</a></p>
+  </div>
+</div>
+  <script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+function submitLogin() {
+  var email = document.getElementById('loginEmail');
+  var password = document.getElementById('loginPassword');
+  var errorBox = document.getElementById('loginError');
+  var emailValue = email.value.trim();
+  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  email.style.borderColor = '';
+  password.style.borderColor = '';
+  errorBox.style.display = 'none';
+  errorBox.textContent = '';
+
+  if (!emailValue || !password.value) {
+    if (!emailValue) email.style.borderColor = '#EF4444';
+    if (!password.value) password.style.borderColor = '#EF4444';
+    errorBox.textContent = 'Please enter your email address and password.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  if (!emailRe.test(emailValue)) {
+    email.style.borderColor = '#EF4444';
+    errorBox.textContent = 'Please enter a valid email address.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  window.location.href = '../index.html';
+}
+</script>
+</body>
+</html>

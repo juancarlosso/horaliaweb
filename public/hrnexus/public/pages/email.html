@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Email Inbox — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Inbox-style email client UI with folder navigation and message preview."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+
+<!-- ── Sidebar ──────────────────────────────────────────────────────── -->
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+
+<!-- ── Main ─────────────────────────────────────────────────────────── -->
+<div class="main-content" id="mainContent">
+
+  <!-- Topbar -->
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Email</span></nav>
+      <div class="search-wrap"><i class="bi bi-search search-icon-i"></i><input type="search" class="search-input" placeholder="Search emails..." oninput="searchEmails(this.value)"/></div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel"><i class="bi bi-bell-fill"></i><span class="badge-dot"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- Page header — exact React marginBottom:1rem -->
+      <div class="page-header mb-1rem">
+        <div>
+          <h1 class="page-title">Email Inbox</h1>
+          <p class="page-subtitle" id="unreadSubtitle">2 unread messages</p>
+        </div>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="startCompose()">
+          <i class="bi bi-pencil-square me-1"></i>Compose
+        </button>
+      </div>
+
+      <!-- ── 3-panel email layout — exact React height:calc(100vh-210px) ── -->
+      <div class="email-wrap">
+
+        <!-- LEFT: folder sidebar (200px) ──────────────────────────────── -->
+        <div class="email-sidebar">
+          <!-- Compose button inside sidebar — exact React -->
+          <button class="btn-hr btn-primary-hr w100pct-fs8125-mb2" type="button" onclick="startCompose()">
+            <i class="bi bi-pencil-square me-1"></i>Compose
+          </button>
+
+          <!-- Folder buttons — exact React -->
+          <button type="button" class="folder-btn active" id="folder-inbox" data-folder="inbox" onclick="setFolder('inbox')">
+            <i class="bi bi-inbox-fill folder-icon w16px-fs875-c-primary"></i>
+            <span class="folder-label fs8125-fw7-c-primary-tl-fl1">Inbox</span>
+            <span class="badge-red-xs-fs65-p04-14" id="badge-inbox">2</span>
+          </button>
+          <button type="button" class="folder-btn" id="folder-starred" data-folder="starred" onclick="setFolder('starred')">
+            <i class="bi bi-star-fill folder-icon w16px-fs875-c-muted"></i>
+            <span class="folder-label fs8125-fw5-c-body-tl-fl1">Starred</span>
+            <span class="badge-border-xs-fs65-p04-14">2</span>
+          </button>
+          <button type="button" class="folder-btn" id="folder-sent" data-folder="sent" onclick="setFolder('sent')">
+            <i class="bi bi-send-fill folder-icon w16px-fs875-c-muted"></i>
+            <span class="folder-label fs8125-fw5-c-body-tl-fl1">Sent</span>
+          </button>
+          <button type="button" class="folder-btn" id="folder-drafts" data-folder="drafts" onclick="setFolder('drafts')">
+            <i class="bi bi-file-earmark-fill folder-icon w16px-fs875-c-muted"></i>
+            <span class="folder-label fs8125-fw5-c-body-tl-fl1">Drafts</span>
+            <span class="badge-border-xs-fs65-p04-14">2</span>
+          </button>
+          <button type="button" class="folder-btn" id="folder-trash" data-folder="trash" onclick="setFolder('trash')">
+            <i class="bi bi-trash3-fill folder-icon w16px-fs875-c-muted"></i>
+            <span class="folder-label fs8125-fw5-c-body-tl-fl1">Trash</span>
+          </button>
+
+          <!-- Labels — exact React -->
+          <div class="p-2-1-mt4">
+            <div class="fs65-fw7-c-muted-mb2-uc">Labels</div>
+            <button type="button" class="label-btn" onclick="filterByLabel('HR')"><div class="sq8px-bg-purple-shrink0"></div><span class="fs8-muted">HR</span></button><button type="button" class="label-btn" onclick="filterByLabel('Dev')"><div class="sq8px-bg-blue-shrink0"></div><span class="fs8-muted">Dev</span></button><button type="button" class="label-btn" onclick="filterByLabel('Tech')"><div class="sq8px-bg-red-shrink0"></div><span class="fs8-muted">Tech</span></button><button type="button" class="label-btn" onclick="filterByLabel('Design')"><div class="sq8px-bg-amber-shrink0"></div><span class="fs8-muted">Design</span></button><button type="button" class="label-btn" onclick="filterByLabel('Analytics')"><div class="sq8px-bg-green-shrink0"></div><span class="fs8-muted">Analytics</span></button><button type="button" class="label-btn" onclick="filterByLabel('Social')"><div class="sq8px-bg-pink-shrink0"></div><span class="fs8-muted">Social</span></button><button type="button" class="label-btn" onclick="filterByLabel('System')"><div class="sq8px-bg-slate-dk-shrink0"></div><span class="fs8-muted">System</span></button>
+          </div>
+        </div>
+
+        <!-- MIDDLE: email list (320px) ─────────────────────────────────── -->
+        <div class="email-list-panel">
+          <!-- Search + count toolbar -->
+          <div class="p-3-bb-1-shrink0">
+            <div class="rel-mb2">
+              <i class="bi bi-search abs-input-icon-l2"></i>
+              <input class="hr-input fs8-pt16-pb16-pl8" id="emailSearch" placeholder="Search email..." oninput="searchEmails(this.value)"/>
+            </div>
+            <div class="flex-jsb-ac">
+              <span class="fs75-fw6-muted" id="msgCount">7 messages</span>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Filter" id="unreadFilterBtn" onclick="showFilterMenu()"><i class="bi bi-funnel"></i></button>
+            </div>
+          </div>
+          <!-- Email rows -->
+          <div class="ov-y-auto-fl1" id="emailListBody">
+<div class="email-row rel-bg-blue-3-p-35-4-bb-1-pointer-trans" data-id="1" data-folder="inbox" data-starred="1" onclick="openEmail(1)">
+      <div class="abs-t50pct-l0-w3px-h60pct-bg-primary"></div>
+      <div class="flex-ac-g25-mb15">
+        <div class="avatar-purple-pink-30">ER</div>
+        <div class="fl1-mnw0">
+          <div class="flex-jsb-ac">
+            <span class="mw150px-fs8125-fw7-c-body-ellipsis-nowrap-ov-hidden">Emily Rodriguez</span>
+            <span class="fs7-c-muted-shrink0">10:32 AM</span>
+          </div>
+        </div>
+      </div>
+      <div class="pl42px">
+        <div class="fs8125-fw7-c-body-mb05-ellipsis-nowrap-ov-hidden">Q4 Performance Review Forms are Now Live</div>
+        <div class="fs75-muted-ellipsis">Hi team! I wanted to let everyone know that the Q4 performance review forms are now available...</div>
+        <div class="flex-ac-g1-mt15"><i class="bi bi-exclamation-circle-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><span class="fs6-fw7-c-purple-bg-purple-8-br3px-p-04-14">HR</span></div>
+      </div>
+    </div><div class="email-row rel-bg-blue-3-p-35-4-bb-1-pointer-trans" data-id="2" data-folder="inbox" data-starred="0" onclick="openEmail(2)">
+      <div class="abs-t50pct-l0-w3px-h60pct-bg-primary"></div>
+      <div class="flex-ac-g25-mb15">
+        <div class="avatar-green-purple-30">AP</div>
+        <div class="fl1-mnw0">
+          <div class="flex-jsb-ac">
+            <span class="mw150px-fs8125-fw7-c-body-ellipsis-nowrap-ov-hidden">Aisha Patel</span>
+            <span class="fs7-c-muted-shrink0">9:45 AM</span>
+          </div>
+        </div>
+      </div>
+      <div class="pl42px">
+        <div class="fs8125-fw7-c-body-mb05-ellipsis-nowrap-ov-hidden">Holiday Party Confirmed — Dec 22nd at 6PM 🎉</div>
+        <div class="fs75-muted-ellipsis">Great news everyone! The annual holiday party has been confirmed for December 22nd...</div>
+        <div class="flex-ac-g1-mt15"><span class="fs6-fw7-c-pink-bg-pink-8-br3px-p-04-14">Social</span></div>
+      </div>
+    </div><div class="email-row rel-bg-transparent-p-35-4-bb-1-pointer-trans" data-id="3" data-folder="inbox" data-starred="1" onclick="openEmail(3)">
+      
+      <div class="flex-ac-g25-mb15">
+        <div class="avatar-red-amber-30">TN</div>
+        <div class="fl1-mnw0">
+          <div class="flex-jsb-ac">
+            <span class="mw150px-fs8125-fw5-c-body-ellipsis-nowrap-ov-hidden">Tom Nakamura</span>
+            <span class="fs7-c-muted-shrink0">Yesterday</span>
+          </div>
+        </div>
+      </div>
+      <div class="pl42px">
+        <div class="fs8125-fw5-c-body-mb05-ellipsis-nowrap-ov-hidden">Infrastructure Migration — Successful Deployment</div>
+        <div class="fs75-muted-ellipsis">Team, I am pleased to report that the infrastructure migration completed successfully this morning...</div>
+        <div class="flex-ac-g1-mt15"><i class="bi bi-exclamation-circle-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-paperclip fs7-muted"></i><span class="fs6-fw7-c-red-bg-red-8-br3px-p-04-14">Tech</span></div>
+      </div>
+    </div><div class="email-row rel-bg-transparent-p-35-4-bb-1-pointer-trans" data-id="4" data-folder="inbox" data-starred="0" onclick="openEmail(4)">
+      
+      <div class="flex-ac-g25-mb15">
+        <div class="avatar-green-sky-30">MJ</div>
+        <div class="fl1-mnw0">
+          <div class="flex-jsb-ac">
+            <span class="mw150px-fs8125-fw5-c-body-ellipsis-nowrap-ov-hidden">Marcus Johnson</span>
+            <span class="fs7-c-muted-shrink0">Yesterday</span>
+          </div>
+        </div>
+      </div>
+      <div class="pl42px">
+        <div class="fs8125-fw5-c-body-mb05-ellipsis-nowrap-ov-hidden">Auth Refactor PR — Ready for Review</div>
+        <div class="fs75-muted-ellipsis">Hi, I have finished the auth refactor. The PR is up and includes all the changes we discussed...</div>
+        <div class="flex-ac-g1-mt15"><span class="fs6-fw7-c-blue-bg-blue-8-br3px-p-04-14">Dev</span></div>
+      </div>
+    </div><div class="email-row rel-bg-transparent-p-35-4-bb-1-pointer-trans" data-id="5" data-folder="inbox" data-starred="0" onclick="openEmail(5)">
+      
+      <div class="flex-ac-g25-mb15">
+        <div class="avatar-blue-purple-30">SC</div>
+        <div class="fl1-mnw0">
+          <div class="flex-jsb-ac">
+            <span class="mw150px-fs8125-fw5-c-body-ellipsis-nowrap-ov-hidden">Sarah Chen</span>
+            <span class="fs7-c-muted-shrink0">Mon</span>
+          </div>
+        </div>
+      </div>
+      <div class="pl42px">
+        <div class="fs8125-fw5-c-body-mb05-ellipsis-nowrap-ov-hidden">Onboarding Redesign — Figma Preview Ready</div>
+        <div class="fs75-muted-ellipsis">Hey! I just finished the redesign for the employee onboarding flow. I have attached a preview...</div>
+        <div class="flex-ac-g1-mt15"><i class="bi bi-paperclip fs7-muted"></i><span class="fs6-fw7-c-amber-bg-amber-8-br3px-p-04-14">Design</span></div>
+      </div>
+    </div><div class="email-row rel-bg-transparent-p-35-4-bb-1-pointer-trans" data-id="6" data-folder="inbox" data-starred="0" onclick="openEmail(6)">
+      
+      <div class="flex-ac-g25-mb15">
+        <div class="avatar-sky-blue-30">DK</div>
+        <div class="fl1-mnw0">
+          <div class="flex-jsb-ac">
+            <span class="mw150px-fs8125-fw5-c-body-ellipsis-nowrap-ov-hidden">David Kim</span>
+            <span class="fs7-c-muted-shrink0">Mon</span>
+          </div>
+        </div>
+      </div>
+      <div class="pl42px">
+        <div class="fs8125-fw5-c-body-mb05-ellipsis-nowrap-ov-hidden">Q4 Analytics Dashboard — Release Notes</div>
+        <div class="fs75-muted-ellipsis">The analytics dashboard v2 is ready for staging. I have included the release notes and known issues...</div>
+        <div class="flex-ac-g1-mt15"><i class="bi bi-paperclip fs7-muted"></i><span class="fs6-fw7-c-green-bg-green-8-br3px-p-04-14">Analytics</span></div>
+      </div>
+    </div><div class="email-row rel-bg-transparent-p-35-4-bb-1-pointer-trans" data-id="7" data-folder="inbox" data-starred="0" onclick="openEmail(7)">
+      
+      <div class="flex-ac-g25-mb15">
+        <div class="avatar-red-amber-30">HR</div>
+        <div class="fl1-mnw0">
+          <div class="flex-jsb-ac">
+            <span class="mw150px-fs8125-fw5-c-body-ellipsis-nowrap-ov-hidden">HR System</span>
+            <span class="fs7-c-muted-shrink0">Mon</span>
+          </div>
+        </div>
+      </div>
+      <div class="pl42px">
+        <div class="fs8125-fw5-c-body-mb05-ellipsis-nowrap-ov-hidden">[Reminder] Leave requests close Dec 14th</div>
+        <div class="fs75-muted-ellipsis">This is an automated reminder that holiday leave requests will close on December 14th. Please...</div>
+        <div class="flex-ac-g1-mt15"><span class="fs6-fw7-c-slate-dk-bg-slate-dk-8-br3px-p-04-14">System</span></div>
+      </div>
+    </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: email main area ─────────────────────────────────────── -->
+        <div class="email-main">
+
+          <!-- EMPTY STATE — exact React -->
+          <div class="flex-col-ac-jfc-g4-c-muted-p-8-fl1" id="viewEmpty">
+            <div class="fs3-op15"><i class="bi bi-envelope-open"></i></div>
+            <div class="fs1-fw6">Select an email to read</div>
+            <div class="fs875">Or compose a new message</div>
+            <button type="button" class="btn-hr btn-primary-hr" onclick="startCompose()">
+              <i class="bi bi-pencil-square me-1"></i>Compose
+            </button>
+          </div>
+
+          <!-- READ VIEW — exact React -->
+          <div class="d-none-fl1" id="viewRead">
+            <!-- Toolbar — exact React -->
+            <div class="flex-ac-g2-p-3-6-bb-1-shrink0">
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr" onclick="closeEmail()">
+                <i class="bi bi-arrow-left me-1"></i>Back
+              </button>
+              <div class="w1px-h20px-bg-border"></div>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Archive" onclick="archiveEmail()"><i class="bi bi-archive"></i></button>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Delete" onclick="deleteEmail()"><i class="bi bi-trash3"></i></button>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Mark unread" onclick="markUnread()"><i class="bi bi-envelope"></i></button>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Move to folder"><i class="bi bi-folder2"></i></button>
+              <div class="ml-auto-flex-g15">
+                <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" id="starBtn" title="Star" onclick="toggleStar()">
+                  <i class="bi bi-star" id="starIcon"></i>
+                </button>
+                <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+              </div>
+            </div>
+            <!-- Email body — exact React padding:1.5rem 2rem -->
+            <div class="p-6-8-ov-y-auto-fl1" id="readBody">
+              <!-- Dynamically filled by JS -->
+            </div>
+          </div>
+
+          <!-- COMPOSE VIEW — exact React -->
+          <div class="d-none-fl1" id="viewCompose">
+            <!-- Compose header — exact React -->
+            <div class="flex-ac-jsb-p-35-6-bb-1-shrink0">
+              <h3 class="fs1-fw7-m-0">New Message</h3>
+              <div class="flex-g15">
+                <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr" onclick="toggleFullscreen()" id="fullscreenBtn">
+                  <i class="bi bi-arrows-angle-expand me-1"></i>Full screen
+                </button>
+                <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="discardCompose()" title="Discard">
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
+            </div>
+            <!-- Compose fields — exact React -->
+            <div class="flex-col-ov-y-auto-fl1" id="composeInner">
+              <div class="compose-field" id="toRow">
+                <span class="compose-label w28px">To:</span>
+                <input class="compose-input" id="composeTo" placeholder="Recipients..."/>
+                <button class="fs8-fw6-c-muted-bg-none-br15-p-1-2-nowrap-b-none-pointer" type="button" id="ccBccBtn" onclick="toggleCCBCC()">Cc/Bcc</button>
+              </div>
+              <div class="compose-field d-none" id="ccRow">
+                <span class="compose-label w28px">CC:</span>
+                <input class="compose-input" id="composeCC"/>
+              </div>
+              <div class="compose-field d-none" id="bccRow">
+                <span class="compose-label w28px">BCC:</span>
+                <input class="compose-input" id="composeBCC"/>
+              </div>
+              <!-- Subject — exact React fontWeight:600 fontSize:.9375rem -->
+              <div class="compose-field">
+                <span class="compose-label w52px">Subject:</span>
+                <input class="compose-input fs9375-fw6" id="composeSubject" placeholder="Subject line..."/>
+              </div>
+              <!-- Formatting toolbar — exact React 11 buttons + 2 dividers -->
+              <div class="flex-ac-wrap-g05-p-2-6-bb-1">
+                <button type="button" class="fmt-btn" title="Bold"><i class="bi bi-type-bold"></i></button>
+                <button type="button" class="fmt-btn" title="Italic"><i class="bi bi-type-italic"></i></button>
+                <button type="button" class="fmt-btn" title="Underline"><i class="bi bi-type-underline"></i></button>
+                <div class="w1px-h24px-bg-border-m-0-1-shrink0"></div>
+                <button type="button" class="fmt-btn" title="List"><i class="bi bi-list-ul"></i></button>
+                <button type="button" class="fmt-btn" title="Numbered"><i class="bi bi-list-ol"></i></button>
+                <button type="button" class="fmt-btn" title="Quote"><i class="bi bi-quote"></i></button>
+                <div class="w1px-h24px-bg-border-m-0-1-shrink0"></div>
+                <button type="button" class="fmt-btn" title="Link"><i class="bi bi-link"></i></button>
+                <button type="button" class="fmt-btn" title="Image"><i class="bi bi-image"></i></button>
+                <button type="button" class="fmt-btn" title="Attach"><i class="bi bi-paperclip"></i></button>
+              </div>
+              <!-- Body textarea — exact React flex:1 -->
+              <textarea class="fs9375-c-body-bg-transparent-p-4-6-lh-17-b-none-fl1" id="composeBody" placeholder="Compose your message..."></textarea>
+            </div>
+            <!-- Send toolbar — exact React -->
+            <div class="flex-ac-g3-p-35-6-bt-1-shrink0">
+              <button type="button" class="btn-hr btn-primary-hr" onclick="sendEmail()">
+                <i class="bi bi-send-fill me-1"></i>Send
+              </button>
+              <button type="button" class="btn-hr btn-outline-hr btn-sm-hr">
+                <i class="bi bi-clock me-1"></i>Schedule
+              </button>
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr">
+                <i class="bi bi-save me-1"></i>Save Draft
+              </button>
+              <div class="ml-auto-flex-g15">
+                <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Formatting"><i class="bi bi-text-left"></i></button>
+                <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Attach"><i class="bi bi-paperclip"></i></button>
+                <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr c-red" type="button" title="Discard" onclick="discardCompose()"><i class="bi bi-trash3"></i></button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /email-main -->
+      </div><!-- /email-wrap -->
+
+    </div><!-- /page-inner -->
+  </main>
+</div><!-- /main-content -->
+
+<!-- ── FULL-SCREEN COMPOSE OVERLAY ─────────────────────────────────────── -->
+<div class="d-none-fixed-bg-card-bg-z8000-inset0" id="fullscreenCompose">
+  <!-- Header -->
+  <div class="flex-ac-jsb-bg-card-bg-p-4-8-bb-1-shrink0">
+    <div class="flex-ac-g4">
+      <div class="flex-ac-g25">
+        <div class="brand-icon sq32px-br25"><i class="bi bi-people-fill fs875-c-white"></i></div>
+        <span class="fs9375-fw8-c-body">HRNexus Mail</span>
+      </div>
+      <span class="c-border">|</span>
+      <h3 class="fs1-fw7-c-body-m-0" id="fsTitle">New Message</h3>
+    </div>
+    <div class="flex-g2">
+      <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr" onclick="toggleFullscreen()">
+        <i class="bi bi-arrows-angle-contract me-1"></i>Exit Full Screen
+      </button>
+      <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" onclick="discardCompose()" title="Discard">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+  </div>
+  <!-- Compose fields -->
+  <div class="flex-col-w100pct-mw900px-p-0-8-m-0-auto-ov-hidden-fl1">
+    <div class="compose-field pl0-pr0">
+      <span class="compose-label w60px">To:</span>
+      <input class="compose-input" id="fsTo" placeholder="Recipients..."/>
+      <button class="fs8-fw6-c-muted-bg-none-br15-p-1-2-nowrap-b-none-pointer" type="button" onclick="toggleFsCCBCC()" id="fsCcBccBtn">Cc/Bcc</button>
+    </div>
+    <div class="compose-field d-none-pl0-pr0" id="fsCcRow">
+      <span class="compose-label w60px">CC:</span>
+      <input class="compose-input" id="fsCC"/>
+    </div>
+    <div class="compose-field d-none-pl0-pr0" id="fsBccRow">
+      <span class="compose-label w60px">BCC:</span>
+      <input class="compose-input" id="fsBCC"/>
+    </div>
+    <div class="compose-field pl0-pr0">
+      <span class="compose-label w60px">Subject:</span>
+      <input class="compose-input fs9375-fw6" id="fsSubject" placeholder="Subject line..."/>
+    </div>
+    <!-- Formatting toolbar -->
+    <div class="flex-ac-wrap-g05-p-2-0-bb-1">
+      <button type="button" class="fmt-btn" title="Bold"><i class="bi bi-type-bold"></i></button>
+      <button type="button" class="fmt-btn" title="Italic"><i class="bi bi-type-italic"></i></button>
+      <button type="button" class="fmt-btn" title="Underline"><i class="bi bi-type-underline"></i></button>
+      <div class="w1px-h24px-bg-border-m-0-1"></div>
+      <button type="button" class="fmt-btn" title="List"><i class="bi bi-list-ul"></i></button>
+      <button type="button" class="fmt-btn" title="Numbered"><i class="bi bi-list-ol"></i></button>
+      <button type="button" class="fmt-btn" title="Quote"><i class="bi bi-quote"></i></button>
+      <div class="w1px-h24px-bg-border-m-0-1"></div>
+      <button type="button" class="fmt-btn" title="Link"><i class="bi bi-link"></i></button>
+      <button type="button" class="fmt-btn" title="Image"><i class="bi bi-image"></i></button>
+      <button type="button" class="fmt-btn" title="Attach"><i class="bi bi-paperclip"></i></button>
+    </div>
+    <!-- Body -->
+    <textarea class="fs1-c-body-bg-transparent-p-6-0-lh-175-b-none-fl1" id="fsBody" placeholder="Compose your message..."></textarea>
+  </div>
+  <!-- Footer -->
+  <div class="flex-ac-g3-bg-card-bg-p-4-8-bt-1-shrink0">
+    <button type="button" class="btn-hr btn-primary-hr" onclick="sendEmail()">
+      <i class="bi bi-send-fill me-1"></i>Send
+    </button>
+    <button type="button" class="btn-hr btn-outline-hr btn-sm-hr">
+      <i class="bi bi-clock me-1"></i>Schedule
+    </button>
+    <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr">
+      <i class="bi bi-save me-1"></i>Save Draft
+    </button>
+    <div class="ml-auto-flex-g15">
+      <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Attach"><i class="bi bi-paperclip"></i></button>
+      <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Formatting"><i class="bi bi-text-left"></i></button>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr c-red" type="button" title="Discard" onclick="discardCompose()"><i class="bi bi-trash3"></i></button>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   EMAIL INBOX — COMPLETE JS ENGINE (100% replica of React EmailPage)
+   ═══════════════════════════════════════════════════════════════════ */
+
+var EMAILS    = [{"id": 1, "from": "Emily Rodriguez", "init": "ER", "bg": "linear-gradient(135deg,#7C3AED,#EC4899)", "subject": "Q4 Performance Review Forms are Now Live", "preview": "Hi team! I wanted to let everyone know that the Q4 performance review forms are now available...", "time": "10:32 AM", "folder": "inbox", "unread": true, "starred": true, "important": true, "labels": ["HR"], "hasAtt": false, "body": "Hi everyone,\n\nI'm excited to announce that the Q4 Performance Review forms are now live in our HR portal.\n\nPlease complete the following by December 20th:\n\u2022 Self-assessment form\n\u2022 Peer review for at least 2 colleagues\n\u2022 Manager review (for managers only)\n\nThe review focuses on four core competencies:\n1. Technical skills and quality of work\n2. Collaboration and communication\n3. Initiative and innovation\n4. Leadership and professional development\n\nLinks:\n- Self Review: https://hr.company.com/review/self\n- Peer Review: https://hr.company.com/review/peer\n\nPlease reach out if you have any questions!\n\nBest,\nEmily Rodriguez\nHR Specialist"}, {"id": 2, "from": "Aisha Patel", "init": "AP", "bg": "linear-gradient(135deg,#10B981,#7C3AED)", "subject": "Holiday Party Confirmed \u2014 Dec 22nd at 6PM \ud83c\udf89", "preview": "Great news everyone! The annual holiday party has been confirmed for December 22nd...", "time": "9:45 AM", "folder": "inbox", "unread": true, "starred": false, "important": false, "labels": ["Social"], "hasAtt": false, "body": "Hi all,\n\nExciting news! The annual HRNexus Holiday Party has been officially confirmed:\n\n\ud83d\udcc5 Date: Saturday, December 22nd\n\u23f0 Time: 6:00 PM - 10:00 PM\n\ud83d\udccd Venue: The Rooftop, 220 West 48th Street\n\nWhat to expect:\n\u2022 Dinner and open bar\n\u2022 Team awards ceremony\n\u2022 Live music\n\u2022 +1 guests welcome!\n\nPlease RSVP by December 19th via the link below:\nhttps://events.company.com/holiday2024\n\nWe can't wait to celebrate an incredible year with you all! \ud83c\udf89\n\nBest,\nAisha\nMarketing & Events Lead"}, {"id": 3, "from": "Tom Nakamura", "init": "TN", "bg": "linear-gradient(135deg,#EF4444,#F59E0B)", "subject": "Infrastructure Migration \u2014 Successful Deployment", "preview": "Team, I am pleased to report that the infrastructure migration completed successfully this morning...", "time": "Yesterday", "folder": "inbox", "unread": false, "starred": true, "important": true, "labels": ["Tech"], "hasAtt": true, "att": [["\ud83d\udcca","Migration_Report.pdf","3.2 MB"],["\ud83d\udcc8","Performance_Benchmarks.xlsx","892 KB"]], "body": "Team,\n\nI'm pleased to report that last night's infrastructure migration completed without any issues.\n\nKey results:\n\u2022 Zero downtime during the 3-hour migration window\n\u2022 API response times improved by 40% (avg 180ms \u2192 108ms)\n\u2022 Database query performance up 55%\n\u2022 All monitoring alerts green\n\nChanges made:\n1. Migrated to new Kubernetes cluster (v1.28)\n2. Upgraded PostgreSQL from 14 \u2192 16\n3. Enabled Redis caching for session management\n4. CDN configuration optimised for APAC region\n\nAttachments:\n\ud83d\udcca Migration Report.pdf\n\ud83d\udcc8 Performance Benchmarks.xlsx\n\nSpecial thanks to Marcus for the late-night support!\n\nTom\nDevOps Lead"}, {"id": 4, "from": "Marcus Johnson", "init": "MJ", "bg": "linear-gradient(135deg,#10B981,#0EA5E9)", "subject": "Auth Refactor PR \u2014 Ready for Review", "preview": "Hi, I have finished the auth refactor. The PR is up and includes all the changes we discussed...", "time": "Yesterday", "folder": "inbox", "unread": false, "starred": false, "important": false, "labels": ["Dev"], "hasAtt": false, "body": "Hi,\n\nThe auth refactor PR is up and ready for review. Here's a summary of what changed:\n\nChanges:\n\u2022 Migrated from custom session tokens to JWT\n\u2022 Added refresh token rotation\n\u2022 Implemented rate limiting on auth endpoints\n\u2022 Added OAuth 2.0 support (Google, GitHub)\n\nTesting:\n\u2022 All existing auth tests pass\n\u2022 Added 23 new test cases\n\u2022 Tested edge cases: expired tokens, concurrent requests, invalid signatures\n\nPR Link: https://github.com/hrnexus/api/pull/847\n\nPlease review when you get a chance. Happy to hop on a call if anything needs clarification.\n\nMarcus"}, {"id": 5, "from": "Sarah Chen", "init": "SC", "bg": "linear-gradient(135deg,#5B8FF9,#7C3AED)", "subject": "Onboarding Redesign \u2014 Figma Preview Ready", "att": [["\ud83c\udfa8","Onboarding_Redesign_v2.fig","4.7 MB"],["\ud83d\udccb","User_Research_Report.pdf","1.1 MB"]], "preview": "Hey! I just finished the redesign for the employee onboarding flow. I have attached a preview...", "time": "Mon", "folder": "inbox", "unread": false, "starred": false, "important": false, "labels": ["Design"], "hasAtt": true, "body": "Hey team,\n\nThe onboarding redesign is complete! Here's what changed:\n\nKey improvements:\n\u2022 Reduced from 8 steps to 5 steps\n\u2022 Added visual progress indicator\n\u2022 Removed 6 redundant form fields\n\u2022 New welcome video integration\n\u2022 Mobile-first responsive layout\n\nUser testing results:\n\u2022 Time to complete: 12 min \u2192 7 min (42% reduction)\n\u2022 Drop-off rate: 34% \u2192 9%\n\u2022 User satisfaction: 6.2/10 \u2192 8.8/10\n\nFigma link: https://figma.com/file/abc123/onboarding-v2\n\nAttachments:\n\ud83c\udfa8 Onboarding_Redesign_v2.fig\n\ud83d\udccb User_Research_Report.pdf\n\nWould love feedback before we hand off to dev!\n\nSarah"}, {"id": 6, "from": "David Kim", "init": "DK", "bg": "linear-gradient(135deg,#0EA5E9,#5B8FF9)", "subject": "Q4 Analytics Dashboard \u2014 Release Notes", "att": [["\ud83d\udcc4","Release_Notes_v2.pdf","410 KB"]], "preview": "The analytics dashboard v2 is ready for staging. I have included the release notes and known issues...", "time": "Mon", "folder": "inbox", "unread": false, "starred": false, "important": false, "labels": ["Analytics"], "hasAtt": true, "body": "Hi all,\n\nThe Analytics Dashboard v2 is deployed to staging and ready for review.\n\nNew features in v2:\n\u2022 Real-time data pipeline (was 24hr delay)\n\u2022 14 new report types including cohort analysis\n\u2022 Exportable to PDF, CSV, and Google Sheets\n\u2022 Custom date range picker\n\u2022 Saved dashboard presets per user\n\u2022 Slack notifications for metric thresholds\n\nKnown issues:\n\u26a0\ufe0f Safari: slight rendering glitch in the pivot table (fix in progress)\n\u26a0\ufe0f Export to PDF slow for >10K row datasets\n\nStaging URL: https://staging.hrnexus.com/analytics\n\nDavid"}, {"id": 7, "from": "HR System", "init": "HR", "bg": "linear-gradient(135deg,#EF4444,#F59E0B)", "subject": "[Reminder] Leave requests close Dec 14th", "preview": "This is an automated reminder that holiday leave requests will close on December 14th. Please...", "time": "Mon", "folder": "inbox", "unread": false, "starred": false, "important": false, "labels": ["System"], "hasAtt": false, "body": "This is an automated reminder.\n\nHoliday Leave Requests \u2014 Closing Date: December 14, 2024\n\nIf you plan to take time off during December 26\u201331, please submit your request before December 14th.\n\nAvailable leave balance as of today:\n\u2022 Annual Leave: 8 days remaining\n\u2022 Sick Leave: 7 days remaining\n\u2022 Carry-over: 2 days\n\nHow to apply:\n1. Log in to HR Portal at hr.company.com\n2. Navigate to Leave Management\n3. Submit your request\n\nFor any questions contact hr@company.com\n\nHR System"}];
+var LABELS    = [{"id": "HR", "color": "#7C3AED"}, {"id": "Dev", "color": "#5B8FF9"}, {"id": "Tech", "color": "#EF4444"}, {"id": "Design", "color": "#F59E0B"}, {"id": "Analytics", "color": "#10B981"}, {"id": "Social", "color": "#EC4899"}, {"id": "System", "color": "#64748B"}];
+var LABEL_MAP = {};
+LABELS.forEach(function(l) { LABEL_MAP[l.id] = l.color; });
+
+/* ── State — mirrors React useState ───────────────────────────────── */
+var _emailView    = 'inbox';   // inbox | read | compose
+var _folder       = 'inbox';
+var _selectedId   = null;
+var _showCC       = false;
+var _searchQ      = '';
+var _isFullscreen = false;
+var _fsCCBCC      = false;
+var _unreadOnly   = false;
+
+/* ── Helpers ───────────────────────────────────────────────────────── */
+function getEmail(id) { return EMAILS.find(function(e) { return e.id === id; }); }
+
+function getShownEmails() {
+  return EMAILS.filter(function(e) {
+    var matchFolder = _folder === 'starred' ? e.starred : e.folder === _folder || (_folder === 'inbox' && e.folder === 'inbox');
+    var matchSearch = !_searchQ || e.subject.toLowerCase().includes(_searchQ) || e.from.toLowerCase().includes(_searchQ);
+    var matchUnread = !_unreadOnly || e.unread;
+    return matchFolder && matchSearch && matchUnread;
+  });
+}
+
+function updateUnreadSubtitle() {
+  var n = EMAILS.filter(function(e) { return e.unread; }).length;
+  var el = document.getElementById('unreadSubtitle');
+  if (el) el.textContent = n + ' unread message' + (n !== 1 ? 's' : '');
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ── View switcher ─────────────────────────────────────────────────── */
+function showView(v) {
+  _emailView = v;
+  document.getElementById('viewEmpty').style.display   = v === 'inbox'   ? 'flex' : 'none';
+  document.getElementById('viewRead').style.display    = v === 'read'    ? 'flex' : 'none';
+  document.getElementById('viewCompose').style.display = v === 'compose' ? 'flex' : 'none';
+}
+
+/* ── Folder selector — exact React logic ──────────────────────────── */
+function setFolder(f) {
+  _folder = f;
+  _selectedId = null;
+  // Update active class
+  document.querySelectorAll('.folder-btn').forEach(function(btn) {
+    var isCurrent = btn.getAttribute('data-folder') === f;
+    btn.classList.toggle('active', isCurrent);
+    btn.querySelector('.folder-icon').style.color  = isCurrent ? 'var(--color-primary)' : 'var(--body-text-muted)';
+    btn.querySelector('.folder-label').style.color      = isCurrent ? 'var(--color-primary)' : 'var(--body-text)';
+    btn.querySelector('.folder-label').style.fontWeight = isCurrent ? '700' : '500';
+  });
+  renderEmailList();
+  showView('inbox');
+}
+
+/* ── Render email list ─────────────────────────────────────────────── */
+function renderEmailList() {
+  var shown = getShownEmails();
+  document.getElementById('msgCount').textContent = shown.length + ' message' + (shown.length !== 1 ? 's' : '');
+  var html = shown.map(function(e) {
+    var isSel = e.id === _selectedId;
+    var fw    = e.unread ? '700' : '500';
+    var bg    = isSel ? 'var(--color-primary-light)' : e.unread ? 'rgba(91,143,249,.03)' : 'transparent';
+    var ubar  = e.unread ? '<div style="position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--color-primary);border-radius:0 2px 2px 0"></div>' : '';
+    var imp   = e.important ? '<i class="bi bi-exclamation-circle-fill" style="color:#F59E0B;font-size:.7rem"></i>' : '';
+    var star  = e.starred   ? '<i class="bi bi-star-fill" style="color:#F59E0B;font-size:.7rem"></i>' : '';
+    var att   = e.hasAtt    ? '<i class="bi bi-paperclip" style="color:var(--body-text-muted);font-size:.7rem"></i>' : '';
+    var chips = e.labels.map(function(l) {
+      var c = LABEL_MAP[l]||'#5B8FF9';
+      return '<span style="font-size:.6rem;font-weight:700;padding:.1rem .35rem;border-radius:3px;background:'+c+'15;color:'+c+'">'+l+'</span>';
+    }).join('');
+    return '<div class="email-row" data-id="'+e.id+'" onclick="openEmail('+e.id+')"' +
+      ' style="padding:.875rem 1rem;border-bottom:1px solid var(--body-border);cursor:pointer;background:'+bg+';transition:background .15s;position:relative">'+
+      ubar+
+      '<div style="display:flex;align-items:center;gap:.625rem;margin-bottom:.375rem">'+
+      '<div style="width:30px;height:30px;border-radius:50%;background:'+e.bg+';display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:.7rem;flex-shrink:0">'+e.init+'</div>'+
+      '<div style="flex:1;min-width:0">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
+      '<span style="font-size:.8125rem;font-weight:'+fw+';color:var(--body-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px">'+esc(e.from)+'</span>'+
+      '<span style="font-size:.7rem;color:var(--body-text-muted);flex-shrink:0">'+e.time+'</span></div></div></div>'+
+      '<div style="padding-left:42px">'+
+      '<div style="font-size:.8125rem;font-weight:'+fw+';color:var(--body-text);margin-bottom:.125rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(e.subject)+'</div>'+
+      '<div style="font-size:.75rem;color:var(--body-text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(e.preview)+'</div>'+
+      '<div style="display:flex;gap:.25rem;margin-top:.375rem;align-items:center">'+imp+star+att+chips+'</div></div></div>';
+  }).join('');
+  if (!html) {
+    html = '<div style="padding:3rem;text-align:center;color:var(--body-text-muted)"><i class="bi bi-inbox" style="font-size:2.5rem;display:block;margin-bottom:1rem;opacity:.3"></i><div style="font-weight:600">No emails</div></div>';
+  }
+  document.getElementById('emailListBody').innerHTML = html;
+}
+
+/* ── Open an email — exact React openEmail ─────────────────────────── */
+function openEmail(id) {
+  var e = getEmail(id);
+  if (!e) return;
+  _selectedId = id;
+  e.unread = false;  // mark read
+  updateUnreadSubtitle();
+  renderEmailList();
+  renderReadView(e);
+  showView('read');
+}
+
+function renderReadView(e) {
+  // Labels
+  var labelHtml = e.labels.map(function(l) {
+    var c=LABEL_MAP[l]||'#5B8FF9';
+    return '<span style="font-size:.75rem;font-weight:700;padding:.25rem .6rem;border-radius:999px;background:'+c+'15;color:'+c+'">'+l+'</span>';
+  }).join('');
+
+  // Attachments
+  var attHtml = '';
+  if (e.hasAtt && e.att && e.att.length) {
+    attHtml = '<div style="border-top:1px solid var(--body-border);padding-top:1rem;margin-top:.5rem">' +
+      '<div style="font-size:.8125rem;font-weight:700;margin-bottom:.625rem;color:var(--body-text-muted)">Attachments</div>' +
+      '<div style="display:flex;gap:.5rem;flex-wrap:wrap">' +
+      e.att.map(function(a) {
+        return '<div class="att-pill">'+
+          '<div style="font-size:1.25rem">'+a[0]+'</div>'+
+          '<div><div style="font-size:.8125rem;font-weight:600;color:var(--body-text)">'+esc(a[1])+'</div>'+
+          '<div style="font-size:.7rem;color:var(--body-text-muted)">'+esc(a[2])+'</div></div>'+
+          '<i class="bi bi-download" style="color:var(--color-primary);font-size:.875rem;margin-left:.375rem"></i></div>';
+      }).join('') + '</div></div>';
+  }
+
+  // Quick reply box — exact React
+  var quickReply = '<div class="quick-reply-box">' +
+    '<div class="quick-reply-header">' +
+    '<i class="bi bi-reply" style="color:var(--body-text-muted)"></i>' +
+    '<span style="font-size:.8125rem;font-weight:600;color:var(--body-text)">Reply to ' + esc(e.from) + '</span>' +
+    '<button type="button" class="btn-hr btn-ghost-hr btn-sm-hr" style="margin-left:auto;font-size:.8rem" onclick="replyEmail()">Open full compose</button>' +
+    '</div>' +
+    '<div style="padding:.875rem 1rem">' +
+    '<textarea id="quickReplyText" placeholder="Write your reply..." style="width:100%;border:none;background:transparent;outline:none;resize:none;font-family:var(--font);font-size:.875rem;color:var(--body-text);min-height:80px;line-height:1.6"></textarea>' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:.625rem;border-top:1px solid var(--body-border);margin-top:.375rem">' +
+    '<div style="display:flex;gap:.25rem">' +
+    ['bi-paperclip','bi-image','bi-link','bi-emoji-smile'].map(function(ic) {
+      return '<button type="button" style="background:none;border:none;color:var(--body-text-muted);cursor:pointer;padding:.25rem .375rem;border-radius:.375rem;font-size:.9rem"><i class="bi '+ic+'"></i></button>';
+    }).join('') +
+    '</div>' +
+    '<button type="button" class="btn-hr btn-primary-hr btn-sm-hr"><i class="bi bi-send me-1"></i>Send Reply</button>' +
+    '</div></div></div>';
+
+  // Star icon
+  var starHtml = e.starred
+    ? '<i class="bi bi-star-fill" style="color:#F59E0B"></i>'
+    : '<i class="bi bi-star"></i>';
+  document.getElementById('starIcon').className = e.starred ? 'bi bi-star-fill' : 'bi bi-star';
+  document.getElementById('starBtn').style.color = e.starred ? '#F59E0B' : '';
+
+  // Build full read view — exact React padding:1.5rem 2rem
+  document.getElementById('readBody').innerHTML =
+    '<h2 style="font-size:1.25rem;font-weight:800;color:var(--body-text);margin-bottom:1rem;line-height:1.3">'+esc(e.subject)+'</h2>' +
+    '<div style="display:flex;gap:.375rem;margin-bottom:1rem;flex-wrap:wrap">'+labelHtml+'</div>' +
+    '<div style="display:flex;align-items:center;gap:.875rem;padding:1rem;background:var(--body-bg);border-radius:.875rem;margin-bottom:1.5rem">' +
+    '<div style="width:44px;height:44px;border-radius:50%;background:'+e.bg+';display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:.9rem;flex-shrink:0">'+e.init+'</div>' +
+    '<div style="flex:1"><div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+    '<div><div style="font-weight:700;font-size:.9375rem">'+esc(e.from)+'</div>' +
+    '<div style="font-size:.8rem;color:var(--body-text-muted)">To: you@hrnexus.com · '+e.time+'</div></div>' +
+    '<div style="display:flex;gap:.375rem">' +
+    '<button type="button" class="btn-hr btn-outline-hr btn-sm-hr" onclick="replyEmail()"><i class="bi bi-reply me-1"></i>Reply</button>' +
+    '<button type="button" class="btn-hr btn-outline-hr btn-sm-hr"><i class="bi bi-reply-all me-1"></i>Reply All</button>' +
+    '<button type="button" class="btn-hr btn-outline-hr btn-sm-hr"><i class="bi bi-forward me-1"></i>Fwd</button>' +
+    '</div></div></div></div>' +
+    '<div style="font-size:.9375rem;line-height:1.8;color:var(--body-text);white-space:pre-line;padding-bottom:1.5rem">'+esc(e.body)+'</div>' +
+    attHtml +
+    quickReply;
+}
+
+/* ── Close email ────────────────────────────────────────────────────── */
+function closeEmail() {
+  _selectedId = null;
+  renderEmailList();
+  showView('inbox');
+}
+
+/* ── Reply email — exact React replyEmail ──────────────────────────── */
+function replyEmail() {
+  var e = getEmail(_selectedId);
+  if (!e) return;
+  document.getElementById('composeTo').value     = e.from;
+  document.getElementById('composeSubject').value= 'Re: ' + e.subject;
+  document.getElementById('composeBody').value   = '\n\n--- On ' + e.time + ' ' + e.from + ' wrote ---\n' + e.body.slice(0, 200) + '...';
+  if (_isFullscreen) {
+    document.getElementById('fsTo').value     = e.from;
+    document.getElementById('fsSubject').value= 'Re: ' + e.subject;
+    document.getElementById('fsBody').value   = '\n\n--- On ' + e.time + ' ' + e.from + ' wrote ---\n' + e.body.slice(0, 200) + '...';
+  }
+  showView('compose');
+}
+
+/* ── Start compose — exact React startCompose ──────────────────────── */
+function startCompose() {
+  document.getElementById('composeTo').value     = '';
+  document.getElementById('composeSubject').value= '';
+  document.getElementById('composeBody').value   = '';
+  document.getElementById('fsTo').value     = '';
+  document.getElementById('fsSubject').value= '';
+  document.getElementById('fsBody').value   = '';
+  showView('compose');
+}
+
+/* ── Send email ─────────────────────────────────────────────────────── */
+function sendEmail() {
+  // Exact React: go back to inbox
+  discardCompose();
+  updateUnreadSubtitle();
+}
+
+/* ── Discard compose ────────────────────────────────────────────────── */
+function discardCompose() {
+  if (_isFullscreen) toggleFullscreen();
+  showView('inbox');
+  _selectedId = null;
+  renderEmailList();
+}
+
+/* ── CC/BCC toggle ──────────────────────────────────────────────────── */
+function toggleCCBCC() {
+  _showCC = !_showCC;
+  document.getElementById('ccRow').style.display  = _showCC ? 'flex' : 'none';
+  document.getElementById('bccRow').style.display = _showCC ? 'flex' : 'none';
+  document.getElementById('ccBccBtn').style.display = _showCC ? 'none' : '';
+}
+
+function toggleFsCCBCC() {
+  _fsCCBCC = !_fsCCBCC;
+  document.getElementById('fsCcRow').style.display  = _fsCCBCC ? 'flex' : 'none';
+  document.getElementById('fsBccRow').style.display = _fsCCBCC ? 'flex' : 'none';
+  document.getElementById('fsCcBccBtn').style.display = _fsCCBCC ? 'none' : '';
+}
+
+/* ── Full-screen compose toggle ─────────────────────────────────────── */
+function toggleFullscreen() {
+  _isFullscreen = !_isFullscreen;
+  var overlay = document.getElementById('fullscreenCompose');
+  overlay.style.display = _isFullscreen ? 'flex' : 'none';
+
+  if (_isFullscreen) {
+    // Sync content from panel compose to fullscreen
+    document.getElementById('fsTo').value      = document.getElementById('composeTo').value;
+    document.getElementById('fsSubject').value = document.getElementById('composeSubject').value;
+    document.getElementById('fsBody').value    = document.getElementById('composeBody').value;
+    document.getElementById('fsTitle').textContent = document.getElementById('composeSubject').value || 'New Message';
+    // Update button text
+    document.getElementById('fullscreenBtn').innerHTML = '<i class="bi bi-arrows-angle-contract me-1"></i>Exit Full Screen';
+  } else {
+    // Sync back from fullscreen to panel
+    document.getElementById('composeTo').value     = document.getElementById('fsTo').value;
+    document.getElementById('composeSubject').value= document.getElementById('fsSubject').value;
+    document.getElementById('composeBody').value   = document.getElementById('fsBody').value;
+    document.getElementById('fullscreenBtn').innerHTML = '<i class="bi bi-arrows-angle-expand me-1"></i>Full screen';
+  }
+}
+
+/* ── Email actions ──────────────────────────────────────────────────── */
+function toggleStar() {
+  var e = getEmail(_selectedId);
+  if (!e) return;
+  e.starred = !e.starred;
+  var icon = document.getElementById('starIcon');
+  icon.className = e.starred ? 'bi bi-star-fill' : 'bi bi-star';
+  document.getElementById('starBtn').style.color = e.starred ? '#F59E0B' : '';
+  renderEmailList();
+}
+
+function archiveEmail() {
+  var e = getEmail(_selectedId);
+  if (!e) return;
+  e.folder = 'archive';
+  closeEmail();
+}
+
+function deleteEmail() {
+  var e = getEmail(_selectedId);
+  if (!e) return;
+  e.folder = 'trash';
+  closeEmail();
+  if (_folder === 'inbox') renderEmailList();
+}
+
+function markUnread() {
+  var e = getEmail(_selectedId);
+  if (!e) return;
+  e.unread = true;
+  updateUnreadSubtitle();
+  closeEmail();
+}
+
+/* ── Search ─────────────────────────────────────────────────────────── */
+function searchEmails(q) {
+  _searchQ = (q || '').toLowerCase().trim();
+  // Sync both search inputs
+  var topSearch   = document.querySelector('.search-input');
+  var panelSearch = document.getElementById('emailSearch');
+  if (topSearch   && topSearch   !== document.activeElement) topSearch.value   = q || '';
+  if (panelSearch && panelSearch !== document.activeElement) panelSearch.value = q || '';
+  renderEmailList();
+}
+
+/* ── Filter by label ────────────────────────────────────────────────── */
+function filterByLabel(label) {
+  _searchQ = label.toLowerCase();
+  document.getElementById('emailSearch').value = label;
+  renderEmailList();
+}
+
+function showFilterMenu() {
+  // Toggles an unread-only filter, independent of the text search box —
+  // previously this set _searchQ = 'unread' as if "unread" were text to
+  // search for in the subject/sender, which no email actually contains,
+  // so the button always produced an empty list instead of filtering.
+  _unreadOnly = !_unreadOnly;
+  var btn = document.getElementById('unreadFilterBtn');
+  if (btn) {
+    btn.classList.toggle('btn-primary-hr', _unreadOnly);
+    btn.classList.toggle('btn-ghost-hr', !_unreadOnly);
+    btn.querySelector('i').className = _unreadOnly ? 'bi bi-funnel-fill' : 'bi bi-funnel';
+  }
+  renderEmailList();
+}
+
+/* ── Keyboard shortcuts ─────────────────────────────────────────────── */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (_isFullscreen) { toggleFullscreen(); return; }
+    if (_emailView === 'compose') { discardCompose(); return; }
+    if (_emailView === 'read')   { closeEmail(); return; }
+  }
+  // Compose shortcut: C key (when not in input)
+  if (e.key === 'c' && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
+    startCompose();
+  }
+});
+
+/* ── Init ───────────────────────────────────────────────────────────── */
+renderEmailList();
+</script>
+</body>
+</html>

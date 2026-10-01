@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>File Manager — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="File manager for organising and sharing HR documents, contracts, and shared folders."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+
+<!-- ── Sidebar ──────────────────────────────────────────────────── -->
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+
+<!-- ── Main ─────────────────────────────────────────────────────── -->
+<div class="main-content" id="mainContent">
+
+  <!-- Topbar -->
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">File Manager</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search files..." oninput="handleTopSearch(this.value)"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel"><i class="bi bi-bell-fill"></i><span class="badge-dot"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- ══ PAGE HEADER ══════════════════════════════════════════════ -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">File Manager</h1>
+          <p class="page-subtitle">Manage your documents, folders and shared files</p>
+        </div>
+        <div class="flex-g2-ac">
+          <button class="btn-hr btn-outline-hr flex-ac-g15" type="button" onclick="openUploadModal()">
+            <i class="bi bi-upload"></i>Upload
+          </button>
+          <button class="btn-hr btn-primary-hr flex-ac-g15" type="button" onclick="openNewModal()">
+            <i class="bi bi-plus-lg"></i>New File
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ STATS ROW — exact React: col-6 col-xl-3 ═══════════════════ -->
+      <div class="row g-3 mb-1rem">
+        <div class="col-6 col-xl-3">
+          <div class="card-hr flex-ac-g4-p-45-5">
+            <div class="icon-box-blue-10-44">
+              <i class="bi bi-files fs12-c-blue"></i>
+            </div>
+            <div>
+              <div class="fs13-fw8-c-body-lh-1">392</div>
+              <div class="fs78-c-muted-mt06">Total Files</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="card-hr flex-ac-g4-p-45-5">
+            <div class="icon-box-purple-10-44">
+              <i class="bi bi-hdd-fill fs12-c-purple"></i>
+            </div>
+            <div>
+              <div class="fs13-fw8-c-body-lh-1">12.9 GB</div>
+              <div class="fs78-c-muted-mt06">Total Storage</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="card-hr flex-ac-g4-p-45-5">
+            <div class="icon-box-green-10-44">
+              <i class="bi bi-share-fill fs12-c-green"></i>
+            </div>
+            <div>
+              <div class="fs13-fw8-c-body-lh-1">47</div>
+              <div class="fs78-c-muted-mt06">Shared Files</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="card-hr flex-ac-g4-p-45-5">
+            <div class="icon-box-amber-10-44">
+              <i class="bi bi-star-fill fs12-c-amber"></i>
+            </div>
+            <div>
+              <div class="fs13-fw8-c-body-lh-1" id="statStarred">4</div>
+              <div class="fs78-c-muted-mt06">Starred Files</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STORAGE BAR — exact React ══════════════════════════════════ -->
+      <div class="card-hr p-5-6-mb4">
+        <div class="flex-jsb-ac-mb3">
+          <div class="fw7-fs875-body">Storage Usage</div>
+          <div class="fs78-muted">9.4 GB of 12.9 GB used</div>
+        </div>
+        <div class="prog-md2">
+          <div class="w73pct-h100pct-bg-grad-blue-purple-br4px-trans"></div>
+        </div>
+        <div class="flex-wrap-g6-mt35">
+          <div class="flex-ac-g04"><div class="sq8px-bg-red-shrink0"></div><span class="fs75-muted">PDFs · 3.1 GB</span></div><div class="flex-ac-g04"><div class="sq8px-bg-green-shrink0"></div><span class="fs75-muted">Spreadsheets · 2.4 GB</span></div><div class="flex-ac-g04"><div class="sq8px-bg-blue-mid-shrink0"></div><span class="fs75-muted">Documents · 1.8 GB</span></div><div class="flex-ac-g04"><div class="sq8px-bg-amber-shrink0"></div><span class="fs75-muted">Media · 1.4 GB</span></div><div class="flex-ac-g04"><div class="sq8px-bg-purple-shrink0"></div><span class="fs75-muted">Archives · 0.7 GB</span></div>
+        </div>
+      </div>
+
+      <!-- ══ FOLDERS — exact React: col-6 col-md-4 col-xl-2 ════════════ -->
+      <div class="mb-6">
+        <div class="fs75-fw7-c-body-mb35-uc">Folders</div>
+        <div class="row g-3">
+          <div class="col-6 col-md-4 col-xl-2">
+      <div class="card-hr fm-folder p-45-pointer-trans" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(91,143,249,.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <div class="icon-box-blue-13-44">
+          <i class="bi bi-folder-fill fs14-c-blue"></i>
+        </div>
+        <div class="fs85-fw7-c-body-mb1-ellipsis-nowrap-ov-hidden">HR Documents</div>
+        <div class="fs75-muted">48 files · 2.4 GB</div>
+        <div class="fs7-c-muted-mt1">2 hours ago</div>
+      </div>
+    </div><div class="col-6 col-md-4 col-xl-2">
+      <div class="card-hr fm-folder p-45-pointer-trans" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(91,143,249,.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <div class="icon-box-green-13-44">
+          <i class="bi bi-folder-fill fs14-c-green"></i>
+        </div>
+        <div class="fs85-fw7-c-body-mb1-ellipsis-nowrap-ov-hidden">Payroll Reports</div>
+        <div class="fs75-muted">23 files · 890 MB</div>
+        <div class="fs7-c-muted-mt1">Yesterday</div>
+      </div>
+    </div><div class="col-6 col-md-4 col-xl-2">
+      <div class="card-hr fm-folder p-45-pointer-trans" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(91,143,249,.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <div class="icon-box-purple-13-44">
+          <i class="bi bi-folder-fill fs14-c-purple"></i>
+        </div>
+        <div class="fs85-fw7-c-body-mb1-ellipsis-nowrap-ov-hidden">Employee Contracts</div>
+        <div class="fs75-muted">134 files · 4.1 GB</div>
+        <div class="fs7-c-muted-mt1">3 days ago</div>
+      </div>
+    </div><div class="col-6 col-md-4 col-xl-2">
+      <div class="card-hr fm-folder p-45-pointer-trans" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(91,143,249,.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <div class="icon-box-amber-13-44">
+          <i class="bi bi-folder-fill fs14-c-amber"></i>
+        </div>
+        <div class="fs85-fw7-c-body-mb1-ellipsis-nowrap-ov-hidden">Recruitment Assets</div>
+        <div class="fs75-muted">67 files · 1.7 GB</div>
+        <div class="fs7-c-muted-mt1">Last week</div>
+      </div>
+    </div><div class="col-6 col-md-4 col-xl-2">
+      <div class="card-hr fm-folder p-45-pointer-trans" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(91,143,249,.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <div class="icon-box-sky-13-44">
+          <i class="bi bi-folder-fill fs14-c-sky"></i>
+        </div>
+        <div class="fs85-fw7-c-body-mb1-ellipsis-nowrap-ov-hidden">Training Materials</div>
+        <div class="fs75-muted">91 files · 3.2 GB</div>
+        <div class="fs7-c-muted-mt1">2 weeks ago</div>
+      </div>
+    </div><div class="col-6 col-md-4 col-xl-2">
+      <div class="card-hr fm-folder p-45-pointer-trans" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(91,143,249,.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <div class="icon-box-red-13-44">
+          <i class="bi bi-folder-fill fs14-c-red"></i>
+        </div>
+        <div class="fs85-fw7-c-body-mb1-ellipsis-nowrap-ov-hidden">Compliance Docs</div>
+        <div class="fs75-muted">29 files · 560 MB</div>
+        <div class="fs7-c-muted-mt1">1 month ago</div>
+      </div>
+    </div>
+        </div>
+      </div>
+
+      <!-- ══ FAVORITE FILES — exact React: shown only when starred > 0 ═ -->
+      <div class="mb-6" id="favSection">
+        <div class="flex-ac-g2-mb35">
+          <i class="bi bi-star-fill c-amber-fs875"></i>
+          <span class="fs75-fw7-c-body-uc">Favorite Files</span>
+        </div>
+        <div class="row g-3" id="favGrid">
+          <div class="col-12 col-md-6 col-xl-3 fav-card" data-file-id="1">
+  <div class="card-hr flex-ac-g35-p-4-45-pointer">
+    <div class="icon-box-green-10-40-2">
+      <i class="bi bi-file-earmark-excel-fill fs11-c-green"></i>
+    </div>
+    <div class="fl1-mnw0">
+      <div class="fs82-fw7-c-body-ellipsis-nowrap-ov-hidden">Q4_Payroll_Summary.xlsx</div>
+      <div class="fs72-c-muted-mt04">2.4 MB</div>
+    </div>
+    <i class="bi bi-star-fill fs875-c-amber-pointer-shrink0" onclick="event.stopPropagation();toggleStar(1)"></i>
+  </div>
+</div><div class="col-12 col-md-6 col-xl-3 fav-card" data-file-id="2">
+  <div class="card-hr flex-ac-g35-p-4-45-pointer">
+    <div class="icon-box-red-10-40">
+      <i class="bi bi-file-earmark-pdf-fill fs11-c-red"></i>
+    </div>
+    <div class="fl1-mnw0">
+      <div class="fs82-fw7-c-body-ellipsis-nowrap-ov-hidden">Employee_Handbook_2024.pdf</div>
+      <div class="fs72-c-muted-mt04">8.1 MB</div>
+    </div>
+    <i class="bi bi-star-fill fs875-c-amber-pointer-shrink0" onclick="event.stopPropagation();toggleStar(2)"></i>
+  </div>
+</div><div class="col-12 col-md-6 col-xl-3 fav-card" data-file-id="4">
+  <div class="card-hr flex-ac-g35-p-4-45-pointer">
+    <div class="icon-box-purple-10-40">
+      <i class="bi bi-file-earmark-zip-fill fs11-c-purple"></i>
+    </div>
+    <div class="fl1-mnw0">
+      <div class="fs82-fw7-c-body-ellipsis-nowrap-ov-hidden">Brand_Assets.zip</div>
+      <div class="fs72-c-muted-mt04">45.6 MB</div>
+    </div>
+    <i class="bi bi-star-fill fs875-c-amber-pointer-shrink0" onclick="event.stopPropagation();toggleStar(4)"></i>
+  </div>
+</div><div class="col-12 col-md-6 col-xl-3 fav-card" data-file-id="7">
+  <div class="card-hr flex-ac-g35-p-4-45-pointer">
+    <div class="icon-box-purple-10-40">
+      <i class="bi bi-file-earmark-zip-fill fs11-c-purple"></i>
+    </div>
+    <div class="fl1-mnw0">
+      <div class="fs82-fw7-c-body-ellipsis-nowrap-ov-hidden">Company_Logo_Pack.zip</div>
+      <div class="fs72-c-muted-mt04">22.1 MB</div>
+    </div>
+    <i class="bi bi-star-fill fs875-c-amber-pointer-shrink0" onclick="event.stopPropagation();toggleStar(7)"></i>
+  </div>
+</div>
+        </div>
+      </div>
+
+      <!-- ══ FILE LIST CARD ══════════════════════════════════════════════ -->
+      <div class="card-hr">
+
+        <!-- Toolbar — exact React -->
+        <div class="flex-ac-wrap-g3-p-4-5-bb-5-border">
+          <div class="fs875-fw7-c-body">All Files</div>
+
+          <!-- Search input -->
+          <div class="rel-mnw180px-fl1">
+            <i class="bi bi-search abs-input-icon-l"></i>
+            <input class="w100pct-fs82-c-body-bg-bg-br2-p-2-3-2-8" type="text" id="fileSearch" placeholder="Search files…" oninput="applyFilters()" />
+          </div>
+
+          <!-- Filter pills: all starred pdf xlsx docx zip -->
+          <div class="flex-g1-wrap">
+            <button class="fm-filter-btn fs75-fw6-c-blue-bg-blue-10-br16-p-14-28-bc-blue-pointer" type="button" data-filter="all" onclick="setFilter(this,'all')">All</button><button class="fm-filter-btn fs75-fw6-c-muted-bg-transparent-br16-p-14-28-bc-border" type="button" data-filter="starred" onclick="setFilter(this,'starred')">STARRED</button><button class="fm-filter-btn fs75-fw6-c-muted-bg-transparent-br16-p-14-28-bc-border" type="button" data-filter="pdf" onclick="setFilter(this,'pdf')">PDF</button><button class="fm-filter-btn fs75-fw6-c-muted-bg-transparent-br16-p-14-28-bc-border" type="button" data-filter="xlsx" onclick="setFilter(this,'xlsx')">XLSX</button><button class="fm-filter-btn fs75-fw6-c-muted-bg-transparent-br16-p-14-28-bc-border" type="button" data-filter="docx" onclick="setFilter(this,'docx')">DOCX</button><button class="fm-filter-btn fs75-fw6-c-muted-bg-transparent-br16-p-14-28-bc-border" type="button" data-filter="zip" onclick="setFilter(this,'zip')">ZIP</button>
+          </div>
+
+          <!-- View toggle: list | grid -->
+          <div class="flex-g1">
+            <button type="button" id="viewBtnList" class="fm-view-btn active"  onclick="setView('list')" title="List view">
+              <i class="bi bi-list-ul"></i>
+            </button>
+            <button type="button" id="viewBtnGrid" class="fm-view-btn inactive" onclick="setView('grid')" title="Grid view">
+              <i class="bi bi-grid-3x2-gap-fill"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- ── LIST VIEW ─────────────────────────────────────────────── -->
+        <div class="ov-x-auto" id="viewList">
+          <table id="fileListTable">
+            <thead>
+              <tr>
+                <th>Name</th><th>Size</th><th>Owner</th><th>Modified</th><th>Shared</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="fileListBody">
+              <tr class="fm-file-row bb-1-trans" data-file-id="1" data-type="xlsx" data-name="q4_payroll_summary.xlsx" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+  <td class="p-3-5">
+    <div class="flex-ac-g3">
+      <div class="icon-box-green-10-36">
+        <i class="bi bi-file-earmark-excel-fill fs1-c-green"></i>
+      </div>
+      <span class="fs85-fw6-c-body">Q4_Payroll_Summary.xlsx</span>
+    </div>
+  </td>
+  <td class="fs82-c-muted-p-3-5-nowrap">2.4 MB</td>
+  <td class="fs82-c-muted-p-3-5">Sarah Chen</td>
+  <td class="fs82-c-muted-p-3-5-nowrap">Dec 10, 2024</td>
+  <td class="p-3-5"><span class="iflex-fs72-fw6-c-green-bg-green-10-br16-p-08-22"><i class="bi bi-share-fill fs65"></i>Shared</span></td>
+  <td class="p-3-5">
+    <div class="flex-ac-g15">
+      <button class="fm-action-btn star-btn icon-box-transparent-28" type="button" onclick="toggleStar(1)" title="Star" data-file-id="1">
+        <i class="bi bi-star-fill c-amber-fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="Download">
+        <i class="bi bi-download fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="More">
+        <i class="bi bi-three-dots-vertical fs875"></i>
+      </button>
+    </div>
+  </td>
+</tr><tr class="fm-file-row bb-1-trans" data-file-id="2" data-type="pdf" data-name="employee_handbook_2024.pdf" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+  <td class="p-3-5">
+    <div class="flex-ac-g3">
+      <div class="icon-box-red-10-36">
+        <i class="bi bi-file-earmark-pdf-fill fs1-c-red"></i>
+      </div>
+      <span class="fs85-fw6-c-body">Employee_Handbook_2024.pdf</span>
+    </div>
+  </td>
+  <td class="fs82-c-muted-p-3-5-nowrap">8.1 MB</td>
+  <td class="fs82-c-muted-p-3-5">Marcus J.</td>
+  <td class="fs82-c-muted-p-3-5-nowrap">Dec 8, 2024</td>
+  <td class="p-3-5"></td>
+  <td class="p-3-5">
+    <div class="flex-ac-g15">
+      <button class="fm-action-btn star-btn icon-box-transparent-28" type="button" onclick="toggleStar(2)" title="Star" data-file-id="2">
+        <i class="bi bi-star-fill c-amber-fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="Download">
+        <i class="bi bi-download fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="More">
+        <i class="bi bi-three-dots-vertical fs875"></i>
+      </button>
+    </div>
+  </td>
+</tr><tr class="fm-file-row bb-1-trans" data-file-id="3" data-type="docx" data-name="onboarding_template.docx" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+  <td class="p-3-5">
+    <div class="flex-ac-g3">
+      <div class="icon-box-blue-mid-10-36">
+        <i class="bi bi-file-earmark-word-fill fs1-c-blue-mid"></i>
+      </div>
+      <span class="fs85-fw6-c-body">Onboarding_Template.docx</span>
+    </div>
+  </td>
+  <td class="fs82-c-muted-p-3-5-nowrap">1.2 MB</td>
+  <td class="fs82-c-muted-p-3-5">Emily R.</td>
+  <td class="fs82-c-muted-p-3-5-nowrap">Dec 7, 2024</td>
+  <td class="p-3-5"><span class="iflex-fs72-fw6-c-green-bg-green-10-br16-p-08-22"><i class="bi bi-share-fill fs65"></i>Shared</span></td>
+  <td class="p-3-5">
+    <div class="flex-ac-g15">
+      <button class="fm-action-btn star-btn icon-box-transparent-28" type="button" onclick="toggleStar(3)" title="Star" data-file-id="3">
+        <i class="bi bi-star fs875-c-muted"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="Download">
+        <i class="bi bi-download fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="More">
+        <i class="bi bi-three-dots-vertical fs875"></i>
+      </button>
+    </div>
+  </td>
+</tr><tr class="fm-file-row bb-1-trans" data-file-id="4" data-type="zip" data-name="brand_assets.zip" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+  <td class="p-3-5">
+    <div class="flex-ac-g3">
+      <div class="icon-box-purple-10-36">
+        <i class="bi bi-file-earmark-zip-fill fs1-c-purple"></i>
+      </div>
+      <span class="fs85-fw6-c-body">Brand_Assets.zip</span>
+    </div>
+  </td>
+  <td class="fs82-c-muted-p-3-5-nowrap">45.6 MB</td>
+  <td class="fs82-c-muted-p-3-5">Aisha P.</td>
+  <td class="fs82-c-muted-p-3-5-nowrap">Dec 5, 2024</td>
+  <td class="p-3-5"></td>
+  <td class="p-3-5">
+    <div class="flex-ac-g15">
+      <button class="fm-action-btn star-btn icon-box-transparent-28" type="button" onclick="toggleStar(4)" title="Star" data-file-id="4">
+        <i class="bi bi-star-fill c-amber-fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="Download">
+        <i class="bi bi-download fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="More">
+        <i class="bi bi-three-dots-vertical fs875"></i>
+      </button>
+    </div>
+  </td>
+</tr><tr class="fm-file-row bb-1-trans" data-file-id="5" data-type="pptx" data-name="q3_performance_review.pptx" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+  <td class="p-3-5">
+    <div class="flex-ac-g3">
+      <div class="icon-box-amber-10-36">
+        <i class="bi bi-file-earmark-ppt-fill fs1-c-amber"></i>
+      </div>
+      <span class="fs85-fw6-c-body">Q3_Performance_Review.pptx</span>
+    </div>
+  </td>
+  <td class="fs82-c-muted-p-3-5-nowrap">12.3 MB</td>
+  <td class="fs82-c-muted-p-3-5">David K.</td>
+  <td class="fs82-c-muted-p-3-5-nowrap">Dec 3, 2024</td>
+  <td class="p-3-5"><span class="iflex-fs72-fw6-c-green-bg-green-10-br16-p-08-22"><i class="bi bi-share-fill fs65"></i>Shared</span></td>
+  <td class="p-3-5">
+    <div class="flex-ac-g15">
+      <button class="fm-action-btn star-btn icon-box-transparent-28" type="button" onclick="toggleStar(5)" title="Star" data-file-id="5">
+        <i class="bi bi-star fs875-c-muted"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="Download">
+        <i class="bi bi-download fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="More">
+        <i class="bi bi-three-dots-vertical fs875"></i>
+      </button>
+    </div>
+  </td>
+</tr><tr class="fm-file-row bb-1-trans" data-file-id="6" data-type="xlsx" data-name="recruitment_pipeline.xlsx" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+  <td class="p-3-5">
+    <div class="flex-ac-g3">
+      <div class="icon-box-green-10-36">
+        <i class="bi bi-file-earmark-excel-fill fs1-c-green"></i>
+      </div>
+      <span class="fs85-fw6-c-body">Recruitment_Pipeline.xlsx</span>
+    </div>
+  </td>
+  <td class="fs82-c-muted-p-3-5-nowrap">3.8 MB</td>
+  <td class="fs82-c-muted-p-3-5">Tom N.</td>
+  <td class="fs82-c-muted-p-3-5-nowrap">Dec 1, 2024</td>
+  <td class="p-3-5"></td>
+  <td class="p-3-5">
+    <div class="flex-ac-g15">
+      <button class="fm-action-btn star-btn icon-box-transparent-28" type="button" onclick="toggleStar(6)" title="Star" data-file-id="6">
+        <i class="bi bi-star fs875-c-muted"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="Download">
+        <i class="bi bi-download fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="More">
+        <i class="bi bi-three-dots-vertical fs875"></i>
+      </button>
+    </div>
+  </td>
+</tr><tr class="fm-file-row bb-1-trans" data-file-id="7" data-type="zip" data-name="company_logo_pack.zip" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+  <td class="p-3-5">
+    <div class="flex-ac-g3">
+      <div class="icon-box-purple-10-36">
+        <i class="bi bi-file-earmark-zip-fill fs1-c-purple"></i>
+      </div>
+      <span class="fs85-fw6-c-body">Company_Logo_Pack.zip</span>
+    </div>
+  </td>
+  <td class="fs82-c-muted-p-3-5-nowrap">22.1 MB</td>
+  <td class="fs82-c-muted-p-3-5">Aisha P.</td>
+  <td class="fs82-c-muted-p-3-5-nowrap">Nov 28, 2024</td>
+  <td class="p-3-5"><span class="iflex-fs72-fw6-c-green-bg-green-10-br16-p-08-22"><i class="bi bi-share-fill fs65"></i>Shared</span></td>
+  <td class="p-3-5">
+    <div class="flex-ac-g15">
+      <button class="fm-action-btn star-btn icon-box-transparent-28" type="button" onclick="toggleStar(7)" title="Star" data-file-id="7">
+        <i class="bi bi-star-fill c-amber-fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="Download">
+        <i class="bi bi-download fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="More">
+        <i class="bi bi-three-dots-vertical fs875"></i>
+      </button>
+    </div>
+  </td>
+</tr><tr class="fm-file-row bb-1-trans" data-file-id="8" data-type="pdf" data-name="leave_policy_update.pdf" onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background=''">
+  <td class="p-3-5">
+    <div class="flex-ac-g3">
+      <div class="icon-box-red-10-36">
+        <i class="bi bi-file-earmark-pdf-fill fs1-c-red"></i>
+      </div>
+      <span class="fs85-fw6-c-body">Leave_Policy_Update.pdf</span>
+    </div>
+  </td>
+  <td class="fs82-c-muted-p-3-5-nowrap">0.9 MB</td>
+  <td class="fs82-c-muted-p-3-5">Emily R.</td>
+  <td class="fs82-c-muted-p-3-5-nowrap">Nov 25, 2024</td>
+  <td class="p-3-5"></td>
+  <td class="p-3-5">
+    <div class="flex-ac-g15">
+      <button class="fm-action-btn star-btn icon-box-transparent-28" type="button" onclick="toggleStar(8)" title="Star" data-file-id="8">
+        <i class="bi bi-star fs875-c-muted"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="Download">
+        <i class="bi bi-download fs875"></i>
+      </button>
+      <button class="icon-box-transparent-28-2" type="button" title="More">
+        <i class="bi bi-three-dots-vertical fs875"></i>
+      </button>
+    </div>
+  </td>
+</tr>
+            </tbody>
+          </table>
+          <!-- Empty state -->
+          <div class="fm-empty" id="listEmpty">
+            <i class="bi bi-folder-x"></i>
+            <p>No files match your filter</p>
+          </div>
+        </div>
+
+        <!-- ── GRID VIEW ─────────────────────────────────────────────── -->
+        <div class="d-none-p-5" id="viewGrid">
+          <div class="row g-3" id="fileGridBody">
+            <div class="col-6 col-md-4 col-xl-3 fm-grid-item" data-file-id="1" data-type="xlsx" data-name="q4_payroll_summary.xlsx">
+  <div class="fm-grid-card rel-bg-card-bg-br35-p-5-pointer-trans" onmouseover="this.style.borderColor='#5B8FF9'" onmouseout="this.style.borderColor='var(--body-border)'">
+    <button class="star-btn abs-card-close" type="button" onclick="event.stopPropagation();toggleStar(1)" data-file-id="1">
+      <i class="bi bi-star-fill c-amber-fs875"></i>
+    </button>
+    <div class="icon-box-green-10-48">
+      <i class="bi bi-file-earmark-excel-fill fs14-c-green"></i>
+    </div>
+    <div class="fs82-fw7-c-body-pr4-mb1-ellipsis-nowrap-ov-hidden">Q4_Payroll_Summary.xlsx</div>
+    <div class="fs72-muted">2.4 MB · Dec 10, 2024</div>
+  </div>
+</div><div class="col-6 col-md-4 col-xl-3 fm-grid-item" data-file-id="2" data-type="pdf" data-name="employee_handbook_2024.pdf">
+  <div class="fm-grid-card rel-bg-card-bg-br35-p-5-pointer-trans" onmouseover="this.style.borderColor='#5B8FF9'" onmouseout="this.style.borderColor='var(--body-border)'">
+    <button class="star-btn abs-card-close" type="button" onclick="event.stopPropagation();toggleStar(2)" data-file-id="2">
+      <i class="bi bi-star-fill c-amber-fs875"></i>
+    </button>
+    <div class="icon-box-red-10-48">
+      <i class="bi bi-file-earmark-pdf-fill fs14-c-red"></i>
+    </div>
+    <div class="fs82-fw7-c-body-pr4-mb1-ellipsis-nowrap-ov-hidden">Employee_Handbook_2024.pdf</div>
+    <div class="fs72-muted">8.1 MB · Dec 8, 2024</div>
+  </div>
+</div><div class="col-6 col-md-4 col-xl-3 fm-grid-item" data-file-id="3" data-type="docx" data-name="onboarding_template.docx">
+  <div class="fm-grid-card rel-bg-card-bg-br35-p-5-pointer-trans" onmouseover="this.style.borderColor='#5B8FF9'" onmouseout="this.style.borderColor='var(--body-border)'">
+    <button class="star-btn abs-card-close" type="button" onclick="event.stopPropagation();toggleStar(3)" data-file-id="3">
+      <i class="bi bi-star fs875-c-border"></i>
+    </button>
+    <div class="icon-box-blue-mid-10-48">
+      <i class="bi bi-file-earmark-word-fill fs14-c-blue-mid"></i>
+    </div>
+    <div class="fs82-fw7-c-body-pr4-mb1-ellipsis-nowrap-ov-hidden">Onboarding_Template.docx</div>
+    <div class="fs72-muted">1.2 MB · Dec 7, 2024</div>
+  </div>
+</div><div class="col-6 col-md-4 col-xl-3 fm-grid-item" data-file-id="4" data-type="zip" data-name="brand_assets.zip">
+  <div class="fm-grid-card rel-bg-card-bg-br35-p-5-pointer-trans" onmouseover="this.style.borderColor='#5B8FF9'" onmouseout="this.style.borderColor='var(--body-border)'">
+    <button class="star-btn abs-card-close" type="button" onclick="event.stopPropagation();toggleStar(4)" data-file-id="4">
+      <i class="bi bi-star-fill c-amber-fs875"></i>
+    </button>
+    <div class="icon-box-purple-10-48">
+      <i class="bi bi-file-earmark-zip-fill fs14-c-purple"></i>
+    </div>
+    <div class="fs82-fw7-c-body-pr4-mb1-ellipsis-nowrap-ov-hidden">Brand_Assets.zip</div>
+    <div class="fs72-muted">45.6 MB · Dec 5, 2024</div>
+  </div>
+</div><div class="col-6 col-md-4 col-xl-3 fm-grid-item" data-file-id="5" data-type="pptx" data-name="q3_performance_review.pptx">
+  <div class="fm-grid-card rel-bg-card-bg-br35-p-5-pointer-trans" onmouseover="this.style.borderColor='#5B8FF9'" onmouseout="this.style.borderColor='var(--body-border)'">
+    <button class="star-btn abs-card-close" type="button" onclick="event.stopPropagation();toggleStar(5)" data-file-id="5">
+      <i class="bi bi-star fs875-c-border"></i>
+    </button>
+    <div class="icon-box-amber-10-48">
+      <i class="bi bi-file-earmark-ppt-fill fs14-c-amber"></i>
+    </div>
+    <div class="fs82-fw7-c-body-pr4-mb1-ellipsis-nowrap-ov-hidden">Q3_Performance_Review.pptx</div>
+    <div class="fs72-muted">12.3 MB · Dec 3, 2024</div>
+  </div>
+</div><div class="col-6 col-md-4 col-xl-3 fm-grid-item" data-file-id="6" data-type="xlsx" data-name="recruitment_pipeline.xlsx">
+  <div class="fm-grid-card rel-bg-card-bg-br35-p-5-pointer-trans" onmouseover="this.style.borderColor='#5B8FF9'" onmouseout="this.style.borderColor='var(--body-border)'">
+    <button class="star-btn abs-card-close" type="button" onclick="event.stopPropagation();toggleStar(6)" data-file-id="6">
+      <i class="bi bi-star fs875-c-border"></i>
+    </button>
+    <div class="icon-box-green-10-48">
+      <i class="bi bi-file-earmark-excel-fill fs14-c-green"></i>
+    </div>
+    <div class="fs82-fw7-c-body-pr4-mb1-ellipsis-nowrap-ov-hidden">Recruitment_Pipeline.xlsx</div>
+    <div class="fs72-muted">3.8 MB · Dec 1, 2024</div>
+  </div>
+</div><div class="col-6 col-md-4 col-xl-3 fm-grid-item" data-file-id="7" data-type="zip" data-name="company_logo_pack.zip">
+  <div class="fm-grid-card rel-bg-card-bg-br35-p-5-pointer-trans" onmouseover="this.style.borderColor='#5B8FF9'" onmouseout="this.style.borderColor='var(--body-border)'">
+    <button class="star-btn abs-card-close" type="button" onclick="event.stopPropagation();toggleStar(7)" data-file-id="7">
+      <i class="bi bi-star-fill c-amber-fs875"></i>
+    </button>
+    <div class="icon-box-purple-10-48">
+      <i class="bi bi-file-earmark-zip-fill fs14-c-purple"></i>
+    </div>
+    <div class="fs82-fw7-c-body-pr4-mb1-ellipsis-nowrap-ov-hidden">Company_Logo_Pack.zip</div>
+    <div class="fs72-muted">22.1 MB · Nov 28, 2024</div>
+  </div>
+</div><div class="col-6 col-md-4 col-xl-3 fm-grid-item" data-file-id="8" data-type="pdf" data-name="leave_policy_update.pdf">
+  <div class="fm-grid-card rel-bg-card-bg-br35-p-5-pointer-trans" onmouseover="this.style.borderColor='#5B8FF9'" onmouseout="this.style.borderColor='var(--body-border)'">
+    <button class="star-btn abs-card-close" type="button" onclick="event.stopPropagation();toggleStar(8)" data-file-id="8">
+      <i class="bi bi-star fs875-c-border"></i>
+    </button>
+    <div class="icon-box-red-10-48">
+      <i class="bi bi-file-earmark-pdf-fill fs14-c-red"></i>
+    </div>
+    <div class="fs82-fw7-c-body-pr4-mb1-ellipsis-nowrap-ov-hidden">Leave_Policy_Update.pdf</div>
+    <div class="fs72-muted">0.9 MB · Nov 25, 2024</div>
+  </div>
+</div>
+          </div>
+          <!-- Empty state -->
+          <div class="fm-empty" id="gridEmpty">
+            <i class="bi bi-folder-x"></i>
+            <p>No files match your filter</p>
+          </div>
+        </div>
+
+      </div><!-- /card-hr -->
+
+    </div><!-- /page-inner -->
+  </main>
+</div><!-- /main-content -->
+
+<!-- ══ NEW FILE MODAL — exact React ═══════════════════════════════════════ -->
+<div class="fm-overlay d-none" id="newFileOverlay" onclick="if(event.target===this)closeNewModal()">
+  <div class="fm-modal">
+    <!-- Header -->
+    <div class="flex-jsb-ac-mb6">
+      <h3 class="fs11-fw8-c-body-m-0">Create New File</h3>
+      <button class="fs125-c-muted-bg-none-b-none-pointer" type="button" onclick="closeNewModal()">&times;</button>
+    </div>
+    <!-- File name -->
+    <label class="d-block-fs8-fw7-c-body-mb15">File Name</label>
+    <input class="w100pct-fs875-c-body-bg-bg-br25-p-28-35-mb4" type="text" id="newFileName" placeholder="Enter file name…" />
+    <!-- File type picker -->
+    <label class="d-block-fs8-fw7-c-body-mb15">File Type</label>
+    <div class="grid-cols-4-g2-mb6" id="fileTypePicker">
+      <!-- Built by JS -->
+    </div>
+    <!-- Actions -->
+    <div class="flex-g2">
+      <button class="fs875-fw7-c-body-bg-transparent-br25-p-28-pointer-fl1" type="button" onclick="closeNewModal()">Cancel</button>
+      <button class="fs875-fw7-c-white-bg-grad-blue-purple-br25-p-28-b-none" type="button" onclick="createFile()">Create File</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Upload Files (real File API — reads name/size from the picked files) ══════ -->
+<div class="fm-overlay d-none" id="uploadFileOverlay" onclick="if(event.target===this)closeUploadModal()">
+  <div class="fm-modal">
+    <div class="flex-jsb-ac-mb6">
+      <h3 class="fs11-fw8-c-body-m-0">Upload Files</h3>
+      <button class="fs125-c-muted-bg-none-b-none-pointer" type="button" onclick="closeUploadModal()">&times;</button>
+    </div>
+    <label class="d-block-fs8-fw7-c-body-mb15">Choose files from your device</label>
+    <input class="w100pct-fs875-c-body-bg-bg-br25-p-28-35-mb4" type="file" id="uploadFileInput" multiple onchange="handleUploadFilesChosen(this)"/>
+    <div id="uploadFileList" style="font-size:.8125rem;color:var(--body-text-muted);margin-bottom:1rem;line-height:1.6"></div>
+    <div class="flex-g2">
+      <button class="fs875-fw7-c-body-bg-transparent-br25-p-28-pointer-fl1" type="button" onclick="closeUploadModal()">Cancel</button>
+      <button class="fs875-fw7-c-white-bg-grad-blue-purple-br25-p-28-b-none" type="button" onclick="confirmUpload()">Upload</button>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* =============================================================
+   FILE MANAGER — Complete JS Engine  (zero string-escape bugs)
+   ============================================================= */
+
+var FILE_LIST  = [{"id": 1, "name": "Q4_Payroll_Summary.xlsx", "type": "xlsx", "size": "2.4 MB", "owner": "Sarah Chen", "modified": "Dec 10, 2024", "starred": true, "shared": true}, {"id": 2, "name": "Employee_Handbook_2024.pdf", "type": "pdf", "size": "8.1 MB", "owner": "Marcus J.", "modified": "Dec 8, 2024", "starred": true, "shared": false}, {"id": 3, "name": "Onboarding_Template.docx", "type": "docx", "size": "1.2 MB", "owner": "Emily R.", "modified": "Dec 7, 2024", "starred": false, "shared": true}, {"id": 4, "name": "Brand_Assets.zip", "type": "zip", "size": "45.6 MB", "owner": "Aisha P.", "modified": "Dec 5, 2024", "starred": true, "shared": false}, {"id": 5, "name": "Q3_Performance_Review.pptx", "type": "pptx", "size": "12.3 MB", "owner": "David K.", "modified": "Dec 3, 2024", "starred": false, "shared": true}, {"id": 6, "name": "Recruitment_Pipeline.xlsx", "type": "xlsx", "size": "3.8 MB", "owner": "Tom N.", "modified": "Dec 1, 2024", "starred": false, "shared": false}, {"id": 7, "name": "Company_Logo_Pack.zip", "type": "zip", "size": "22.1 MB", "owner": "Aisha P.", "modified": "Nov 28, 2024", "starred": true, "shared": true}, {"id": 8, "name": "Leave_Policy_Update.pdf", "type": "pdf", "size": "0.9 MB", "owner": "Emily R.", "modified": "Nov 25, 2024", "starred": false, "shared": false}];
+var FILE_ICONS = {"pdf": {"icon": "bi-file-earmark-pdf-fill", "color": "#EF4444", "bg": "rgba(239,68,68,.1)"}, "xlsx": {"icon": "bi-file-earmark-excel-fill", "color": "#10B981", "bg": "rgba(16,185,129,.1)"}, "docx": {"icon": "bi-file-earmark-word-fill", "color": "#3B82F6", "bg": "rgba(59,130,246,.1)"}, "pptx": {"icon": "bi-file-earmark-ppt-fill", "color": "#F59E0B", "bg": "rgba(245,158,11,.1)"}, "zip": {"icon": "bi-file-earmark-zip-fill", "color": "#7C3AED", "bg": "rgba(124,58,237,.1)"}, "img": {"icon": "bi-file-earmark-image-fill", "color": "#0EA5E9", "bg": "rgba(14,165,233,.1)"}};
+
+/* ── State ─────────────────────────────────────────────────── */
+var _search  = '';
+var _filter  = 'all';
+var _view    = 'list';
+var _starred = [1, 2, 4, 7];
+var _newType = 'docx';
+
+/* ── Helpers ────────────────────────────────────────────────── */
+function fi(type) {
+  return FILE_ICONS[type] || FILE_ICONS['pdf'];
+}
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function h(tag, attrs, inner) {
+  var attrStr = Object.keys(attrs || {}).map(function(k) {
+    return ' ' + k + '="' + esc(attrs[k]) + '"';
+  }).join('');
+  return '<' + tag + attrStr + '>' + (inner || '') + '</' + tag + '>';
+}
+
+/* ── Get filtered list ──────────────────────────────────────── */
+function getFiltered() {
+  return FILE_LIST.filter(function(f) {
+    var matchSearch = !_search || f.name.toLowerCase().indexOf(_search) >= 0;
+    var matchFilter =
+      _filter === 'all'     ? true :
+      _filter === 'starred' ? _starred.indexOf(f.id) >= 0 :
+                              f.type === _filter;
+    return matchSearch && matchFilter;
+  });
+}
+
+/* ── Toggle star ────────────────────────────────────────────── */
+function toggleStar(id) {
+  var idx = _starred.indexOf(id);
+  if (idx >= 0) {
+    _starred.splice(idx, 1);
+  } else {
+    _starred.push(id);
+  }
+  var statEl = document.getElementById('statStarred');
+  if (statEl) {
+    statEl.textContent = _starred.length;
+    statEl.classList.add('star-pulse');
+    setTimeout(function() { statEl.classList.remove('star-pulse'); }, 300);
+  }
+  renderListView();
+  renderGridView();
+  renderFavSection();
+}
+
+/* ── Set filter type ────────────────────────────────────────── */
+function setFilter(btn, f) {
+  _filter = f;
+  document.querySelectorAll('.fm-filter-btn').forEach(function(b) {
+    var isA = b.getAttribute('data-filter') === f;
+    b.style.borderColor = isA ? '#5B8FF9' : 'var(--body-border)';
+    b.style.background  = isA ? 'rgba(91,143,249,.1)' : 'transparent';
+    b.style.color       = isA ? '#5B8FF9' : 'var(--body-text-muted)';
+  });
+  renderListView();
+  renderGridView();
+}
+
+/* ── Set view (list / grid) ─────────────────────────────────── */
+function setView(v) {
+  _view = v;
+  document.getElementById('viewList').style.display = v === 'list' ? 'block' : 'none';
+  document.getElementById('viewGrid').style.display = v === 'grid' ? 'block' : 'none';
+  document.getElementById('viewBtnList').className = 'fm-view-btn ' + (v === 'list' ? 'active' : 'inactive');
+  document.getElementById('viewBtnGrid').className = 'fm-view-btn ' + (v === 'grid' ? 'active' : 'inactive');
+}
+
+/* ── Apply search filter ────────────────────────────────────── */
+function applyFilters() {
+  _search = (document.getElementById('fileSearch').value || '').toLowerCase().trim();
+  renderListView();
+  renderGridView();
+}
+
+/* ── Top search bar sync ────────────────────────────────────── */
+function handleTopSearch(q) {
+  var inner = document.getElementById('fileSearch');
+  if (inner) { inner.value = q; }
+  _search = q.toLowerCase().trim();
+  renderListView();
+  renderGridView();
+}
+
+/* ── Build row HTML (LIST view) ─────────────────────────────── */
+function buildListRow(f) {
+  var ico       = fi(f.type);
+  var isStarred = _starred.indexOf(f.id) >= 0;
+
+  // Shared badge
+  var sharedBadge = f.shared
+    ? '<span style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;' +
+      'font-weight:600;color:#10B981;background:rgba(16,185,129,.1);' +
+      'padding:.2rem .55rem;border-radius:.4rem">' +
+      '<i class="bi bi-share-fill" style="font-size:.65rem"></i>Shared</span>'
+    : '';
+
+  // Star icon
+  var starIco   = isStarred ? 'bi-star-fill' : 'bi-star';
+  var starColor = isStarred ? '#F59E0B'      : 'var(--body-text-muted)';
+
+  // Action button builder
+  function iconBtn(onclick, title, iconClass, extraStyle) {
+    return '<button type="button"' +
+      (onclick ? ' onclick="' + onclick + '"' : '') +
+      ' title="' + title + '"' +
+      ' style="width:28px;height:28px;border-radius:.4rem;border:none;' +
+      'background:transparent;cursor:pointer;display:flex;align-items:center;' +
+      'justify-content:center;' + (extraStyle || 'color:var(--body-text-muted)') + '">' +
+      '<i class="bi ' + iconClass + '" style="font-size:.875rem' +
+      (starColor && title === 'Star' ? ';color:' + starColor : '') + '"></i>' +
+      '</button>';
+  }
+
+  return '<tr' +
+    ' style="border-bottom:1px solid var(--body-border);transition:background .15s"' +
+    ' onmouseover="this.style.background=\'var(--body-bg)\'"' +
+    ' onmouseout="this.style.background=\'\'">' +
+
+    '<td style="padding:.75rem 1.25rem">' +
+      '<div style="display:flex;align-items:center;gap:.75rem">' +
+        '<div style="width:36px;height:36px;border-radius:.5rem;background:' + ico.bg + ';' +
+        'display:flex;align-items:center;justify-content:center;flex-shrink:0">' +
+          '<i class="bi ' + ico.icon + '" style="color:' + ico.color + ';font-size:1rem"></i>' +
+        '</div>' +
+        '<span style="font-weight:600;font-size:.85rem;color:var(--body-text)">' + esc(f.name) + '</span>' +
+      '</div>' +
+    '</td>' +
+
+    '<td style="padding:.75rem 1.25rem;font-size:.82rem;color:var(--body-text-muted);white-space:nowrap">' + f.size + '</td>' +
+    '<td style="padding:.75rem 1.25rem;font-size:.82rem;color:var(--body-text-muted)">' + f.owner + '</td>' +
+    '<td style="padding:.75rem 1.25rem;font-size:.82rem;color:var(--body-text-muted);white-space:nowrap">' + f.modified + '</td>' +
+    '<td style="padding:.75rem 1.25rem">' + sharedBadge + '</td>' +
+
+    '<td style="padding:.75rem 1.25rem">' +
+      '<div style="display:flex;gap:.375rem;align-items:center">' +
+        '<button type="button" onclick="toggleStar(' + f.id + ')" title="Star"' +
+        ' class="fm-action-btn"' +
+        ' style="width:28px;height:28px;border-radius:.4rem;border:none;background:transparent;' +
+        'cursor:pointer;display:flex;align-items:center;justify-content:center">' +
+          '<i class="bi ' + starIco + '" style="color:' + starColor + ';font-size:.875rem"></i>' +
+        '</button>' +
+        '<button type="button" onclick="handleDownloadFile(' + f.id + ')" title="Download"' +
+        ' style="width:28px;height:28px;border-radius:.4rem;border:none;background:transparent;' +
+        'cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--body-text-muted)">' +
+          '<i class="bi bi-download" style="font-size:.875rem"></i>' +
+        '</button>' +
+        '<div class="pos-rel-inline">' +
+          '<button type="button" data-bs-toggle="dropdown" aria-expanded="false" title="More"' +
+          ' style="width:28px;height:28px;border-radius:.4rem;border:none;background:transparent;' +
+          'cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--body-text-muted)">' +
+            '<i class="bi bi-three-dots-vertical" style="font-size:.875rem"></i>' +
+          '</button>' +
+          '<ul class="dropdown-menu dropdown-menu-end">' +
+            '<li><a class="dropdown-item" href="#" onclick="event.preventDefault();handleToggleShare(' + f.id + ')">' + (f.shared ? 'Unshare' : 'Share') + '</a></li>' +
+            '<li><a class="dropdown-item" href="#" style="color:#EF4444" onclick="event.preventDefault();handleDeleteFile(' + f.id + ')">Delete</a></li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+    '</td>' +
+    '</tr>';
+}
+
+/* ── Build card HTML (GRID view) ────────────────────────────── */
+function buildGridCard(f) {
+  var ico       = fi(f.type);
+  var isStarred = _starred.indexOf(f.id) >= 0;
+  var starIco   = isStarred ? 'bi-star-fill' : 'bi-star';
+  var starColor = isStarred ? '#F59E0B'      : 'var(--body-border)';
+
+  return '<div class="col-6 col-md-4 col-xl-3">' +
+    '<div class="fm-grid-card"' +
+    ' style="border:1.5px solid var(--body-border);border-radius:.875rem;padding:1.25rem;' +
+    'background:var(--card-bg);cursor:pointer;position:relative;transition:border-color .2s"' +
+    ' onmouseover="this.style.borderColor=\'#5B8FF9\'"' +
+    ' onmouseout="this.style.borderColor=\'var(--body-border)\'">' +
+
+      '<button type="button"' +
+      ' onclick="event.stopPropagation();toggleStar(' + f.id + ')"' +
+      ' style="position:absolute;top:.75rem;right:.75rem;background:none;border:none;cursor:pointer;padding:0">' +
+        '<i class="bi ' + starIco + '" style="color:' + starColor + ';font-size:.875rem"></i>' +
+      '</button>' +
+
+      '<div style="width:48px;height:48px;border-radius:.75rem;background:' + ico.bg + ';' +
+      'display:flex;align-items:center;justify-content:center;margin-bottom:.875rem">' +
+        '<i class="bi ' + ico.icon + '" style="color:' + ico.color + ';font-size:1.4rem"></i>' +
+      '</div>' +
+
+      '<div style="font-weight:700;font-size:.82rem;color:var(--body-text);margin-bottom:.25rem;' +
+      'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:1rem">' +
+        esc(f.name) +
+      '</div>' +
+
+      '<div style="font-size:.72rem;color:var(--body-text-muted)">' +
+        f.size + ' · ' + f.modified +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+/* ── Render LIST view ───────────────────────────────────────── */
+function renderListView() {
+  var files = getFiltered();
+  var tbody = document.getElementById('fileListBody');
+  var empty = document.getElementById('listEmpty');
+  if (!files.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  tbody.innerHTML = files.map(buildListRow).join('');
+}
+
+/* ── Render GRID view ───────────────────────────────────────── */
+function renderGridView() {
+  var files    = getFiltered();
+  var gridBody = document.getElementById('fileGridBody');
+  var empty    = document.getElementById('gridEmpty');
+  if (!files.length) {
+    gridBody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  gridBody.innerHTML = files.map(buildGridCard).join('');
+}
+
+/* ── Render Favorite Files ──────────────────────────────────── */
+function renderFavSection() {
+  var favFiles = FILE_LIST.filter(function(f) {
+    return _starred.indexOf(f.id) >= 0;
+  });
+  var section = document.getElementById('favSection');
+  var grid    = document.getElementById('favGrid');
+  section.style.display = favFiles.length > 0 ? '' : 'none';
+
+  grid.innerHTML = favFiles.map(function(f) {
+    var ico = fi(f.type);
+    return '<div class="col-12 col-md-6 col-xl-3">' +
+      '<div class="card-hr" style="padding:1rem 1.125rem;display:flex;align-items:center;gap:.875rem;cursor:pointer">' +
+        '<div style="width:40px;height:40px;border-radius:.625rem;background:' + ico.bg + ';' +
+        'display:flex;align-items:center;justify-content:center;flex-shrink:0">' +
+          '<i class="bi ' + ico.icon + '" style="color:' + ico.color + ';font-size:1.1rem"></i>' +
+        '</div>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-weight:700;font-size:.82rem;color:var(--body-text);' +
+          'white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(f.name) + '</div>' +
+          '<div style="font-size:.72rem;color:var(--body-text-muted);margin-top:.1rem">' + f.size + '</div>' +
+        '</div>' +
+        '<i class="bi bi-star-fill"' +
+        ' style="color:#F59E0B;font-size:.875rem;cursor:pointer;flex-shrink:0"' +
+        ' onclick="event.stopPropagation();toggleStar(' + f.id + ')"></i>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+/* ── Toast helper ── */
+function showToast(message, kind) {
+  var bg = kind === 'danger' ? 'linear-gradient(135deg,#EF4444,#F97316)' : (kind === 'success' ? 'linear-gradient(135deg,#10B981,#06B6D4)' : 'linear-gradient(135deg,#4F6EF7,#8B5CF6)');
+  var icon = kind === 'danger' ? 'bi-trash3-fill' : (kind === 'success' ? 'bi-check-circle-fill' : 'bi-download');
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:' + bg + ';color:#fff;padding:.875rem 1.25rem;border-radius:.875rem;font-size:.875rem;font-weight:700;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:.625rem;opacity:0;transition:opacity .25s';
+  toast.innerHTML = '<i class="bi ' + icon + '"></i><span>' + esc(message) + '</span>';
+  document.body.appendChild(toast);
+  requestAnimationFrame(function () { toast.style.opacity = '1'; });
+  setTimeout(function () {
+    toast.style.opacity = '0';
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 3000);
+}
+
+/* ── Download (list-row action) ─────────────────────────────── */
+function handleDownloadFile(id) {
+  var f = FILE_LIST.find(function(x) { return x.id === id; });
+  if (!f) return;
+  showToast(f.name + ' (' + f.size + ') downloaded', 'success');
+}
+
+/* ── Share toggle (list-row "More" menu) ────────────────────── */
+function handleToggleShare(id) {
+  var f = FILE_LIST.find(function(x) { return x.id === id; });
+  if (!f) return;
+  f.shared = !f.shared;
+  renderListView();
+  renderGridView();
+  showToast(f.name + (f.shared ? ' is now shared' : ' is no longer shared'), 'success');
+}
+
+/* ── Delete (list-row "More" menu) ──────────────────────────── */
+function handleDeleteFile(id) {
+  var idx = FILE_LIST.findIndex(function(x) { return x.id === id; });
+  if (idx < 0) return;
+  var f = FILE_LIST[idx];
+  FILE_LIST.splice(idx, 1);
+  var starIdx = _starred.indexOf(id);
+  if (starIdx >= 0) {
+    _starred.splice(starIdx, 1);
+    var statEl = document.getElementById('statStarred');
+    if (statEl) statEl.textContent = _starred.length;
+  }
+  renderListView();
+  renderGridView();
+  renderFavSection();
+  showToast(f.name + ' deleted', 'danger');
+}
+var FILE_TYPE_META = {
+  docx: { icon: 'bi-file-earmark-word-fill',  color: '#3B82F6', bg: 'rgba(59,130,246,.1)'  },
+  xlsx: { icon: 'bi-file-earmark-excel-fill', color: '#10B981', bg: 'rgba(16,185,129,.1)'  },
+  pptx: { icon: 'bi-file-earmark-ppt-fill',   color: '#F59E0B', bg: 'rgba(245,158,11,.1)'  },
+  pdf:  { icon: 'bi-file-earmark-pdf-fill',   color: '#EF4444', bg: 'rgba(239,68,68,.1)'   }
+};
+
+function openNewModal() {
+  _newType = 'docx';
+  var inp = document.getElementById('newFileName');
+  inp.value = '';
+  inp.style.borderColor = '';
+  renderFileTypePicker();
+  var overlay = document.getElementById('newFileOverlay');
+  overlay.classList.remove('d-none');
+  overlay.style.display = 'flex';
+  setTimeout(function() { inp.focus(); }, 50);
+}
+
+function closeNewModal() {
+  var overlay = document.getElementById('newFileOverlay');
+  overlay.classList.add('d-none');
+  overlay.style.display = 'none';
+}
+
+function renderFileTypePicker() {
+  var picker = document.getElementById('fileTypePicker');
+  picker.innerHTML = ['docx', 'xlsx', 'pptx', 'pdf'].map(function(type) {
+    var m        = FILE_TYPE_META[type];
+    var isActive = type === _newType;
+    var border   = isActive ? m.color        : 'var(--body-border)';
+    var bg       = isActive ? m.bg           : 'transparent';
+    return '<button type="button"' +
+      ' data-type="' + type + '"' +
+      ' onclick="setNewType(\'' + type + '\')"' +
+      ' style="padding:.875rem .5rem;border-radius:.625rem;border:2px solid ' + border + ';' +
+      'display:flex;flex-direction:column;align-items:center;gap:.375rem;cursor:pointer;' +
+      'background:' + bg + ';font-family:var(--font)">' +
+        '<i class="bi ' + m.icon + '" style="font-size:1.25rem;color:' + m.color + '"></i>' +
+        '<span style="font-size:.7rem;font-weight:700;color:var(--body-text)">' +
+          type.toUpperCase() +
+        '</span>' +
+      '</button>';
+  }).join('');
+}
+
+function setNewType(type) {
+  _newType = type;
+  renderFileTypePicker();
+}
+
+function createFile() {
+  var name = (document.getElementById('newFileName').value || '').trim();
+  if (!name) {
+    var inp = document.getElementById('newFileName');
+    inp.style.borderColor = '#EF4444';
+    inp.focus();
+    return;
+  }
+  var fullName = name.toLowerCase().endsWith('.' + _newType) ? name : name + '.' + _newType;
+  var now      = new Date();
+  var months   = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var dateStr  = months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+  var maxId    = 0;
+  FILE_LIST.forEach(function(f) { if (f.id > maxId) maxId = f.id; });
+  var newFile  = {
+    id: maxId + 1, name: fullName, type: _newType,
+    size: '0 KB', owner: 'You', modified: dateStr,
+    starred: false, shared: false
+  };
+  FILE_LIST.unshift(newFile);
+  renderListView();
+  renderGridView();
+  closeNewModal();
+}
+
+/* ── UPLOAD MODAL (real File API) ───────────────────────────── */
+function openUploadModal() {
+  var input = document.getElementById('uploadFileInput');
+  input.value = '';
+  input.style.borderColor = '';
+  document.getElementById('uploadFileList').innerHTML = '';
+  var overlay = document.getElementById('uploadFileOverlay');
+  overlay.classList.remove('d-none');
+  overlay.style.display = 'flex';
+}
+
+function closeUploadModal() {
+  var overlay = document.getElementById('uploadFileOverlay');
+  overlay.classList.add('d-none');
+  overlay.style.display = 'none';
+}
+
+function formatBytes(bytes) {
+  if (!bytes) return '0 KB';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+}
+
+function extToType(name) {
+  var ext = (name.split('.').pop() || '').toLowerCase();
+  if (ext === 'pdf') return 'pdf';
+  if (['xlsx', 'xls', 'csv'].indexOf(ext) >= 0) return 'xlsx';
+  if (['docx', 'doc'].indexOf(ext) >= 0) return 'docx';
+  if (['pptx', 'ppt'].indexOf(ext) >= 0) return 'pptx';
+  if (['zip', 'rar', '7z'].indexOf(ext) >= 0) return 'zip';
+  if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].indexOf(ext) >= 0) return 'img';
+  return 'pdf';
+}
+
+function handleUploadFilesChosen(input) {
+  var listEl = document.getElementById('uploadFileList');
+  var files = Array.prototype.slice.call(input.files);
+  input.style.borderColor = '';
+  listEl.innerHTML = files.map(function(f) {
+    return esc(f.name) + ' <span style="opacity:.7">(' + formatBytes(f.size) + ')</span>';
+  }).join('<br>');
+}
+
+function confirmUpload() {
+  var input = document.getElementById('uploadFileInput');
+  var files = Array.prototype.slice.call(input.files);
+  if (!files.length) {
+    input.style.borderColor = '#EF4444';
+    return;
+  }
+  input.style.borderColor = '';
+
+  var now = new Date();
+  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var dateStr = months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+  var maxId = 0;
+  FILE_LIST.forEach(function(f) { if (f.id > maxId) maxId = f.id; });
+
+  var newEntries = files.map(function(file) {
+    maxId++;
+    return {
+      id: maxId, name: file.name, type: extToType(file.name),
+      size: formatBytes(file.size), owner: 'You', modified: dateStr,
+      starred: false, shared: false
+    };
+  });
+  FILE_LIST.unshift.apply(FILE_LIST, newEntries);
+
+  renderListView();
+  renderGridView();
+  closeUploadModal();
+  showToast(files.length + ' file' + (files.length === 1 ? '' : 's') + ' uploaded', 'success');
+}
+
+/* ── Keyboard: Escape closes modal ─────────────────────────── */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { closeNewModal(); closeUploadModal(); }
+});
+
+/* ── Initial render ─────────────────────────────────────────── */
+renderListView();
+renderGridView();
+</script>
+</body>
+</html>

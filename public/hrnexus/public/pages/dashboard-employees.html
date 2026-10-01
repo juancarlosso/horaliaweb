@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Employees Dashboard — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Employee-focused dashboard summarising headcount, new hires, and department breakdowns."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<style id="page-css">
+
+.dept-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ava-stack{display:flex}
+.ava-stack .ava{width:30px;height:30px;border-radius:50%;border:2px solid var(--card-bg);margin-left:-8px;first-child{margin-left:0};display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:#fff;flex-shrink:0}
+.ava-stack .ava:first-child{margin-left:0}
+.skill-chip{display:inline-block;padding:.15rem .5rem;border-radius:999px;font-size:.65rem;font-weight:700;background:var(--color-primary-light);color:var(--color-primary);margin:.1rem}
+.heat-cell{width:12px;height:12px;border-radius:2px;display:inline-block}
+.hmap-row{display:flex;align-items:center;gap:3px;margin-bottom:3px}
+.emp-spark{display:inline-flex;align-items:flex-end;gap:1px;height:20px}
+.emp-spark span{width:3px;border-radius:1px 1px 0 0;background:var(--color-primary);opacity:.75}
+.hire-bar{height:10px;border-radius:999px;background:var(--color-primary);transition:width .8s}
+
+</style>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span>Dashboards</span><span class="bc-sep">/</span><span class="bc-current">Employees</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Employees Dashboard</h1>
+          <p class="page-subtitle">Workforce snapshot — headcount, performance, diversity &amp; hiring pipeline</p>
+        </div>
+        <div style="display:flex;gap:.5rem">
+          <button type="button" class="btn-hr btn-outline-hr" onclick="toggleFilterPanel(event)"><i class="bi bi-funnel me-1"></i>Filter</button>
+          <button type="button" class="btn-hr btn-primary-hr" onclick="openAddEmployee()"><i class="bi bi-person-plus-fill me-1"></i>Add Employee</button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="row g-3 mb-1rem">
+        <div class="col-6 col-xl-3"><div class="stat-card s-blue"><div class="stat-icon" style="background:rgba(79,110,247,.12);color:#4F6EF7"><i class="bi bi-people-fill"></i></div><div class="stat-value">284</div><div class="stat-label">Total Employees</div><div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+12 this quarter</div></div></div>
+        <div class="col-6 col-xl-3"><div class="stat-card s-green"><div class="stat-icon" style="background:rgba(16,185,129,.12);color:#10B981"><i class="bi bi-calendar-check-fill"></i></div><div class="stat-value">96.2%</div><div class="stat-label">Attendance Rate</div><div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+1.4% vs last month</div></div></div>
+        <div class="col-6 col-xl-3"><div class="stat-card s-amber"><div class="stat-icon" style="background:rgba(245,158,11,.12);color:#F59E0B"><i class="bi bi-person-plus-fill"></i></div><div class="stat-value">18</div><div class="stat-label">Open Positions</div><div class="stat-delta" style="color:#F59E0B"><i class="bi bi-arrow-right"></i>42 applications pending</div></div></div>
+        <div class="col-6 col-xl-3"><div class="stat-card s-red"><div class="stat-icon" style="background:rgba(239,68,68,.12);color:#EF4444"><i class="bi bi-door-open-fill"></i></div><div class="stat-value">4.2%</div><div class="stat-label">Attrition Rate</div><div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-down-right"></i>-0.8% vs last quarter</div></div></div>
+      </div>
+
+      <div class="row g-4 mb-1rem">
+        <!-- Department Breakdown -->
+        <div class="col-12 col-xl-5">
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">By Department</div><span class="badge-blue-xs">284 total</span></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.875rem">
+              <div style="display:flex;align-items:center;gap:.75rem"><span class="dept-dot" style="background:#4F6EF7"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Engineering</span><div style="flex:2;background:var(--body-border);border-radius:999px;height:8px;overflow:hidden"><div style="width:34%;height:100%;background:linear-gradient(90deg,#4F6EF7,#8B5CF6);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">96</span></div>
+              <div style="display:flex;align-items:center;gap:.75rem"><span class="dept-dot" style="background:#10B981"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Product</span><div style="flex:2;background:var(--body-border);border-radius:999px;height:8px;overflow:hidden"><div style="width:19%;height:100%;background:linear-gradient(90deg,#10B981,#06B6D4);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">54</span></div>
+              <div style="display:flex;align-items:center;gap:.75rem"><span class="dept-dot" style="background:#F59E0B"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Sales</span><div style="flex:2;background:var(--body-border);border-radius:999px;height:8px;overflow:hidden"><div style="width:16%;height:100%;background:linear-gradient(90deg,#F59E0B,#F97316);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">46</span></div>
+              <div style="display:flex;align-items:center;gap:.75rem"><span class="dept-dot" style="background:#06B6D4"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Marketing</span><div style="flex:2;background:var(--body-border);border-radius:999px;height:8px;overflow:hidden"><div style="width:13%;height:100%;background:linear-gradient(90deg,#06B6D4,#10B981);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">38</span></div>
+              <div style="display:flex;align-items:center;gap:.75rem"><span class="dept-dot" style="background:#8B5CF6"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">HR</span><div style="flex:2;background:var(--body-border);border-radius:999px;height:8px;overflow:hidden"><div style="width:9%;height:100%;background:linear-gradient(90deg,#8B5CF6,#EC4899);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">26</span></div>
+              <div style="display:flex;align-items:center;gap:.75rem"><span class="dept-dot" style="background:#EF4444"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Finance</span><div style="flex:2;background:var(--body-border);border-radius:999px;height:8px;overflow:hidden"><div style="width:8%;height:100%;background:linear-gradient(90deg,#EF4444,#F97316);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">24</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Headcount Trend -->
+        <div class="col-12 col-xl-4">
+          <div class="card-hr h-100">
+            <div class="card-hd"><div class="card-title-hr">Headcount Trend</div></div>
+            <div class="card-bd">
+              <svg viewBox="0 0 340 160" style="width:100%;height:140px;overflow:visible">
+                <defs><linearGradient id="hcGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.18"/><stop offset="100%" stop-color="#10B981" stop-opacity="0.01"/></linearGradient></defs>
+                <line x1="0" y1="120" x2="340" y2="120" stroke="var(--body-border)" stroke-width="1"/>
+                <line x1="0" y1="80" x2="340" y2="80" stroke="var(--body-border)" stroke-width="1"/>
+                <line x1="0" y1="40" x2="340" y2="40" stroke="var(--body-border)" stroke-width="1"/>
+                <path d="M0,110 C40,105 80,95 120,88 C160,81 200,72 240,65 C280,58 310,56 340,52 L340,140 L0,140 Z" fill="url(#hcGrad)"/>
+                <path d="M0,110 C40,105 80,95 120,88 C160,81 200,72 240,65 C280,58 310,56 340,52" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linejoin="round"/>
+                <text x="0" y="154" font-size="9" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Q1</text>
+                <text x="80" y="154" font-size="9" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Q2</text>
+                <text x="165" y="154" font-size="9" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Q3</text>
+                <text x="248" y="154" font-size="9" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Q4</text>
+                <text x="318" y="154" font-size="9" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Now</text>
+              </svg>
+              <div class="row g-2" style="margin-top:.5rem">
+                <div class="col-6"><div style="padding:.625rem;background:var(--body-bg);border-radius:.5rem;border:1px solid var(--body-border);text-align:center"><div style="font-size:1.25rem;font-weight:800;color:#10B981">+48</div><div style="font-size:.68rem;color:var(--body-text-muted)">Net Hires YTD</div></div></div>
+                <div class="col-6"><div style="padding:.625rem;background:var(--body-bg);border-radius:.5rem;border:1px solid var(--body-border);text-align:center"><div style="font-size:1.25rem;font-weight:800;color:#EF4444">12</div><div style="font-size:.68rem;color:var(--body-text-muted)">Separations</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gender & Age Diversity -->
+        <div class="col-12 col-xl-3">
+          <div class="card-hr h-100">
+            <div class="card-hd"><div class="card-title-hr">Diversity</div></div>
+            <div class="card-bd">
+              <div style="margin-bottom:1.25rem">
+                <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--body-text-muted);margin-bottom:.625rem">Gender Split</div>
+                <div style="height:12px;border-radius:999px;overflow:hidden;display:flex">
+                  <div style="width:56%;background:linear-gradient(90deg,#4F6EF7,#8B5CF6)"></div>
+                  <div style="flex:1;background:linear-gradient(90deg,#EC4899,#F97316)"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:.375rem">
+                  <span style="font-size:.75rem;font-weight:700;color:#4F6EF7">Male 56%</span>
+                  <span style="font-size:.75rem;font-weight:700;color:#EC4899">Female 44%</span>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--body-text-muted);margin-bottom:.625rem">Age Groups</div>
+                <div style="display:flex;flex-direction:column;gap:.375rem">
+                  <div style="display:flex;align-items:center;gap:.5rem"><span style="font-size:.75rem;color:var(--body-text-muted);min-width:48px">22–28</span><div style="flex:1;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:38%;height:100%;background:#4F6EF7;border-radius:999px"></div></div><span style="font-size:.75rem;font-weight:700;min-width:28px;text-align:right;color:var(--body-text)">38%</span></div>
+                  <div style="display:flex;align-items:center;gap:.5rem"><span style="font-size:.75rem;color:var(--body-text-muted);min-width:48px">29–35</span><div style="flex:1;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:32%;height:100%;background:#10B981;border-radius:999px"></div></div><span style="font-size:.75rem;font-weight:700;min-width:28px;text-align:right;color:var(--body-text)">32%</span></div>
+                  <div style="display:flex;align-items:center;gap:.5rem"><span style="font-size:.75rem;color:var(--body-text-muted);min-width:48px">36–45</span><div style="flex:1;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:22%;height:100%;background:#F59E0B;border-radius:999px"></div></div><span style="font-size:.75rem;font-weight:700;min-width:28px;text-align:right;color:var(--body-text)">22%</span></div>
+                  <div style="display:flex;align-items:center;gap:.5rem"><span style="font-size:.75rem;color:var(--body-text-muted);min-width:48px">46+</span><div style="flex:1;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:8%;height:100%;background:#8B5CF6;border-radius:999px"></div></div><span style="font-size:.75rem;font-weight:700;min-width:28px;text-align:right;color:var(--body-text)">8%</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employee Table -->
+      <div class="card-hr">
+        <div class="card-hd">
+          <div class="card-title-hr">Employee Directory</div>
+          <div style="display:flex;gap:.5rem">
+            <input type="search" class="hr-inp" id="empSearch" placeholder="Search employees..." style="width:200px;padding:.35rem .75rem">
+            <button type="button" class="btn-hr btn-outline-hr btn-sm-hr" onclick="exportDirectory()"><i class="bi bi-download me-1"></i>Export</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="hr-table" data-sortable id="empTable">
+            <thead><tr><th data-sort="name">Name</th><th data-sort="dept">Department</th><th data-sort="role">Role</th><th data-sort="perf">Performance</th><th>Skills</th><th data-sort="tenure">Tenure</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="empTableBody">
+              <tr data-name="Sarah Chen" data-email="sarah.chen@hr.io" data-dept="Product" data-role="Sr UX Designer" data-perf="94" data-tenure="3y 9m" data-tenure-months="45" data-status="Active" data-skills="Figma, React" data-initials="SC"><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#4F6EF7,#8B5CF6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">SC</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Sarah Chen</div><div style="font-size:.72rem;color:var(--body-text-muted)">sarah.chen@hr.io</div></div></div></td><td>Product</td><td>Sr UX Designer</td><td><div style="display:flex;align-items:center;gap:.5rem"><div style="flex:1;height:6px;background:var(--body-border);border-radius:999px;overflow:hidden"><div style="width:94%;height:100%;background:#10B981;border-radius:999px"></div></div><span style="font-size:.75rem;font-weight:700;color:#10B981">94</span></div></td><td><span class="skill-chip">Figma</span><span class="skill-chip">React</span></td><td>3y 9m</td><td><span class="badge-st st-active">Active</span></td><td><button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" onclick="openEditEmployee(this)"><i class="bi bi-pencil"></i></button></td></tr>
+              <tr data-name="Marcus Johnson" data-email="m.johnson@hr.io" data-dept="Engineering" data-role="Backend Lead" data-perf="88" data-tenure="5y 2m" data-tenure-months="62" data-status="Active" data-skills="Node.js, AWS" data-initials="MJ"><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#10B981,#06B6D4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">MJ</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Marcus Johnson</div><div style="font-size:.72rem;color:var(--body-text-muted)">m.johnson@hr.io</div></div></div></td><td>Engineering</td><td>Backend Lead</td><td><div style="display:flex;align-items:center;gap:.5rem"><div style="flex:1;height:6px;background:var(--body-border);border-radius:999px;overflow:hidden"><div style="width:88%;height:100%;background:#5B8FF9;border-radius:999px"></div></div><span style="font-size:.75rem;font-weight:700;color:#5B8FF9">88</span></div></td><td><span class="skill-chip">Node.js</span><span class="skill-chip">AWS</span></td><td>5y 2m</td><td><span class="badge-st st-active">Active</span></td><td><button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" onclick="openEditEmployee(this)"><i class="bi bi-pencil"></i></button></td></tr>
+              <tr data-name="Priya Nair" data-email="p.nair@hr.io" data-dept="Product" data-role="Product Manager" data-perf="91" data-tenure="2y 4m" data-tenure-months="28" data-status="Active" data-skills="Strategy, SQL" data-initials="PN"><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#F59E0B,#EF4444);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">PN</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Priya Nair</div><div style="font-size:.72rem;color:var(--body-text-muted)">p.nair@hr.io</div></div></div></td><td>Product</td><td>Product Manager</td><td><div style="display:flex;align-items:center;gap:.5rem"><div style="flex:1;height:6px;background:var(--body-border);border-radius:999px;overflow:hidden"><div style="width:91%;height:100%;background:#10B981;border-radius:999px"></div></div><span style="font-size:.75rem;font-weight:700;color:#10B981">91</span></div></td><td><span class="skill-chip">Strategy</span><span class="skill-chip">SQL</span></td><td>2y 4m</td><td><span class="badge-st st-active">Active</span></td><td><button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" onclick="openEditEmployee(this)"><i class="bi bi-pencil"></i></button></td></tr>
+              <tr data-name="Ravi Das" data-email="r.das@hr.io" data-dept="Engineering" data-role="DevOps Engineer" data-perf="79" data-tenure="1y 8m" data-tenure-months="20" data-status="On Leave" data-skills="Docker, K8s" data-initials="RD"><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#8B5CF6,#EC4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">RD</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Ravi Das</div><div style="font-size:.72rem;color:var(--body-text-muted)">r.das@hr.io</div></div></div></td><td>Engineering</td><td>DevOps Engineer</td><td><div style="display:flex;align-items:center;gap:.5rem"><div style="flex:1;height:6px;background:var(--body-border);border-radius:999px;overflow:hidden"><div style="width:79%;height:100%;background:#F59E0B;border-radius:999px"></div></div><span style="font-size:.75rem;font-weight:700;color:#F59E0B">79</span></div></td><td><span class="skill-chip">Docker</span><span class="skill-chip">K8s</span></td><td>1y 8m</td><td><span class="badge-st st-pending">On Leave</span></td><td><button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" onclick="openEditEmployee(this)"><i class="bi bi-pencil"></i></button></td></tr>
+              <tr data-name="Aisha Iyer" data-email="a.iyer@hr.io" data-dept="Marketing" data-role="Growth Manager" data-perf="85" data-tenure="4y 1m" data-tenure-months="49" data-status="Active" data-skills="SEO, Ads" data-initials="AI"><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#06B6D4,#10B981);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">AI</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Aisha Iyer</div><div style="font-size:.72rem;color:var(--body-text-muted)">a.iyer@hr.io</div></div></div></td><td>Marketing</td><td>Growth Manager</td><td><div style="display:flex;align-items:center;gap:.5rem"><div style="flex:1;height:6px;background:var(--body-border);border-radius:999px;overflow:hidden"><div style="width:85%;height:100%;background:#5B8FF9;border-radius:999px"></div></div><span style="font-size:.75rem;font-weight:700;color:#5B8FF9">85</span></div></td><td><span class="skill-chip">SEO</span><span class="skill-chip">Ads</span></td><td>4y 1m</td><td><span class="badge-st st-active">Active</span></td><td><button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" onclick="openEditEmployee(this)"><i class="bi bi-pencil"></i></button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+
+<!-- ══════ Filter panel ══════ -->
+<div class="hr-panel panel-w260" id="filterPanel" style="position:fixed;top:80px;right:2rem;z-index:1050">
+  <div class="card-bd p-1rem">
+    <div style="font-weight:800;font-size:.9rem;margin-bottom:.875rem">Filter Directory</div>
+    <label class="form-label-hr">Department</label>
+    <select class="hr-input" id="filterDept" style="margin-bottom:.875rem">
+      <option value="">All Departments</option>
+      <option>Product</option><option>Engineering</option><option>Marketing</option>
+    </select>
+    <label class="form-label-hr">Status</label>
+    <select class="hr-input" id="filterStatus" style="margin-bottom:1rem">
+      <option value="">All Statuses</option>
+      <option>Active</option><option>On Leave</option>
+    </select>
+    <div style="display:flex;gap:.5rem">
+      <button type="button" class="btn-hr btn-outline-hr btn-sm-hr" style="flex:1" onclick="resetFilters()">Reset</button>
+      <button type="button" class="btn-hr btn-primary-hr btn-sm-hr" style="flex:1" onclick="applyFilters()">Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Add / Edit Employee ══════ -->
+<div class="modal fade" id="employeeModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="employeeModalTitle"><i class="bi bi-person-plus-fill me-2 c-primary"></i>Add Employee</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="employeeForm" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label-hr">Full Name <span class="c-red">*</span></label>
+              <input class="hr-input" type="text" id="empName" placeholder="e.g. Neha Kapoor"/>
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Email <span class="c-red">*</span></label>
+              <input class="hr-input" type="email" id="empEmail" placeholder="name@hr.io"/>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Department</label>
+              <select class="hr-input" id="empDept">
+                <option>Product</option><option>Engineering</option><option>Marketing</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Role <span class="c-red">*</span></label>
+              <input class="hr-input" type="text" id="empRole" placeholder="e.g. Product Designer"/>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Status</label>
+              <select class="hr-input" id="empStatus">
+                <option>Active</option><option>On Leave</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Skills</label>
+              <input class="hr-input" type="text" id="empSkills" placeholder="e.g. Figma, React"/>
+            </div>
+          </div>
+          <div id="empError" style="display:none;font-size:.8125rem;color:#EF4444;margin-top:1rem"></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" id="employeeSubmitBtn" onclick="submitEmployee()"><i class="bi bi-check-lg me-1"></i>Add Employee</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var AVATAR_GRADIENTS = [
+  'linear-gradient(135deg,#4F6EF7,#8B5CF6)', 'linear-gradient(135deg,#10B981,#06B6D4)',
+  'linear-gradient(135deg,#F59E0B,#EF4444)', 'linear-gradient(135deg,#8B5CF6,#EC4899)',
+  'linear-gradient(135deg,#06B6D4,#10B981)',
+];
+// Deterministic per-employee gradient — using a global counter here meant
+// re-rendering an existing employee (via edit) would reassign them a
+// different, effectively random gradient each time, since the counter
+// keeps advancing from whatever other employees have been added since.
+// Hashing a stable identifier instead means the same employee always
+// gets the same color, whether they're being rendered for the first
+// time or re-rendered after an edit.
+function gradientForKey(key) {
+  var hash = 0;
+  for (var i = 0; i < key.length; i++) {
+    hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+  }
+  return AVATAR_GRADIENTS[hash % AVATAR_GRADIENTS.length];
+}
+var editingRow = null;
+
+function initials(name) {
+  return name.trim().split(/\s+/).map(function(w){ return w[0]; }).join('').substring(0,2).toUpperCase();
+}
+
+function perfColor(perf) {
+  if (perf >= 90) return '#10B981';
+  if (perf >= 80) return '#5B8FF9';
+  return '#F59E0B';
+}
+
+function buildRowHtml(emp) {
+  var statusClass = emp.status === 'Active' ? 'st-active' : 'st-pending';
+  var skills = emp.skills.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  var skillsHtml = skills.map(function(s){ return '<span class="skill-chip">' + escapeHtml(s) + '</span>'; }).join('');
+  var gradient = gradientForKey(emp.email || emp.name);
+  var color = perfColor(emp.perf);
+  return (
+    '<td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:' + gradient + ';display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">' + initials(emp.name) + '</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">' + escapeHtml(emp.name) + '</div><div style="font-size:.72rem;color:var(--body-text-muted)">' + escapeHtml(emp.email) + '</div></div></div></td>' +
+    '<td>' + escapeHtml(emp.dept) + '</td>' +
+    '<td>' + escapeHtml(emp.role) + '</td>' +
+    '<td><div style="display:flex;align-items:center;gap:.5rem"><div style="flex:1;height:6px;background:var(--body-border);border-radius:999px;overflow:hidden"><div style="width:' + emp.perf + '%;height:100%;background:' + color + ';border-radius:999px"></div></div><span style="font-size:.75rem;font-weight:700;color:' + color + '">' + emp.perf + '</span></div></td>' +
+    '<td>' + skillsHtml + '</td>' +
+    '<td>' + escapeHtml(emp.tenure) + '</td>' +
+    '<td><span class="badge-st ' + statusClass + '">' + escapeHtml(emp.status) + '</span></td>' +
+    '<td><button class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" type="button" onclick="openEditEmployee(this)"><i class="bi bi-pencil"></i></button></td>'
+  );
+}
+
+/* ── Add / Edit Employee ──────────────────────────────────────────── */
+function openAddEmployee() {
+  editingRow = null;
+  document.getElementById('employeeForm').reset();
+  document.getElementById('empError').style.display = 'none';
+  document.getElementById('employeeModalTitle').innerHTML = '<i class="bi bi-person-plus-fill me-2 c-primary"></i>Add Employee';
+  document.getElementById('employeeSubmitBtn').innerHTML = '<i class="bi bi-check-lg me-1"></i>Add Employee';
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('employeeModal')).show();
+}
+
+function openEditEmployee(btn) {
+  var row = btn.closest('tr');
+  editingRow = row;
+  document.getElementById('empError').style.display = 'none';
+  document.getElementById('empName').value = row.dataset.name;
+  document.getElementById('empEmail').value = row.dataset.email;
+  document.getElementById('empDept').value = row.dataset.dept;
+  document.getElementById('empRole').value = row.dataset.role;
+  document.getElementById('empStatus').value = row.dataset.status;
+  document.getElementById('empSkills').value = row.dataset.skills;
+  document.getElementById('employeeModalTitle').innerHTML = '<i class="bi bi-pencil-fill me-2 c-primary"></i>Edit Employee';
+  document.getElementById('employeeSubmitBtn').innerHTML = '<i class="bi bi-check-lg me-1"></i>Save Changes';
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('employeeModal')).show();
+}
+
+function submitEmployee() {
+  var name = document.getElementById('empName').value.trim();
+  var email = document.getElementById('empEmail').value.trim();
+  var dept = document.getElementById('empDept').value;
+  var role = document.getElementById('empRole').value.trim();
+  var status = document.getElementById('empStatus').value;
+  var skills = document.getElementById('empSkills').value.trim() || 'General';
+  var errorBox = document.getElementById('empError');
+
+  if (!name || !email || !role) {
+    errorBox.textContent = 'Please fill in name, email, and role.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  errorBox.style.display = 'none';
+
+  if (editingRow) {
+    var perf = parseFloat(editingRow.dataset.perf);
+    var tenure = editingRow.dataset.tenure;
+    var tenureMonths = editingRow.dataset.tenureMonths;
+    var emp = { name: name, email: email, dept: dept, role: role, status: status, skills: skills, perf: perf, tenure: tenure };
+    editingRow.dataset.name = name; editingRow.dataset.email = email; editingRow.dataset.dept = dept;
+    editingRow.dataset.role = role; editingRow.dataset.status = status; editingRow.dataset.skills = skills;
+    editingRow.innerHTML = buildRowHtml(emp);
+  } else {
+    var newEmp = { name: name, email: email, dept: dept, role: role, status: status, skills: skills, perf: 75, tenure: '0y 0m' };
+    var tr = document.createElement('tr');
+    tr.dataset.name = name; tr.dataset.email = email; tr.dataset.dept = dept;
+    tr.dataset.role = role; tr.dataset.perf = '75'; tr.dataset.tenure = '0y 0m';
+    tr.dataset.tenureMonths = '0'; tr.dataset.status = status; tr.dataset.skills = skills;
+    tr.innerHTML = buildRowHtml(newEmp);
+    document.getElementById('empTableBody').appendChild(tr);
+  }
+
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('employeeModal')).hide();
+}
+
+/* ── Search + Filter ──────────────────────────────────────────────── */
+function getFilterState() {
+  return {
+    query: document.getElementById('empSearch').value.trim().toLowerCase(),
+    dept: document.getElementById('filterDept').value,
+    status: document.getElementById('filterStatus').value,
+  };
+}
+
+function applyFilters() {
+  var f = getFilterState();
+  var rows = document.querySelectorAll('#empTableBody tr');
+  rows.forEach(function(row) {
+    var matchesQuery = !f.query ||
+      row.dataset.name.toLowerCase().indexOf(f.query) !== -1 ||
+      row.dataset.dept.toLowerCase().indexOf(f.query) !== -1 ||
+      row.dataset.role.toLowerCase().indexOf(f.query) !== -1;
+    var matchesDept = !f.dept || row.dataset.dept === f.dept;
+    var matchesStatus = !f.status || row.dataset.status === f.status;
+    row.style.display = (matchesQuery && matchesDept && matchesStatus) ? '' : 'none';
+  });
+  document.getElementById('filterPanel').classList.remove('visible');
+}
+
+function resetFilters() {
+  document.getElementById('filterDept').value = '';
+  document.getElementById('filterStatus').value = '';
+  applyFilters();
+}
+
+document.getElementById('empSearch').addEventListener('input', applyFilters);
+
+function toggleFilterPanel(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('filterPanel').classList.toggle('visible');
+}
+document.addEventListener('click', function(e) {
+  var panel = document.getElementById('filterPanel');
+  if (!panel.contains(e.target)) {
+    panel.classList.remove('visible');
+  }
+});
+
+/* ── Sortable columns ────────────────────────────────────────────── */
+var sortState = { key: null, dir: 1 };
+document.querySelectorAll('#empTable th[data-sort]').forEach(function(th) {
+  th.style.cursor = 'pointer';
+  th.addEventListener('click', function() {
+    var key = th.getAttribute('data-sort');
+    sortState.dir = (sortState.key === key) ? -sortState.dir : 1;
+    sortState.key = key;
+    var tbody = document.getElementById('empTableBody');
+    var rows = Array.from(tbody.querySelectorAll('tr'));
+    var attr = key === 'perf' ? 'perf' : (key === 'tenure' ? 'tenureMonths' : key);
+    rows.sort(function(a, b) {
+      var av = a.dataset[attr], bv = b.dataset[attr];
+      var an = parseFloat(av), bn = parseFloat(bv);
+      var cmp = (!isNaN(an) && !isNaN(bn)) ? (an - bn) : String(av).localeCompare(String(bv));
+      return cmp * sortState.dir;
+    });
+    rows.forEach(function(r) { tbody.appendChild(r); });
+  });
+});
+
+/* ── Export ───────────────────────────────────────────────────────── */
+function csvEscape(val) {
+  var s = String(val);
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+function csvRow(cells) { return cells.map(csvEscape).join(',') + '\r\n'; }
+
+function exportDirectory() {
+  var rows = Array.from(document.querySelectorAll('#empTableBody tr')).filter(function(r){ return r.style.display !== 'none'; });
+  var csv = csvRow(['Name', 'Email', 'Department', 'Role', 'Performance', 'Skills', 'Tenure', 'Status']);
+  rows.forEach(function(r) {
+    csv += csvRow([r.dataset.name, r.dataset.email, r.dataset.dept, r.dataset.role, r.dataset.perf, r.dataset.skills, r.dataset.tenure, r.dataset.status]);
+  });
+  var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'employee-directory-' + new Date().toISOString().slice(0, 10) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>

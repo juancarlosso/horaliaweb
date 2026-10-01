@@ -1,0 +1,6 @@
+# These two files are documented, verbatim snapshots of already-compiled
+# CSS (see the header comment in each) — not hand-authored source, so
+# they're not meant to pass stylelint's formatting rules. Everything else
+# under src/scss/ is hand-written and should still be linted normally.
+src/scss/utils/_extracted.scss
+src/scss/pages/_extracted-legacy.scss

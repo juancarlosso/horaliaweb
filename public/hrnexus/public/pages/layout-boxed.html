@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Boxed Layout — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Boxed layout variant with a constrained, centered page width."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+
+<style id="layout-css">
+/* Override default full-width layout */
+.sidebar  { display: none !important; }
+.main-content { margin-left: 0 !important; }
+
+/* Page-level outer background */
+body.layout-boxed { background: var(--body-bg2) !important; }
+
+/* Outer wrapper — centers the boxed shell */
+.bx-outer {
+  min-height: 100vh; display: flex; align-items: flex-start;
+  justify-content: center; padding: 1.25rem;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-primary) 4%, transparent),
+    color-mix(in srgb, var(--color-secondary, #8B5CF6) 3%, transparent)
+  );
+}
+@media(prefers-color-scheme:dark){
+  .bx-outer { background: #040609; }
+}
+
+/* The boxed shell — contains everything */
+.bx-shell {
+  width: 100%; max-width: 1380px;
+  border-radius: 1.25rem;
+  box-shadow: 0 16px 64px rgba(0,0,0,.18);
+  overflow: hidden;
+  border: 1px solid var(--body-border);
+  display: flex; min-height: calc(100vh - 2.5rem);
+  background: var(--body-bg);
+}
+
+/* Boxed sidebar — left column of the shell */
+.bx-sidebar {
+  width: 240px; flex-shrink: 0;
+  background: var(--sidebar-bg);
+  display: flex; flex-direction: column;
+  border-right: 1px solid var(--sidebar-border);
+  transition: width .26s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
+.bx-sidebar.slim { width: 64px; }
+.bx-sidebar.slim .nav-text,
+.bx-sidebar.slim .brand-name,
+.bx-sidebar.slim .brand-tagline,
+.bx-sidebar.slim .nav-badge,
+.bx-sidebar.slim .nav-chevron,
+.bx-sidebar.slim .nav-section-title { display: none; }
+.bx-sidebar.slim .nav-lnk { justify-content: center; padding: .625rem; }
+.bx-sidebar.slim .nav-lnk::before { display: none; }
+.bx-sidebar.slim .nav-group-body { max-height: 0 !important; pointer-events: none; }
+.bx-sidebar.slim .nav-li { margin: 0 .375rem .0625rem; }
+
+/* Boxed sidebar brand */
+.bx-sidebar .sidebar-brand {
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+/* Boxed main area — flex-1 column */
+.bx-main {
+  flex: 1; min-width: 0; display: flex; flex-direction: column;
+}
+
+/* Topbar inside the box */
+.topbar-bx {
+  position: sticky; top: 0; z-index: 99;
+  height: var(--topbar-height); display: flex; align-items: center;
+  padding: 0 1.5rem; gap: 1rem;
+  background: var(--topbar-bg); border-bottom: 1px solid var(--topbar-border);
+  box-shadow: var(--topbar-shadow); flex-shrink: 0;
+}
+
+/* Content inside box */
+.page-bx { padding: 1.5rem; flex: 1; }
+.page-bx .page-inner { max-width: 100%; }
+
+/* Responsive: on small screens, stack vertically */
+@media(max-width: 900px) {
+  .bx-outer { padding: 0; }
+  .bx-shell { border-radius: 0; min-height: 100vh; max-width: 100%; flex-direction: column; }
+  .bx-sidebar { width: 100% !important; height: auto; flex-direction: row; overflow-x: auto; }
+  .bx-sidebar.slim { width: 100% !important; }
+  .bx-sidebar .sidebar-brand { border-bottom: none; border-right: 1px solid var(--sidebar-border); flex-shrink: 0; }
+  .bx-sidebar .sidebar-nav { display: flex; padding: .5rem; gap: .25rem; overflow-x: auto; flex-direction: row; }
+  .bx-sidebar .nav-section-title { display: none; }
+  .bx-sidebar .nav-li { position: relative; }
+  .bx-sidebar .nav-group-body.open {
+    position: absolute; top: 100%; left: 0; z-index: 40;
+    min-width: 200px; background: var(--sidebar-bg);
+    border: 1px solid var(--sidebar-border); border-radius: .625rem;
+    box-shadow: 0 12px 32px rgba(0,0,0,.28); padding: .375rem;
+    max-height: none; overflow: visible;
+  }
+  .bx-sidebar .nav-group-body .nav-lnk { flex-direction: row; font-size: .8rem; }
+  .bx-sidebar .nav-li { margin: 0; }
+  .bx-sidebar .nav-lnk { flex-direction: column; gap: .2rem; padding: .5rem .75rem; font-size: .7rem; white-space: nowrap; }
+  .bx-sidebar .nav-text { font-size: .65rem; }
+}
+</style>
+</head>
+<body class="layout-boxed">
+
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="bx-outer">
+  <div class="bx-shell">
+    <!-- Boxed sidebar -->
+    <aside class="bx-sidebar" id="bxSidebar" aria-label="Main navigation">
+      <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+      <div class="sidebar-nav bx-sb-nav" id="bxSbNav">
+<div class="sidebar-nav" id="sidebarNav">
+    <div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd active" data-sidebar-tooltip="HR Core" aria-expanded="true"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron open"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body open"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div>
+  
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div>
+<div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div>
+
+      </div>
+    </aside>
+    <!-- Boxed main area -->
+    <div class="bx-main">
+      <header class="topbar-bx">
+        <button type="button" class="btn-icon-top" id="bxToggle" aria-label="Toggle sidebar">
+          <i class="bi bi-list" style="font-size:1.25rem"></i>
+        </button>
+        <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span>Layouts</span><span class="bc-sep">/</span><span class="bc-current">Boxed Layout</span></nav>
+        <div class="search-wrap" style="margin-left:.5rem">
+          <i class="bi bi-search search-icon-i"></i>
+          <input type="search" class="search-input" placeholder="Search..." aria-label="Search"/>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:.375rem">
+          <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications"><i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span></button>
+    <button type="button" class="btn-icon-top" data-theme-toggle>
+            <i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+          <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-w260" id="profile-panel">
+        <div class="card-bd p-45">
+          <div class="flex-ac-g35-mb4">
+            <div class="icon-box-primary-violet-48-fs1125">R</div>
+            <div>
+              <div class="fw7-fs9375-body">Ravindra S.</div>
+              <div class="fs775-muted">HR Manager</div>
+              <div class="flex-ac-g1-mt05">
+                <span class="d-iblock-sq6px-bg-green"></span>
+                <span class="fs7-fw6-c-green">Online</span>
+              </div>
+            </div>
+          </div>
+          <div class="divider-hr m-2-0"></div>
+          <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+          <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+          <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help &amp; Support</a>
+          <div class="divider-hr m-2-0"></div>
+          <div class="flex-ac-jsb-p-1-0">
+            <span class="fs8-muted">Appearance</span>
+            <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+              <i class="bi bi-sun-fill theme-icon-light"></i>
+              <i class="bi bi-moon-fill theme-icon-dark"></i>
+            </button>
+          </div>
+          <div class="divider-hr m-2-0"></div>
+          <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+            <i class="bi bi-box-arrow-right"></i> Sign Out
+          </a>
+        </div>
+      </div>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+        </div>
+      </header>
+      <div class="page-bx">
+        <div class="page-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Boxed Layout</h1>
+          <p class="page-subtitle">The entire dashboard lives inside a centred, rounded container with a subtle outer background — giving it a floating app-within-a-page feel. Sidebar and content are both contained within the box.</p>
+        </div>
+        <div style="display:flex;gap:.5rem">
+          <button type="button" class="btn-hr btn-outline-hr">
+            <i class="bi bi-grid me-1"></i>Switch Layout
+          </button>
+          <button type="button" class="btn-hr btn-primary-hr">
+            <i class="bi bi-plus-lg me-1"></i>Add Employee
+          </button>
+        </div>
+      </div>
+      <!-- Stat cards row -->
+      <div class="row g-3 mb-1rem">
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-blue">
+            <div class="stat-icon" style="background:rgba(79,110,247,.12);color:#4F6EF7"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-value">284</div>
+            <div class="stat-label">Total Employees</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+12 this month</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-green">
+            <div class="stat-icon" style="background:rgba(16,185,129,.12);color:#10B981"><i class="bi bi-calendar-check-fill"></i></div>
+            <div class="stat-value">96.2%</div>
+            <div class="stat-label">Attendance</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+1.4%</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-amber">
+            <div class="stat-icon" style="background:rgba(245,158,11,.12);color:#F59E0B"><i class="bi bi-credit-card-fill"></i></div>
+            <div class="stat-value">₹2.84Cr</div>
+            <div class="stat-label">Monthly Payroll</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-check-circle-fill"></i>Processed</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-violet">
+            <div class="stat-icon" style="background:rgba(139,92,246,.12);color:#8B5CF6"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="stat-value">4.2%</div>
+            <div class="stat-label">Attrition</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-down-right"></i>-0.8%</div>
+          </div>
+        </div>
+      </div>
+      <!-- Content row -->
+      <div class="row g-4">
+        <div class="col-12 col-xl-8">
+          <div class="card-hr">
+            <div class="card-hd">
+              <div class="card-title-hr">Employee Directory</div>
+              <span class="badge-primary-xs">Active</span>
+            </div>
+            <div class="table-wrap">
+              <table class="hr-table">
+                <thead><tr><th>Name</th><th>Department</th><th>Role</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#4F6EF7,#8B5CF6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">SC</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Sarah Chen</div><div style="font-size:.72rem;color:var(--body-text-muted)">sarah.chen@hr.io</div></div></div></td><td>Product</td><td>Sr UX Designer</td><td><span class="badge-st st-active">Active</span></td></tr>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#10B981,#06B6D4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">MJ</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Marcus Johnson</div><div style="font-size:.72rem;color:var(--body-text-muted)">m.johnson@hr.io</div></div></div></td><td>Engineering</td><td>Backend Lead</td><td><span class="badge-st st-active">Active</span></td></tr>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#F59E0B,#EF4444);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">PN</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Priya Nair</div><div style="font-size:.72rem;color:var(--body-text-muted)">p.nair@hr.io</div></div></div></td><td>Product</td><td>Product Manager</td><td><span class="badge-st st-active">Active</span></td></tr>
+                  <tr><td><div style="display:flex;align-items:center;gap:.625rem"><div style="width:32px;height:32px;border-radius:.5rem;background:linear-gradient(135deg,#8B5CF6,#EC4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">RD</div><div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Ravi Das</div><div style="font-size:.72rem;color:var(--body-text-muted)">r.das@hr.io</div></div></div></td><td>Engineering</td><td>DevOps Engineer</td><td><span class="badge-st st-pending">On Leave</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-xl-4">
+          <div class="card-hr mb-1rem">
+            <div class="card-hd"><div class="card-title-hr">Quick Actions</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.5rem">
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-person-plus-fill" style="color:var(--color-primary)"></i>Add New Employee</button>
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-calendar-check-fill" style="color:#10B981"></i>Mark Attendance</button>
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-credit-card-fill" style="color:#F59E0B"></i>Run Payroll</button>
+              <button type="button" class="btn-hr btn-outline-hr" style="justify-content:flex-start;gap:.625rem"><i class="bi bi-graph-up-arrow" style="color:#8B5CF6"></i>View Analytics</button>
+            </div>
+          </div>
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Department Split</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.625rem">
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Engineering</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:34%;height:100%;background:linear-gradient(90deg,#4F6EF7,#8B5CF6);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">96</span></div>
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Product</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:19%;height:100%;background:linear-gradient(90deg,#10B981,#06B6D4);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">54</span></div>
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Sales</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:16%;height:100%;background:linear-gradient(90deg,#F59E0B,#F97316);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">46</span></div>
+              <div style="display:flex;align-items:center;gap:.625rem"><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">HR</span><div style="flex:2;height:8px;border-radius:999px;background:var(--body-border);overflow:hidden"><div style="width:9%;height:100%;background:linear-gradient(90deg,#8B5CF6,#EC4899);border-radius:999px"></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:30px;text-align:right">26</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+var bxSb    = document.getElementById('bxSidebar');
+var popup   = document.getElementById('sb-main-popup');
+var popupOpenBtn = null;
+
+function closePopup() {
+  popup.classList.remove('visible');
+  popup.setAttribute('aria-hidden', 'true');
+  if (popupOpenBtn) {
+    popupOpenBtn.classList.remove('popup-open');
+    popupOpenBtn.setAttribute('aria-expanded', 'false');
+  }
+  popupOpenBtn = null;
+}
+
+function openPopupFor(btn) {
+  var navLi = btn.parentElement;
+  var body  = navLi && navLi.nextElementSibling;
+  if (!body || !body.classList.contains('nav-group-body')) return;
+
+  var title = btn.querySelector('.nav-text')?.textContent?.trim() || '';
+  var links = body.querySelectorAll('.nav-lnk');
+
+  var html = title ? '<div class="popup-title">' + title + '</div>' : '';
+  links.forEach(function(link) {
+    // Clone each real sidebar link so the flyout always matches the actual
+    // nav-group-body content (labels, hrefs, badges) rather than duplicating
+    // it by hand and risking the two falling out of sync.
+    var clone = link.cloneNode(true);
+    clone.classList.remove('nav-child');
+    html += clone.outerHTML;
+  });
+  popup.innerHTML = html;
+
+  // Make it paint (invisibly) before measuring — offsetHeight reads 0
+  // while display:none, which would silently break the overflow checks
+  // below for icons near the bottom of the sidebar.
+  popup.style.visibility = 'hidden';
+  popup.classList.add('visible');
+  var popupHeight = popup.offsetHeight;
+
+  var rect = btn.getBoundingClientRect();
+  popup.style.left = Math.round(rect.right + 8) + 'px';
+
+  var spaceBelow = window.innerHeight - rect.top - 16;
+  var spaceAbove = rect.bottom - 16;
+  if (popupHeight > spaceBelow && spaceAbove >= popupHeight) {
+    // Not enough room to grow downward from the icon — flip to anchor
+    // from its bottom edge and grow upward instead, so the whole
+    // submenu stays on screen.
+    popup.style.top = 'auto';
+    popup.style.bottom = Math.round(window.innerHeight - rect.bottom) + 'px';
+  } else {
+    popup.style.bottom = 'auto';
+    var top = Math.round(rect.top);
+    var maxTop = window.innerHeight - popupHeight - 16;
+    popup.style.top = Math.max(8, Math.min(top, maxTop)) + 'px';
+  }
+
+  popup.style.visibility = '';
+  popup.setAttribute('aria-hidden', 'false');
+  btn.classList.add('popup-open');
+  btn.setAttribute('aria-expanded', 'true');
+  popupOpenBtn = btn;
+}
+
+document.getElementById('bxToggle').addEventListener('click', function() {
+  bxSb.classList.toggle('slim');
+  closePopup();
+});
+
+// Re-wire sidebar group toggles for boxed nav
+bxSb.querySelectorAll('.nav-group-hd').forEach(function(btn) {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault(); e.stopPropagation();
+
+    // Collapsed sidebar: pop the submenu out to the right instead of
+    // expanding inline (there's no room for labels when slim).
+    if (bxSb.classList.contains('slim')) {
+      if (popupOpenBtn === btn) { closePopup(); return; }
+      closePopup();
+      openPopupFor(btn);
+      return;
+    }
+
+    var navLi = btn.parentElement;
+    var body  = navLi && navLi.nextElementSibling;
+    if (!body || !body.classList.contains('nav-group-body')) return;
+
+    var willOpen = !body.classList.contains('open');
+
+    bxSb.querySelectorAll('.nav-group-body.open').forEach(function(b) {
+      if (b !== body) b.classList.remove('open');
+    });
+    bxSb.querySelectorAll('.nav-group-hd.active').forEach(function(h) {
+      if (h !== btn) {
+        h.classList.remove('active');
+        h.setAttribute('aria-expanded', 'false');
+        h.querySelector('.nav-chevron')?.classList.remove('open');
+      }
+    });
+
+    body.classList.toggle('open', willOpen);
+    btn.querySelector('.nav-chevron')?.classList.toggle('open', willOpen);
+    btn.setAttribute('aria-expanded', String(willOpen));
+    btn.classList.toggle('active', willOpen);
+  });
+});
+
+document.addEventListener('click', function(e) {
+  if (popupOpenBtn && !popup.contains(e.target) && !popupOpenBtn.contains(e.target)) {
+    closePopup();
+  }
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePopup();
+});
+window.addEventListener('resize', closePopup);
+</script>
+</body>
+</html>

@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>AI Performance Summaries — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="AI-generated performance review summaries condensing manager feedback and goals into a single readable brief."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+  <style>
+.emp-select-card{border:1.5px solid var(--body-border);border-radius:.875rem;padding:1rem;
+  cursor:pointer;transition:all .2s;background:var(--card-bg)}
+.emp-select-card:hover{border-color:var(--color-primary);background:var(--color-primary-light)}
+.emp-select-card.active{border-color:var(--color-primary);background:var(--color-primary-light)}
+.metric-chip{padding:.375rem .75rem;border-radius:.5rem;background:var(--body-bg);
+  border:1px solid var(--body-border);font-size:.78rem;font-weight:600;display:inline-flex;
+  align-items:center;gap:.375rem}
+.gen-btn{display:flex;align-items:center;gap:.625rem;padding:.75rem 1.5rem;
+  border-radius:.75rem;font-size:.9rem;font-weight:700;border:none;cursor:pointer;
+  font-family:var(--font);background:linear-gradient(135deg,#4F6EF7,#7C3AED);
+  color:#fff;transition:all .2s;box-shadow:0 4px 16px rgba(79,110,247,.3)}
+.gen-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(79,110,247,.4)}
+.gen-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.summary-output{min-height:160px;padding:1.25rem;background:var(--body-bg);
+  border-radius:.875rem;border:1px solid var(--body-border);font-size:.9rem;
+  line-height:1.8;color:var(--body-text);white-space:pre-wrap;position:relative}
+.copy-btn{position:absolute;top:.75rem;right:.75rem;padding:.3rem .625rem;border-radius:.5rem;
+  background:var(--card-bg);border:1px solid var(--body-border);cursor:pointer;font-size:.72rem;
+  font-weight:700;color:var(--body-text-muted);transition:all .15s}
+.copy-btn:hover{border-color:var(--color-primary);color:var(--color-primary)}
+.tone-btn{padding:.4rem .875rem;border-radius:.5rem;border:1.5px solid var(--body-border);
+  background:transparent;color:var(--body-text-muted);font-size:.8rem;font-weight:600;
+  cursor:pointer;font-family:var(--font);transition:all .15s}
+.tone-btn.active{border-color:var(--color-primary);background:var(--color-primary-light);
+  color:var(--color-primary)}
+.star-bar{display:flex;gap:2px}
+.star-bar span{font-size:1.125rem;cursor:pointer;transition:color .1s}
+.cursor-typed::after{content:'|';animation:blink .7s step-end infinite;color:var(--color-primary)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── Print: show only the constructed summary printout ── */
+@media print {
+  body * { visibility: hidden; }
+  #printArea, #printArea * { visibility: visible; }
+  #printArea {
+    display: block !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 2rem;
+  }
+  @page { margin: 1.5cm; }
+}
+</style>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation"><a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a><div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span>AI Features</span><span class="bc-sep">/</span><span class="bc-current">Performance Summaries</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content"><div class="page-inner">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">AI Performance Summaries</h1>
+          <p class="page-subtitle">Auto-generate professional performance review write-ups from goal data, ratings, and KPIs — in your tone of choice</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Left — Employee selector -->
+        <div class="col-12 col-xl-4">
+          <div class="card-hr mb-1rem">
+            <div class="card-hd"><div class="card-title-hr">Select Employee</div></div>
+            <div class="card-bd">
+              <div style="display:flex;flex-direction:column;gap:.625rem" id="empCards"></div>
+            </div>
+          </div>
+          <!-- Tone selector -->
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Writing Tone</div></div>
+            <div class="card-bd">
+              <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+                <button type="button" class="tone-btn active" data-tone="professional">Professional</button>
+                <button type="button" class="tone-btn" data-tone="encouraging">Encouraging</button>
+                <button type="button" class="tone-btn" data-tone="direct">Direct</button>
+                <button type="button" class="tone-btn" data-tone="detailed">Detailed</button>
+              </div>
+              <div class="fs75-muted mt-75rem">Tone changes how Claude writes — same data, different style.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right — Metrics + output -->
+        <div class="col-12 col-xl-8">
+          <!-- Metrics panel -->
+          <div class="card-hr mb-1rem">
+            <div class="card-hd"><div class="card-title-hr">Performance Data</div></div>
+            <div class="card-bd" id="metricPanel"></div>
+          </div>
+
+          <!-- Generate + output -->
+          <div class="card-hr">
+            <div class="card-hd">
+              <div class="card-title-hr">AI-Generated Summary</div>
+              <button type="button" class="gen-btn" id="genBtn">
+                <i class="bi bi-stars"></i>Generate with AI
+              </button>
+            </div>
+            <div class="card-bd">
+              <div class="summary-output" id="summaryOutput">
+                <div style="color:var(--body-text-muted);font-style:italic;text-align:center;padding:2rem">
+                  Click Generate to create an AI-written performance summary</div>
+              </div>
+              <button type="button" class="copy-btn" id="copyBtn" style="display:none;margin-top:.75rem;
+                position:static;width:100%">Copy to Clipboard</button>
+              <div id="actionBar" style="display:none;gap:.625rem;margin-top:1rem;flex-wrap:wrap">
+                <button type="button" class="btn-hr btn-primary-hr btn-sm-hr" id="saveRecordBtn" onclick="saveToRecord()">
+                  <i class="bi bi-file-earmark-check-fill me-1"></i>Save to Employee Record
+                </button>
+                <button type="button" class="btn-hr btn-outline-hr btn-sm-hr" onclick="openEmailModal()">
+                  <i class="bi bi-envelope-fill me-1"></i>Email to Manager
+                </button>
+                <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr" onclick="printSummary()">
+                  <i class="bi bi-printer-fill me-1"></i>Print / PDF
+                </button>
+              </div>
+              <div id="saveConfirm" style="display:none;align-items:center;gap:.5rem;color:#10B981;font-size:.8125rem;font-weight:600;margin-top:.75rem">
+                <i class="bi bi-check-circle-fill"></i><span id="saveConfirmText"></span>
+              </div>
+              <div id="printArea" style="display:none"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div></main>
+</div>
+
+<!-- ══════ MODAL: Email to Manager ══════ -->
+<div class="modal fade" id="emailManagerModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-envelope-fill me-2 c-primary"></i>Email to Manager</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="emailManagerForm" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label-hr">To</label>
+              <input class="hr-input" type="email" id="emailTo" />
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Subject</label>
+              <input class="hr-input" type="text" id="emailSubject" />
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Message Preview</label>
+              <textarea class="hr-input" id="emailBody" rows="6" style="font-size:.8125rem"></textarea>
+            </div>
+          </div>
+          <div id="emailManagerError" style="display:none;font-size:.8125rem;color:#EF4444;margin-top:1rem"></div>
+        </form>
+        <div id="emailManagerSuccess" style="display:none;text-align:center;padding:1.5rem 1rem">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;margin:0 auto .75rem">
+            <i class="bi bi-check-circle-fill" style="font-size:1.5rem;color:#10B981"></i>
+          </div>
+          <div style="font-weight:800;font-size:1rem;color:var(--body-text);margin-bottom:.25rem">Email Sent</div>
+          <div style="font-size:.8125rem;color:var(--body-text-muted)" id="emailSuccessText"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" id="emailCancelBtn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" id="emailSendBtn" onclick="sendEmailToManager()"><i class="bi bi-send-fill me-1"></i>Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+
+
+<script>
+const EMPLOYEES = [
+  { id:1, name:'Sarah Chen', role:'Sr UX Designer', dept:'Product', avatar:'SC', color:'#7C3AED',
+    period:'Q4 2025', rating:4.2, manager:'Priya Nair', managerEmail:'priya.nair@hrnexus.com',
+    goals:[{g:'Redesign the onboarding flow',status:'Completed',impact:'38% drop in onboarding time'},
+           {g:'Ship Design System v3.0',status:'Completed',impact:'Used by 42 components'},
+           {g:'Conduct 12 user research sessions',status:'Partial',impact:'8 of 12 complete'}],
+    strengths:['Exceptional visual thinking','Strong stakeholder communication','Cross-team collaboration'],
+    improvements:['Time management on large projects','Documentation thoroughness'],
+    attendance:97, kpis:{tasks_done:34, tasks_total:38, reviews_led:6, kudos:14} },
+  { id:2, name:'Marcus Johnson', role:'Backend Engineer', dept:'Engineering', avatar:'MJ', color:'#0EA5E9',
+    period:'Q4 2025', rating:3.8, manager:'David Okafor', managerEmail:'david.okafor@hrnexus.com',
+    goals:[{g:'Migrate auth to JWT + OAuth2',status:'Completed',impact:'Zero auth incidents'},
+           {g:'Reduce API latency by 30%',status:'Completed',impact:'41% improvement achieved'},
+           {g:'Mentor 2 junior engineers',status:'In Progress',impact:'1 of 2 on track'}],
+    strengths:['Deep backend architecture knowledge','Proactive problem identification','Clean code practices'],
+    improvements:['Frontend collaboration','Meeting commit timelines'],
+    attendance:94, kpis:{tasks_done:29, tasks_total:32, prs_merged:47, code_reviews:23} },
+  { id:3, name:'Priya Nair', role:'Product Manager', dept:'Product', avatar:'PN', color:'#10B981',
+    period:'Q4 2025', rating:4.7, manager:'Ravindra Sharma', managerEmail:'ravindra.sharma@hrnexus.com',
+    goals:[{g:'Launch AI analytics feature set',status:'Completed',impact:'+22% DAU uplift'},
+           {g:'Achieve NPS of 52+',status:'Completed',impact:'NPS reached 58'},
+           {g:'Conduct 20 customer interviews',status:'Completed',impact:'All 20 completed, 3 insights shipped'}],
+    strengths:['Exceptional stakeholder alignment','Data-driven decision making','Clear product vision'],
+    improvements:['Technical depth in eng discussions'],
+    attendance:98, kpis:{features_shipped:8, roadmap_accuracy:92, customer_meetings:20, nps:58} },
+];
+
+let selectedEmp = EMPLOYEES[0];
+let currentTone = 'professional';
+let generatedSummary = '';
+let typewriterInterval = null;
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderEmployeeCards();
+  selectEmployee(EMPLOYEES[0].id);
+  document.querySelectorAll('.tone-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTone = btn.dataset.tone;
+    });
+  });
+});
+
+function renderEmployeeCards() {
+  const wrap = document.getElementById('empCards');
+  wrap.innerHTML = EMPLOYEES.map(e => `
+    <div class="emp-select-card" id="ecard-${e.id}" onclick="selectEmployee(${e.id})">
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <div style="width:40px;height:40px;border-radius:.75rem;background:${e.color}22;
+          display:flex;align-items:center;justify-content:center;font-weight:800;
+          font-size:.875rem;color:${e.color};flex-shrink:0">${e.avatar}</div>
+        <div class="fl1-mnw0">
+          <div class="fw7-fs875-body">${e.name}</div>
+          <div class="fs75-muted">${e.role}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:1.125rem;font-weight:900;color:${e.rating>=4.5?'#10B981':e.rating>=4?'#5B8FF9':'#F59E0B'}">${e.rating}</div>
+          <div class="fs6 fs72-muted">/5.0</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function selectEmployee(id) {
+  EMPLOYEES.forEach(e => document.getElementById(`ecard-${e.id}`)?.classList.remove('active'));
+  document.getElementById(`ecard-${id}`)?.classList.add('active');
+  selectedEmp = EMPLOYEES.find(e => e.id === id);
+  renderMetrics();
+  clearOutput();
+}
+
+function renderMetrics() {
+  const e = selectedEmp;
+  const col = e.rating >= 4.5 ? '#10B981' : e.rating >= 4.0 ? '#5B8FF9' : '#F59E0B';
+  document.getElementById('metricPanel').innerHTML = `
+    <div class="flex-ac-jsb-mb3">
+      <div>
+        <div class="fw7-fs9375-body">${e.name}</div>
+        <div class="fs8-muted">${e.role} · ${e.dept} · ${e.period}</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:2rem;font-weight:900;color:${col};line-height:1">${e.rating}</div>
+        <div class="fs72-muted">/ 5.0 Rating</div>
+      </div>
+    </div>
+
+    <div class="fs72-muted fw7 mb-2" style="text-transform:uppercase;letter-spacing:.07em">Goals this Quarter</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem">
+      ${e.goals.map(g => `
+        <div style="padding:.75rem;background:var(--body-bg);border-radius:.625rem;border:1px solid var(--body-border)">
+          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.25rem">
+            <i class="bi bi-${g.status==='Completed'?'check-circle-fill c-green':g.status==='Partial'?'dash-circle-fill c-amber':'circle c-blue'}-fs9"
+               style="font-size:.875rem;color:${g.status==='Completed'?'#10B981':g.status==='Partial'?'#F59E0B':'#5B8FF9'}"></i>
+            <span class="fs8125-fw5-body fl1-mnw0">${g.g}</span>
+            <span style="font-size:.65rem;font-weight:800;padding:.15rem .45rem;border-radius:999px;
+              background:${g.status==='Completed'?'rgba(16,185,129,.1)':g.status==='Partial'?'rgba(245,158,11,.1)':'rgba(91,143,249,.1)'};
+              color:${g.status==='Completed'?'#10B981':g.status==='Partial'?'#D97706':'#5B8FF9'}">${g.status}</span>
+          </div>
+          <div class="fs75-muted" style="padding-left:1.5rem">Impact: ${g.impact}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="row g-3 mb-75rem">
+      <div class="col-6">
+        <div class="fs72-muted fw7 mb-2" style="text-transform:uppercase;letter-spacing:.07em">Strengths</div>
+        ${e.strengths.map(s => `<div class="metric-chip mb-2" style="display:flex"><i class="bi bi-plus-circle-fill" style="color:#10B981;font-size:.8rem"></i>${s}</div>`).join('')}
+      </div>
+      <div class="col-6">
+        <div class="fs72-muted fw7 mb-2" style="text-transform:uppercase;letter-spacing:.07em">Growth Areas</div>
+        ${e.improvements.map(s => `<div class="metric-chip mb-2" style="display:flex"><i class="bi bi-arrow-up-circle-fill" style="color:#F59E0B;font-size:.8rem"></i>${s}</div>`).join('')}
+      </div>
+    </div>
+
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+      <div class="metric-chip"><i class="bi bi-calendar-check-fill" style="color:#5B8FF9;font-size:.8rem"></i>Attendance ${e.attendance}%</div>
+      ${Object.entries(e.kpis).slice(0,3).map(([k,v]) =>
+        `<div class="metric-chip"><i class="bi bi-graph-up" style="color:#10B981;font-size:.8rem"></i>${k.replace(/_/g,' ')}: ${v}</div>`
+      ).join('')}
+    </div>`;
+}
+
+function clearOutput() {
+  document.getElementById('summaryOutput').innerHTML =
+    '<div style="color:var(--body-text-muted);font-style:italic;text-align:center;padding:2rem">Click Generate to create an AI-written performance summary</div>';
+  generatedSummary = '';
+  document.getElementById('copyBtn').style.display = 'none';
+  document.getElementById('actionBar').style.display = 'none';
+}
+
+async function generateSummary() {
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="ai-spinner"></span>Generating…';
+
+  // Cancel any typewriter animation still running from a previous
+  // generation — without this, clicking Regenerate (or switching tone)
+  // before the previous summary finished typing would leave two intervals
+  // both appending characters to the same output, scrambling the text.
+  if (typewriterInterval) {
+    clearInterval(typewriterInterval);
+    typewriterInterval = null;
+  }
+
+  const e = selectedEmp;
+
+  const output = document.getElementById('summaryOutput');
+  output.textContent = '';
+  output.classList.add('cursor-typed');
+
+  // NOTE: this is a static HTML/CSS/JS template with no backend. A real AI
+  // integration needs a server-side proxy to hold an API key safely —
+  // calling a real LLM API directly from client-side JS would either fail
+  // outright (no key, and the API isn't reachable cross-origin like this
+  // anyway) or, worse, require embedding a real secret key in the page
+  // source for anyone to copy. Instead, each tone below is a genuinely
+  // distinct writing style built from the employee's real data — a
+  // realistic, safe-to-ship demo of what the feature would produce.
+  await new Promise(resolve => setTimeout(resolve, 700 + Math.random() * 500));
+  generatedSummary = buildSummary(e, currentTone);
+
+  // Typewriter effect
+  output.classList.add('cursor-typed');
+  output.textContent = '';
+  let i = 0;
+  typewriterInterval = setInterval(() => {
+    if (i < generatedSummary.length) {
+      output.textContent += generatedSummary[i++];
+    } else {
+      clearInterval(typewriterInterval);
+      typewriterInterval = null;
+      output.classList.remove('cursor-typed');
+      document.getElementById('copyBtn').style.display = 'block';
+      document.getElementById('actionBar').style.display = 'flex';
+    }
+  }, 18);
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="bi bi-stars"></i>Regenerate';
+}
+
+function buildSummary(e, tone) {
+  const completed = e.goals.filter(g => g.status === 'Completed');
+  const inProgress = e.goals.filter(g => g.status !== 'Completed');
+  const firstName = e.name.split(' ')[0];
+  const topImpact = completed.length ? completed[0].impact : e.goals[0].impact;
+
+  let ratingWord = 'solid';
+  if (e.rating >= 4.5) ratingWord = 'standout';
+  else if (e.rating >= 4.0) ratingWord = 'strong';
+
+  const strengthsList = e.strengths.join(', ').toLowerCase();
+  const topTwoStrengths = e.strengths.slice(0, 2).join(' and ').toLowerCase();
+  const improvementsList = e.improvements.join(' and ').toLowerCase();
+
+  if (tone === 'encouraging') {
+    return `${firstName} has had a genuinely ${ratingWord} ${e.period}, and it's worth celebrating! ` +
+      `Completing ${completed.length} of ${e.goals.length} goals is real momentum, especially the win on "${e.goals[0].g}" — ${topImpact.toLowerCase()}. ` +
+      `What stands out most is ${topTwoStrengths}, both of which are already making a visible difference for ${e.dept}. ` +
+      `With a ${e.rating}/5.0 rating and ${e.attendance}% attendance, ${firstName} is clearly showing up and delivering. ` +
+      `Next quarter, a bit more focus on ${improvementsList} would round things out nicely — but overall, this is the kind of trajectory worth recognising and building on.`;
+  }
+
+  if (tone === 'direct') {
+    const goalLines = e.goals.map(g => `${g.g} — ${g.status}${g.status === 'Completed' ? '' : ' (' + g.impact + ')'}`).join('. ');
+    return `${e.name} — ${e.rating}/5.0, ${e.period}. ${completed.length}/${e.goals.length} goals complete. ` +
+      `Top result: ${topImpact}. Goals: ${goalLines}. ` +
+      `Strengths: ${strengthsList}. To improve: ${improvementsList}. Attendance: ${e.attendance}%.`;
+  }
+
+  if (tone === 'detailed') {
+    const goalBlock = e.goals.map(g =>
+      `"${g.g}" was marked ${g.status.toLowerCase()}${g.status !== 'Completed' ? ' at quarter end' : ''}, with the result that ${g.impact.toLowerCase()}.`
+    ).join(' ');
+    return `This review covers ${e.name}'s performance as ${e.role} in ${e.dept} for ${e.period}, resulting in an overall rating of ${e.rating}/5.0. ` +
+      `Across ${e.goals.length} quarterly goals, ${completed.length} were fully completed` +
+      (inProgress.length ? ` and ${inProgress.length} remain in progress or partially complete` : '') + `. ${goalBlock} ` +
+      `${firstName}'s key strengths this period include ${strengthsList}, each of which has had a measurable, positive impact on team outcomes in ${e.dept}. ` +
+      `Areas identified for continued development are ${improvementsList}; addressing these would further strengthen ${firstName}'s overall impact heading into next quarter. ` +
+      `Attendance for the period was ${e.attendance}%. On balance, this represents a ${ratingWord} quarter, and this summary is suitable for inclusion in the formal review record.`;
+  }
+
+  // professional (default)
+  return `${e.name} has delivered a ${ratingWord} performance this ${e.period}, achieving an overall rating of ${e.rating}/5.0. ` +
+    `${completed.length} of ${e.goals.length} quarterly goals were completed, with notable achievements including ${topImpact.toLowerCase()}. ` +
+    `${firstName} consistently demonstrates ${topTwoStrengths}, which has had a measurable positive impact on the ${e.dept} team. ` +
+    `Areas identified for continued development include ${improvementsList}, with clear plans in place for the upcoming quarter. ` +
+    `With an attendance rate of ${e.attendance}% and an overall rating of ${e.rating}/5.0, ${firstName} is a valued contributor to the organisation.`;
+}
+
+
+function copyToClipboard() {
+  const btn = document.getElementById('copyBtn');
+  const showCopied = () => {
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  };
+  const showFailed = () => {
+    btn.textContent = 'Copy failed — select text manually';
+    setTimeout(() => btn.textContent = 'Copy', 2500);
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(generatedSummary).then(showCopied).catch(() => {
+      if (!fallbackCopy(generatedSummary)) showFailed(); else showCopied();
+    });
+  } else {
+    if (fallbackCopy(generatedSummary)) showCopied(); else showFailed();
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+
+document.getElementById('genBtn').addEventListener('click', generateSummary);
+document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+
+// Add AI spinner CSS
+const st = document.createElement('style');
+st.textContent=`.ai-spinner{width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}`;
+document.head.appendChild(st);
+
+/* ── Save to Employee Record ───────────────────────────────────────── */
+const savedRecords = {};
+
+function saveToRecord() {
+  if (!generatedSummary) return;
+  const e = selectedEmp;
+  savedRecords[e.id] = { summary: generatedSummary, tone: currentTone, savedAt: new Date() };
+
+  const btn = document.getElementById('saveRecordBtn');
+  const originalHtml = btn.innerHTML;
+  btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Saved';
+  btn.disabled = true;
+
+  const confirmBox = document.getElementById('saveConfirm');
+  const confirmText = document.getElementById('saveConfirmText');
+  const now = new Date().toLocaleString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+  confirmText.textContent = `Saved to ${e.name}'s employee record — ${e.period}, ${now}.`;
+  confirmBox.style.display = 'flex';
+
+  setTimeout(() => {
+    btn.innerHTML = originalHtml;
+    btn.disabled = false;
+  }, 2200);
+}
+
+/* ── Email to Manager ──────────────────────────────────────────────── */
+function resetEmailModal() {
+  document.getElementById('emailManagerForm').style.display = 'block';
+  document.getElementById('emailManagerSuccess').style.display = 'none';
+  document.getElementById('emailManagerError').style.display = 'none';
+  document.getElementById('emailSendBtn').style.display = 'inline-flex';
+  document.getElementById('emailCancelBtn').textContent = 'Cancel';
+  document.getElementById('emailTo').style.borderColor = '';
+}
+
+function openEmailModal() {
+  if (!generatedSummary) return;
+  const e = selectedEmp;
+  resetEmailModal();
+  document.getElementById('emailTo').value = e.managerEmail;
+  document.getElementById('emailSubject').value = `Performance Summary — ${e.name} — ${e.period}`;
+  document.getElementById('emailBody').value =
+    `Hi ${e.manager.split(' ')[0]},\n\nHere is the ${e.period} performance summary for ${e.name} (${e.role}):\n\n${generatedSummary}\n\nOverall rating: ${e.rating}/5.0 · Attendance: ${e.attendance}%\n\nBest,\nHRNexus`;
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('emailManagerModal')).show();
+}
+
+function sendEmailToManager() {
+  const toEl = document.getElementById('emailTo');
+  const subjectEl = document.getElementById('emailSubject');
+  const bodyEl = document.getElementById('emailBody');
+  const errorBox = document.getElementById('emailManagerError');
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  toEl.style.borderColor = '';
+  errorBox.style.display = 'none';
+
+  if (!toEl.value.trim() || !EMAIL_RE.test(toEl.value.trim())) {
+    toEl.style.borderColor = '#EF4444';
+    errorBox.textContent = 'Please enter a valid recipient email address.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  if (!subjectEl.value.trim() || !bodyEl.value.trim()) {
+    errorBox.textContent = 'Subject and message cannot be empty.';
+    errorBox.style.display = 'block';
+    return;
+  }
+
+  const e = selectedEmp;
+  document.getElementById('emailSuccessText').textContent =
+    `Sent to ${e.manager} (${toEl.value.trim()}).`;
+  document.getElementById('emailManagerForm').style.display = 'none';
+  document.getElementById('emailManagerSuccess').style.display = 'block';
+  document.getElementById('emailSendBtn').style.display = 'none';
+  document.getElementById('emailCancelBtn').textContent = 'Close';
+}
+
+document.getElementById('emailManagerModal').addEventListener('hidden.bs.modal', resetEmailModal);
+
+/* ── Print / PDF ───────────────────────────────────────────────────── */
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function printSummary() {
+  if (!generatedSummary) return;
+  const e = selectedEmp;
+  const toneLabels = { professional:'Professional', encouraging:'Encouraging', direct:'Direct', detailed:'Detailed' };
+
+  document.getElementById('printArea').innerHTML = `
+    <div style="font-family:inherit;color:#111;max-width:700px;margin:0 auto">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #333;padding-bottom:1rem;margin-bottom:1.5rem">
+        <div>
+          <div style="font-size:1.3rem;font-weight:800">${escapeHtml(e.name)}</div>
+          <div style="color:#555">${escapeHtml(e.role)} · ${escapeHtml(e.dept)}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:1.1rem;font-weight:800;color:#4F6EF7">Performance Summary</div>
+          <div style="color:#555">${escapeHtml(e.period)}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:2rem;margin-bottom:1.5rem;font-size:.9rem">
+        <div><strong>Overall Rating:</strong> ${e.rating}/5.0</div>
+        <div><strong>Attendance:</strong> ${e.attendance}%</div>
+        <div><strong>Tone:</strong> ${toneLabels[currentTone] || currentTone}</div>
+      </div>
+      <div style="line-height:1.7;font-size:.95rem">${escapeHtml(generatedSummary)}</div>
+      <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #ccc;color:#888;font-size:.75rem">
+        Generated via HRNexus · ${new Date().toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'})}
+      </div>
+    </div>`;
+
+  window.print();
+}
+</script>
+</body></html>

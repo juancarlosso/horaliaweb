@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Empresa;
+use Illuminate\Http\Request;
+
+class PaymentAttemptController extends Controller
+{
+    public function index(Request $request, int $empresa)
+    {
+        $user = $request->user();
+
+        $company = (int) $user->profile === 1
+            ? Empresa::query()->findOrFail($empresa)
+            : $user->empresas()
+                ->wherePivot('control_total', true)
+                ->where('empresas.id', $empresa)
+                ->firstOrFail();
+
+        $attempts = $company->intentosPago()
+            ->orderByDesc('intentado_en')
+            ->orderByDesc('id')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('empresas.intentos-pago', [
+            'empresa' => $company,
+            'attempts' => $attempts,
+            'navigation' => DashboardController::navigation(),
+            'activeSection' => 'empresas',
+        ]);
+    }
+}

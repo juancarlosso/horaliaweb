@@ -1,0 +1,12 @@
+// =============================================================================
+// HRNexus — "Utils" SCSS Entry
+// =============================================================================
+// Compiles to dist/css/hrnexus-utils.css, loaded by every page in
+// public/pages/*.html. See utils/_extracted.scss for what this actually
+// contains and why.
+
+// BUILD:  npm run build:css:utils        (dev, with source maps)
+//         npm run build:css:utils:prod   (compressed, no maps)
+// =============================================================================
+
+@use 'utils/extracted';

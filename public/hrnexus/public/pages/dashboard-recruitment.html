@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Recruitment Dashboard — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Recruitment dashboard — hiring pipeline, time-to-hire trend, and active job openings."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<style id="page-css">
+
+.hire-pill{display:inline-flex;align-items:center;justify-content:center;min-width:52px;padding:.4rem .5rem;border-radius:.5rem;color:#fff;font-weight:800;font-size:.8125rem}
+.hire-pill.empty{background:var(--body-bg2);color:transparent}
+.hire-table-hd{display:grid;grid-template-columns:1.6fr repeat(5,1fr);gap:.5rem;padding:0 0 .75rem;font-size:.78rem;font-weight:700;color:var(--body-text-muted);border-bottom:1px solid var(--body-border);margin-bottom:.75rem}
+.hire-table-row{display:grid;grid-template-columns:1.6fr repeat(5,1fr);gap:.5rem;align-items:center;padding:.625rem 0}
+.gauge-ring-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.gauge-center-val{position:absolute;text-align:center}
+.reminder-card{border-radius:1rem;background:linear-gradient(135deg,#0E3A52 0%,#164E63 100%);padding:1.5rem;color:#fff;position:relative;overflow:hidden;height:100%}
+.reminder-card::before{content:'';position:absolute;bottom:-40%;right:-20%;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%)}
+.stat-icon-circle{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin:0 auto .75rem}
+.ai-recruit-card{border-radius:1rem;border:1px solid var(--body-border);background:var(--card-bg);height:100%;display:flex;flex-direction:column;padding:1.5rem}
+.ai-recruit-icon{width:64px;height:64px;border-radius:1rem;background:linear-gradient(135deg,#F97316,#EF4444);display:flex;align-items:center;justify-content:center;font-size:1.75rem;color:#fff;margin:0 auto .875rem}
+.tth-bars{display:flex;align-items:flex-end;gap:1.5rem;height:180px;padding:0 .5rem}
+.tth-col{flex:1;display:flex;flex-direction:column-reverse;max-width:70px;margin:0 auto;border-radius:.4rem .4rem 0 0;overflow:hidden}
+.tth-seg{width:100%}
+.sched-date-badge{width:52px;height:52px;border-radius:.625rem;background:var(--body-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.stage-card{padding:1.125rem;border-radius:.875rem;border:1px solid var(--body-border);background:var(--body-bg);height:100%}
+.app-card{padding:1rem;border-radius:.875rem;border:1px solid var(--body-border);background:var(--body-bg);margin-bottom:.75rem}
+.app-card:last-child{margin-bottom:0}
+.priority-badge{font-size:.68rem;font-weight:700;padding:.15rem .5rem;border-radius:.35rem;display:inline-block;margin-top:.2rem}
+.fin-bar-track{height:8px;border-radius:999px;background:var(--body-border);overflow:hidden}
+.fin-bar-fill{height:100%;border-radius:999px}
+.la-row{display:flex;align-items:center;gap:.875rem;padding:.75rem 0;border-bottom:1px solid var(--body-border)}
+.la-row:last-child{border-bottom:none}
+.ai-bubble{background:var(--body-bg);border-radius:.875rem;padding:.875rem 1rem;font-size:.8125rem;line-height:1.55;color:var(--body-text)}
+.ai-input-wrap{display:flex;align-items:center;gap:.5rem;border:1.5px solid var(--body-border);border-radius:999px;padding:.5rem .5rem .5rem 1rem}
+.ai-input-wrap input{border:none;outline:none;background:transparent;flex:1;font-size:.8125rem;color:var(--body-text);font-family:inherit}
+.ai-send-btn{width:32px;height:32px;border-radius:50%;background:#16181F;color:#fff;border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.online-badge-lt{font-size:.68rem;font-weight:700;color:#10B981;background:rgba(16,185,129,.1);padding:.15rem .5rem;border-radius:999px;display:inline-flex;align-items:center;gap:.3rem}
+.online-badge-lt::before{content:'';width:6px;height:6px;border-radius:50%;background:#10B981}
+
+</style>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span>Dashboards</span><span class="bc-sep">/</span><span class="bc-current">Recruitment</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search candidates, job openings..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Warranty Expiring</div>
+          <div class="notif-text">HP EliteBook (AP-815) warranty expires in 14 days.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Maintenance Scheduled</div>
+          <div class="notif-text">Server rack AC unit maintenance scheduled for Mar 18.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Asset Assigned</div>
+          <div class="notif-text">Dell XPS 13" (AP-782) assigned to Sarah Johnson.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Repair Update</div>
+          <div class="notif-text">Logitech Mouse (AP-681) repair completed, ready for pickup.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Low Stock Alert</div>
+          <div class="notif-text">Only 3 spare laptops remain in IT inventory.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Asset Policy Updated</div>
+          <div class="notif-text">New device return policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Recruitment Dashboard</h1>
+          <p class="page-subtitle">Pipeline health, hiring velocity &amp; open requisitions — all in one view</p>
+        </div>
+        <div style="display:flex;gap:.625rem;flex-wrap:wrap">
+          <button type="button" class="btn-hr btn-outline-hr"><i class="bi bi-calendar3 me-2"></i>Dec 2025</button>
+          <button type="button" class="btn-hr btn-outline-hr"><i class="bi bi-download me-2"></i>Download Report<i class="bi bi-chevron-down ms-2" style="font-size:.7rem"></i></button>
+          <button type="button" class="btn-hr btn-primary-hr"><i class="bi bi-plus-lg me-1"></i>Add New Job</button>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-1rem">
+        <!-- Candidates Hiring Analysis -->
+        <div class="col-12 col-xl-8">
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Candidates Hiring Analysis</div>
+              <div style="display:flex;gap:.5rem;align-items:center">
+                <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr"><i class="bi bi-sliders"></i></button>
+                <button type="button" class="btn-hr btn-outline-hr btn-sm-hr"><i class="bi bi-download me-1"></i>Last 30 Days</button>
+              </div>
+            </div>
+            <div class="card-bd">
+              <div class="hire-table-hd">
+                <div>Department</div><div>Applicants</div><div>Shortlisted</div><div>Interviewed</div><div>Offered</div><div>Hired</div>
+              </div>
+              <div class="hire-table-row">
+                <div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Marketing</div><div style="font-size:.72rem;color:var(--body-text-muted)">Product Manager</div></div>
+                <div><span class="hire-pill" style="background:#F97316">14</span></div>
+                <div><span class="hire-pill" style="background:#164E63">08</span></div>
+                <div><span class="hire-pill empty">—</span></div>
+                <div><span class="hire-pill empty">—</span></div>
+                <div><span class="hire-pill empty">—</span></div>
+              </div>
+              <div class="hire-table-row">
+                <div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Data Analyst</div><div style="font-size:.72rem;color:var(--body-text-muted)">Jr Data Analyst</div></div>
+                <div><span class="hire-pill" style="background:#F97316">16</span></div>
+                <div><span class="hire-pill" style="background:#164E63">12</span></div>
+                <div><span class="hire-pill empty">—</span></div>
+                <div><span class="hire-pill empty">—</span></div>
+                <div><span class="hire-pill empty">—</span></div>
+              </div>
+              <div class="hire-table-row">
+                <div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Project Coordinator</div><div style="font-size:.72rem;color:var(--body-text-muted)">Jr Level</div></div>
+                <div><span class="hire-pill" style="background:#F97316">24</span></div>
+                <div><span class="hire-pill" style="background:#164E63">06</span></div>
+                <div><span class="hire-pill empty">—</span></div>
+                <div><span class="hire-pill empty">—</span></div>
+                <div><span class="hire-pill empty">—</span></div>
+              </div>
+              <div class="hire-table-row">
+                <div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Design Lead</div><div style="font-size:.72rem;color:var(--body-text-muted)">UI Designer</div></div>
+                <div><span class="hire-pill" style="background:#F97316">12</span></div>
+                <div><span class="hire-pill" style="background:#164E63">08</span></div>
+                <div><span class="hire-pill" style="background:#16181F">06</span></div>
+                <div><span class="hire-pill" style="background:#5B8FF9">05</span></div>
+                <div><span class="hire-pill empty">—</span></div>
+              </div>
+              <div class="hire-table-row">
+                <div><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Project Manager</div><div style="font-size:.72rem;color:var(--body-text-muted)">Senior Manager</div></div>
+                <div><span class="hire-pill" style="background:#F97316">22</span></div>
+                <div><span class="hire-pill" style="background:#164E63">20</span></div>
+                <div><span class="hire-pill" style="background:#16181F">16</span></div>
+                <div><span class="hire-pill" style="background:#5B8FF9">12</span></div>
+                <div><span class="hire-pill" style="background:#10B981">04</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recruitment Overview -->
+        <div class="col-12 col-xl-4">
+          <div class="card-hr h-100">
+            <div class="card-hd"><div class="card-title-hr">Recruitment Overview</div><button type="button" class="btn-hr btn-outline-hr btn-sm-hr"><i class="bi bi-calendar3 me-1"></i>Monthly</button></div>
+            <div class="card-bd">
+              <div class="row g-2 mb-75rem">
+                <div class="col-6">
+                  <div style="font-size:.75rem;color:var(--body-text-muted)">Offer Acceptance</div>
+                  <div style="font-size:1.25rem;font-weight:800;color:var(--body-text)">74.4%</div>
+                </div>
+                <div class="col-6">
+                  <div style="font-size:.75rem;color:var(--body-text-muted)">Overall Hire Rate</div>
+                  <div style="font-size:1.25rem;font-weight:800;color:var(--body-text)">2.7%</div>
+                </div>
+              </div>
+              <div class="gauge-ring-wrap">
+                <svg viewBox="0 0 220 220" width="220" height="220">
+                  <path d="M110.00,22.00 A88,88 0 0 1 128.84,24.04" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M134.79,25.56 A88,88 0 0 1 152.30,32.83" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M157.58,35.97 A88,88 0 0 1 172.32,47.87" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M176.51,52.37 A88,88 0 0 1 187.30,67.95" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M190.05,73.44 A88,88 0 0 1 196.02,91.43" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M197.10,97.48 A88,88 0 0 1 197.77,116.42" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M197.10,122.52 A88,88 0 0 1 192.40,140.88" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M190.05,146.56 A88,88 0 0 1 180.36,162.85" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M176.51,167.63 A88,88 0 0 1 162.62,180.53" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M157.58,184.03 A88,88 0 0 1 140.62,192.50" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M134.79,194.44 A88,88 0 0 1 116.14,197.79" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M110.00,198.00 A88,88 0 0 1 91.16,195.96" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M85.21,194.44 A88,88 0 0 1 67.70,187.17" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M62.42,184.03 A88,88 0 0 1 47.68,172.13" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M43.49,167.63 A88,88 0 0 1 32.70,152.05" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M29.95,146.56 A88,88 0 0 1 23.98,128.57" fill="none" stroke="#F97316" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M22.90,122.52 A88,88 0 0 1 22.23,103.58" fill="none" stroke="#E5E7EB" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M22.90,97.48 A88,88 0 0 1 27.60,79.12" fill="none" stroke="#E5E7EB" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M29.95,73.44 A88,88 0 0 1 39.64,57.15" fill="none" stroke="#E5E7EB" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M43.49,52.37 A88,88 0 0 1 57.38,39.47" fill="none" stroke="#E5E7EB" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M62.42,35.97 A88,88 0 0 1 79.38,27.50" fill="none" stroke="#E5E7EB" stroke-width="13" stroke-linecap="round"/>
+                  <path d="M85.21,25.56 A88,88 0 0 1 103.86,22.21" fill="none" stroke="#E5E7EB" stroke-width="13" stroke-linecap="round"/>
+                </svg>
+                <div class="gauge-center-val">
+                  <div style="font-size:1.625rem;font-weight:800;color:var(--body-text)">2,384</div>
+                  <div style="font-size:.75rem;color:var(--body-text-muted)">Total Applications</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-1rem">
+        <div class="col-12 col-xl-8">
+          <div class="row g-3">
+            <div class="col-6 col-lg-3">
+              <div class="stage-card" style="text-align:center">
+                <span class="stat-icon-circle" style="background:rgba(249,115,22,.12);color:#F97316"><i class="bi bi-briefcase-fill"></i></span>
+                <div style="font-size:1.5rem;font-weight:800;color:var(--body-text)">47</div>
+                <div style="font-size:.78rem;color:var(--body-text-muted)">Open Positions</div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-3">
+              <div class="stage-card" style="text-align:center">
+                <span class="stat-icon-circle" style="background:rgba(91,143,249,.12);color:#5B8FF9"><i class="bi bi-people-fill"></i></span>
+                <div style="font-size:1.5rem;font-weight:800;color:var(--body-text)">2,384</div>
+                <div style="font-size:.78rem;color:var(--body-text-muted)">Total Candidates</div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-3">
+              <div class="stage-card" style="text-align:center">
+                <span class="stat-icon-circle" style="background:rgba(22,24,31,.08);color:#16181F"><i class="bi bi-calendar2-week-fill"></i></span>
+                <div style="font-size:1.5rem;font-weight:800;color:var(--body-text)">12</div>
+                <div style="font-size:.78rem;color:var(--body-text-muted)">Interviews Today</div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-3">
+              <div class="stage-card" style="text-align:center">
+                <span class="stat-icon-circle" style="background:rgba(59,140,174,.12);color:#3B8CAE"><i class="bi bi-file-earmark-check-fill"></i></span>
+                <div style="font-size:1.5rem;font-weight:800;color:var(--body-text)">28</div>
+                <div style="font-size:.78rem;color:var(--body-text-muted)">Offers Released</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4 mt-1">
+            <!-- AI Assistant -->
+            <div class="col-12 col-lg-5">
+              <div class="ai-recruit-card">
+                <span class="ai-recruit-icon"><i class="bi bi-robot"></i></span>
+                <div style="text-align:center;margin-bottom:1rem">
+                  <div style="font-weight:800;font-size:1.0625rem;color:var(--body-text)">How can I help you today</div>
+                  <div style="font-size:.78rem;color:var(--body-text-muted);display:flex;align-items:center;justify-content:center;gap:.4rem;margin-top:.25rem">AI Recruitment Assistant <span class="online-badge-lt">Online</span></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem">
+                  <button type="button" class="btn-hr btn-outline-hr btn-sm-hr" style="text-align:left;justify-content:flex-start;white-space:normal">Analyze top candidates for Senior Developer role</button>
+                  <button type="button" class="btn-hr btn-outline-hr btn-sm-hr" style="text-align:left;justify-content:flex-start;white-space:normal">Generate hiring report</button>
+                </div>
+                <div class="ai-bubble" style="margin-bottom:1rem">
+                  <div style="font-weight:700;color:var(--color-primary);margin-bottom:.35rem;display:flex;align-items:center;gap:.35rem"><i class="bi bi-stars"></i>AI Assistant</div>
+                  👋 Welcome to your AI Recruitment Assistant! I'm here to help you find and evaluate the best candidates.
+                </div>
+                <div class="ai-input-wrap" style="margin-top:auto">
+                  <input type="text" placeholder="Ask me anything about Requirement">
+                  <button type="button" class="ai-send-btn" aria-label="Send"><i class="bi bi-send-fill" style="font-size:.8rem"></i></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Average Time To Hire -->
+            <div class="col-12 col-lg-7">
+              <div class="card-hr h-100">
+                <div class="card-hd"><div class="card-title-hr">Average Time To Hire</div><button type="button" class="btn-hr btn-outline-hr btn-sm-hr"><i class="bi bi-download me-1"></i>Last 30 Days</button></div>
+                <div class="card-bd">
+                  <div class="tth-bars">
+                    <div class="tth-col" style="height:73%"><div class="tth-seg" style="height:20%;background:#A9C5D6"></div><div class="tth-seg" style="height:28%;background:#3B8CAE"></div><div class="tth-seg" style="height:40%;background:#164E63"></div><div class="tth-seg" style="height:12%;background:#16181F"></div></div>
+                    <div class="tth-col" style="height:93%"><div class="tth-seg" style="height:20%;background:#A9C5D6"></div><div class="tth-seg" style="height:28%;background:#3B8CAE"></div><div class="tth-seg" style="height:40%;background:#164E63"></div><div class="tth-seg" style="height:12%;background:#16181F"></div></div>
+                    <div class="tth-col" style="height:67%"><div class="tth-seg" style="height:20%;background:#A9C5D6"></div><div class="tth-seg" style="height:28%;background:#3B8CAE"></div><div class="tth-seg" style="height:40%;background:#164E63"></div><div class="tth-seg" style="height:12%;background:#16181F"></div></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-around;margin-top:.75rem;font-size:.78rem;color:var(--body-text-muted);font-weight:600">
+                    <span>Jan</span><span>Feb</span><span>Mar</span>
+                  </div>
+                  <div class="divider-hr"></div>
+                  <div style="display:flex;flex-direction:column;gap:.625rem">
+                    <div style="display:flex;align-items:center;justify-content:space-between"><span style="display:flex;align-items:center;gap:.5rem;font-size:.8125rem;color:var(--body-text)"><span style="width:8px;height:8px;border-radius:2px;background:#A9C5D6;display:inline-block"></span>Applied to Shortlisted</span><strong style="color:var(--body-text)">05</strong></div>
+                    <div style="display:flex;align-items:center;justify-content:space-between"><span style="display:flex;align-items:center;gap:.5rem;font-size:.8125rem;color:var(--body-text)"><span style="width:8px;height:8px;border-radius:2px;background:#3B8CAE;display:inline-block"></span>Shortlisted</span><strong style="color:var(--body-text)">07</strong></div>
+                    <div style="display:flex;align-items:center;justify-content:space-between"><span style="display:flex;align-items:center;gap:.5rem;font-size:.8125rem;color:var(--body-text)"><span style="width:8px;height:8px;border-radius:2px;background:#164E63;display:inline-block"></span>Interview to Offer</span><strong style="color:var(--body-text)">10</strong></div>
+                    <div style="display:flex;align-items:center;justify-content:space-between"><span style="display:flex;align-items:center;gap:.5rem;font-size:.8125rem;color:var(--body-text)"><span style="width:8px;height:8px;border-radius:2px;background:#16181F;display:inline-block"></span>Acceptance</span><strong style="color:var(--body-text)">03</strong></div>
+                  </div>
+                  <div class="badge-green-xs" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .75rem;margin-top:1rem"><i class="bi bi-arrow-up-right"></i>12% faster than industry avg</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column: Quick Reminder + Upcoming Schedules -->
+        <div class="col-12 col-xl-4">
+          <div style="display:flex;flex-direction:column;gap:1rem;height:100%">
+            <div class="reminder-card">
+              <div style="position:relative;z-index:1">
+                <div style="font-weight:700;font-size:.9375rem;margin-bottom:.625rem">Quick Reminder</div>
+                <div style="font-size:1.15rem;font-weight:800;line-height:1.35;margin-bottom:.375rem">You have 21 Interview Schedule Today!</div>
+                <div style="font-size:.8125rem;color:rgba(255,255,255,.65);margin-bottom:1.25rem">Don't forget to schedule interviews</div>
+                <button type="button" class="btn-hr" style="background:#F97316;color:#fff">Schedule Now <i class="bi bi-arrow-right ms-1"></i></button>
+              </div>
+            </div>
+
+            <div class="card-hr" style="flex:1">
+              <div class="card-hd"><div class="card-title-hr">Upcoming Schedules</div><button type="button" class="btn-hr btn-outline-hr btn-sm-hr"><i class="bi bi-download me-1"></i>Last 30 Days</button></div>
+              <div class="card-bd">
+                <div class="la-row">
+                  <span class="sched-date-badge"><span style="font-size:.65rem;font-weight:700;color:var(--body-text-muted);text-transform:uppercase">Mar</span><span style="font-size:1rem;font-weight:800;color:var(--body-text)">02</span></span>
+                  <div style="flex:1"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Product Designer</div><div style="font-size:.72rem;color:var(--body-text-muted)"><i class="bi bi-clock me-1"></i>09:00 AM – 10:30 AM</div></div>
+                  <span class="av cov-1">RS</span>
+                </div>
+                <div class="la-row">
+                  <span class="sched-date-badge"><span style="font-size:.65rem;font-weight:700;color:var(--body-text-muted);text-transform:uppercase">Apr</span><span style="font-size:1rem;font-weight:800;color:var(--body-text)">22</span></span>
+                  <div style="flex:1"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Marketing Manager</div><div style="font-size:.72rem;color:var(--body-text-muted)"><i class="bi bi-clock me-1"></i>01:00 PM – 02:00 PM</div></div>
+                  <span class="av cov-2">JD</span>
+                </div>
+                <div class="la-row">
+                  <span class="sched-date-badge"><span style="font-size:.65rem;font-weight:700;color:var(--body-text-muted);text-transform:uppercase">May</span><span style="font-size:1rem;font-weight:800;color:var(--body-text)">11</span></span>
+                  <div style="flex:1"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Sr. Data Science</div><div style="font-size:.72rem;color:var(--body-text-muted)"><i class="bi bi-clock me-1"></i>11:00 AM – 12:30 PM</div></div>
+                  <span class="av cov-3">AK</span>
+                </div>
+                <div class="la-row">
+                  <span class="sched-date-badge"><span style="font-size:.65rem;font-weight:700;color:var(--body-text-muted);text-transform:uppercase">Jun</span><span style="font-size:1rem;font-weight:800;color:var(--body-text)">07</span></span>
+                  <div style="flex:1"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Software Engineer</div><div style="font-size:.72rem;color:var(--body-text-muted)"><i class="bi bi-clock me-1"></i>02:00 PM – 03:30 PM</div></div>
+                  <span class="av cov-4">MP</span>
+                </div>
+                <div class="la-row">
+                  <span class="sched-date-badge"><span style="font-size:.65rem;font-weight:700;color:var(--body-text-muted);text-transform:uppercase">Aug</span><span style="font-size:1rem;font-weight:800;color:var(--body-text)">18</span></span>
+                  <div style="flex:1"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Financial Analyst</div><div style="font-size:.72rem;color:var(--body-text-muted)"><i class="bi bi-clock me-1"></i>03:00 PM – 04:00 PM</div></div>
+                  <span class="av cov-6">TN</span>
+                </div>
+                <button type="button" class="btn-hr btn-primary-hr" style="width:100%;justify-content:center;margin-top:.5rem">View All Schedule</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage Performance -->
+      <div class="card-hr mb-1rem">
+        <div class="card-hd"><div class="card-title-hr">Stage Performance</div><div style="display:flex;gap:.5rem"><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr"><i class="bi bi-sliders"></i></button><button type="button" class="btn-hr btn-outline-hr btn-sm-hr"><i class="bi bi-download me-1"></i>Last 30 Days</button></div></div>
+        <div class="card-bd">
+          <div class="row g-3">
+            <div class="col-6 col-lg">
+              <div class="stage-card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem"><span style="font-size:.8125rem;color:var(--body-text-muted);font-weight:600">Applied</span><span class="icon-box-amber"><i class="bi bi-file-earmark-person-fill" style="color:#F59E0B"></i></span></div>
+                <div style="font-size:1.375rem;font-weight:800;color:var(--body-text)">1,848</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;font-size:.72rem;color:var(--body-text-muted);margin:.4rem 0 .4rem">Overall Progress<strong style="color:var(--body-text)">36.3%</strong></div>
+                <div class="fin-bar-track"><div class="fin-bar-fill" style="width:36.3%;background:#F97316"></div></div>
+              </div>
+            </div>
+            <div class="col-6 col-lg">
+              <div class="stage-card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem"><span style="font-size:.8125rem;color:var(--body-text-muted);font-weight:600">Shortlisted</span><span class="icon-box-cyan"><i class="bi bi-hourglass-split" style="color:#0EA5E9"></i></span></div>
+                <div style="font-size:1.375rem;font-weight:800;color:var(--body-text)">1,240</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;font-size:.72rem;color:var(--body-text-muted);margin:.4rem 0 .4rem">Conversion rate<strong style="color:var(--body-text)">67.1%</strong></div>
+                <div class="fin-bar-track"><div class="fin-bar-fill" style="width:67.1%;background:#164E63"></div></div>
+              </div>
+            </div>
+            <div class="col-6 col-lg">
+              <div class="stage-card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem"><span style="font-size:.8125rem;color:var(--body-text-muted);font-weight:600">Interviewed</span><span class="icon-box-blue"><i class="bi bi-calendar2-week-fill" style="color:#5B8FF9"></i></span></div>
+                <div style="font-size:1.375rem;font-weight:800;color:var(--body-text)">892</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;font-size:.72rem;color:var(--body-text-muted);margin:.4rem 0 .4rem">Conversion rate<strong style="color:var(--body-text)">36.3%</strong></div>
+                <div class="fin-bar-track"><div class="fin-bar-fill" style="width:36.3%;background:#16181F"></div></div>
+              </div>
+            </div>
+            <div class="col-6 col-lg">
+              <div class="stage-card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem"><span style="font-size:.8125rem;color:var(--body-text-muted);font-weight:600">Offered</span><span class="icon-box-purple"><i class="bi bi-file-earmark-check-fill" style="color:#7C3AED"></i></span></div>
+                <div style="font-size:1.375rem;font-weight:800;color:var(--body-text)">324</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;font-size:.72rem;color:var(--body-text-muted);margin:.4rem 0 .4rem">Conversion rate<strong style="color:var(--body-text)">26.5%</strong></div>
+                <div class="fin-bar-track"><div class="fin-bar-fill" style="width:26.5%;background:#5B8FF9"></div></div>
+              </div>
+            </div>
+            <div class="col-6 col-lg">
+              <div class="stage-card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem"><span style="font-size:.8125rem;color:var(--body-text-muted);font-weight:600">Hired</span><span class="icon-box-green"><i class="bi bi-person-check-fill" style="color:#10B981"></i></span></div>
+                <div style="font-size:1.375rem;font-weight:800;color:var(--body-text)">64</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;font-size:.72rem;color:var(--body-text-muted);margin:.4rem 0 .4rem">Conversion rate<strong style="color:var(--body-text)">41.2%</strong></div>
+                <div class="fin-bar-track"><div class="fin-bar-fill" style="width:41.2%;background:#10B981"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Recent Applications -->
+        <div class="col-12 col-xl-4">
+          <div class="card-hr h-100" style="display:flex;flex-direction:column">
+            <div class="card-hd"><div class="card-title-hr">Recent Applications</div></div>
+            <div class="card-bd" style="flex:1;display:flex;flex-direction:column">
+              <div class="app-card">
+                <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.625rem">
+                  <span class="av cov-5">AS</span>
+                  <div style="flex:1"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Andrew Stuart</div><div style="font-size:.72rem;color:var(--body-text-muted)">Frontend Developer</div></div>
+                  <span class="badge-blue-xs"><i class="bi bi-circle-fill" style="font-size:.4rem"></i> Interview</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--body-text-muted)">
+                  <span><i class="bi bi-person-workspace me-1"></i>7 years exp</span>
+                  <span><i class="bi bi-calendar3 me-1"></i>Applied: Dec 27, 2025</span>
+                </div>
+              </div>
+              <div class="app-card">
+                <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.625rem">
+                  <span class="av cov-4">JB</span>
+                  <div style="flex:1"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Jessica Brown</div><div style="font-size:.72rem;color:var(--body-text-muted)">UI/UX Designer</div></div>
+                  <span class="badge-amber-xs"><i class="bi bi-circle-fill" style="font-size:.4rem"></i> Shortlisted</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--body-text-muted)">
+                  <span><i class="bi bi-person-workspace me-1"></i>7 years exp</span>
+                  <span><i class="bi bi-calendar3 me-1"></i>Applied: Dec 27, 2025</span>
+                </div>
+              </div>
+              <button type="button" class="btn-hr btn-primary-hr" style="width:100%;justify-content:center;margin-top:auto">View All Applications</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Job Openings -->
+        <div class="col-12 col-xl-8">
+          <div class="card-hr h-100">
+            <div class="card-hd"><div class="card-title-hr">Active Job Openings</div><button type="button" class="btn-hr btn-outline-hr btn-sm-hr">View All</button></div>
+            <div class="table-wrap">
+              <table class="hr-table" data-sortable>
+                <thead><tr><th data-sort>Job ID</th><th data-sort>Date</th><th>Job Title</th><th>Location</th><th data-sort>Department</th><th data-sort>Applicants</th></tr></thead>
+                <tbody>
+                  <tr><td class="fs72-muted">JOB-001</td><td><i class="bi bi-calendar3 me-1" style="color:var(--body-text-muted)"></i>Jan 03, 2026</td><td><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Frontend Developer</div><span class="priority-badge" style="background:rgba(239,68,68,.1);color:#DB3030">High Priority</span></td><td><i class="bi bi-geo-alt me-1" style="color:var(--body-text-muted)"></i>Remote</td><td>Engineering</td><td><i class="bi bi-people me-1" style="color:var(--body-text-muted)"></i>89</td></tr>
+                  <tr><td class="fs72-muted">JOB-002</td><td><i class="bi bi-calendar3 me-1" style="color:var(--body-text-muted)"></i>Jan 02, 2026</td><td><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Product Manager</div><span class="priority-badge" style="background:rgba(239,68,68,.1);color:#DB3030">High Priority</span></td><td><i class="bi bi-geo-alt me-1" style="color:var(--body-text-muted)"></i>Office</td><td>Product</td><td><i class="bi bi-people me-1" style="color:var(--body-text-muted)"></i>76</td></tr>
+                  <tr><td class="fs72-muted">JOB-003</td><td><i class="bi bi-calendar3 me-1" style="color:var(--body-text-muted)"></i>Jan 02, 2026</td><td><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">UX Designer</div><span class="priority-badge" style="background:rgba(239,68,68,.1);color:#DB3030">High Priority</span></td><td><i class="bi bi-geo-alt me-1" style="color:var(--body-text-muted)"></i>Hybrid</td><td>Design</td><td><i class="bi bi-people me-1" style="color:var(--body-text-muted)"></i>68</td></tr>
+                  <tr><td class="fs72-muted">JOB-004</td><td><i class="bi bi-calendar3 me-1" style="color:var(--body-text-muted)"></i>Jan 01, 2026</td><td><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Sales Executive</div><span class="priority-badge" style="background:rgba(91,143,249,.12);color:#3B6FD6">Medium</span></td><td><i class="bi bi-geo-alt me-1" style="color:var(--body-text-muted)"></i>Office</td><td>Sales</td><td><i class="bi bi-people me-1" style="color:var(--body-text-muted)"></i>61</td></tr>
+                  <tr><td class="fs72-muted">JOB-005</td><td><i class="bi bi-calendar3 me-1" style="color:var(--body-text-muted)"></i>Jan 01, 2026</td><td><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">DevOps Engineer</div><span class="priority-badge" style="background:rgba(91,143,249,.12);color:#3B6FD6">Medium</span></td><td><i class="bi bi-geo-alt me-1" style="color:var(--body-text-muted)"></i>Office</td><td>Engineering</td><td><i class="bi bi-people me-1" style="color:var(--body-text-muted)"></i>54</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+</body>
+</html>

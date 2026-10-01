@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Leads Dashboard — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Sales leads dashboard tracking pipeline stages, conversion rates, and lead sources."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<style id="page-css">
+
+.pipeline-col{background:var(--body-bg);border-radius:.875rem;padding:.875rem;min-width:200px}
+.pipeline-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.pipeline-lbl{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em}
+.lead-card{background:var(--card-bg);border:1px solid var(--body-border);border-radius:.75rem;padding:.875rem;margin-bottom:.5rem;transition:all .15s;cursor:pointer}
+.lead-card:hover{border-color:var(--color-primary);box-shadow:0 2px 12px rgba(79,110,247,.12)}
+.lead-card:last-child{margin-bottom:0}
+.prob-bar{height:4px;border-radius:999px;background:var(--body-border);overflow:hidden;margin-top:.375rem}
+.prob-fill{height:100%;border-radius:999px;transition:width .8s}
+.funnel-seg{display:flex;align-items:center;gap:.875rem;padding:.625rem .75rem;border-radius:.625rem;margin-bottom:.375rem}
+.source-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.conv-ring{position:relative;display:inline-flex}
+.conv-ring .cv{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;color:var(--body-text)}
+
+</style>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span>Dashboards</span><span class="bc-sep">/</span><span class="bc-current">Leads</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Leads Dashboard</h1>
+          <p class="page-subtitle">Sales pipeline, conversion funnel &amp; lead scoring — full CRM intelligence at a glance</p>
+        </div>
+        <div style="display:flex;gap:.5rem">
+          <button type="button" class="btn-hr btn-outline-hr" onclick="toggleFilterPanel(event)"><i class="bi bi-funnel me-1"></i>Filter</button>
+          <button type="button" class="btn-hr btn-primary-hr" onclick="openAddLead()"><i class="bi bi-plus-lg me-1"></i>Add Lead</button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="row g-3 mb-1rem">
+        <div class="col-6 col-xl-3"><div class="stat-card s-blue"><div class="stat-icon" style="background:rgba(79,110,247,.12);color:#4F6EF7"><i class="bi bi-person-lines-fill"></i></div><div class="stat-value">1,284</div><div class="stat-label">Total Leads</div><div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+142 this month</div></div></div>
+        <div class="col-6 col-xl-3"><div class="stat-card s-green"><div class="stat-icon" style="background:rgba(16,185,129,.12);color:#10B981"><i class="bi bi-trophy-fill"></i></div><div class="stat-value">24.8%</div><div class="stat-label">Win Rate</div><div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+3.2% vs last quarter</div></div></div>
+        <div class="col-6 col-xl-3"><div class="stat-card s-amber"><div class="stat-icon" style="background:rgba(245,158,11,.12);color:#F59E0B"><i class="bi bi-currency-rupee"></i></div><div class="stat-value">₹2.8Cr</div><div class="stat-label">Pipeline Value</div><div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+18% vs last month</div></div></div>
+        <div class="col-6 col-xl-3"><div class="stat-card s-cyan"><div class="stat-icon" style="background:rgba(6,182,212,.12);color:#06B6D4"><i class="bi bi-clock-fill"></i></div><div class="stat-value">28 days</div><div class="stat-label">Avg Sales Cycle</div><div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-down-right"></i>-4 days improvement</div></div></div>
+      </div>
+
+      <div class="row g-4 mb-1rem">
+        <!-- Kanban Pipeline -->
+        <div class="col-12 col-xl-8">
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Sales Pipeline</div><span class="badge-primary-xs">₹2.8Cr active</span></div>
+            <div class="card-bd">
+              <div style="display:flex;gap:.875rem;overflow-x:auto;padding-bottom:.5rem">
+                <!-- New -->
+                <div class="pipeline-col" style="flex:1">
+                  <div class="pipeline-hd"><span class="pipeline-lbl" style="color:#5B8FF9">New</span><span style="font-size:.72rem;font-weight:700;background:rgba(91,143,249,.12);color:#5B8FF9;padding:.1rem .45rem;border-radius:999px">8</span></div>
+                  <div class="lead-card"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">TechCorp India</div><div style="font-size:.72rem;color:var(--body-text-muted)">Enterprise SaaS · ₹18L</div><div class="prob-bar"><div class="prob-fill" style="width:20%;background:#5B8FF9"></div></div></div>
+                  <div class="lead-card"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">Sunrise Retail</div><div style="font-size:.72rem;color:var(--body-text-muted)">E-commerce · ₹8.5L</div><div class="prob-bar"><div class="prob-fill" style="width:15%;background:#5B8FF9"></div></div></div>
+                  <div class="lead-card"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">MediCare Plus</div><div style="font-size:.72rem;color:var(--body-text-muted)">Healthcare · ₹24L</div><div class="prob-bar"><div class="prob-fill" style="width:10%;background:#5B8FF9"></div></div></div>
+                </div>
+                <!-- Qualified -->
+                <div class="pipeline-col" style="flex:1">
+                  <div class="pipeline-hd"><span class="pipeline-lbl" style="color:#F59E0B">Qualified</span><span style="font-size:.72rem;font-weight:700;background:rgba(245,158,11,.12);color:#D97706;padding:.1rem .45rem;border-radius:999px">6</span></div>
+                  <div class="lead-card"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">Finserv Group</div><div style="font-size:.72rem;color:var(--body-text-muted)">BFSI · ₹42L</div><div class="prob-bar"><div class="prob-fill" style="width:40%;background:#F59E0B"></div></div></div>
+                  <div class="lead-card"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">AutoParts Hub</div><div style="font-size:.72rem;color:var(--body-text-muted)">Manufacturing · ₹16L</div><div class="prob-bar"><div class="prob-fill" style="width:35%;background:#F59E0B"></div></div></div>
+                </div>
+                <!-- Proposal -->
+                <div class="pipeline-col" style="flex:1">
+                  <div class="pipeline-hd"><span class="pipeline-lbl" style="color:#8B5CF6">Proposal</span><span style="font-size:.72rem;font-weight:700;background:rgba(139,92,246,.12);color:#8B5CF6;padding:.1rem .45rem;border-radius:999px">4</span></div>
+                  <div class="lead-card" style="border-color:var(--color-primary)"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">Global Edu Pvt Ltd</div><div style="font-size:.72rem;color:var(--body-text-muted)">EdTech · ₹58L</div><div class="prob-bar"><div class="prob-fill" style="width:65%;background:#8B5CF6"></div></div></div>
+                  <div class="lead-card"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">ReachOut Media</div><div style="font-size:.72rem;color:var(--body-text-muted)">Advertising · ₹28L</div><div class="prob-bar"><div class="prob-fill" style="width:60%;background:#8B5CF6"></div></div></div>
+                </div>
+                <!-- Won -->
+                <div class="pipeline-col" style="flex:1">
+                  <div class="pipeline-hd"><span class="pipeline-lbl" style="color:#10B981">Won</span><span style="font-size:.72rem;font-weight:700;background:rgba(16,185,129,.12);color:#10B981;padding:.1rem .45rem;border-radius:999px">11</span></div>
+                  <div class="lead-card"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">Nexus Payments</div><div style="font-size:.72rem;color:#10B981">₹72L closed</div><div class="prob-bar"><div class="prob-fill" style="width:100%;background:#10B981"></div></div></div>
+                  <div class="lead-card"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">InfraBuild Corp</div><div style="font-size:.72rem;color:#10B981">₹48L closed</div><div class="prob-bar"><div class="prob-fill" style="width:100%;background:#10B981"></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lead Source & Conversion -->
+        <div class="col-12 col-xl-4">
+          <div class="card-hr mb-75rem">
+            <div class="card-hd"><div class="card-title-hr">Lead Sources</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.5rem">
+              <div class="funnel-seg" style="background:rgba(79,110,247,.06)"><span class="source-dot" style="background:#4F6EF7"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Organic Search</span><span style="font-weight:800;font-size:.875rem;color:#4F6EF7">32%</span></div>
+              <div class="funnel-seg" style="background:rgba(16,185,129,.06)"><span class="source-dot" style="background:#10B981"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Referrals</span><span style="font-weight:800;font-size:.875rem;color:#10B981">24%</span></div>
+              <div class="funnel-seg" style="background:rgba(245,158,11,.06)"><span class="source-dot" style="background:#F59E0B"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Paid Ads</span><span style="font-weight:800;font-size:.875rem;color:#D97706">21%</span></div>
+              <div class="funnel-seg" style="background:rgba(139,92,246,.06)"><span class="source-dot" style="background:#8B5CF6"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Social Media</span><span style="font-weight:800;font-size:.875rem;color:#8B5CF6">14%</span></div>
+              <div class="funnel-seg" style="background:rgba(239,68,68,.06)"><span class="source-dot" style="background:#EF4444"></span><span style="flex:1;font-size:.8125rem;font-weight:600;color:var(--body-text)">Events</span><span style="font-weight:800;font-size:.875rem;color:#EF4444">9%</span></div>
+            </div>
+          </div>
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Top Sales Reps</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.625rem">
+              <div style="display:flex;align-items:center;gap:.75rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#4F6EF7,#8B5CF6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">AK</div><div style="flex:1"><div style="font-size:.8125rem;font-weight:700;color:var(--body-text)">Arjun Kumar</div><div style="height:5px;border-radius:999px;background:var(--body-border);overflow:hidden;margin-top:.25rem"><div style="width:92%;height:100%;background:#10B981;border-radius:999px"></div></div></div><span style="font-weight:800;font-size:.8rem;color:#10B981;white-space:nowrap">₹1.2Cr</span></div>
+              <div style="display:flex;align-items:center;gap:.75rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#10B981,#06B6D4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">SM</div><div style="flex:1"><div style="font-size:.8125rem;font-weight:700;color:var(--body-text)">Sunita Mehta</div><div style="height:5px;border-radius:999px;background:var(--body-border);overflow:hidden;margin-top:.25rem"><div style="width:78%;height:100%;background:#5B8FF9;border-radius:999px"></div></div></div><span style="font-weight:800;font-size:.8rem;color:#5B8FF9;white-space:nowrap">₹94L</span></div>
+              <div style="display:flex;align-items:center;gap:.75rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#EF4444);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem;flex-shrink:0">VP</div><div style="flex:1"><div style="font-size:.8125rem;font-weight:700;color:var(--body-text)">Vijay Patel</div><div style="height:5px;border-radius:999px;background:var(--body-border);overflow:hidden;margin-top:.25rem"><div style="width:65%;height:100%;background:#F59E0B;border-radius:999px"></div></div></div><span style="font-weight:800;font-size:.8rem;color:#D97706;white-space:nowrap">₹78L</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lead Table -->
+      <div class="card-hr">
+        <div class="card-hd"><div class="card-title-hr">Hot Leads</div><span class="badge-red-xs">Needs follow-up today</span></div>
+        <div class="table-wrap">
+          <table class="hr-table" data-sortable id="leadsTable">
+            <thead><tr><th data-sort>Company</th><th data-sort>Contact</th><th data-sort>Source</th><th data-sort>Value</th><th data-sort>Score</th><th data-sort>Stage</th><th data-sort>Last Activity</th><th>Actions</th></tr></thead>
+            <tbody id="leadsTableBody">
+              <tr data-company="Global Edu Pvt Ltd" data-industry="EdTech" data-city="Mumbai" data-contact="Reena Shah" data-source="Organic" data-value="58" data-score="92" data-stage="Proposal" data-activity="Today 10:30"><td><div style="font-weight:700;color:var(--body-text)">Global Edu Pvt Ltd</div><div style="font-size:.72rem;color:var(--body-text-muted)">EdTech · Mumbai</div></td><td>Reena Shah</td><td><span class="badge-blue-xs">Organic</span></td><td style="font-weight:700;color:var(--body-text)">₹58L</td><td><span style="font-size:.78rem;font-weight:800;color:#10B981;background:rgba(16,185,129,.1);padding:.15rem .45rem;border-radius:999px">92</span></td><td><span class="badge-st st-leave">Proposal</span></td><td>Today 10:30</td><td><button class="btn-hr btn-primary-hr btn-sm-hr" type="button" onclick="logContact(this)">Follow up</button></td></tr>
+              <tr data-company="Finserv Group" data-industry="BFSI" data-city="Pune" data-contact="Anand Desai" data-source="Referral" data-value="42" data-score="78" data-stage="Qualified" data-activity="Yesterday"><td><div style="font-weight:700;color:var(--body-text)">Finserv Group</div><div style="font-size:.72rem;color:var(--body-text-muted)">BFSI · Pune</div></td><td>Anand Desai</td><td><span class="badge-green-xs">Referral</span></td><td style="font-weight:700;color:var(--body-text)">₹42L</td><td><span style="font-size:.78rem;font-weight:800;color:#F59E0B;background:rgba(245,158,11,.1);padding:.15rem .45rem;border-radius:999px">78</span></td><td><span class="badge-st st-pending">Qualified</span></td><td>Yesterday</td><td><button class="btn-hr btn-primary-hr btn-sm-hr" type="button" onclick="logContact(this)">Follow up</button></td></tr>
+              <tr data-company="TechCorp India" data-industry="Enterprise" data-city="Hyderabad" data-contact="Kavitha Rao" data-source="Paid Ads" data-value="18" data-score="64" data-stage="New" data-activity="3 days ago"><td><div style="font-weight:700;color:var(--body-text)">TechCorp India</div><div style="font-size:.72rem;color:var(--body-text-muted)">Enterprise · Hyderabad</div></td><td>Kavitha Rao</td><td><span class="badge-amber-xs">Paid Ads</span></td><td style="font-weight:700;color:var(--body-text)">₹18L</td><td><span style="font-size:.78rem;font-weight:800;color:#5B8FF9;background:rgba(91,143,249,.1);padding:.15rem .45rem;border-radius:999px">64</span></td><td><span class="badge-st st-inactive">New</span></td><td>3 days ago</td><td><button class="btn-hr btn-outline-hr btn-sm-hr" type="button" onclick="logContact(this)">Call</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+
+<!-- ══════ Filter panel ══════ -->
+<div class="hr-panel panel-w260" id="filterPanel" style="position:fixed;top:80px;right:2rem;z-index:1050">
+  <div class="card-bd p-1rem">
+    <div style="font-weight:800;font-size:.9rem;margin-bottom:.875rem">Filter Leads</div>
+    <label class="form-label-hr">Source</label>
+    <select class="hr-input" id="filterSource" style="margin-bottom:.875rem">
+      <option value="">All Sources</option>
+      <option>Organic</option><option>Referral</option><option>Paid Ads</option>
+    </select>
+    <label class="form-label-hr">Stage</label>
+    <select class="hr-input" id="filterStage" style="margin-bottom:1rem">
+      <option value="">All Stages</option>
+      <option>New</option><option>Qualified</option><option>Proposal</option>
+    </select>
+    <div style="display:flex;gap:.5rem">
+      <button type="button" class="btn-hr btn-outline-hr btn-sm-hr" style="flex:1" onclick="resetFilters()">Reset</button>
+      <button type="button" class="btn-hr btn-primary-hr btn-sm-hr" style="flex:1" onclick="applyFilters()">Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Add Lead ══════ -->
+<div class="modal fade" id="leadModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-person-plus-fill me-2 c-primary"></i>Add Lead</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="leadForm" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label-hr">Company <span class="c-red">*</span></label>
+              <input class="hr-input" type="text" id="leadCompany" placeholder="e.g. Bright Retail Co."/>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Industry</label>
+              <input class="hr-input" type="text" id="leadIndustry" placeholder="e.g. Retail"/>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">City</label>
+              <input class="hr-input" type="text" id="leadCity" placeholder="e.g. Bengaluru"/>
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Contact Person <span class="c-red">*</span></label>
+              <input class="hr-input" type="text" id="leadContact" placeholder="e.g. Arjun Mehta"/>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Source</label>
+              <select class="hr-input" id="leadSource">
+                <option>Organic</option><option>Referral</option><option>Paid Ads</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label-hr">Stage</label>
+              <select class="hr-input" id="leadStage">
+                <option>New</option><option>Qualified</option><option>Proposal</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label-hr">Deal Value (₹ Lakhs) <span class="c-red">*</span></label>
+              <input class="hr-input" type="number" id="leadValue" min="1" placeholder="e.g. 25"/>
+            </div>
+          </div>
+          <div id="leadError" style="display:none;font-size:.8125rem;color:#EF4444;margin-top:1rem"></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="submitLead()"><i class="bi bi-check-lg me-1"></i>Add Lead</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: Log Contact ══════ -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-telephone-fill me-2 c-primary"></i>Log Contact — <span id="contactCompanyName"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="contactForm" novalidate>
+          <label class="form-label-hr">Contact Type</label>
+          <select class="hr-input" id="contactType" style="margin-bottom:.875rem">
+            <option>Phone Call</option><option>Email</option><option>Meeting</option><option>WhatsApp</option>
+          </select>
+          <label class="form-label-hr">Notes</label>
+          <textarea class="hr-input" id="contactNotes" rows="3" placeholder="What was discussed?"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="submitContact()"><i class="bi bi-check-lg me-1"></i>Log & Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var SOURCE_BADGE = { 'Organic': 'badge-blue-xs', 'Referral': 'badge-green-xs', 'Paid Ads': 'badge-amber-xs' };
+var STAGE_BADGE = { 'New': 'st-inactive', 'Qualified': 'st-pending', 'Proposal': 'st-leave' };
+var SCORE_SEED = { 'New': 55, 'Qualified': 72, 'Proposal': 85 };
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function scoreColor(score) {
+  if (score >= 85) return '#10B981';
+  if (score >= 65) return '#F59E0B';
+  return '#5B8FF9';
+}
+
+function buildLeadRowHtml(lead) {
+  var sourceBadge = SOURCE_BADGE[lead.source] || 'badge-blue-xs';
+  var stageBadge = STAGE_BADGE[lead.stage] || 'st-inactive';
+  var color = scoreColor(lead.score);
+  var btnLabel = lead.stage === 'New' ? 'Call' : 'Follow up';
+  var btnClass = lead.stage === 'New' ? 'btn-hr btn-outline-hr btn-sm-hr' : 'btn-hr btn-primary-hr btn-sm-hr';
+  return (
+    '<td><div style="font-weight:700;color:var(--body-text)">' + escapeHtml(lead.company) + '</div><div style="font-size:.72rem;color:var(--body-text-muted)">' + escapeHtml(lead.industry) + ' · ' + escapeHtml(lead.city) + '</div></td>' +
+    '<td>' + escapeHtml(lead.contact) + '</td>' +
+    '<td><span class="' + sourceBadge + '">' + escapeHtml(lead.source) + '</span></td>' +
+    '<td style="font-weight:700;color:var(--body-text)">₹' + lead.value + 'L</td>' +
+    '<td><span style="font-size:.78rem;font-weight:800;color:' + color + ';background:' + color + '1A;padding:.15rem .45rem;border-radius:999px">' + lead.score + '</span></td>' +
+    '<td><span class="badge-st ' + stageBadge + '">' + escapeHtml(lead.stage) + '</span></td>' +
+    '<td>' + escapeHtml(lead.activity) + '</td>' +
+    '<td><button class="' + btnClass + '" type="button" onclick="logContact(this)">' + btnLabel + '</button></td>'
+  );
+}
+
+/* ── Add Lead ─────────────────────────────────────────────────────── */
+function openAddLead() {
+  document.getElementById('leadForm').reset();
+  document.getElementById('leadError').style.display = 'none';
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('leadModal')).show();
+}
+
+function submitLead() {
+  var company = document.getElementById('leadCompany').value.trim();
+  var industry = document.getElementById('leadIndustry').value.trim() || 'General';
+  var city = document.getElementById('leadCity').value.trim() || '—';
+  var contact = document.getElementById('leadContact').value.trim();
+  var source = document.getElementById('leadSource').value;
+  var stage = document.getElementById('leadStage').value;
+  var value = parseInt(document.getElementById('leadValue').value, 10);
+  var errorBox = document.getElementById('leadError');
+
+  if (!company || !contact || !value) {
+    errorBox.textContent = 'Please fill in company, contact person, and deal value.';
+    errorBox.style.display = 'block';
+    return;
+  }
+  errorBox.style.display = 'none';
+
+  var lead = {
+    company: company, industry: industry, city: city, contact: contact,
+    source: source, stage: stage, value: value,
+    score: SCORE_SEED[stage] || 60, activity: 'Just now',
+  };
+
+  var tr = document.createElement('tr');
+  tr.dataset.company = company; tr.dataset.industry = industry; tr.dataset.city = city;
+  tr.dataset.contact = contact; tr.dataset.source = source; tr.dataset.value = value;
+  tr.dataset.score = lead.score; tr.dataset.stage = stage; tr.dataset.activity = 'Just now';
+  tr.innerHTML = buildLeadRowHtml(lead);
+  document.getElementById('leadsTableBody').prepend(tr);
+
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('leadModal')).hide();
+}
+
+/* ── Log Contact (Follow up / Call) ──────────────────────────────── */
+var contactingRow = null;
+
+function logContact(btn) {
+  contactingRow = btn.closest('tr');
+  document.getElementById('contactForm').reset();
+  document.getElementById('contactCompanyName').textContent = contactingRow.dataset.company;
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('contactModal')).show();
+}
+
+function submitContact() {
+  if (!contactingRow) return;
+  contactingRow.dataset.activity = 'Just now';
+  contactingRow.querySelector('td:nth-child(7)').textContent = 'Just now';
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('contactModal')).hide();
+}
+
+/* ── Filter ───────────────────────────────────────────────────────── */
+function applyFilters() {
+  var source = document.getElementById('filterSource').value;
+  var stage = document.getElementById('filterStage').value;
+  document.querySelectorAll('#leadsTableBody tr').forEach(function(row) {
+    var matchesSource = !source || row.dataset.source === source;
+    var matchesStage = !stage || row.dataset.stage === stage;
+    row.style.display = (matchesSource && matchesStage) ? '' : 'none';
+  });
+  document.getElementById('filterPanel').classList.remove('visible');
+}
+
+function resetFilters() {
+  document.getElementById('filterSource').value = '';
+  document.getElementById('filterStage').value = '';
+  applyFilters();
+}
+
+function toggleFilterPanel(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('filterPanel').classList.toggle('visible');
+}
+document.addEventListener('click', function(e) {
+  var panel = document.getElementById('filterPanel');
+  if (!panel.contains(e.target)) {
+    panel.classList.remove('visible');
+  }
+});
+</script>
+</body>
+</html>

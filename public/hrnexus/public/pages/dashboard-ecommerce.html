@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>E-Commerce Dashboard — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="E-commerce dashboard variant showing sales, orders, and revenue metrics in the HRNexus UI kit."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<style id="page-css">
+
+/* Sparkline bars */
+.spk{display:inline-flex;align-items:flex-end;gap:2px;height:28px;vertical-align:middle}
+.spk span{display:inline-block;width:4px;border-radius:2px 2px 0 0;background:var(--color-primary);opacity:.7}
+
+/* Product image placeholder */
+.prod-img{width:44px;height:44px;border-radius:.625rem;background:var(--body-bg);
+  border:1px solid var(--body-border);display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0}
+
+/* Mini donut (SVG) */
+.mini-donut{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.mini-donut svg{transform:rotate(-90deg)}
+.mini-donut .md-val{position:absolute;font-size:.65rem;font-weight:900;color:var(--body-text)}
+
+/* Category bar */
+.cat-bar{height:8px;border-radius:999px;background:var(--body-border);overflow:hidden;flex:1}
+.cat-fill{height:100%;border-radius:999px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+
+/* Order status dots */
+.order-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+
+/* Geo heatmap rows */
+.geo-row{display:flex;align-items:center;gap:.875rem;padding:.5rem 0;border-bottom:1px solid var(--body-border)}
+.geo-row:last-child{border-bottom:none}
+.geo-bar{height:6px;border-radius:999px;background:linear-gradient(90deg,var(--color-primary),#8B5CF6)}
+
+/* Activity feed */
+.af-item{display:flex;gap:.75rem;padding:.625rem 0;border-bottom:1px solid var(--body-border)}
+.af-item:last-child{border-bottom:none}
+.af-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+
+/* Revenue chart SVG */
+.rev-chart{width:100%;overflow:visible}
+
+</style>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div style="display:none" class="mobile-backdrop" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html" aria-label="HRNexus home">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span>Dashboards</span><span class="bc-sep">/</span><span class="bc-current">E-Commerce</span></nav>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon-i"></i>
+        <input type="search" class="search-input" placeholder="Search employees, tasks..." aria-label="Search"/>
+      </div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">E-Commerce Dashboard</h1>
+          <p class="page-subtitle">Real-time sales intelligence — orders, revenue, products &amp; customer insights</p>
+        </div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <select class="hr-inp" id="reportRange" style="padding:.4rem .875rem;width:auto">
+            <option>Last 30 days</option><option>Last 7 days</option><option>This month</option><option>This quarter</option>
+          </select>
+          <button type="button" class="btn-hr btn-primary-hr" onclick="exportReport()"><i class="bi bi-download me-1"></i>Export Report</button>
+        </div>
+      </div>
+
+      <!-- KPI Row -->
+      <div class="row g-3 mb-1rem">
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-blue">
+            <div class="stat-icon" style="background:rgba(79,110,247,.12);color:#4F6EF7"><i class="bi bi-bag-fill"></i></div>
+            <div class="stat-value">₹48.2L</div>
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+18.4% vs last month</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-green">
+            <div class="stat-icon" style="background:rgba(16,185,129,.12);color:#10B981"><i class="bi bi-cart-check-fill"></i></div>
+            <div class="stat-value">2,847</div>
+            <div class="stat-label">Total Orders</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+12.1% vs last month</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-amber">
+            <div class="stat-icon" style="background:rgba(245,158,11,.12);color:#F59E0B"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-value">18,492</div>
+            <div class="stat-label">Active Customers</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+6.8% new this month</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="stat-card s-violet">
+            <div class="stat-icon" style="background:rgba(139,92,246,.12);color:#8B5CF6"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="stat-value">₹1,694</div>
+            <div class="stat-label">Avg Order Value</div>
+            <div class="stat-delta" style="color:#10B981"><i class="bi bi-arrow-up-right"></i>+5.3% improvement</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-1rem">
+        <!-- Revenue Chart -->
+        <div class="col-12 col-xl-8">
+          <div class="card-hr">
+            <div class="card-hd">
+              <div><div class="card-title-hr">Revenue Overview</div><div class="card-subtitle-hr">Monthly gross revenue vs returns</div></div>
+              <div style="display:flex;gap:.375rem">
+                <span style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:600;color:var(--body-text-muted)"><span style="width:10px;height:10px;border-radius:2px;background:#4F6EF7;display:inline-block"></span>Revenue</span>
+                <span style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:600;color:var(--body-text-muted)"><span style="width:10px;height:10px;border-radius:2px;background:#EF4444;display:inline-block"></span>Returns</span>
+              </div>
+            </div>
+            <div class="card-bd" style="padding-bottom:.5rem">
+              <svg class="rev-chart" viewBox="0 0 700 200" preserveAspectRatio="none" style="height:180px">
+                <defs>
+                  <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#4F6EF7" stop-opacity="0.22"/>
+                    <stop offset="100%" stop-color="#4F6EF7" stop-opacity="0.01"/>
+                  </linearGradient>
+                </defs>
+                <!-- Grid lines -->
+                <line x1="0" y1="160" x2="700" y2="160" stroke="var(--body-border)" stroke-width="1"/>
+                <line x1="0" y1="120" x2="700" y2="120" stroke="var(--body-border)" stroke-width="1"/>
+                <line x1="0" y1="80"  x2="700" y2="80"  stroke="var(--body-border)" stroke-width="1"/>
+                <line x1="0" y1="40"  x2="700" y2="40"  stroke="var(--body-border)" stroke-width="1"/>
+                <!-- Revenue area -->
+                <path d="M0,140 C50,130 100,100 150,90 C200,80 250,60 300,55 C350,50 400,45 450,40 C500,35 550,50 600,48 C650,46 700,42 700,42 L700,180 L0,180 Z" fill="url(#revGrad)"/>
+                <path d="M0,140 C50,130 100,100 150,90 C200,80 250,60 300,55 C350,50 400,45 450,40 C500,35 550,50 600,48 C650,46 700,42 700,42" fill="none" stroke="#4F6EF7" stroke-width="2.5" stroke-linejoin="round"/>
+                <!-- Returns line -->
+                <path d="M0,168 C50,165 100,162 150,158 C200,154 250,155 300,152 C350,149 400,152 450,148 C500,144 550,150 600,147 C650,145 700,143 700,143" fill="none" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="4 3" stroke-linejoin="round"/>
+                <!-- Month labels -->
+                <text x="0" y="196" font-size="10" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Jul</text>
+                <text x="100" y="196" font-size="10" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Aug</text>
+                <text x="200" y="196" font-size="10" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Sep</text>
+                <text x="300" y="196" font-size="10" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Oct</text>
+                <text x="400" y="196" font-size="10" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Nov</text>
+                <text x="500" y="196" font-size="10" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Dec</text>
+                <text x="610" y="196" font-size="10" fill="var(--body-text-muted)" font-family="DM Sans,sans-serif">Jan</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Status Donut -->
+        <div class="col-12 col-xl-4">
+          <div class="card-hr h-100">
+            <div class="card-hd"><div class="card-title-hr">Order Status</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;align-items:center;gap:1.25rem">
+              <svg viewBox="0 0 120 120" width="140" height="140" style="transform:rotate(-90deg)">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="var(--body-border)" stroke-width="16"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#10B981" stroke-width="16" stroke-dasharray="188 126" stroke-dashoffset="0" stroke-linecap="round"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#F59E0B" stroke-width="16" stroke-dasharray="63 251" stroke-dashoffset="-188" stroke-linecap="round"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#EF4444" stroke-width="16" stroke-dasharray="31 283" stroke-dashoffset="-251" stroke-linecap="round"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#5B8FF9" stroke-width="16" stroke-dasharray="34 280" stroke-dashoffset="-282" stroke-linecap="round"/>
+              </svg>
+              <div style="width:100%;display:flex;flex-direction:column;gap:.5rem">
+                <div style="display:flex;align-items:center;gap:.625rem"><span class="order-dot" style="background:#10B981"></span><span style="flex:1;font-size:.8125rem;color:var(--body-text)">Delivered</span><span style="font-weight:700;font-size:.875rem;color:var(--body-text)">1,694</span><span style="font-size:.72rem;color:var(--body-text-muted)">59.5%</span></div>
+                <div style="display:flex;align-items:center;gap:.625rem"><span class="order-dot" style="background:#F59E0B"></span><span style="flex:1;font-size:.8125rem;color:var(--body-text)">In Transit</span><span style="font-weight:700;font-size:.875rem;color:var(--body-text)">568</span><span style="font-size:.72rem;color:var(--body-text-muted)">20.0%</span></div>
+                <div style="display:flex;align-items:center;gap:.625rem"><span class="order-dot" style="background:#EF4444"></span><span style="flex:1;font-size:.8125rem;color:var(--body-text)">Returned</span><span style="font-weight:700;font-size:.875rem;color:var(--body-text)">278</span><span style="font-size:.72rem;color:var(--body-text-muted)">9.8%</span></div>
+                <div style="display:flex;align-items:center;gap:.625rem"><span class="order-dot" style="background:#5B8FF9"></span><span style="flex:1;font-size:.8125rem;color:var(--body-text)">Processing</span><span style="font-weight:700;font-size:.875rem;color:var(--body-text)">307</span><span style="font-size:.72rem;color:var(--body-text-muted)">10.7%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-1rem">
+        <!-- Top Products -->
+        <div class="col-12 col-xl-5">
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Top Products</div><span class="badge-primary-xs">This Month</span></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.625rem">
+              <div style="display:flex;align-items:center;gap:.875rem"><div class="prod-img">👟</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Air Runner Pro X</div><div style="font-size:.72rem;color:var(--body-text-muted)">Footwear · 847 sold</div></div><div style="text-align:right"><div style="font-weight:800;font-size:.9rem;color:var(--body-text)">₹8.4L</div><div style="font-size:.68rem;color:#10B981;font-weight:700">+24%</div></div></div>
+              <div style="display:flex;align-items:center;gap:.875rem"><div class="prod-img">💻</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">UltraBook 15 Pro</div><div style="font-size:.72rem;color:var(--body-text-muted)">Electronics · 312 sold</div></div><div style="text-align:right"><div style="font-weight:800;font-size:.9rem;color:var(--body-text)">₹7.2L</div><div style="font-size:.68rem;color:#10B981;font-weight:700">+18%</div></div></div>
+              <div style="display:flex;align-items:center;gap:.875rem"><div class="prod-img">🎧</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">SoundPods Max</div><div style="font-size:.72rem;color:var(--body-text-muted)">Audio · 1,204 sold</div></div><div style="text-align:right"><div style="font-weight:800;font-size:.9rem;color:var(--body-text)">₹6.8L</div><div style="font-size:.68rem;color:#10B981;font-weight:700">+31%</div></div></div>
+              <div style="display:flex;align-items:center;gap:.875rem"><div class="prod-img">⌚</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">SmartWatch Series 9</div><div style="font-size:.72rem;color:var(--body-text-muted)">Wearables · 521 sold</div></div><div style="text-align:right"><div style="font-weight:800;font-size:.9rem;color:var(--body-text)">₹5.9L</div><div style="font-size:.68rem;color:#F59E0B;font-weight:700">+9%</div></div></div>
+              <div style="display:flex;align-items:center;gap:.875rem"><div class="prod-img">📱</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.875rem;color:var(--body-text)">Galaxy Tab Ultra</div><div style="font-size:.72rem;color:var(--body-text-muted)">Tablets · 284 sold</div></div><div style="text-align:right"><div style="font-weight:800;font-size:.9rem;color:var(--body-text)">₹4.8L</div><div style="font-size:.68rem;color:#EF4444;font-weight:700">-3%</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sales by Category -->
+        <div class="col-12 col-xl-4">
+          <div class="card-hr h-100">
+            <div class="card-hd"><div class="card-title-hr">Sales by Category</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:1rem">
+              <div><div style="display:flex;justify-content:space-between;font-size:.8125rem;margin-bottom:.375rem"><span style="font-weight:600;color:var(--body-text)">Electronics</span><span style="font-weight:700;color:var(--color-primary)">38%</span></div><div class="cat-bar"><div class="cat-fill" style="width:38%;background:linear-gradient(90deg,#4F6EF7,#8B5CF6)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:.8125rem;margin-bottom:.375rem"><span style="font-weight:600;color:var(--body-text)">Fashion</span><span style="font-weight:700;color:#10B981">24%</span></div><div class="cat-bar"><div class="cat-fill" style="width:24%;background:linear-gradient(90deg,#10B981,#06B6D4)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:.8125rem;margin-bottom:.375rem"><span style="font-weight:600;color:var(--body-text)">Home &amp; Kitchen</span><span style="font-weight:700;color:#F59E0B">18%</span></div><div class="cat-bar"><div class="cat-fill" style="width:18%;background:linear-gradient(90deg,#F59E0B,#F97316)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:.8125rem;margin-bottom:.375rem"><span style="font-weight:600;color:var(--body-text)">Sports</span><span style="font-weight:700;color:#06B6D4">12%</span></div><div class="cat-bar"><div class="cat-fill" style="width:12%;background:linear-gradient(90deg,#06B6D4,#10B981)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:.8125rem;margin-bottom:.375rem"><span style="font-weight:600;color:var(--body-text)">Books &amp; Media</span><span style="font-weight:700;color:#8B5CF6">8%</span></div><div class="cat-bar"><div class="cat-fill" style="width:8%;background:linear-gradient(90deg,#8B5CF6,#EC4899)"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="col-12 col-xl-3">
+          <div class="card-hr h-100">
+            <div class="card-hd"><div class="card-title-hr">Recent Orders</div></div>
+            <div class="card-bd" style="display:flex;flex-direction:column;gap:.5rem">
+              <div style="padding:.625rem;border-radius:.625rem;border:1px solid var(--body-border);background:var(--body-bg)"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">#ORD-7821</div><div style="font-size:.72rem;color:var(--body-text-muted)">Rahul M. · ₹4,280</div><span class="badge-st st-active" style="font-size:.6rem">Delivered</span></div>
+              <div style="padding:.625rem;border-radius:.625rem;border:1px solid var(--body-border);background:var(--body-bg)"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">#ORD-7820</div><div style="font-size:.72rem;color:var(--body-text-muted)">Priya S. · ₹12,500</div><span class="badge-st st-pending" style="font-size:.6rem">In Transit</span></div>
+              <div style="padding:.625rem;border-radius:.625rem;border:1px solid var(--body-border);background:var(--body-bg)"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">#ORD-7819</div><div style="font-size:.72rem;color:var(--body-text-muted)">Ankit K. · ₹2,899</div><span class="badge-st st-active" style="font-size:.6rem">Delivered</span></div>
+              <div style="padding:.625rem;border-radius:.625rem;border:1px solid var(--body-border);background:var(--body-bg)"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">#ORD-7818</div><div style="font-size:.72rem;color:var(--body-text-muted)">Sneha R. · ₹8,750</div><span class="badge-st st-leave" style="font-size:.6rem">Processing</span></div>
+              <div style="padding:.625rem;border-radius:.625rem;border:1px solid var(--body-border);background:var(--body-bg)"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">#ORD-7817</div><div style="font-size:.72rem;color:var(--body-text-muted)">Vijay P. · ₹1,299</div><span class="badge-st st-inactive" style="font-size:.6rem">Returned</span></div>
+              <div style="padding:.625rem;border-radius:.625rem;border:1px solid var(--body-border);background:var(--body-bg)"><div style="font-weight:700;font-size:.8rem;color:var(--body-text)">#ORD-7816</div><div style="font-size:.72rem;color:var(--body-text-muted)">Meera L. · ₹3,400</div><span class="badge-st st-active" style="font-size:.6rem">Delivered</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom row: Top Regions + Activity Feed -->
+      <div class="row g-4">
+        <div class="col-12 col-xl-6">
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Sales by Region</div><span class="badge-green-xs">India</span></div>
+            <div class="card-bd">
+              <div class="geo-row"><span style="font-size:.8125rem;font-weight:600;color:var(--body-text);min-width:90px">Maharashtra</span><div style="flex:1"><div class="cat-bar"><div class="geo-bar" style="width:82%"></div></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">₹12.8L</span></div>
+              <div class="geo-row"><span style="font-size:.8125rem;font-weight:600;color:var(--body-text);min-width:90px">Karnataka</span><div style="flex:1"><div class="cat-bar"><div class="geo-bar" style="width:68%"></div></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">₹9.4L</span></div>
+              <div class="geo-row"><span style="font-size:.8125rem;font-weight:600;color:var(--body-text);min-width:90px">Tamil Nadu</span><div style="flex:1"><div class="cat-bar"><div class="geo-bar" style="width:55%"></div></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">₹7.8L</span></div>
+              <div class="geo-row"><span style="font-size:.8125rem;font-weight:600;color:var(--body-text);min-width:90px">Delhi NCR</span><div style="flex:1"><div class="cat-bar"><div class="geo-bar" style="width:48%"></div></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">₹6.9L</span></div>
+              <div class="geo-row"><span style="font-size:.8125rem;font-weight:600;color:var(--body-text);min-width:90px">Gujarat</span><div style="flex:1"><div class="cat-bar"><div class="geo-bar" style="width:38%"></div></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">₹5.4L</span></div>
+              <div class="geo-row"><span style="font-size:.8125rem;font-weight:600;color:var(--body-text);min-width:90px">Telangana</span><div style="flex:1"><div class="cat-bar"><div class="geo-bar" style="width:29%"></div></div></div><span style="font-size:.8rem;font-weight:700;color:var(--body-text);min-width:45px;text-align:right">₹3.8L</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-xl-6">
+          <div class="card-hr">
+            <div class="card-hd"><div class="card-title-hr">Live Activity</div><span class="badge-red-xs" style="display:flex;align-items:center;gap:.3rem"><span style="width:6px;height:6px;border-radius:50%;background:#EF4444;animation:pulse 1.4s infinite"></span>Live</span></div>
+            <div class="card-bd">
+              <div class="af-item"><div class="af-dot" style="background:rgba(16,185,129,.12);color:#10B981"><i class="bi bi-bag-check-fill" style="font-size:.75rem"></i></div><div style="flex:1;min-width:0"><div style="font-size:.8125rem;font-weight:600;color:var(--body-text)">New order #7822 placed</div><div style="font-size:.72rem;color:var(--body-text-muted)">Deepika M. · ₹6,240 · Mumbai</div></div><div style="font-size:.68rem;color:var(--body-text-muted);white-space:nowrap">2m ago</div></div>
+              <div class="af-item"><div class="af-dot" style="background:rgba(91,143,249,.12);color:#5B8FF9"><i class="bi bi-person-plus-fill" style="font-size:.75rem"></i></div><div style="flex:1;min-width:0"><div style="font-size:.8125rem;font-weight:600;color:var(--body-text)">New customer registered</div><div style="font-size:.72rem;color:var(--body-text-muted)">Arjun K. · arjun.k@gmail.com</div></div><div style="font-size:.68rem;color:var(--body-text-muted);white-space:nowrap">5m ago</div></div>
+              <div class="af-item"><div class="af-dot" style="background:rgba(245,158,11,.12);color:#F59E0B"><i class="bi bi-truck" style="font-size:.75rem"></i></div><div style="flex:1;min-width:0"><div style="font-size:.8125rem;font-weight:600;color:var(--body-text)">Order #7801 out for delivery</div><div style="font-size:.72rem;color:var(--body-text-muted)">Bengaluru zone · ETA 3:30 PM</div></div><div style="font-size:.68rem;color:var(--body-text-muted);white-space:nowrap">8m ago</div></div>
+              <div class="af-item"><div class="af-dot" style="background:rgba(239,68,68,.12);color:#EF4444"><i class="bi bi-arrow-return-left" style="font-size:.75rem"></i></div><div style="flex:1;min-width:0"><div style="font-size:.8125rem;font-weight:600;color:var(--body-text)">Return request #7784</div><div style="font-size:.72rem;color:var(--body-text-muted)">Size issue · ₹1,299 refund pending</div></div><div style="font-size:.68rem;color:var(--body-text-muted);white-space:nowrap">14m ago</div></div>
+              <div class="af-item"><div class="af-dot" style="background:rgba(16,185,129,.12);color:#10B981"><i class="bi bi-star-fill" style="font-size:.75rem"></i></div><div style="flex:1;min-width:0"><div style="font-size:.8125rem;font-weight:600;color:var(--body-text)">5-star review received</div><div style="font-size:.72rem;color:var(--body-text-muted)">Air Runner Pro X · "Best shoe ever"</div></div><div style="font-size:.68rem;color:var(--body-text-muted);white-space:nowrap">22m ago</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+
+<script>
+function csvEscape(val) {
+  var s = String(val);
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+function csvRow(cells) {
+  return cells.map(csvEscape).join(',') + '\r\n';
+}
+
+function exportReport() {
+  var range = document.getElementById('reportRange').value;
+  var today = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  var csv = '';
+
+  csv += csvRow(['E-Commerce Dashboard Report']);
+  csv += csvRow(['Period', range]);
+  csv += csvRow(['Generated', today]);
+  csv += '\r\n';
+
+  csv += csvRow(['KEY METRICS']);
+  csv += csvRow(['Metric', 'Value', 'Change']);
+  csv += csvRow(['Total Revenue', '₹48.2L', '+18.4% vs last month']);
+  csv += csvRow(['Total Orders', '2,847', '+12.1% vs last month']);
+  csv += csvRow(['Active Customers', '18,492', '+6.8% new this month']);
+  csv += csvRow(['Avg Order Value', '₹1,694', '+5.3% improvement']);
+  csv += '\r\n';
+
+  csv += csvRow(['ORDER STATUS']);
+  csv += csvRow(['Status', 'Orders', 'Share']);
+  csv += csvRow(['Delivered', '1,694', '59.5%']);
+  csv += csvRow(['In Transit', '568', '20.0%']);
+  csv += csvRow(['Returned', '278', '9.8%']);
+  csv += csvRow(['Processing', '307', '10.7%']);
+  csv += '\r\n';
+
+  csv += csvRow(['TOP PRODUCTS']);
+  csv += csvRow(['Product', 'Category', 'Units Sold', 'Revenue', 'Growth']);
+  csv += csvRow(['Air Runner Pro X', 'Footwear', '847', '₹8.4L', '+24%']);
+  csv += csvRow(['UltraBook 15 Pro', 'Electronics', '312', '₹7.2L', '+18%']);
+  csv += csvRow(['SoundPods Max', 'Audio', '1,204', '₹6.8L', '+31%']);
+  csv += csvRow(['SmartWatch Series 9', 'Wearables', '521', '₹5.9L', '+9%']);
+  csv += csvRow(['Galaxy Tab Ultra', 'Tablets', '284', '₹4.8L', '-3%']);
+  csv += '\r\n';
+
+  csv += csvRow(['SALES BY CATEGORY']);
+  csv += csvRow(['Category', 'Share']);
+  csv += csvRow(['Electronics', '38%']);
+  csv += csvRow(['Fashion', '24%']);
+  csv += csvRow(['Home & Kitchen', '18%']);
+  csv += csvRow(['Sports', '12%']);
+  csv += csvRow(['Books & Media', '8%']);
+  csv += '\r\n';
+
+  csv += csvRow(['RECENT ORDERS']);
+  csv += csvRow(['Order ID', 'Customer', 'Amount', 'Status']);
+  csv += csvRow(['#ORD-7821', 'Rahul M.', '₹4,280', 'Delivered']);
+  csv += csvRow(['#ORD-7820', 'Priya S.', '₹12,500', 'In Transit']);
+  csv += csvRow(['#ORD-7819', 'Ankit K.', '₹2,899', 'Delivered']);
+  csv += csvRow(['#ORD-7818', 'Sneha R.', '₹8,750', 'Processing']);
+  csv += csvRow(['#ORD-7817', 'Vijay P.', '₹1,299', 'Returned']);
+  csv += csvRow(['#ORD-7816', 'Meera L.', '₹3,400', 'Delivered']);
+  csv += '\r\n';
+
+  csv += csvRow(['SALES BY REGION']);
+  csv += csvRow(['State', 'Revenue']);
+  csv += csvRow(['Maharashtra', '₹12.8L']);
+  csv += csvRow(['Karnataka', '₹9.4L']);
+  csv += csvRow(['Tamil Nadu', '₹7.8L']);
+  csv += csvRow(['Delhi NCR', '₹6.9L']);
+  csv += csvRow(['Gujarat', '₹5.4L']);
+  csv += csvRow(['Telangana', '₹3.8L']);
+
+  var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'ecommerce-dashboard-report-' + new Date().toISOString().slice(0, 10) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+
+<style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
+</body>
+</html>

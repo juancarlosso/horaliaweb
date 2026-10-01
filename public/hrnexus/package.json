@@ -1,0 +1,60 @@
+{
+  "name": "hrnexus-admin-dashboard",
+  "version": "4.4.1",
+  "description": "HRNexus Bootstrap 5 Admin Dashboard — 89 pages, dark mode, responsive, four color presets",
+  "private": true,
+  "scripts": {
+    "dev": "npm-run-all --parallel watch:scss watch:js serve",
+    "serve": "browser-sync start --config bs-config.js",
+    "build": "npm-run-all build:scss build:js",
+    "build:prod": "npm-run-all build:scss:prod build:js:prod",
+    "build:scss": "npm-run-all build:css:core build:css:utils build:css:pages",
+    "build:scss:prod": "npm-run-all build:css:core:prod build:css:utils:prod build:css:pages:prod",
+    "build:css:core": "sass src/scss/core.scss dist/css/hrnexus-core.css --style=expanded --source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "build:css:core:prod": "sass src/scss/core.scss dist/css/hrnexus-core.css --style=compressed --no-source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "build:css:utils": "sass src/scss/utils.scss dist/css/hrnexus-utils.css --style=expanded --source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "build:css:utils:prod": "sass src/scss/utils.scss dist/css/hrnexus-utils.css --style=compressed --no-source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "build:css:pages": "sass src/scss/pages.scss dist/css/hrnexus-pages.css --style=expanded --source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "build:css:pages:prod": "sass src/scss/pages.scss dist/css/hrnexus-pages.css --style=compressed --no-source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "build:scss:standalone": "sass src/scss/main.scss dist/css/hrnexus.min.css --style=expanded --source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "build:scss:standalone:prod": "sass src/scss/main.scss dist/css/hrnexus.min.css --style=compressed --no-source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "build:js": "node scripts/bundle.js",
+    "build:js:prod": "node scripts/bundle.js --minify",
+    "watch:scss": "npm-run-all --parallel watch:css:core watch:css:utils watch:css:pages",
+    "watch:css:core": "sass --watch src/scss/core.scss:dist/css/hrnexus-core.css --style=expanded --source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "watch:css:utils": "sass --watch src/scss/utils.scss:dist/css/hrnexus-utils.css --style=expanded --source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "watch:css:pages": "sass --watch src/scss/pages.scss:dist/css/hrnexus-pages.css --style=expanded --source-map --load-path=node_modules --quiet-deps --silence-deprecation=import",
+    "watch:js": "node scripts/bundle.js --watch",
+    "build:themes": "node scripts/build-themes.js",
+    "lint:scss": "stylelint \"src/scss/**/*.scss\" --fix",
+    "postinstall": "node scripts/postinstall.js",
+    "validate:ids": "node scripts/validate-duplicate-ids.js",
+    "validate:project": "node scripts/validate-project.js"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "chokidar": "^3.6.0",
+    "fs-extra": "^11.4.0",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.102.0",
+    "stylelint": "^16.6.1",
+    "stylelint-config-standard-scss": "^13.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions"
+  ],
+  "license": "SEE LICENSE IN LICENSE.md",
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true
+  }
+}

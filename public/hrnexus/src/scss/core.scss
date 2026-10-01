@@ -1,0 +1,48 @@
+// =============================================================================
+// HRNexus Admin Dashboard — "Core" SCSS Entry (CDN-Bootstrap build)
+// =============================================================================
+
+// This is the entry point that matches what every page in public/pages/
+// actually loads: Bootstrap 5 comes from the jsDelivr CDN via a plain
+// <link> tag, and this file supplies everything HRNexus adds on top of it
+// (design tokens, layout, cards/UI components, dashboard widgets, themes) —
+// nothing more. It intentionally does NOT `@use 'bootstrap/scss/bootstrap'`;
+// see main.scss if you want a single self-contained bundle that includes a
+// local copy of Bootstrap instead of relying on the CDN.
+
+// CUSTOMISE: Edit src/scss/abstracts/_variables.scss
+//            Change $primary to re-colour everything.
+// BUILD:     npm run build:scss       (dev, with source maps)
+//            npm run build:scss:prod  (compressed, no maps)
+// OUTPUT:    dist/css/hrnexus-core.css — the file every page's
+//            <link rel="stylesheet" href="…/dist/css/hrnexus-core.css">
+//            actually resolves to.
+// =============================================================================
+
+// ── Step 1: Our abstracts (variables + mixins via forwarding hub) ─────────────
+@use 'abstracts' as *;
+
+// ── Step 2: CSS custom properties (design tokens → :root vars) ────────────────
+@use 'abstracts/tokens';
+
+// ── Step 3: Base reset + animations ──────────────────────────────────────────
+@use 'base/reset';
+@use 'base/animations';
+@use 'base/recovered-legacy';
+
+// ── Step 4: Layout ────────────────────────────────────────────────────────────
+@use 'layout/sidebar';
+@use 'layout/topbar';
+@use 'layout/content';
+@use 'layout/responsive';
+
+// ── Step 5: Components ────────────────────────────────────────────────────────
+@use 'components/cards';
+@use 'components/ui';
+
+// ── Step 6: Theme presets (all 4 themes, class-based) ────────────────────────
+// Apply: <html class="theme-rose"> or lazy-load dist/css/themes/rose.min.css
+@use 'themes/presets';
+
+// ── Step 7: Page-specific SCSS (add your pages here) ─────────────────────────
+// @use 'pages/my-page';

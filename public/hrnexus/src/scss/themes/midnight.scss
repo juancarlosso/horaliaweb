@@ -1,0 +1,15 @@
+// midnight theme — compile: npm run build:themes
+// Usage: <html class="theme-midnight"> + <link href="/dist/css/themes/midnight.min.css">
+.theme-midnight {
+  --color-primary:              #6366F1;
+  --color-primary-dark:         #4F46E5;
+  --color-primary-light:        rgba(99, 102, 241, 0.09);
+  --color-primary-glow:         rgba(99, 102, 241, 0.18);
+  --color-secondary:            #A78BFA;
+  --sidebar-bg:                 #0A0E1A;
+  --sidebar-bg2:                #0F1526;
+  --sidebar-item-active-border: #6366F1;
+  --sidebar-item-active:        rgba(99, 102, 241, 0.16);
+  --body-bg:                    #F0F1F8;
+  --body-text:                  #1A1D3A;
+}

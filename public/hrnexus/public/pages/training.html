@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Training & Development — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Training and development tracker for employee courses, certifications, and completion status."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html"><div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div><div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div></a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Training & Development</span></nav>
+      <div class="search-wrap"><i class="bi bi-search search-icon-i"></i><input type="search" class="search-input" placeholder="Search courses..."/></div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel"><i class="bi bi-bell-fill"></i><span class="badge-dot"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- PAGE HEADER -->
+      <div class="page-header">
+        <div>
+          <h1 class="fs16-fw9-c-body-m-0">Training &amp; Development</h1>
+          <p class="fs85-c-muted-m-1-0-0">Learning Management System — courses, paths, progress, and certifications</p>
+        </div>
+        <button class="flex-ac-g2-fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none-pointer" type="button" onclick="openAddCourseModal()"><i class="bi bi-plus-lg"></i>Add Course</button>
+      </div>
+
+      <!-- STATS STRIP -->
+      <div class="grid-cols-auto-fill-mn160-g4-mb6">
+        <div class="card-hr flex-ac-g35-p-4-5">
+          <div class="icon-box-blue-9-40"><i class="bi bi-book-fill fs11-c-blue"></i></div>
+          <div><div class="fs14-fw9-c-body-lh-1" id="statEnrolled">3</div><div class="fs75-fw6-muted">Enrolled</div></div>
+        </div>
+        <div class="card-hr flex-ac-g35-p-4-5">
+          <div class="icon-box-green-9-40"><i class="bi bi-patch-check-fill fs11-c-green"></i></div>
+          <div><div class="fs14-fw9-c-body-lh-1" id="statCompleted">1</div><div class="fs75-fw6-muted">Completed</div></div>
+        </div>
+        <div class="card-hr flex-ac-g35-p-4-5">
+          <div class="icon-box-purple-9-40"><i class="bi bi-clock-fill fs11-c-purple"></i></div>
+          <div><div class="fs14-fw9-c-body-lh-1" id="statHours">12.0h</div><div class="fs75-fw6-muted">Hours Learned</div></div>
+        </div>
+        <div class="card-hr flex-ac-g35-p-4-5">
+          <div class="icon-box-amber-9-40"><i class="bi bi-award-fill fs11-c-amber"></i></div>
+          <div><div class="fs14-fw9-c-body-lh-1" id="statCerts">1</div><div class="fs75-fw6-muted">Certifications</div></div>
+        </div>
+      </div>
+
+      <!-- TABS — exact React pill-style tab bar -->
+      <div class="flex-g1-bg-bg-br25-p-1-mb6-b-1">
+        <button type="button" class="tab-pill active" id="tab-courses"  onclick="switchTab('courses')"><i class="bi bi-grid-1x2"></i>Course Library</button>
+        <button type="button" class="tab-pill"        id="tab-my"       onclick="switchTab('my')"><i class="bi bi-bookmark-fill"></i>My Learning</button>
+        <button type="button" class="tab-pill"        id="tab-paths"    onclick="switchTab('paths')"><i class="bi bi-signpost-2-fill"></i>Learning Paths</button>
+        <button type="button" class="tab-pill"        id="tab-leaderboard" onclick="switchTab('leaderboard')"><i class="bi bi-trophy-fill"></i>Leaderboard</button>
+      </div>
+
+      <!-- ══ TAB: COURSE LIBRARY ══ -->
+      <div id="panel-courses">
+        <!-- Filter bar -->
+        <div class="flex-ac-wrap-g3-mb5">
+          <div class="rel-mnw200px-fl1">
+            <i class="bi bi-search abs-t50pct-l3-c-muted-pe-none"></i>
+            <input class="tr-input pl9" id="courseSearch" placeholder="Search courses…" oninput="filterCourses()"/>
+          </div>
+          <div class="flex-g15-wrap" id="catFilters"><button class="cat-filter-btn badge-blue-12-xs-fs78-p14-3" type="button" data-cat="All" onclick="filterCat('All')">All</button><button class="cat-filter-btn badge-transparent-xs-fs78-p14-3" type="button" data-cat="Leadership" onclick="filterCat('Leadership')">Leadership</button><button class="cat-filter-btn badge-transparent-xs-fs78-p14-3" type="button" data-cat="Analytics" onclick="filterCat('Analytics')">Analytics</button><button class="cat-filter-btn badge-transparent-xs-fs78-p14-3" type="button" data-cat="Compliance" onclick="filterCat('Compliance')">Compliance</button><button class="cat-filter-btn badge-transparent-xs-fs78-p14-3" type="button" data-cat="Technical" onclick="filterCat('Technical')">Technical</button><button class="cat-filter-btn badge-transparent-xs-fs78-p14-3" type="button" data-cat="Soft Skills" onclick="filterCat('Soft Skills')">Soft Skills</button><button class="cat-filter-btn badge-transparent-xs-fs78-p14-3" type="button" data-cat="Project Mgmt" onclick="filterCat('Project Mgmt')">Project Mgmt</button></div>
+        </div>
+        <!-- Course grid -->
+        <div class="grid-cols-auto-fill-mn300-g4" id="courseGrid">
+<div class="course-card bg-card-bg-ov-hidden-pointer-trans-shadow" data-course-id="1" data-cat="Leadership" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+  <!-- Card header -->
+  <div class="flex-ac-g35-rel-bg-blue-10-p-5-ov-hidden">
+    <div class="abs-t-20px-r-20px-sq80px-bg-blue-13"></div>
+    <div class="icon-box-blue-15-52">
+      <i class="bi bi-person-workspace fs15-c-blue"></i>
+    </div>
+    <div>
+      <div class="fs9-fw8-c-body-mb1">Leadership Fundamentals</div>
+      <div class="flex-g2-ac-wrap">
+        <span class="badge-blue-8-xs-fs65-p06-18">Intermediate</span>
+        <span class="fs72-muted">Leadership</span>
+      </div>
+    </div>
+  </div>
+  <!-- Card body -->
+  <div class="p-4-5">
+    <div class="flex-g4-fs78-c-muted-mb3">
+      <span><i class="bi bi-clock mr-1"></i>6h 30m</span>
+      <span><i class="bi bi-play-circle mr-1"></i>18 lessons</span>
+      <span><i class="bi bi-people-fill mr-1"></i>312</span>
+    </div>
+    <div class="flex-ac-g01"><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-half c-amber-fs7"></i><span class="fs75-fw7-c-body-ml1">4.8</span></div>
+    <div class="mt-75rem">
+          <div class="flex-jsb-mb1">
+            <span class="fs75-fw6-muted">Progress</span>
+            <span class="fs75-fw8-c-blue">65%</span>
+          </div>
+          <div class="h6px-bg-border-br3px-ov-hidden">
+            <div class="w65pct-h100pct-bg-blue-br3px-trans"></div>
+          </div>
+        </div>
+  </div>
+  <!-- Card footer -->
+  <div class="flex-ac-jsb-p-35-5-bt-1">
+    <span class="fs78-muted"><i class="bi bi-person-fill mr-1"></i>Dr. Sarah Lin</span>
+    <div class="flex-g2"><button class="fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none-pointer" type="button" onclick="openQuizModal(1)">Continue</button></div>
+  </div>
+</div>
+<div class="course-card bg-card-bg-ov-hidden-pointer-trans-shadow-4" data-course-id="2" data-cat="Analytics" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+  <!-- Card header -->
+  <div class="flex-ac-g35-rel-bg-green-10-p-5-ov-hidden">
+    <div class="abs-t-20px-r-20px-sq80px-bg-green-13"></div>
+    <div class="icon-box-green-15-52">
+      <i class="bi bi-bar-chart-line-fill fs15-c-green"></i>
+    </div>
+    <div>
+      <div class="fs9-fw8-c-body-mb1">Data Analytics for HR</div>
+      <div class="flex-g2-ac-wrap">
+        <span class="badge-green-8-xs-fs65-p06-18">Beginner</span>
+        <span class="fs72-muted">Analytics</span>
+      </div>
+    </div>
+  </div>
+  <!-- Card body -->
+  <div class="p-4-5">
+    <div class="flex-g4-fs78-c-muted-mb3">
+      <span><i class="bi bi-clock mr-1"></i>4h 15m</span>
+      <span><i class="bi bi-play-circle mr-1"></i>12 lessons</span>
+      <span><i class="bi bi-people-fill mr-1"></i>198</span>
+    </div>
+    <div class="flex-ac-g01"><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-half c-amber-fs7"></i><span class="fs75-fw7-c-body-ml1">4.6</span></div>
+    
+  </div>
+  <!-- Card footer -->
+  <div class="flex-ac-jsb-p-35-5-bt-1">
+    <span class="fs78-muted"><i class="bi bi-person-fill mr-1"></i>Marcus Webb</span>
+    <div class="flex-g2"><button class="fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none-pointer" type="button" onclick="openEnrollModal(2)">Enroll</button></div>
+  </div>
+</div>
+<div class="course-card bg-card-bg-ov-hidden-pointer-trans-shadow-2" data-course-id="3" data-cat="Compliance" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+  <!-- Card header -->
+  <div class="flex-ac-g35-rel-bg-purple-10-p-5-ov-hidden">
+    <div class="abs-t-20px-r-20px-sq80px-bg-purple-13"></div>
+    <div class="icon-box-purple-15-52">
+      <i class="bi bi-shield-check-fill fs15-c-purple"></i>
+    </div>
+    <div>
+      <div class="fs9-fw8-c-body-mb1">POSH & Workplace Safety</div>
+      <div class="flex-g2-ac-wrap">
+        <span class="badge-green-8-xs-fs65-p06-18">Beginner</span>
+        <span class="fs72-muted">Compliance</span>
+      </div>
+    </div>
+  </div>
+  <!-- Card body -->
+  <div class="p-4-5">
+    <div class="flex-g4-fs78-c-muted-mb3">
+      <span><i class="bi bi-clock mr-1"></i>2h 00m</span>
+      <span><i class="bi bi-play-circle mr-1"></i>8 lessons</span>
+      <span><i class="bi bi-people-fill mr-1"></i>547</span>
+    </div>
+    <div class="flex-ac-g01"><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-half c-amber-fs7"></i><span class="fs75-fw7-c-body-ml1">4.9</span></div>
+    <div class="mt-75rem">
+          <div class="flex-jsb-mb1">
+            <span class="fs75-fw6-muted">Completed!</span>
+            <span class="fs75-fw8-c-green">100%</span>
+          </div>
+          <div class="h6px-bg-border-br3px-ov-hidden">
+            <div class="w100pct-h100pct-bg-green-br3px-trans"></div>
+          </div>
+        </div>
+  </div>
+  <!-- Card footer -->
+  <div class="flex-ac-jsb-p-35-5-bt-1">
+    <span class="fs78-muted"><i class="bi bi-person-fill mr-1"></i>Neha Sharma</span>
+    <div class="flex-g2"><button class="course-cert-btn flex-ac-g1-fs75-fw7-c-white-bg-amber-br16-p-12-28-b-none" type="button" data-course-id="3" onclick="openCertModal(3)"><i class="bi bi-award-fill"></i>Certificate</button></div>
+  </div>
+</div>
+<div class="course-card bg-card-bg-ov-hidden-pointer-trans-shadow-4" data-course-id="4" data-cat="Technical" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+  <!-- Card header -->
+  <div class="flex-ac-g35-rel-bg-amber-10-p-5-ov-hidden">
+    <div class="abs-t-20px-r-20px-sq80px-bg-amber-13"></div>
+    <div class="icon-box-amber-15-52">
+      <i class="bi bi-file-earmark-excel-fill fs15-c-amber"></i>
+    </div>
+    <div>
+      <div class="fs9-fw8-c-body-mb1">Advanced Excel for Finance</div>
+      <div class="flex-g2-ac-wrap">
+        <span class="badge-amber-8-xs-fs65-p06-18">Advanced</span>
+        <span class="fs72-muted">Technical</span>
+      </div>
+    </div>
+  </div>
+  <!-- Card body -->
+  <div class="p-4-5">
+    <div class="flex-g4-fs78-c-muted-mb3">
+      <span><i class="bi bi-clock mr-1"></i>8h 00m</span>
+      <span><i class="bi bi-play-circle mr-1"></i>24 lessons</span>
+      <span><i class="bi bi-people-fill mr-1"></i>221</span>
+    </div>
+    <div class="flex-ac-g01"><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-half c-amber-fs7"></i><span class="fs75-fw7-c-body-ml1">4.7</span></div>
+    
+  </div>
+  <!-- Card footer -->
+  <div class="flex-ac-jsb-p-35-5-bt-1">
+    <span class="fs78-muted"><i class="bi bi-person-fill mr-1"></i>David Park</span>
+    <div class="flex-g2"><button class="fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none-pointer" type="button" onclick="openEnrollModal(4)">Enroll</button></div>
+  </div>
+</div>
+<div class="course-card bg-card-bg-ov-hidden-pointer-trans-shadow-3" data-course-id="5" data-cat="Soft Skills" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+  <!-- Card header -->
+  <div class="flex-ac-g35-rel-bg-sky-10-p-5-ov-hidden">
+    <div class="abs-t-20px-r-20px-sq80px-bg-sky-13"></div>
+    <div class="icon-box-sky-15-52">
+      <i class="bi bi-chat-dots-fill fs15-c-sky"></i>
+    </div>
+    <div>
+      <div class="fs9-fw8-c-body-mb1">Effective Communication</div>
+      <div class="flex-g2-ac-wrap">
+        <span class="badge-green-8-xs-fs65-p06-18">Beginner</span>
+        <span class="fs72-muted">Soft Skills</span>
+      </div>
+    </div>
+  </div>
+  <!-- Card body -->
+  <div class="p-4-5">
+    <div class="flex-g4-fs78-c-muted-mb3">
+      <span><i class="bi bi-clock mr-1"></i>3h 30m</span>
+      <span><i class="bi bi-play-circle mr-1"></i>10 lessons</span>
+      <span><i class="bi bi-people-fill mr-1"></i>432</span>
+    </div>
+    <div class="flex-ac-g01"><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-half c-amber-fs7"></i><span class="fs75-fw7-c-body-ml1">4.5</span></div>
+    <div class="mt-75rem">
+          <div class="flex-jsb-mb1">
+            <span class="fs75-fw6-muted">Progress</span>
+            <span class="fs75-fw8-c-sky">30%</span>
+          </div>
+          <div class="h6px-bg-border-br3px-ov-hidden">
+            <div class="w30pct-h100pct-bg-sky-br3px-trans"></div>
+          </div>
+        </div>
+  </div>
+  <!-- Card footer -->
+  <div class="flex-ac-jsb-p-35-5-bt-1">
+    <span class="fs78-muted"><i class="bi bi-person-fill mr-1"></i>Priya Nair</span>
+    <div class="flex-g2"><button class="fs75-fw7-c-white-bg-sky-br16-p-12-28-b-none-pointer" type="button" onclick="openQuizModal(5)">Continue</button></div>
+  </div>
+</div>
+<div class="course-card bg-card-bg-ov-hidden-pointer-trans-shadow-4" data-course-id="6" data-cat="Project Mgmt" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+  <!-- Card header -->
+  <div class="flex-ac-g35-rel-bg-pink-10-p-5-ov-hidden">
+    <div class="abs-t-20px-r-20px-sq80px-bg-pink-13"></div>
+    <div class="icon-box-pink-15-52">
+      <i class="bi bi-kanban-fill fs15-c-pink"></i>
+    </div>
+    <div>
+      <div class="fs9-fw8-c-body-mb1">Agile & Scrum Essentials</div>
+      <div class="flex-g2-ac-wrap">
+        <span class="badge-blue-8-xs-fs65-p06-18">Intermediate</span>
+        <span class="fs72-muted">Project Mgmt</span>
+      </div>
+    </div>
+  </div>
+  <!-- Card body -->
+  <div class="p-4-5">
+    <div class="flex-g4-fs78-c-muted-mb3">
+      <span><i class="bi bi-clock mr-1"></i>5h 00m</span>
+      <span><i class="bi bi-play-circle mr-1"></i>16 lessons</span>
+      <span><i class="bi bi-people-fill mr-1"></i>167</span>
+    </div>
+    <div class="flex-ac-g01"><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-half c-amber-fs7"></i><span class="fs75-fw7-c-body-ml1">4.6</span></div>
+    
+  </div>
+  <!-- Card footer -->
+  <div class="flex-ac-jsb-p-35-5-bt-1">
+    <span class="fs78-muted"><i class="bi bi-person-fill mr-1"></i>Tom Reddy</span>
+    <div class="flex-g2"><button class="fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none-pointer" type="button" onclick="openEnrollModal(6)">Enroll</button></div>
+  </div>
+</div>
+<div class="course-card bg-card-bg-ov-hidden-pointer-trans-shadow-4" data-course-id="7" data-cat="Compliance" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+  <!-- Card header -->
+  <div class="flex-ac-g35-rel-bg-red-10-p-5-ov-hidden">
+    <div class="abs-t-20px-r-20px-sq80px-bg-red-13"></div>
+    <div class="icon-box-red-15-52">
+      <i class="bi bi-receipt-cutoff fs15-c-red"></i>
+    </div>
+    <div>
+      <div class="fs9-fw8-c-body-mb1">Payroll & Tax Compliance</div>
+      <div class="flex-g2-ac-wrap">
+        <span class="badge-blue-8-xs-fs65-p06-18">Intermediate</span>
+        <span class="fs72-muted">Compliance</span>
+      </div>
+    </div>
+  </div>
+  <!-- Card body -->
+  <div class="p-4-5">
+    <div class="flex-g4-fs78-c-muted-mb3">
+      <span><i class="bi bi-clock mr-1"></i>4h 45m</span>
+      <span><i class="bi bi-play-circle mr-1"></i>14 lessons</span>
+      <span><i class="bi bi-people-fill mr-1"></i>289</span>
+    </div>
+    <div class="flex-ac-g01"><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-half c-amber-fs7"></i><span class="fs75-fw7-c-body-ml1">4.8</span></div>
+    
+  </div>
+  <!-- Card footer -->
+  <div class="flex-ac-jsb-p-35-5-bt-1">
+    <span class="fs78-muted"><i class="bi bi-person-fill mr-1"></i>CA Anita Rao</span>
+    <div class="flex-g2"><button class="fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none-pointer" type="button" onclick="openEnrollModal(7)">Enroll</button></div>
+  </div>
+</div>
+<div class="course-card bg-card-bg-ov-hidden-pointer-trans-shadow-4" data-course-id="8" data-cat="Soft Skills" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+  <!-- Card header -->
+  <div class="flex-ac-g35-rel-bg-violet-10-p-5-ov-hidden">
+    <div class="abs-t-20px-r-20px-sq80px-bg-violet-13"></div>
+    <div class="icon-box-violet-15-52">
+      <i class="bi bi-emoji-smile-fill fs15-c-violet"></i>
+    </div>
+    <div>
+      <div class="fs9-fw8-c-body-mb1">Emotional Intelligence at Work</div>
+      <div class="flex-g2-ac-wrap">
+        <span class="badge-green-8-xs-fs65-p06-18">Beginner</span>
+        <span class="fs72-muted">Soft Skills</span>
+      </div>
+    </div>
+  </div>
+  <!-- Card body -->
+  <div class="p-4-5">
+    <div class="flex-g4-fs78-c-muted-mb3">
+      <span><i class="bi bi-clock mr-1"></i>2h 30m</span>
+      <span><i class="bi bi-play-circle mr-1"></i>9 lessons</span>
+      <span><i class="bi bi-people-fill mr-1"></i>501</span>
+    </div>
+    <div class="flex-ac-g01"><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-fill c-amber-fs7"></i><i class="bi bi-star-half c-amber-fs7"></i><span class="fs75-fw7-c-body-ml1">4.9</span></div>
+    
+  </div>
+  <!-- Card footer -->
+  <div class="flex-ac-jsb-p-35-5-bt-1">
+    <span class="fs78-muted"><i class="bi bi-person-fill mr-1"></i>Dr. Renu Mehta</span>
+    <div class="flex-g2"><button class="fs75-fw7-c-white-bg-blue-br16-p-12-28-b-none-pointer" type="button" onclick="openEnrollModal(8)">Enroll</button></div>
+  </div>
+</div>
+        </div>
+      </div>
+
+      <!-- ══ TAB: MY LEARNING ══ -->
+      <div class="d-none" id="panel-my">
+        <div class="grid-g4" id="myLearningList">
+<div class="card-hr flex-ac-wrap-g4-p-5" data-my-id="1">
+  <div class="icon-box-blue-10-52">
+    <i class="bi bi-person-workspace fs14-c-blue"></i>
+  </div>
+  <div class="fl1-mw200">
+    <div class="fw8-c-body-mb1">Leadership Fundamentals</div>
+    <div class="fs78-muted">Leadership · 6h 30m · Dr. Sarah Lin</div>
+    <div class="mt-2">
+      <div class="prog-md2">
+        <div class="w65pct-h100pct-bg-blue-br4px-trans"></div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-col-ac-g3-mnw80px-tc">
+    <span class="fs13-fw9-c-blue">65%</span>
+    <span class="fs72-muted">In Progress</span>
+  </div>
+  <div class="flex-g2"><button class="fs8-fw7-c-white-bg-blue-br2-p-16-35-b-none-pointer" type="button" onclick="openQuizModal(1)">Continue</button></div>
+</div>
+<div class="card-hr flex-ac-wrap-g4-p-5" data-my-id="3">
+  <div class="icon-box-purple-10-52">
+    <i class="bi bi-shield-check-fill fs14-c-purple"></i>
+  </div>
+  <div class="fl1-mw200">
+    <div class="fw8-c-body-mb1">POSH & Workplace Safety</div>
+    <div class="fs78-muted">Compliance · 2h 00m · Neha Sharma</div>
+    <div class="mt-2">
+      <div class="prog-md2">
+        <div class="w100pct-h100pct-bg-green-br4px-trans"></div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-col-ac-g3-mnw80px-tc">
+    <span class="fs13-fw9-c-green">100%</span>
+    <span class="fs72-muted">Complete</span>
+  </div>
+  <div class="flex-g2"><button class="flex-ac-g15-fs8-fw7-c-white-bg-amber-br2-p-16-35-b-none" type="button" onclick="openCertModal(3)"><i class="bi bi-award-fill"></i>Certificate</button></div>
+</div>
+<div class="card-hr flex-ac-wrap-g4-p-5" data-my-id="5">
+  <div class="icon-box-sky-10-52">
+    <i class="bi bi-chat-dots-fill fs14-c-sky"></i>
+  </div>
+  <div class="fl1-mw200">
+    <div class="fw8-c-body-mb1">Effective Communication</div>
+    <div class="fs78-muted">Soft Skills · 3h 30m · Priya Nair</div>
+    <div class="mt-2">
+      <div class="prog-md2">
+        <div class="w30pct-h100pct-bg-sky-br4px-trans"></div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-col-ac-g3-mnw80px-tc">
+    <span class="fs13-fw9-c-sky">30%</span>
+    <span class="fs72-muted">In Progress</span>
+  </div>
+  <div class="flex-g2"><button class="fs8-fw7-c-white-bg-sky-br2-p-16-35-b-none-pointer" type="button" onclick="openQuizModal(5)">Continue</button></div>
+</div>
+        </div>
+      </div>
+
+      <!-- ══ TAB: LEARNING PATHS ══ -->
+      <div class="d-none" id="panel-paths">
+        <div class="grid-g5">
+<div class="card-hr p-6">
+  <div class="flex-ac-jsb-wrap-g3-mb4">
+    <div class="flex-ac-g35">
+      <div class="icon-box-blue-9-48">
+        <i class="bi bi-person-badge-fill fs13-c-blue"></i>
+      </div>
+      <div>
+        <div class="fs1-fw9-c-body">HR Professional Track</div>
+        <div class="fs8-muted">4 courses · 24h total</div>
+      </div>
+    </div>
+    <div class="flex-ac-g35">
+      <span class="fs82-fw7-c-muted">1/4 complete</span>
+      <button class="fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none-pointer" type="button" onclick="startPath('HR Professional Track',[1,2,3,7])">Start Path</button>
+    </div>
+  </div>
+  <p class="fs82-c-muted-m-0-0-4">Complete pathway for HR generalists — leadership, compliance, analytics, and payroll.</p>
+  <div class="h6px-bg-border-br3px-mb4-ov-hidden">
+    <div class="w25pct-h100pct-bg-blue-br3px-trans"></div>
+  </div>
+  <div class="flex-g3-wrap"><div class="flex-ac-g2-bg-bg-br25-p-2-35-2"><i class="bi bi-play-circle-fill fs85-c-blue"></i><span class="fs78-fw7-c-body">Leadership Fundamentals</span></div><div class="flex-ac-g2-bg-bg-br25-p-2-35"><i class="bi bi-lock-fill fs85-c-muted"></i><span class="fs78-fw7-c-muted">Data Analytics for HR</span></div><div class="flex-ac-g2-bg-bg-br25-p-2-35-3"><i class="bi bi-check-circle-fill fs85-c-green"></i><span class="fs78-fw7-c-green">POSH & Workplace Safety</span></div><div class="flex-ac-g2-bg-bg-br25-p-2-35"><i class="bi bi-lock-fill fs85-c-muted"></i><span class="fs78-fw7-c-muted">Payroll & Tax Compliance</span></div></div>
+</div>
+<div class="card-hr p-6">
+  <div class="flex-ac-jsb-wrap-g3-mb4">
+    <div class="flex-ac-g35">
+      <div class="icon-box-green-9-48">
+        <i class="bi bi-people-fill fs13-c-green"></i>
+      </div>
+      <div>
+        <div class="fs1-fw9-c-body">People Manager Track</div>
+        <div class="fs8-muted">4 courses · 18h total</div>
+      </div>
+    </div>
+    <div class="flex-ac-g35">
+      <span class="fs82-fw7-c-muted">0/4 complete</span>
+      <button class="fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none-pointer" type="button" onclick="startPath('People Manager Track',[1,5,6,8])">Start Path</button>
+    </div>
+  </div>
+  <p class="fs82-c-muted-m-0-0-4">Communication, EQ, Agile, and leadership skills for team leads and managers.</p>
+  <div class="h6px-bg-border-br3px-mb4-ov-hidden">
+    <div class="w0pct-h100pct-bg-green-br3px-trans"></div>
+  </div>
+  <div class="flex-g3-wrap"><div class="flex-ac-g2-bg-bg-br25-p-2-35-2"><i class="bi bi-play-circle-fill fs85-c-blue"></i><span class="fs78-fw7-c-body">Leadership Fundamentals</span></div><div class="flex-ac-g2-bg-bg-br25-p-2-35-4"><i class="bi bi-play-circle-fill fs85-c-sky"></i><span class="fs78-fw7-c-body">Effective Communication</span></div><div class="flex-ac-g2-bg-bg-br25-p-2-35"><i class="bi bi-lock-fill fs85-c-muted"></i><span class="fs78-fw7-c-muted">Agile & Scrum Essentials</span></div><div class="flex-ac-g2-bg-bg-br25-p-2-35"><i class="bi bi-lock-fill fs85-c-muted"></i><span class="fs78-fw7-c-muted">Emotional Intelligence at Work</span></div></div>
+</div>
+<div class="card-hr p-6">
+  <div class="flex-ac-jsb-wrap-g3-mb4">
+    <div class="flex-ac-g35">
+      <div class="icon-box-red-9-48">
+        <i class="bi bi-shield-fill fs13-c-red"></i>
+      </div>
+      <div>
+        <div class="fs1-fw9-c-body">Compliance Fast Track</div>
+        <div class="fs8-muted">2 courses · 7h total</div>
+      </div>
+    </div>
+    <div class="flex-ac-g35">
+      <span class="fs82-fw7-c-muted">1/2 complete</span>
+      <button class="fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none-pointer" type="button" onclick="startPath('Compliance Fast Track',[3,7])">Start Path</button>
+    </div>
+  </div>
+  <p class="fs82-c-muted-m-0-0-4">Mandatory compliance and regulatory training — complete in one week.</p>
+  <div class="h6px-bg-border-br3px-mb4-ov-hidden">
+    <div class="w50pct-h100pct-bg-red-br3px-trans"></div>
+  </div>
+  <div class="flex-g3-wrap"><div class="flex-ac-g2-bg-bg-br25-p-2-35-3"><i class="bi bi-check-circle-fill fs85-c-green"></i><span class="fs78-fw7-c-green">POSH & Workplace Safety</span></div><div class="flex-ac-g2-bg-bg-br25-p-2-35"><i class="bi bi-lock-fill fs85-c-muted"></i><span class="fs78-fw7-c-muted">Payroll & Tax Compliance</span></div></div>
+</div>
+        </div>
+      </div>
+
+      <!-- ══ TAB: LEADERBOARD ══ -->
+      <div class="d-none" id="panel-leaderboard">
+        <div class="card-hr p-6">
+          <div class="card-hd p-0-mb5-b-none">
+            <div><div class="card-title-hr">Learning Leaderboard</div><div class="card-subtitle-hr">Top learners this quarter — ranked by hours completed and certifications earned</div></div>
+          </div>
+          <div class="grid-g3">
+<div class="flex-ac-g4-bg-blue-3-br35-p-35-5">
+  <span class="w32px-fs13-tc">🥇</span>
+  <div class="avatar-blue-15-40">SC</div>
+  <div class="fl1">
+    <div class="fs875-fw8-c-body">Sarah Chen</div>
+    <div class="fs75-muted">Engineering</div>
+  </div>
+  <div class="flex-wrap-g6-fs8">
+    <div class="tc"><div class="fw9-c-body">42h</div><div class="c-muted">Hours</div></div>
+    <div class="tc"><div class="fw9-c-body">6</div><div class="c-muted">Certs</div></div>
+    <div class="tc"><div class="fw9-c-blue">98</div><div class="c-muted">Score</div></div>
+  </div>
+</div>
+<div class="flex-ac-g4-bg-green-3-br35-p-35-5">
+  <span class="w32px-fs13-tc">🥈</span>
+  <div class="avatar-green-15-40">MW</div>
+  <div class="fl1">
+    <div class="fs875-fw8-c-body">Marcus Webb</div>
+    <div class="fs75-muted">Marketing</div>
+  </div>
+  <div class="flex-wrap-g6-fs8">
+    <div class="tc"><div class="fw9-c-body">38h</div><div class="c-muted">Hours</div></div>
+    <div class="tc"><div class="fw9-c-body">5</div><div class="c-muted">Certs</div></div>
+    <div class="tc"><div class="fw9-c-green">94</div><div class="c-muted">Score</div></div>
+  </div>
+</div>
+<div class="flex-ac-g4-bg-purple-3-br35-p-35-5">
+  <span class="w32px-fs13-tc">🥉</span>
+  <div class="avatar-purple-15-40">PN</div>
+  <div class="fl1">
+    <div class="fs875-fw8-c-body">Priya Nair</div>
+    <div class="fs75-muted">HR & Admin</div>
+  </div>
+  <div class="flex-wrap-g6-fs8">
+    <div class="tc"><div class="fw9-c-body">35h</div><div class="c-muted">Hours</div></div>
+    <div class="tc"><div class="fw9-c-body">5</div><div class="c-muted">Certs</div></div>
+    <div class="tc"><div class="fw9-c-purple">91</div><div class="c-muted">Score</div></div>
+  </div>
+</div>
+<div class="flex-ac-g4-bg-card-bg-br35-p-35-5">
+  <span class="w32px-fs13-tc">#4</span>
+  <div class="avatar-amber-15-40">DP</div>
+  <div class="fl1">
+    <div class="fs875-fw8-c-body">David Park</div>
+    <div class="fs75-muted">Finance</div>
+  </div>
+  <div class="flex-wrap-g6-fs8">
+    <div class="tc"><div class="fw9-c-body">31h</div><div class="c-muted">Hours</div></div>
+    <div class="tc"><div class="fw9-c-body">4</div><div class="c-muted">Certs</div></div>
+    <div class="tc"><div class="fw9-c-amber">88</div><div class="c-muted">Score</div></div>
+  </div>
+</div>
+<div class="flex-ac-g4-bg-card-bg-br35-p-35-5">
+  <span class="w32px-fs13-tc">#5</span>
+  <div class="avatar-sky-15-40">ER</div>
+  <div class="fl1">
+    <div class="fs875-fw8-c-body">Emily Roth</div>
+    <div class="fs75-muted">Product</div>
+  </div>
+  <div class="flex-wrap-g6-fs8">
+    <div class="tc"><div class="fw9-c-body">28h</div><div class="c-muted">Hours</div></div>
+    <div class="tc"><div class="fw9-c-body">3</div><div class="c-muted">Certs</div></div>
+    <div class="tc"><div class="fw9-c-sky">84</div><div class="c-muted">Score</div></div>
+  </div>
+</div>
+<div class="flex-ac-g4-bg-card-bg-br35-p-35-5">
+  <span class="w32px-fs13-tc">#6</span>
+  <div class="avatar-pink-15-40">TR</div>
+  <div class="fl1">
+    <div class="fs875-fw8-c-body">Tom Reddy</div>
+    <div class="fs75-muted">Sales</div>
+  </div>
+  <div class="flex-wrap-g6-fs8">
+    <div class="tc"><div class="fw9-c-body">25h</div><div class="c-muted">Hours</div></div>
+    <div class="tc"><div class="fw9-c-body">3</div><div class="c-muted">Certs</div></div>
+    <div class="tc"><div class="fw9-c-pink">80</div><div class="c-muted">Score</div></div>
+  </div>
+</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ══ ENROLL MODAL ══ -->
+<div class="tr-modal-overlay d-none" id="enrollOverlay" onclick="if(event.target===this)closeEnrollModal()">
+  <div class="tr-modal mw420px">
+    <div class="flex-ac-g35-h72px-p-0-6" id="enrollHeader"></div>
+    <div class="p-5-6">
+      <div class="fs875-c-muted-mb5" id="enrollBody"></div>
+      <div class="flex-wrap-g25-mb5" id="enrollSkills"></div>
+      <div class="flex-g3-fs82-c-muted-mb6" id="enrollMeta"></div>
+    </div>
+    <div class="flex-jfe-g25-p-4-6-bt-1">
+      <button type="button" class="btn-hr btn-outline-hr" onclick="closeEnrollModal()">Cancel</button>
+      <button class="fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none-pointer" type="button" id="enrollConfirmBtn" onclick="confirmEnroll()">Enroll Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ QUIZ MODAL ══ -->
+<div class="tr-modal-overlay d-none" id="quizOverlay" onclick="if(event.target===this)closeQuizModal()">
+  <div class="tr-modal mw500px-ov-y-auto">
+    <div class="flex-ac-jsb-p-5-6-bb-1">
+      <div><div class="fs1-fw8" id="quizTitle">Course Quiz</div><div class="fs78-muted" id="quizSubtitle">Answer all questions to continue</div></div>
+      <button class="ghost-icon-lg" type="button" onclick="closeQuizModal()">×</button>
+    </div>
+    <div class="p-6" id="quizBody"></div>
+    <div class="flex-jfe-g2-p-4-6-bt-1">
+      <button type="button" class="btn-hr btn-outline-hr" onclick="closeQuizModal()">Cancel</button>
+      <button class="fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none-pointer" type="button" id="quizSubmitBtn" onclick="submitQuiz()">Submit Quiz</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CERTIFICATE MODAL ══ -->
+<div class="tr-modal-overlay d-none" id="certOverlay" onclick="if(event.target===this)closeCertModal()">
+  <div class="tr-modal mw560px">
+    <div class="p-10-tc" id="certContent"></div>
+    <div class="flex-jfc-g25-p-4-6-bt-1">
+      <button class="fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none-pointer" type="button" onclick="handleDownloadCertificate()"><i class="bi bi-download me-1"></i>Download PDF</button>
+      <button type="button" class="btn-hr btn-outline-hr" onclick="closeCertModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD COURSE MODAL ══ -->
+<div class="tr-modal-overlay d-none" id="addCourseOverlay" onclick="if(event.target===this)closeAddCourseModal()">
+  <div class="tr-modal mw520px-ov-y-auto">
+    <div class="flex-ac-jsb-p-5-6-bb-1">
+      <div><div class="fs1-fw8">Add New Course</div><div class="fs78-muted">Create a new learning course</div></div>
+      <button class="ghost-icon-lg" type="button" onclick="closeAddCourseModal()">×</button>
+    </div>
+    <div class="flex-col-g4-p-6">
+      <div><label class="d-block-fs82-fw7-mb15">Course Title *</label><input class="tr-input" id="acTitle" placeholder="e.g. Advanced Leadership Skills"/></div>
+      <div class="grid-g4-2">
+        <div><label class="d-block-fs82-fw7-mb15">Category</label>
+          <select class="tr-input" id="acCat"><option>Technical</option><option>Leadership</option><option>Analytics</option><option>Compliance</option><option>Soft Skills</option><option>Project Mgmt</option></select></div>
+        <div><label class="d-block-fs82-fw7-mb15">Level</label>
+          <select class="tr-input" id="acLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
+      </div>
+      <div class="grid-g4-2">
+        <div><label class="d-block-fs82-fw7-mb15">Duration</label><input class="tr-input" id="acDuration" placeholder="e.g. 4h 30m"/></div>
+        <div><label class="d-block-fs82-fw7-mb15">Instructor</label><input class="tr-input" id="acInstructor" placeholder="Instructor name"/></div>
+      </div>
+      <div class="grid-g4-2">
+        <div><label class="d-block-fs82-fw7-mb15">Max Seats</label><input class="tr-input" id="acSeats" type="number" placeholder="e.g. 50"/></div>
+        <div><label class="d-block-fs82-fw7-mb15">Rating (1-5)</label><input class="tr-input" id="acRating" type="number" step=".1" min="1" max="5" placeholder="4.5"/></div>
+      </div>
+      <div><label class="d-block-fs82-fw7-mb15">Description</label><textarea class="tr-input resize-none" id="acDesc" rows="3" placeholder="Brief course description…"></textarea></div>
+      <div class="d-none-bg-green-8-br25-p-3-4" id="addSuccessMsg"><i class="bi bi-check-circle-fill c-green"></i><span class="fs875-fw7-c-green">Course added successfully!</span></div>
+    </div>
+    <div class="flex-jfe-g2-p-4-6-bt-1">
+      <button type="button" class="btn-hr btn-outline-hr" onclick="closeAddCourseModal()">Cancel</button>
+      <button class="flex-ac-g16-fs85-fw7-c-white-bg-blue-br2-p-2-5-b-none" type="button" id="addCourseBtn" onclick="submitAddCourse()"><i class="bi bi-plus-lg"></i>Add Course</button>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+var COURSES    = [{"id": 1, "title": "Leadership Fundamentals", "cat": "Leadership", "level": "Intermediate", "duration": "6h 30m", "lessons": 18, "instructor": "Dr. Sarah Lin", "rating": 4.8, "students": 312, "img": "bi-person-workspace", "color": "#5B8FF9", "bg": "rgba(91,143,249,.1)", "desc": "Master the core skills of modern leadership \u2014 communication, delegation, conflict resolution, and team motivation for today's hybrid workplace.", "skills": ["Communication", "Delegation", "Conflict Resolution", "Team Building"], "quiz": [{"q": "What is the most important leadership quality?", "opts": ["Authority", "Empathy", "Speed", "Efficiency"], "a": 1}, {"q": "Delegation is primarily about:", "opts": ["Avoiding work", "Building trust & skills in others", "Speed", "Control"], "a": 1}]}, {"id": 2, "title": "Data Analytics for HR", "cat": "Analytics", "level": "Beginner", "duration": "4h 15m", "lessons": 12, "instructor": "Marcus Webb", "rating": 4.6, "students": 198, "img": "bi-bar-chart-line-fill", "color": "#10B981", "bg": "rgba(16,185,129,.1)", "desc": "Learn to use data to drive HR decisions \u2014 from workforce planning and attrition prediction to compensation benchmarking with Excel and Python.", "skills": ["Data Visualization", "Excel", "Statistical Thinking", "Dashboarding"], "quiz": [{"q": "Which metric measures employee retention?", "opts": ["NPS", "Retention Rate", "EBITDA", "Conversion Rate"], "a": 1}]}, {"id": 3, "title": "POSH & Workplace Safety", "cat": "Compliance", "level": "Beginner", "duration": "2h 00m", "lessons": 8, "instructor": "Neha Sharma", "rating": 4.9, "students": 547, "img": "bi-shield-check-fill", "color": "#7C3AED", "bg": "rgba(124,58,237,.1)", "desc": "Mandatory compliance training on Prevention of Sexual Harassment (POSH), workplace safety regulations, and creating an inclusive work environment.", "skills": ["POSH Act", "Safety Regulations", "Incident Reporting", "Inclusivity"], "quiz": [{"q": "POSH Act was enacted in:", "opts": ["2005", "2013", "2018", "2010"], "a": 1}, {"q": "ICC stands for:", "opts": ["Internal Compliance Committee", "Internal Complaints Committee", "International Culture Committee", "None"], "a": 1}]}, {"id": 4, "title": "Advanced Excel for Finance", "cat": "Technical", "level": "Advanced", "duration": "8h 00m", "lessons": 24, "instructor": "David Park", "rating": 4.7, "students": 221, "img": "bi-file-earmark-excel-fill", "color": "#F59E0B", "bg": "rgba(245,158,11,.1)", "desc": "Power Query, Power Pivot, dynamic arrays, LAMBDA functions, and financial modelling techniques used by top finance and HR analytics professionals.", "skills": ["Power Query", "Power Pivot", "LAMBDA", "Financial Modelling"], "quiz": [{"q": "Power Query is used for:", "opts": ["Presentations", "Data transformation", "Email", "Project management"], "a": 1}]}, {"id": 5, "title": "Effective Communication", "cat": "Soft Skills", "level": "Beginner", "duration": "3h 30m", "lessons": 10, "instructor": "Priya Nair", "rating": 4.5, "students": 432, "img": "bi-chat-dots-fill", "color": "#0EA5E9", "bg": "rgba(14,165,233,.1)", "desc": "Verbal, written, and non-verbal communication skills for the modern workplace \u2014 email writing, presentations, active listening, and giving feedback.", "skills": ["Active Listening", "Email Writing", "Presentations", "Feedback"], "quiz": [{"q": "Active listening means:", "opts": ["Waiting to speak", "Fully concentrating on the speaker", "Multitasking", "Quick responses"], "a": 1}]}, {"id": 6, "title": "Agile & Scrum Essentials", "cat": "Project Mgmt", "level": "Intermediate", "duration": "5h 00m", "lessons": 16, "instructor": "Tom Reddy", "rating": 4.6, "students": 167, "img": "bi-kanban-fill", "color": "#EC4899", "bg": "rgba(236,72,153,.1)", "desc": "Understand Scrum ceremonies, Sprint planning, backlog grooming, retrospectives, and how to adapt Agile principles across non-engineering teams.", "skills": ["Scrum", "Sprint Planning", "Retrospectives", "Agile Mindset"], "quiz": [{"q": "A Sprint is typically:", "opts": ["6 months", "1-4 weeks", "1 year", "1 day"], "a": 1}]}, {"id": 7, "title": "Payroll & Tax Compliance", "cat": "Compliance", "level": "Intermediate", "duration": "4h 45m", "lessons": 14, "instructor": "CA Anita Rao", "rating": 4.8, "students": 289, "img": "bi-receipt-cutoff", "color": "#EF4444", "bg": "rgba(239,68,68,.1)", "desc": "Complete guide to payroll processing, TDS, PF/ESI contributions, Form 16, bonus calculations, and staying compliant with Indian tax laws.", "skills": ["TDS", "PF/ESI", "Form 16", "Payroll Software"], "quiz": [{"q": "TDS stands for:", "opts": ["Tax Deducted at Source", "Total Deduction Summary", "Tax Due Statement", "None"], "a": 0}]}, {"id": 8, "title": "Emotional Intelligence at Work", "cat": "Soft Skills", "level": "Beginner", "duration": "2h 30m", "lessons": 9, "instructor": "Dr. Renu Mehta", "rating": 4.9, "students": 501, "img": "bi-emoji-smile-fill", "color": "#8B5CF6", "bg": "rgba(139,92,246,.1)", "desc": "Understand and develop your EQ \u2014 self-awareness, empathy, emotional regulation, and social skills that drive performance and better workplace relationships.", "skills": ["Self-awareness", "Empathy", "Emotional Regulation", "Resilience"], "quiz": [{"q": "EQ stands for:", "opts": ["Education Quotient", "Emotional Quotient", "Efficiency Quality", "Engagement Quota"], "a": 1}]}];
+var enrolled   = [1,3,5];
+var progress   = {1:65,3:100,5:30};
+var COLORS_MAP = {};
+COURSES.forEach(function(c){ COLORS_MAP[c.id] = c.color; });
+
+var _activeTab = 'courses';
+var _activeCat = 'All';
+var _searchQ   = '';
+var _quizId    = null;
+var _enrollId  = null;
+var _quizAnswers = {};
+var _quizSubmitted = false;
+
+/* ── Tab switch ────────────────────────────────────────────────────── */
+function switchTab(id) {
+  _activeTab = id;
+  ['courses','my','paths','leaderboard'].forEach(function(t) {
+    var panel = document.getElementById('panel-'+t);
+    panel.classList.toggle('d-none', t !== id);
+    panel.style.display = '';
+    document.getElementById('tab-'+t).classList.toggle('active', t===id);
+  });
+}
+
+/* ── Category filter ───────────────────────────────────────────────── */
+function filterCat(cat) {
+  _activeCat = cat;
+  document.querySelectorAll('.cat-filter-btn').forEach(function(btn) {
+    var isCat = btn.getAttribute('data-cat') === cat;
+    btn.style.background   = isCat ? 'rgba(91,143,249,.12)' : 'transparent';
+    btn.style.color        = isCat ? '#5B8FF9' : 'var(--body-text-muted)';
+    btn.style.borderColor  = isCat ? '#5B8FF9' : 'var(--body-border)';
+  });
+  filterCourses();
+}
+
+function filterCourses() {
+  _searchQ = (document.getElementById('courseSearch').value||'').toLowerCase();
+  document.querySelectorAll('.course-card').forEach(function(card) {
+    var cat   = card.getAttribute('data-cat');
+    var title = card.querySelector('[style*="font-weight:800"]')?.textContent?.toLowerCase()||'';
+    var matchCat  = _activeCat==='All' || cat===_activeCat;
+    var matchQ    = !_searchQ || title.includes(_searchQ) || cat.toLowerCase().includes(_searchQ);
+    card.style.display = (matchCat&&matchQ) ? '' : 'none';
+  });
+}
+
+/* ── Enroll modal ──────────────────────────────────────────────────── */
+function openEnrollModal(id) {
+  var c = COURSES.find(function(x){return x.id===id;});
+  if (!c) return;
+  _enrollId = id;
+  var hdr = document.getElementById('enrollHeader');
+  hdr.style.background = c.bg;
+  hdr.innerHTML = '<div style="width:48px;height:48px;border-radius:.875rem;background:'+c.color+'25;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="bi '+c.img+'" style="color:'+c.color+';font-size:1.4rem"></i></div><div><div style="font-weight:800;font-size:1rem;color:var(--body-text)">'+c.title+'</div><div style="font-size:.78rem;color:var(--body-text-muted)">'+c.cat+' · '+c.level+'</div></div>';
+  document.getElementById('enrollBody').textContent = c.desc;
+  document.getElementById('enrollSkills').innerHTML = c.skills.map(function(s){return '<span style="font-size:.75rem;font-weight:700;padding:.25rem .625rem;border-radius:999px;background:'+c.color+'15;color:'+c.color+'">'+s+'</span>';}).join('');
+  document.getElementById('enrollMeta').innerHTML   = '<span><i class="bi bi-clock me-1"></i>'+c.duration+'</span><span><i class="bi bi-play-circle me-1"></i>'+c.lessons+' lessons</span><span><i class="bi bi-people-fill me-1"></i>'+c.students+' students</span><span><i class="bi bi-person-fill me-1"></i>'+c.instructor+'</span>';
+  document.getElementById('enrollOverlay').classList.remove('d-none');
+  document.getElementById('enrollOverlay').style.display = 'flex';
+}
+function closeEnrollModal(){ document.getElementById('enrollOverlay').classList.add('d-none'); document.getElementById('enrollOverlay').style.display='none'; _enrollId=null; }
+
+function confirmEnroll() {
+  if (_enrollId===null) return;
+  var btn = document.getElementById('enrollConfirmBtn');
+  btn.innerHTML = '<span class="tr-spinner" style="display:inline-block"></span>Enrolling…';
+  btn.disabled = true;
+  setTimeout(function() {
+    enrolled.push(_enrollId);
+    progress[_enrollId] = 0;
+    refreshStats();
+    updateCourseCard(_enrollId);
+    closeEnrollModal();
+  }, 1000);
+}
+
+/* ── Quiz modal ────────────────────────────────────────────────────── */
+function openQuizModal(id) {
+  var c = COURSES.find(function(x){return x.id===id;});
+  if (!c) return;
+  _quizId = id; _quizAnswers = {}; _quizSubmitted = false;
+  document.getElementById('quizTitle').textContent    = c.title + ' — Quiz';
+  document.getElementById('quizSubtitle').textContent = c.lessons + ' lessons · ' + c.duration;
+  document.getElementById('quizBody').innerHTML = c.quiz.map(function(q,qi) {
+    return '<div style="margin-bottom:1.5rem"><div style="font-weight:700;font-size:.875rem;margin-bottom:.75rem;color:var(--body-text)">'+(qi+1)+'. '+q.q+'</div>'+
+    q.opts.map(function(opt,oi){return '<div class="quiz-opt" data-q="'+qi+'" data-o="'+oi+'" onclick="selectOpt('+qi+','+oi+')"><div style="width:22px;height:22px;border-radius:50%;border:2px solid var(--body-border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0">'+String.fromCharCode(65+oi)+'</div><span style="font-size:.875rem">'+opt+'</span></div>';}).join('')+'</div>';
+  }).join('');
+  document.getElementById('quizOverlay').classList.remove('d-none');
+  document.getElementById('quizOverlay').style.display = 'flex';
+}
+function closeQuizModal(){ document.getElementById('quizOverlay').classList.add('d-none'); document.getElementById('quizOverlay').style.display='none'; }
+
+function selectOpt(qi,oi) {
+  if (_quizSubmitted) return;
+  _quizAnswers[qi] = oi;
+  document.querySelectorAll('.quiz-opt[data-q="'+qi+'"]').forEach(function(el){
+    el.classList.toggle('selected', parseInt(el.getAttribute('data-o'))===oi);
+  });
+}
+
+function submitQuiz() {
+  if (_quizSubmitted) { closeQuizModal(); return; }
+  var c = COURSES.find(function(x){return x.id===_quizId;});
+  if (!c) return;
+  _quizSubmitted = true;
+  var correct = 0;
+  c.quiz.forEach(function(q,qi) {
+    var chosen = _quizAnswers[qi];
+    document.querySelectorAll('.quiz-opt[data-q="'+qi+'"]').forEach(function(el) {
+      var oi = parseInt(el.getAttribute('data-o'));
+      if (oi===q.a)   el.classList.add('correct');
+      if (oi===chosen && oi!==q.a) el.classList.add('wrong');
+    });
+    if (chosen===q.a) correct++;
+  });
+  var score = Math.round(correct/c.quiz.length*100);
+  var newProg = Math.min(100, (progress[_quizId]||0) + score);
+  progress[_quizId] = newProg;
+  if (newProg >= 100) progress[_quizId] = 100;
+  document.getElementById('quizSubmitBtn').textContent = 'Score: '+score+'% — Close';
+  refreshStats();
+  updateCourseCard(_quizId);
+}
+
+/* ── Certificate modal ─────────────────────────────────────────────── */
+var _certId = null;
+function openCertModal(id) {
+  var c = COURSES.find(function(x){return x.id===id;});
+  if (!c) return;
+  _certId = id;
+  document.getElementById('certContent').innerHTML =
+    '<div style="width:72px;height:72px;border-radius:50%;background:'+c.color+'20;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem"><i class="bi bi-award-fill" style="color:#F59E0B;font-size:2rem"></i></div>'+
+    '<div style="font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--body-text-muted);margin-bottom:.5rem">Certificate of Completion</div>'+
+    '<h2 style="font-weight:900;font-size:1.5rem;color:var(--body-text);margin-bottom:.375rem">'+c.title+'</h2>'+
+    '<p style="color:var(--body-text-muted);margin-bottom:1.5rem">Awarded to <strong>Ravindra Sharma</strong> · Instructor: '+c.instructor+'</p>'+
+    '<div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">'+
+    '<span style="padding:.35rem .875rem;border-radius:999px;background:'+c.color+'15;color:'+c.color+';font-size:.8rem;font-weight:700">'+c.cat+'</span>'+
+    '<span style="padding:.35rem .875rem;border-radius:999px;background:rgba(16,185,129,.12);color:#10B981;font-size:.8rem;font-weight:700">✓ Completed</span>'+
+    '</div>';
+  document.getElementById('certOverlay').classList.remove('d-none');
+  document.getElementById('certOverlay').style.display = 'flex';
+}
+function closeCertModal(){ document.getElementById('certOverlay').classList.add('d-none'); document.getElementById('certOverlay').style.display='none'; }
+
+function handleDownloadCertificate() {
+  var c = COURSES.find(function(x){return x.id===_certId;});
+  if (!c) return;
+  showToast('Certificate for "' + c.title + '" downloaded as PDF', 'success');
+}
+
+/* ── Add Course modal ──────────────────────────────────────────────── */
+function openAddCourseModal() {
+  document.getElementById('addCourseOverlay').classList.remove('d-none');
+  document.getElementById('addCourseOverlay').style.display='flex';
+  document.getElementById('addSuccessMsg').style.display='none';
+  document.getElementById('addCourseBtn').innerHTML='<i class="bi bi-plus-lg"></i>Add Course';
+  document.getElementById('addCourseBtn').disabled=false;
+}
+function closeAddCourseModal(){ document.getElementById('addCourseOverlay').classList.add('d-none'); document.getElementById('addCourseOverlay').style.display='none'; }
+
+function submitAddCourse() {
+  var title = (document.getElementById('acTitle').value||'').trim();
+  if (!title) { document.getElementById('acTitle').style.borderColor='#EF4444'; return; }
+  var btn = document.getElementById('addCourseBtn');
+  btn.innerHTML = '<span class="tr-spinner" style="display:inline-block;margin-right:.375rem"></span>Adding…';
+  btn.disabled = true;
+  setTimeout(function() {
+    document.getElementById('addSuccessMsg').style.display='flex';
+    btn.innerHTML='<i class="bi bi-check-lg"></i>Added!';
+    btn.style.background='#10B981';
+    setTimeout(function(){ closeAddCourseModal(); }, 1400);
+  }, 1200);
+}
+
+/* ── Refresh stats ─────────────────────────────────────────────────── */
+function refreshStats() {
+  var completed = enrolled.filter(function(id){return (progress[id]||0)>=100;});
+  var hours     = enrolled.reduce(function(s,id){
+    var c=COURSES.find(function(x){return x.id===id;});
+    return s + (c?parseFloat(c.duration):0);
+  },0);
+  document.getElementById('statEnrolled').textContent  = enrolled.length;
+  document.getElementById('statCompleted').textContent = completed.length;
+  document.getElementById('statHours').textContent     = hours.toFixed(1)+'h';
+  document.getElementById('statCerts').textContent     = completed.length;
+}
+
+/* ── Update a single course card after enroll/progress ──────────────── */
+function updateCourseCard(id) {
+  var c    = COURSES.find(function(x){return x.id===id;});
+  if (!c) return;
+  var card = document.querySelector('.course-card[data-course-id="'+id+'"]');
+  if (!card) return;
+  var prog   = progress[id]||0;
+  var isDone = prog>=100;
+  var isEnr  = enrolled.includes(id);
+
+  // Enrol border
+  card.style.border = isEnr ? '1.5px solid '+c.color+'40' : '1.5px solid var(--body-border)';
+
+  // Progress bar inside card body
+  var existingProg = card.querySelector('[data-prog]');
+  var bodyDiv = card.querySelectorAll('div')[1]; // second div = card body
+  if (isEnr) {
+    var label   = isDone ? 'Completed!' : 'Progress';
+    var col     = isDone ? '#10B981' : c.color;
+    var progHtml='<div data-prog="1" style="margin-top:.75rem"><div style="display:flex;justify-content:space-between;margin-bottom:.25rem"><span style="font-size:.75rem;font-weight:600;color:var(--body-text-muted)">'+label+'</span><span style="font-size:.75rem;font-weight:800;color:'+col+'">'+prog+'%</span></div><div style="height:6px;border-radius:3px;background:var(--body-border);overflow:hidden"><div style="height:100%;border-radius:3px;background:'+col+';width:'+prog+'%;transition:width .6s ease"></div></div></div>';
+    if (existingProg) existingProg.outerHTML = progHtml;
+    else bodyDiv.insertAdjacentHTML('beforeend', progHtml);
+  }
+
+  // Footer action button
+  var footerDiv = card.querySelector('[style*="border-top"]');
+  if (footerDiv) {
+    var btnDiv = footerDiv.querySelector('div');
+    if (btnDiv) {
+      if (isDone)
+        btnDiv.innerHTML = '<button type="button" onclick="openCertModal('+id+')" style="padding:.3rem .7rem;border-radius:.4rem;border:none;background:#F59E0B;color:#fff;font-size:.75rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.25rem"><i class="bi bi-award-fill"></i>Certificate</button>';
+      else if (isEnr)
+        btnDiv.innerHTML = '<button type="button" onclick="openQuizModal('+id+')" style="padding:.3rem .7rem;border-radius:.4rem;border:none;background:'+c.color+';color:#fff;font-size:.75rem;font-weight:700;cursor:pointer">Continue</button>';
+    }
+  }
+}
+
+/* ── Keyboard ─────────────────────────────────────────────────────── */
+document.addEventListener('keydown',function(e){
+  if (e.key==='Escape') {
+    ['enrollOverlay','quizOverlay','certOverlay','addCourseOverlay'].forEach(function(id){
+      var el = document.getElementById(id);
+      el.classList.add('d-none');
+      el.style.display='none';
+    });
+  }
+});
+
+/* ── Toast helper ─────────────────────────────────────────────────── */
+function showToast(message, kind) {
+  var bg = kind === 'success' ? 'linear-gradient(135deg,#10B981,#06B6D4)' : 'linear-gradient(135deg,#4F6EF7,#8B5CF6)';
+  var icon = kind === 'success' ? 'bi-check-circle-fill' : 'bi-download';
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:' + bg + ';color:#fff;padding:.875rem 1.25rem;border-radius:.875rem;font-size:.875rem;font-weight:700;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:.625rem;opacity:0;transition:opacity .25s';
+  toast.innerHTML = '<i class="bi ' + icon + '"></i><span>' + message + '</span>';
+  document.body.appendChild(toast);
+  requestAnimationFrame(function () { toast.style.opacity = '1'; });
+  setTimeout(function () {
+    toast.style.opacity = '0';
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 3000);
+}
+
+/* ── Start a learning path: enrol in any not-yet-enrolled courses ───── */
+function startPath(pathName, courseIds) {
+  var added = 0;
+  courseIds.forEach(function(id) {
+    if (enrolled.indexOf(id) === -1) {
+      enrolled.push(id);
+      progress[id] = 0;
+      added++;
+      updateCourseCard(id);
+    }
+  });
+  refreshStats();
+  switchTab('courses');
+  if (added > 0) {
+    showToast(pathName + ': enrolled in ' + added + ' new course' + (added === 1 ? '' : 's'), 'success');
+  } else {
+    showToast('You\u2019re already enrolled in every course in ' + pathName, 'success');
+  }
+}
+</script>
+</body></html>

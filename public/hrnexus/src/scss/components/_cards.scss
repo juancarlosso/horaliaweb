@@ -1,0 +1,92 @@
+@use '../abstracts' as *;
+@use 'sass:list';
+@use 'sass:color';
+
+// ── Base card ─────────────────────────────────────────────────────────────────
+.card-hr {
+  @include card-base;
+  overflow: hidden;
+}
+
+.card-hd {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--body-border);
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 0.75rem;
+}
+
+.card-title-hr    { font-size: 0.9375rem; font-weight: $font-weight-bold; color: var(--body-text); margin: 0; letter-spacing: -0.01em; }
+.card-subtitle-hr { font-size: 0.8rem; color: var(--body-text-muted); margin: 0.1rem 0 0; }
+.card-bd          { padding: 1.25rem; }
+.card-footer-hr   {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--body-border);
+  text-align: center;
+}
+
+// ── Stat cards ────────────────────────────────────────────────────────────────
+.stat-card {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--card-border);
+  padding: 1.25rem;
+  position: relative; overflow: hidden;
+  transition: all $transition-fast; cursor: default;
+
+  &::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+  }
+  &::after {
+    content: ''; position: absolute;
+    top: 0; right: 0; width: 80px; height: 80px;
+    border-radius: 50%;
+    opacity: 0.06; transform: translate(20px, -20px);
+  }
+  &:hover { transform: translateY(-2px); box-shadow: var(--card-shadow-hover); }
+}
+
+// Stat colour variants — expanded from $stat-variants map
+@each $name, $colors in $stat-variants {
+  .stat-card.s-#{$name} {
+    &::before { background: linear-gradient(90deg, list.nth($colors, 1), list.nth($colors, 2)); }
+    &::after  { background: list.nth($colors, 1); }
+  }
+}
+
+.stat-icon   { width: 44px; height: 44px; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: 0.875rem; }
+.stat-value  { font-size: 1.75rem; font-weight: $font-weight-black; color: var(--body-text); letter-spacing: -0.04em; line-height: 1; margin-bottom: 0.25rem; }
+.stat-label  { font-size: 0.8rem; color: var(--body-text-muted); font-weight: $font-weight-medium; letter-spacing: 0.01em; }
+.stat-delta  { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.72rem; font-weight: $font-weight-bold; padding: 0.2rem 0.5rem; border-radius: 999px; margin-top: 0.75rem; }
+.delta-up      { background: rgba($success, 0.1); color: color.adjust($success, $lightness: -6%); }
+.delta-down    { background: rgba($danger, 0.1);  color: color.adjust($danger,  $lightness: -8%); }
+.delta-neutral { background: rgba(107, 111, 152, 0.1); color: var(--body-text-muted); }
+
+// ── Donut chart ───────────────────────────────────────────────────────────────
+.donut-wrap   { position: relative; display: inline-flex; svg { transform: rotate(-90deg); } }
+.donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.donut-val    { font-size: 1.5rem; font-weight: $font-weight-black; color: var(--body-text); display: block; line-height: 1; }
+.donut-lbl    { font-size: 0.6875rem; color: var(--body-text-muted); font-weight: $font-weight-medium; }
+
+// ── Kanban ─────────────────────────────────────────────────────────────────────
+.kanban-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; align-items: start; }
+.kanban-col   { background: var(--body-bg2); border-radius: var(--card-radius); padding: 1rem; border: 1px solid var(--body-border); }
+.kanban-hd    { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.875rem; }
+.kanban-title { font-size: 0.845rem; font-weight: $font-weight-bold; color: var(--body-text); }
+.kanban-count { background: var(--body-border); color: var(--body-text-muted); font-size: 0.72rem; font-weight: $font-weight-bold; padding: 0.125rem 0.5rem; border-radius: 999px; }
+
+.kcard {
+  background: var(--card-bg); border-radius: 0.75rem;
+  padding: 0.9375rem; margin-bottom: 0.5rem;
+  box-shadow: 0 1px 3px rgba($primary, 0.05);
+  cursor: grab; transition: all $transition-fast;
+  border: 1px solid var(--card-border);
+  &:hover { transform: translateY(-1px); box-shadow: var(--card-shadow-hover); border-color: rgba($primary, 0.25); }
+}
+.kcard-title { font-size: 0.845rem; font-weight: $font-weight-semi; color: var(--body-text); margin-bottom: 0.375rem; line-height: 1.4; }
+.kcard-meta  { font-size: 0.75rem; color: var(--body-text-muted); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.625rem; }
+.kprio       { font-size: 0.66rem; font-weight: $font-weight-bold; padding: 0.1875rem 0.5rem; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em; }
+.kprio-high  { background: rgba($danger, 0.09);  color: color.adjust($danger,  $lightness: -8%); }
+.kprio-med   { background: rgba($warning, 0.09); color: color.adjust($warning, $lightness: -20%); }
+.kprio-low   { background: rgba($success, 0.09); color: color.adjust($success, $lightness: -6%); }

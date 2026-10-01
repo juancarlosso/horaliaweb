@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Task Management — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Drag-and-drop Kanban board for tracking team tasks across To Do, In Progress, and Done stages."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-content" id="mainContent">
+
+  <!-- Topbar -->
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Toggle sidebar"><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar" aria-label="Breadcrumb"><span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Task Management</span></nav>
+      <div class="search-wrap"><i class="bi bi-search search-icon-i"></i><input type="search" class="search-input" placeholder="Search tasks..." aria-label="Search" oninput="searchTasks(this.value)"/></div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications"><i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode"><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <!-- Notif panel -->
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- Page header — exact React -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Task Management</h1>
+          <p class="page-subtitle">Track and manage all HR tasks across departments</p>
+        </div>
+        <div class="flex-g2-wrap">
+          <button type="button" class="btn-hr btn-outline-hr" onclick="resetFilters()"><i class="bi bi-funnel me-1"></i>Filter</button>
+          <button type="button" class="btn-hr btn-primary-hr" data-bs-toggle="modal" data-bs-target="#newTaskModal"><i class="bi bi-plus-lg me-1"></i>New Task</button>
+        </div>
+      </div>
+
+      <!-- ── 4 stat cards — exact React s-* classes ─────────────────────── -->
+      <div class="row g-3 mb-1rem">
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card s-blue anim-fiu d1">
+            <div class="stat-icon bg-blue-12"><i class="bi bi-kanban-fill c-blue"></i></div>
+            <div class="stat-value">12</div>
+            <div class="stat-label">Total Tasks</div>
+            <div class="fs75-muted-mt2" id="completionRate">25% completion rate</div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card s-cyan anim-fiu d2">
+            <div class="stat-icon bg-cyan-12"><i class="bi bi-arrow-repeat c-cyan"></i></div>
+            <div class="stat-value">4</div>
+            <div class="stat-label">In Progress</div>
+            <div class="fs75-muted-mt2">Active right now</div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card s-green anim-fiu d3">
+            <div class="stat-icon bg-green-12"><i class="bi bi-check-circle-fill c-green"></i></div>
+            <div class="stat-value">3</div>
+            <div class="stat-label">Completed</div>
+            <div class="fs75-muted-mt2">This month</div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card s-red anim-fiu d4">
+            <div class="stat-icon bg-red-12"><i class="bi bi-exclamation-triangle-fill c-red"></i></div>
+            <div class="stat-value">2</div>
+            <div class="stat-label">Urgent</div>
+            <div class="fs75-muted-mt2">Immediate action needed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Filter + View-toggle toolbar — exact React card-hr wrapper ─── -->
+      <div class="card-hr mb-75rem">
+        <div class="card-bd pt4-pb4">
+          <div class="flex-ac-wrap-g3">
+
+            <!-- Dept filter buttons -->
+            <div class="flex-ac-wrap-g15">
+              <span class="fs8125-fw5-c-muted">Dept:</span>
+              <button type="button" id="dept-all" class="btn-hr btn-sm-hr btn-primary-hr" onclick="setDept('all')" data-dept="all">All</button><button type="button" id="dept-Product" class="btn-hr btn-sm-hr btn-outline-hr" onclick="setDept('Product')" data-dept="Product">Product</button><button type="button" id="dept-Finance" class="btn-hr btn-sm-hr btn-outline-hr" onclick="setDept('Finance')" data-dept="Finance">Finance</button><button type="button" id="dept-HR" class="btn-hr btn-sm-hr btn-outline-hr" onclick="setDept('HR')" data-dept="HR">Hr</button><button type="button" id="dept-Engineering" class="btn-hr btn-sm-hr btn-outline-hr" onclick="setDept('Engineering')" data-dept="Engineering">Engineering</button><button type="button" id="dept-Legal" class="btn-hr btn-sm-hr btn-outline-hr" onclick="setDept('Legal')" data-dept="Legal">Legal</button>
+            </div>
+
+            <!-- Vertical divider -->
+            <div class="filter-divider"></div>
+
+            <!-- Priority filter buttons -->
+            <div class="flex-ac-wrap-g15">
+              <span class="fs8125-fw5-c-muted">Priority:</span>
+              <button type="button" id="prio-all" class="btn-hr btn-sm-hr btn-primary-hr" onclick="setPrio('all')" data-prio="all">All</button><button type="button" id="prio-urgent" class="btn-hr btn-sm-hr btn-outline-hr" onclick="setPrio('urgent')" data-prio="urgent">Urgent</button><button type="button" id="prio-high" class="btn-hr btn-sm-hr btn-outline-hr" onclick="setPrio('high')" data-prio="high">High</button><button type="button" id="prio-medium" class="btn-hr btn-sm-hr btn-outline-hr" onclick="setPrio('medium')" data-prio="medium">Medium</button><button type="button" id="prio-low" class="btn-hr btn-sm-hr btn-outline-hr" onclick="setPrio('low')" data-prio="low">Low</button>
+            </div>
+
+            <!-- View toggle — pushed to right with marginLeft:auto -->
+            <div class="flex-g1-ml-auto" id="viewToggle">
+              <button type="button" class="btn-hr btn-sm-hr btn-primary-hr btn-icon-hr active" id="vKanban" onclick="setView('kanban')" title="kanban"><i class="bi bi-kanban"></i></button>
+              <button type="button" class="btn-hr btn-sm-hr btn-outline-hr btn-icon-hr"         id="vList"   onclick="setView('list')"   title="list"><i class="bi bi-list-ul"></i></button>
+              <button type="button" class="btn-hr btn-sm-hr btn-outline-hr btn-icon-hr"         id="vGrid"   onclick="setView('grid')"   title="grid"><i class="bi bi-grid-3x3-gap"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═════════════════ VIEW: KANBAN ═════════════════ -->
+      <div id="viewKanban" class="anim-fiu">
+        <div class="task-kanban-board" id="kanbanBoard">
+<div class="kanban-col-task bg-bg-p-4-b-1" data-col="todo">
+      <div class="flex-ac-jsb-mb4">
+        <div class="flex-ac-g2">
+          <div class="sq10px-bg-slate-dk"></div>
+          <span class="fw7-fs875">To Do</span>
+        </div>
+        <span class="col-count badge-slate-dk-10-xs-fs75-p05-2">2</span>
+      </div>
+      <div class="col-cards"><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="1" data-dept="Product" data-prio="high" data-status="todo" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">UX</span><span class="tag-chip-sm">Design</span>
+        <span class="fs6-fw7-c-amber-dk-bg-amber-12-br4px-p-06-2-ml-auto-uc">High</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">Redesign employee onboarding flow</div>
+      <div class="fs75-c-muted-mb25">Update the full onboarding UI and email sequences</div>
+      
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-blue-purple-24">SC</div></div><div class="av-stack-1"><div class="avatar-green-sky-24">MJ</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>3</span>
+          <span><i class="bi bi-paperclip me-1"></i>2</span>
+          <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 20</span>
+        </div>
+      </div>
+    </div><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="2" data-dept="Finance" data-prio="urgent" data-status="todo" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">Finance</span>
+        <span class="fs6-fw7-c-red-dk-bg-red-12-br4px-p-06-2-ml-auto-uc">Urgent</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">Q4 payroll reconciliation</div>
+      <div class="fs75-c-muted-mb25">Verify all salary adjustments and bonuses for Dec</div>
+      
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>1</span>
+          <span><i class="bi bi-paperclip me-1"></i>5</span>
+          <span class="c-red600"><i class="bi bi-calendar3 me-1"></i>Dec 15</span>
+        </div>
+      </div>
+    </div></div>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr w100pct-mt1" type="button" onclick="openNewTask('todo')">
+        <i class="bi bi-plus me-1"></i>Add task
+      </button>
+    </div><div class="kanban-col-task bg-bg-p-4-b-1" data-col="in-progress">
+      <div class="flex-ac-jsb-mb4">
+        <div class="flex-ac-g2">
+          <div class="sq10px-bg-blue"></div>
+          <span class="fw7-fs875">In Progress</span>
+        </div>
+        <span class="col-count badge-blue-10-xs-fs75-p05-2">4</span>
+      </div>
+      <div class="col-cards"><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="3" data-dept="HR" data-prio="medium" data-status="in-progress" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">Policy</span>
+        <span class="fs6-fw7-c-primary-dk2-bg-blue-12-br4px-p-06-2-ml-auto-uc">Medium</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">Update leave policy documentation</div>
+      <div class="fs75-c-muted-mb25">Revise policy docs with 2025 holiday calendar</div>
+      <div class="mb-25">
+          <div class="flex-jsb-fs7-mb08">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">45%</span>
+          </div>
+          <div class="prog-bar-wrap h5px"><div class="prog-bar-fill w45pct-bg-grad-blue-purple"></div></div>
+        </div>
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div><div class="av-stack-1"><div class="avatar-green-purple-24">AP</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>4</span>
+          <span><i class="bi bi-paperclip me-1"></i>1</span>
+          <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 18</span>
+        </div>
+      </div>
+    </div><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="4" data-dept="HR" data-prio="high" data-status="in-progress" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">Performance</span>
+        <span class="fs6-fw7-c-amber-dk-bg-amber-12-br4px-p-06-2-ml-auto-uc">High</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">Performance review template setup</div>
+      <div class="fs75-c-muted-mb25">Build Q4 review forms and scoring rubrics</div>
+      <div class="mb-25">
+          <div class="flex-jsb-fs7-mb08">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">70%</span>
+          </div>
+          <div class="prog-bar-wrap h5px"><div class="prog-bar-fill w70pct-bg-grad-blue-purple"></div></div>
+        </div>
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-green-purple-24">AP</div></div><div class="av-stack-1"><div class="avatar-blue-purple-24">SC</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>6</span>
+          <span><i class="bi bi-paperclip me-1"></i>3</span>
+          <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 22</span>
+        </div>
+      </div>
+    </div><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="5" data-dept="Engineering" data-prio="medium" data-status="in-progress" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">DevOps</span><span class="tag-chip-sm">AWS</span>
+        <span class="fs6-fw7-c-primary-dk2-bg-blue-12-br4px-p-06-2-ml-auto-uc">Medium</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">AWS infrastructure cost audit</div>
+      <div class="fs75-c-muted-mb25">Review and optimize cloud spending for Q4</div>
+      <div class="mb-25">
+          <div class="flex-jsb-fs7-mb08">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">30%</span>
+          </div>
+          <div class="prog-bar-wrap h5px"><div class="prog-bar-fill w30pct-bg-grad-blue-purple"></div></div>
+        </div>
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-red-amber-24">TN</div></div><div class="av-stack-1"><div class="avatar-green-sky-24">MJ</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>2</span>
+          <span><i class="bi bi-paperclip me-1"></i>0</span>
+          <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 19</span>
+        </div>
+      </div>
+    </div><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="6" data-dept="HR" data-prio="low" data-status="in-progress" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">Events</span>
+        <span class="fs6-fw7-c-slate-dk-bg-slate-dk-10-br4px-p-06-2-ml-auto-uc">Low</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">Team building event planning</div>
+      <div class="fs75-c-muted-mb25">Organize year-end event for all 128 employees</div>
+      <div class="mb-25">
+          <div class="flex-jsb-fs7-mb08">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">55%</span>
+          </div>
+          <div class="prog-bar-wrap h5px"><div class="prog-bar-fill w55pct-bg-grad-blue-purple"></div></div>
+        </div>
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>8</span>
+          <span><i class="bi bi-paperclip me-1"></i>4</span>
+          <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 23</span>
+        </div>
+      </div>
+    </div></div>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr w100pct-mt1" type="button" onclick="openNewTask('in-progress')">
+        <i class="bi bi-plus me-1"></i>Add task
+      </button>
+    </div><div class="kanban-col-task bg-bg-p-4-b-1" data-col="review">
+      <div class="flex-ac-jsb-mb4">
+        <div class="flex-ac-g2">
+          <div class="sq10px-bg-amber"></div>
+          <span class="fw7-fs875">In Review</span>
+        </div>
+        <span class="col-count badge-amber-10-xs-fs75-p05-2">3</span>
+      </div>
+      <div class="col-cards"><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="7" data-dept="Engineering" data-prio="high" data-status="review" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">Dev</span><span class="tag-chip-sm">Analytics</span>
+        <span class="fs6-fw7-c-amber-dk-bg-amber-12-br4px-p-06-2-ml-auto-uc">High</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">Analytics dashboard v2 release</div>
+      <div class="fs75-c-muted-mb25">Ship updated reporting dashboard to production</div>
+      <div class="mb-25">
+          <div class="flex-jsb-fs7-mb08">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">90%</span>
+          </div>
+          <div class="prog-bar-wrap h5px"><div class="prog-bar-fill w90pct-bg-grad-blue-purple"></div></div>
+        </div>
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-sky-blue-24">DK</div></div><div class="av-stack-1"><div class="avatar-green-sky-24">MJ</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>5</span>
+          <span><i class="bi bi-paperclip me-1"></i>6</span>
+          <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 16</span>
+        </div>
+      </div>
+    </div><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="8" data-dept="HR" data-prio="medium" data-status="review" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">Reporting</span>
+        <span class="fs6-fw7-c-primary-dk2-bg-blue-12-br4px-p-06-2-ml-auto-uc">Medium</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">Recruitment KPI report Q4</div>
+      <div class="fs75-c-muted-mb25">Compile hiring metrics and cost-per-hire data</div>
+      <div class="mb-25">
+          <div class="flex-jsb-fs7-mb08">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">85%</span>
+          </div>
+          <div class="prog-bar-wrap h5px"><div class="prog-bar-fill w85pct-bg-grad-blue-purple"></div></div>
+        </div>
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div><div class="av-stack-1"><div class="avatar-green-purple-24">AP</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>2</span>
+          <span><i class="bi bi-paperclip me-1"></i>2</span>
+          <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 17</span>
+        </div>
+      </div>
+    </div><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="9" data-dept="Engineering" data-prio="urgent" data-status="review" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">Security</span>
+        <span class="fs6-fw7-c-red-dk-bg-red-12-br4px-p-06-2-ml-auto-uc">Urgent</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">Security audit — employee access</div>
+      <div class="fs75-c-muted-mb25">Review and prune admin permissions across systems</div>
+      <div class="mb-25">
+          <div class="flex-jsb-fs7-mb08">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">95%</span>
+          </div>
+          <div class="prog-bar-wrap h5px"><div class="prog-bar-fill w95pct-bg-grad-blue-purple"></div></div>
+        </div>
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-red-amber-24">TN</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>7</span>
+          <span><i class="bi bi-paperclip me-1"></i>0</span>
+          <span class="c-red600"><i class="bi bi-calendar3 me-1"></i>Dec 14</span>
+        </div>
+      </div>
+    </div></div>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr w100pct-mt1" type="button" onclick="openNewTask('review')">
+        <i class="bi bi-plus me-1"></i>Add task
+      </button>
+    </div><div class="kanban-col-task bg-bg-p-4-b-1" data-col="done">
+      <div class="flex-ac-jsb-mb4">
+        <div class="flex-ac-g2">
+          <div class="sq10px-bg-green"></div>
+          <span class="fw7-fs875">Done</span>
+        </div>
+        <span class="col-count badge-green-10-xs-fs75-p05-2">3</span>
+      </div>
+      <div class="col-cards"><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="10" data-dept="HR" data-prio="high" data-status="done" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">Compensation</span>
+        <span class="fs6-fw7-c-amber-dk-bg-amber-12-br4px-p-06-2-ml-auto-uc">High</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">2025 compensation benchmarking</div>
+      <div class="fs75-c-muted-mb25">Research market salary data for annual review</div>
+      <div class="flex-ac-g12-fs75-fw6-c-green-mb25">
+          <i class="bi bi-check-circle-fill"></i>Completed
+        </div>
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div><div class="av-stack-1"><div class="avatar-sky-blue-24">DK</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>9</span>
+          <span><i class="bi bi-paperclip me-1"></i>8</span>
+          <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 10</span>
+        </div>
+      </div>
+    </div><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="11" data-dept="Legal" data-prio="medium" data-status="done" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">Legal</span><span class="tag-chip-sm">GDPR</span>
+        <span class="fs6-fw7-c-primary-dk2-bg-blue-12-br4px-p-06-2-ml-auto-uc">Medium</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">GDPR data retention policy update</div>
+      <div class="fs75-c-muted-mb25">Ensure compliance with updated EU regulations</div>
+      <div class="flex-ac-g12-fs75-fw6-c-green-mb25">
+          <i class="bi bi-check-circle-fill"></i>Completed
+        </div>
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-green-purple-24">AP</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>3</span>
+          <span><i class="bi bi-paperclip me-1"></i>5</span>
+          <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 8</span>
+        </div>
+      </div>
+    </div><div class="card-hr task-card p-4-mb25-pointer-trans" data-task-id="12" data-dept="HR" data-prio="low" data-status="done" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="flex-wrap-g1-mb2">
+        <span class="tag-chip-sm">Design</span>
+        <span class="fs6-fw7-c-slate-dk-bg-slate-dk-10-br4px-p-06-2-ml-auto-uc">Low</span>
+      </div>
+      <div class="fs875-fw6-mb1-lh-14">New hire welcome kit redesign</div>
+      <div class="fs75-c-muted-mb25">Update physical and digital welcome materials</div>
+      <div class="flex-ac-g12-fs75-fw6-c-green-mb25">
+          <i class="bi bi-check-circle-fill"></i>Completed
+        </div>
+      <div class="flex-ac-jsb-pt2-bt">
+        <div class="flex"><div class="av-stack-0"><div class="avatar-blue-purple-24">SC</div></div></div>
+        <div class="flex-ac-g2-fs7-c-muted">
+          <span><i class="bi bi-chat me-1"></i>1</span>
+          <span><i class="bi bi-paperclip me-1"></i>3</span>
+          <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 5</span>
+        </div>
+      </div>
+    </div></div>
+      <button class="btn-hr btn-ghost-hr btn-sm-hr w100pct-mt1" type="button" onclick="openNewTask('done')">
+        <i class="bi bi-plus me-1"></i>Add task
+      </button>
+    </div>
+        </div>
+      </div>
+
+      <!-- ═════════════════ VIEW: LIST ═════════════════ -->
+      <div class="card-hr anim-fiu d-none" id="viewList">
+        <div class="table-wrap">
+          <table class="hr-table" id="taskTable" data-sortable>
+            <thead>
+              <tr>
+                <th data-sort>Task</th>
+                <th data-sort>Dept</th>
+                <th data-sort>Priority</th>
+                <th data-sort>Status</th>
+                <th>Assignees</th>
+                <th data-sort>Due</th>
+                <th>Progress</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="listBody">
+<tr class="task-row" data-task-id="1" data-dept="Product" data-prio="high" data-status="todo">
+      <td class="mw260px">
+        <div class="fw6-mb05">Redesign employee onboarding flow</div>
+        <div class="fs75-muted-ellipsis">Update the full onboarding UI and email sequences</div>
+      </td>
+      <td>Product</td>
+      <td><span class="badge-amber-12-xs-fs75-ib-p08-2">High</span></td>
+      <td><span class="badge-slate-dk-10-xs-fs75-p08-24">To Do</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-blue-purple-24">SC</div></div><div class="av-stack-1"><div class="avatar-green-sky-24">MJ</div></div></div></td>
+      <td><span class="fw6-body">Dec 20</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w0pct-bg-grad-blue-purple"></div></div></div><span class="mnw30px-fs75-fw7">0%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="2" data-dept="Finance" data-prio="urgent" data-status="todo">
+      <td class="mw260px">
+        <div class="fw6-mb05">Q4 payroll reconciliation</div>
+        <div class="fs75-muted-ellipsis">Verify all salary adjustments and bonuses for Dec</div>
+      </td>
+      <td>Finance</td>
+      <td><span class="badge-red-12-xs-fs75-ib-p08-2">Urgent</span></td>
+      <td><span class="badge-slate-dk-10-xs-fs75-p08-24">To Do</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div></div></td>
+      <td><span class="fw6-c-red-dk">Dec 15</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w0pct-bg-grad-blue-purple"></div></div></div><span class="mnw30px-fs75-fw7">0%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="3" data-dept="HR" data-prio="medium" data-status="in-progress">
+      <td class="mw260px">
+        <div class="fw6-mb05">Update leave policy documentation</div>
+        <div class="fs75-muted-ellipsis">Revise policy docs with 2025 holiday calendar</div>
+      </td>
+      <td>HR</td>
+      <td><span class="badge-blue-12-xs-fs75-ib-p08-2">Medium</span></td>
+      <td><span class="badge-blue-10-xs-fs75-p08-24">In Progress</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div><div class="av-stack-1"><div class="avatar-green-purple-24">AP</div></div></div></td>
+      <td><span class="fw6-body">Dec 18</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w45pct-bg-grad-blue-purple"></div></div></div><span class="mnw30px-fs75-fw7">45%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="4" data-dept="HR" data-prio="high" data-status="in-progress">
+      <td class="mw260px">
+        <div class="fw6-mb05">Performance review template setup</div>
+        <div class="fs75-muted-ellipsis">Build Q4 review forms and scoring rubrics</div>
+      </td>
+      <td>HR</td>
+      <td><span class="badge-amber-12-xs-fs75-ib-p08-2">High</span></td>
+      <td><span class="badge-blue-10-xs-fs75-p08-24">In Progress</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-green-purple-24">AP</div></div><div class="av-stack-1"><div class="avatar-blue-purple-24">SC</div></div></div></td>
+      <td><span class="fw6-body">Dec 22</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w70pct-bg-grad-blue-purple"></div></div></div><span class="mnw30px-fs75-fw7">70%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="5" data-dept="Engineering" data-prio="medium" data-status="in-progress">
+      <td class="mw260px">
+        <div class="fw6-mb05">AWS infrastructure cost audit</div>
+        <div class="fs75-muted-ellipsis">Review and optimize cloud spending for Q4</div>
+      </td>
+      <td>Engineering</td>
+      <td><span class="badge-blue-12-xs-fs75-ib-p08-2">Medium</span></td>
+      <td><span class="badge-blue-10-xs-fs75-p08-24">In Progress</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-red-amber-24">TN</div></div><div class="av-stack-1"><div class="avatar-green-sky-24">MJ</div></div></div></td>
+      <td><span class="fw6-body">Dec 19</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w30pct-bg-grad-blue-purple"></div></div></div><span class="mnw30px-fs75-fw7">30%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="6" data-dept="HR" data-prio="low" data-status="in-progress">
+      <td class="mw260px">
+        <div class="fw6-mb05">Team building event planning</div>
+        <div class="fs75-muted-ellipsis">Organize year-end event for all 128 employees</div>
+      </td>
+      <td>HR</td>
+      <td><span class="badge-slate-dk-10-xs-fs75-ib-p08-2">Low</span></td>
+      <td><span class="badge-blue-10-xs-fs75-p08-24">In Progress</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div></div></td>
+      <td><span class="fw6-body">Dec 23</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w55pct-bg-grad-blue-purple"></div></div></div><span class="mnw30px-fs75-fw7">55%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="7" data-dept="Engineering" data-prio="high" data-status="review">
+      <td class="mw260px">
+        <div class="fw6-mb05">Analytics dashboard v2 release</div>
+        <div class="fs75-muted-ellipsis">Ship updated reporting dashboard to production</div>
+      </td>
+      <td>Engineering</td>
+      <td><span class="badge-amber-12-xs-fs75-ib-p08-2">High</span></td>
+      <td><span class="badge-amber-10-xs-fs75-p08-24">In Review</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-sky-blue-24">DK</div></div><div class="av-stack-1"><div class="avatar-green-sky-24">MJ</div></div></div></td>
+      <td><span class="fw6-body">Dec 16</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w90pct-bg-grad-blue-purple"></div></div></div><span class="mnw30px-fs75-fw7">90%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="8" data-dept="HR" data-prio="medium" data-status="review">
+      <td class="mw260px">
+        <div class="fw6-mb05">Recruitment KPI report Q4</div>
+        <div class="fs75-muted-ellipsis">Compile hiring metrics and cost-per-hire data</div>
+      </td>
+      <td>HR</td>
+      <td><span class="badge-blue-12-xs-fs75-ib-p08-2">Medium</span></td>
+      <td><span class="badge-amber-10-xs-fs75-p08-24">In Review</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div><div class="av-stack-1"><div class="avatar-green-purple-24">AP</div></div></div></td>
+      <td><span class="fw6-body">Dec 17</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w85pct-bg-grad-blue-purple"></div></div></div><span class="mnw30px-fs75-fw7">85%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="9" data-dept="Engineering" data-prio="urgent" data-status="review">
+      <td class="mw260px">
+        <div class="fw6-mb05">Security audit — employee access</div>
+        <div class="fs75-muted-ellipsis">Review and prune admin permissions across systems</div>
+      </td>
+      <td>Engineering</td>
+      <td><span class="badge-red-12-xs-fs75-ib-p08-2">Urgent</span></td>
+      <td><span class="badge-amber-10-xs-fs75-p08-24">In Review</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-red-amber-24">TN</div></div></div></td>
+      <td><span class="fw6-c-red-dk">Dec 14</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w95pct-bg-grad-blue-purple"></div></div></div><span class="mnw30px-fs75-fw7">95%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="10" data-dept="HR" data-prio="high" data-status="done">
+      <td class="mw260px">
+        <div class="fw6-mb05">2025 compensation benchmarking</div>
+        <div class="fs75-muted-ellipsis">Research market salary data for annual review</div>
+      </td>
+      <td>HR</td>
+      <td><span class="badge-amber-12-xs-fs75-ib-p08-2">High</span></td>
+      <td><span class="badge-green-10-xs-fs75-p08-24">Done</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div><div class="av-stack-1"><div class="avatar-sky-blue-24">DK</div></div></div></td>
+      <td><span class="fw6-body">Dec 10</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w100pct-bg-green"></div></div></div><span class="mnw30px-fs75-fw7">100%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="11" data-dept="Legal" data-prio="medium" data-status="done">
+      <td class="mw260px">
+        <div class="fw6-mb05">GDPR data retention policy update</div>
+        <div class="fs75-muted-ellipsis">Ensure compliance with updated EU regulations</div>
+      </td>
+      <td>Legal</td>
+      <td><span class="badge-blue-12-xs-fs75-ib-p08-2">Medium</span></td>
+      <td><span class="badge-green-10-xs-fs75-p08-24">Done</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-green-purple-24">AP</div></div></div></td>
+      <td><span class="fw6-body">Dec 8</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w100pct-bg-green"></div></div></div><span class="mnw30px-fs75-fw7">100%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr><tr class="task-row" data-task-id="12" data-dept="HR" data-prio="low" data-status="done">
+      <td class="mw260px">
+        <div class="fw6-mb05">New hire welcome kit redesign</div>
+        <div class="fs75-muted-ellipsis">Update physical and digital welcome materials</div>
+      </td>
+      <td>HR</td>
+      <td><span class="badge-slate-dk-10-xs-fs75-ib-p08-2">Low</span></td>
+      <td><span class="badge-green-10-xs-fs75-p08-24">Done</span></td>
+      <td><div class="flex"><div class="av-stack-0"><div class="avatar-blue-purple-24">SC</div></div></div></td>
+      <td><span class="fw6-body">Dec 5</span></td>
+      <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w100pct-bg-green"></div></div></div><span class="mnw30px-fs75-fw7">100%</span></div></td>
+      <td>
+        <div class="flex-g1">
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </td>
+    </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═════════════════ VIEW: GRID ═════════════════ -->
+      <div class="d-none" id="viewGrid">
+        <div class="row g-3 anim-fiu" id="gridBody">
+<div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="1" data-dept="Product" data-prio="high" data-status="todo" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-amber-dk-bg-amber-12-br4px-p-08-2-uc">High</span>
+          <span class="fs65-fw7-c-slate-dk-bg-slate-dk-10-br4px-p-08-2-uc">To Do</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">Redesign employee onboarding flow</div>
+        <div class="fs8125-muted-mb35-lh">Update the full onboarding UI and email sequences</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">0%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w0pct-bg-grad-blue-purple"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">UX</span><span class="tag-chip-sm">Design</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-blue-purple-24">SC</div></div><div class="av-stack-1"><div class="avatar-green-sky-24">MJ</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>3</span>
+            <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 20</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="2" data-dept="Finance" data-prio="urgent" data-status="todo" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-red-dk-bg-red-12-br4px-p-08-2-uc">Urgent</span>
+          <span class="fs65-fw7-c-slate-dk-bg-slate-dk-10-br4px-p-08-2-uc">To Do</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">Q4 payroll reconciliation</div>
+        <div class="fs8125-muted-mb35-lh">Verify all salary adjustments and bonuses for Dec</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">0%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w0pct-bg-grad-blue-purple"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">Finance</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>1</span>
+            <span class="c-red600"><i class="bi bi-calendar3 me-1"></i>Dec 15</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="3" data-dept="HR" data-prio="medium" data-status="in-progress" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-primary-dk2-bg-blue-12-br4px-p-08-2-uc">Medium</span>
+          <span class="fs65-fw7-c-blue-bg-blue-10-br4px-p-08-2-uc">In Progress</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">Update leave policy documentation</div>
+        <div class="fs8125-muted-mb35-lh">Revise policy docs with 2025 holiday calendar</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">45%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w45pct-bg-grad-blue-purple"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">Policy</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div><div class="av-stack-1"><div class="avatar-green-purple-24">AP</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>4</span>
+            <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 18</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="4" data-dept="HR" data-prio="high" data-status="in-progress" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-amber-dk-bg-amber-12-br4px-p-08-2-uc">High</span>
+          <span class="fs65-fw7-c-blue-bg-blue-10-br4px-p-08-2-uc">In Progress</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">Performance review template setup</div>
+        <div class="fs8125-muted-mb35-lh">Build Q4 review forms and scoring rubrics</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">70%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w70pct-bg-grad-blue-purple"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">Performance</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-green-purple-24">AP</div></div><div class="av-stack-1"><div class="avatar-blue-purple-24">SC</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>6</span>
+            <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 22</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="5" data-dept="Engineering" data-prio="medium" data-status="in-progress" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-primary-dk2-bg-blue-12-br4px-p-08-2-uc">Medium</span>
+          <span class="fs65-fw7-c-blue-bg-blue-10-br4px-p-08-2-uc">In Progress</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">AWS infrastructure cost audit</div>
+        <div class="fs8125-muted-mb35-lh">Review and optimize cloud spending for Q4</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">30%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w30pct-bg-grad-blue-purple"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">DevOps</span><span class="tag-chip-sm">AWS</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-red-amber-24">TN</div></div><div class="av-stack-1"><div class="avatar-green-sky-24">MJ</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>2</span>
+            <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 19</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="6" data-dept="HR" data-prio="low" data-status="in-progress" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-slate-dk-bg-slate-dk-10-br4px-p-08-2-uc">Low</span>
+          <span class="fs65-fw7-c-blue-bg-blue-10-br4px-p-08-2-uc">In Progress</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">Team building event planning</div>
+        <div class="fs8125-muted-mb35-lh">Organize year-end event for all 128 employees</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">55%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w55pct-bg-grad-blue-purple"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">Events</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>8</span>
+            <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 23</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="7" data-dept="Engineering" data-prio="high" data-status="review" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-amber-dk-bg-amber-12-br4px-p-08-2-uc">High</span>
+          <span class="fs65-fw7-c-amber-bg-amber-10-br4px-p-08-2-uc">In Review</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">Analytics dashboard v2 release</div>
+        <div class="fs8125-muted-mb35-lh">Ship updated reporting dashboard to production</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">90%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w90pct-bg-grad-blue-purple"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">Dev</span><span class="tag-chip-sm">Analytics</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-sky-blue-24">DK</div></div><div class="av-stack-1"><div class="avatar-green-sky-24">MJ</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>5</span>
+            <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 16</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="8" data-dept="HR" data-prio="medium" data-status="review" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-primary-dk2-bg-blue-12-br4px-p-08-2-uc">Medium</span>
+          <span class="fs65-fw7-c-amber-bg-amber-10-br4px-p-08-2-uc">In Review</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">Recruitment KPI report Q4</div>
+        <div class="fs8125-muted-mb35-lh">Compile hiring metrics and cost-per-hire data</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">85%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w85pct-bg-grad-blue-purple"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">Reporting</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div><div class="av-stack-1"><div class="avatar-green-purple-24">AP</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>2</span>
+            <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 17</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="9" data-dept="Engineering" data-prio="urgent" data-status="review" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-red-dk-bg-red-12-br4px-p-08-2-uc">Urgent</span>
+          <span class="fs65-fw7-c-amber-bg-amber-10-br4px-p-08-2-uc">In Review</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">Security audit — employee access</div>
+        <div class="fs8125-muted-mb35-lh">Review and prune admin permissions across systems</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cprimary">95%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w95pct-bg-grad-blue-purple"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">Security</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-red-amber-24">TN</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>7</span>
+            <span class="c-red600"><i class="bi bi-calendar3 me-1"></i>Dec 14</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="10" data-dept="HR" data-prio="high" data-status="done" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-amber-dk-bg-amber-12-br4px-p-08-2-uc">High</span>
+          <span class="fs65-fw7-c-green-bg-green-10-br4px-p-08-2-uc">Done</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">2025 compensation benchmarking</div>
+        <div class="fs8125-muted-mb35-lh">Research market salary data for annual review</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cgreen">100%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w100pct-bg-green"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">Compensation</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-purple-pink-24">ER</div></div><div class="av-stack-1"><div class="avatar-sky-blue-24">DK</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>9</span>
+            <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 10</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="11" data-dept="Legal" data-prio="medium" data-status="done" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-primary-dk2-bg-blue-12-br4px-p-08-2-uc">Medium</span>
+          <span class="fs65-fw7-c-green-bg-green-10-br4px-p-08-2-uc">Done</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">GDPR data retention policy update</div>
+        <div class="fs8125-muted-mb35-lh">Ensure compliance with updated EU regulations</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cgreen">100%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w100pct-bg-green"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">Legal</span><span class="tag-chip-sm">GDPR</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-green-purple-24">AP</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>3</span>
+            <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 8</span>
+          </div>
+        </div>
+      </div>
+    </div><div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="card-hr task-card h100pct-p-45-pointer-trans" data-task-id="12" data-dept="HR" data-prio="low" data-status="done" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <!-- Priority + Status badges -->
+        <div class="flex-jsb-mb25">
+          <span class="fs65-fw7-c-slate-dk-bg-slate-dk-10-br4px-p-08-2-uc">Low</span>
+          <span class="fs65-fw7-c-green-bg-green-10-br4px-p-08-2-uc">Done</span>
+        </div>
+        <!-- Title + desc -->
+        <div class="fs9375-fw7-mb15-lh-13">New hire welcome kit redesign</div>
+        <div class="fs8125-muted-mb35-lh">Update physical and digital welcome materials</div>
+        <!-- Progress -->
+        <div class="mb-75rem">
+          <div class="flex-jsb-fs75-mb12">
+            <span class="c-muted">Progress</span>
+            <span class="fw7-cgreen">100%</span>
+          </div>
+          <div class="prog-bar-wrap h8px"><div class="prog-bar-fill w100pct-bg-green"></div></div>
+        </div>
+        <!-- Tags -->
+        <div class="flex-wrap-g08-mb3">
+          <span class="tag-chip-sm">Design</span>
+        </div>
+        <!-- Footer: avatars + meta -->
+        <div class="flex-ac-jsb-pt3-bt">
+          <div class="flex"><div class="av-stack-0"><div class="avatar-blue-purple-24">SC</div></div></div>
+          <div class="flex-ac-g15-fs7-c-muted">
+            <span><i class="bi bi-chat me-1"></i>1</span>
+            <span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>Dec 5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+        </div>
+      </div>
+
+    </div><!-- /page-inner -->
+  </main>
+</div><!-- /main-content -->
+
+<!-- ══════ MODAL: New Task ══════ -->
+<div class="modal fade" id="newTaskModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-kanban-fill me-2 c-primary"></i>New Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label-hr">Task Title <span class="c-red">*</span></label>
+            <input class="hr-input" id="newTaskTitle" placeholder="e.g. Update employee onboarding flow"/>
+          </div>
+          <div class="col-12">
+            <label class="form-label-hr">Description</label>
+            <textarea class="hr-input" id="newTaskDesc" rows="2" placeholder="Brief description of the task..."></textarea>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Department <span class="c-red">*</span></label>
+            <select class="hr-input" id="newTaskDept">
+              <option value="">Select dept</option>
+              <option>Product</option><option>Engineering</option><option>HR</option>
+              <option>Finance</option><option>Marketing</option><option>Legal</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Priority <span class="c-red">*</span></label>
+            <select class="hr-input" id="newTaskPrio">
+              <option value="urgent">Urgent</option>
+              <option value="high">High</option>
+              <option value="medium" selected>Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-hr">Status</label>
+            <select class="hr-input" id="newTaskStatus">
+              <option value="todo">To Do</option>
+              <option value="in-progress">In Progress</option>
+              <option value="review">In Review</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-hr">Due Date</label>
+            <input class="hr-input" type="date" id="newTaskDue"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-hr">Assignees</label>
+            <select class="hr-input h90px" id="newTaskAv" multiple>
+              <option value="SC">Sarah Chen (SC)</option>
+              <option value="MJ">Marcus Johnson (MJ)</option>
+              <option value="PN">Priya Nair (PN)</option>
+              <option value="DK">David Kim (DK)</option>
+              <option value="ER">Emily Rodriguez (ER)</option>
+              <option value="TN">Tom Nakamura (TN)</option>
+              <option value="AP">Aisha Patel (AP)</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label-hr">Tags <span class="fs75-muted">(comma separated)</span></label>
+            <input class="hr-input" id="newTaskTags" placeholder="e.g. UX, Design, Q4"/>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="addNewTask()"><i class="bi bi-plus-lg me-1"></i>Create Task</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   TASK MANAGEMENT — COMPLETE FILTER + VIEW ENGINE
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Master data ────────────────────────────────────────────────────────── */
+var TASKS   = [{"id": 1, "title": "Redesign employee onboarding flow", "desc": "Update the full onboarding UI and email sequences", "prio": "high", "status": "todo", "dept": "Product", "av": ["SC", "MJ"], "due": "Dec 20", "prog": 0, "tags": ["UX", "Design"], "c": 3, "f": 2}, {"id": 2, "title": "Q4 payroll reconciliation", "desc": "Verify all salary adjustments and bonuses for Dec", "prio": "urgent", "status": "todo", "dept": "Finance", "av": ["ER"], "due": "Dec 15", "prog": 0, "tags": ["Finance"], "c": 1, "f": 5}, {"id": 3, "title": "Update leave policy documentation", "desc": "Revise policy docs with 2025 holiday calendar", "prio": "medium", "status": "in-progress", "dept": "HR", "av": ["ER", "AP"], "due": "Dec 18", "prog": 45, "tags": ["Policy"], "c": 4, "f": 1}, {"id": 4, "title": "Performance review template setup", "desc": "Build Q4 review forms and scoring rubrics", "prio": "high", "status": "in-progress", "dept": "HR", "av": ["AP", "SC"], "due": "Dec 22", "prog": 70, "tags": ["Performance"], "c": 6, "f": 3}, {"id": 5, "title": "AWS infrastructure cost audit", "desc": "Review and optimize cloud spending for Q4", "prio": "medium", "status": "in-progress", "dept": "Engineering", "av": ["TN", "MJ"], "due": "Dec 19", "prog": 30, "tags": ["DevOps", "AWS"], "c": 2, "f": 0}, {"id": 6, "title": "Team building event planning", "desc": "Organize year-end event for all 128 employees", "prio": "low", "status": "in-progress", "dept": "HR", "av": ["ER"], "due": "Dec 23", "prog": 55, "tags": ["Events"], "c": 8, "f": 4}, {"id": 7, "title": "Analytics dashboard v2 release", "desc": "Ship updated reporting dashboard to production", "prio": "high", "status": "review", "dept": "Engineering", "av": ["DK", "MJ"], "due": "Dec 16", "prog": 90, "tags": ["Dev", "Analytics"], "c": 5, "f": 6}, {"id": 8, "title": "Recruitment KPI report Q4", "desc": "Compile hiring metrics and cost-per-hire data", "prio": "medium", "status": "review", "dept": "HR", "av": ["ER", "AP"], "due": "Dec 17", "prog": 85, "tags": ["Reporting"], "c": 2, "f": 2}, {"id": 9, "title": "Security audit \u2014 employee access", "desc": "Review and prune admin permissions across systems", "prio": "urgent", "status": "review", "dept": "Engineering", "av": ["TN"], "due": "Dec 14", "prog": 95, "tags": ["Security"], "c": 7, "f": 0}, {"id": 10, "title": "2025 compensation benchmarking", "desc": "Research market salary data for annual review", "prio": "high", "status": "done", "dept": "HR", "av": ["ER", "DK"], "due": "Dec 10", "prog": 100, "tags": ["Compensation"], "c": 9, "f": 8}, {"id": 11, "title": "GDPR data retention policy update", "desc": "Ensure compliance with updated EU regulations", "prio": "medium", "status": "done", "dept": "Legal", "av": ["AP"], "due": "Dec 8", "prog": 100, "tags": ["Legal", "GDPR"], "c": 3, "f": 5}, {"id": 12, "title": "New hire welcome kit redesign", "desc": "Update physical and digital welcome materials", "prio": "low", "status": "done", "dept": "HR", "av": ["SC"], "due": "Dec 5", "prog": 100, "tags": ["Design"], "c": 1, "f": 3}];
+var COLS    = [
+  {key:'todo',        label:'To Do',       color:'#64748B', bg:'rgba(100,116,139,.1)'},
+  {key:'in-progress', label:'In Progress',  color:'#5B8FF9', bg:'rgba(91,143,249,.1)'},
+  {key:'review',      label:'In Review',    color:'#F59E0B', bg:'rgba(245,158,11,.1)'},
+  {key:'done',        label:'Done',         color:'#10B981', bg:'rgba(16,185,129,.1)'},
+];
+var PS      = {
+  urgent: {bg:'rgba(239,68,68,.12)', color:'#DC2626', label:'Urgent'},
+  high:   {bg:'rgba(245,158,11,.12)',color:'#D97706', label:'High'},
+  medium: {bg:'rgba(91,143,249,.12)',color:'#3B6FD9', label:'Medium'},
+  low:    {bg:'rgba(100,116,139,.1)',color:'#64748B', label:'Low'},
+};
+var AVC     = {
+  SC:'linear-gradient(135deg,#5B8FF9,#7C3AED)', MJ:'linear-gradient(135deg,#10B981,#0EA5E9)',
+  PN:'linear-gradient(135deg,#F59E0B,#EF4444)', DK:'linear-gradient(135deg,#0EA5E9,#5B8FF9)',
+  ER:'linear-gradient(135deg,#7C3AED,#EC4899)', TN:'linear-gradient(135deg,#EF4444,#F59E0B)',
+  AP:'linear-gradient(135deg,#10B981,#7C3AED)',
+};
+
+/* ── State ─────────────────────────────────────────────────────────────── */
+var _view  = 'kanban';
+var _dept  = 'all';
+var _prio  = 'all';
+var _search= '';
+
+/* ── Filter helpers ─────────────────────────────────────────────────────── */
+function filteredTasks() {
+  return TASKS.filter(function(t) {
+    var matchDept  = _dept  === 'all' || t.dept  === _dept;
+    var matchPrio  = _prio  === 'all' || t.prio  === _prio;
+    var matchSearch= !_search || (t.title + t.desc + t.dept + t.tags.join(' ')).toLowerCase().indexOf(_search) > -1;
+    return matchDept && matchPrio && matchSearch;
+  });
+}
+
+/* ── View switcher ──────────────────────────────────────────────────────── */
+function setView(v) {
+  _view = v;
+  ['kanban','list','grid'].forEach(function(x) {
+    var el = document.getElementById('view' + x.charAt(0).toUpperCase() + x.slice(1));
+    el.classList.toggle('d-none', x !== v);
+    el.style.display = '';
+  });
+  // Update toggle buttons
+  var btns = {kanban:'vKanban', list:'vList', grid:'vGrid'};
+  Object.keys(btns).forEach(function(k) {
+    var btn = document.getElementById(btns[k]);
+    if (!btn) return;
+    btn.classList.toggle('btn-primary-hr', k === v);
+    btn.classList.toggle('btn-outline-hr',  k !== v);
+  });
+  applyFilters();
+}
+
+/* ── Dept filter ────────────────────────────────────────────────────────── */
+function setDept(d) {
+  _dept = d;
+  document.querySelectorAll('[id^="dept-"]').forEach(function(btn) {
+    var match = btn.getAttribute('data-dept') === d;
+    btn.classList.toggle('btn-primary-hr', match);
+    btn.classList.toggle('btn-outline-hr',  !match);
+  });
+  applyFilters();
+}
+
+/* ── Priority filter ────────────────────────────────────────────────────── */
+function setPrio(p) {
+  _prio = p;
+  document.querySelectorAll('[id^="prio-"]').forEach(function(btn) {
+    var match = btn.getAttribute('data-prio') === p;
+    btn.classList.toggle('btn-primary-hr', match);
+    btn.classList.toggle('btn-outline-hr',  !match);
+  });
+  applyFilters();
+}
+
+/* ── Search ─────────────────────────────────────────────────────────────── */
+function searchTasks(q) {
+  _search = q.toLowerCase().trim();
+  applyFilters();
+}
+
+/* ── Reset all filters ──────────────────────────────────────────────────── */
+function resetFilters() {
+  _dept = 'all'; _prio = 'all'; _search = '';
+  var searchEl = document.querySelector('.search-input');
+  if (searchEl) searchEl.value = '';
+  setDept('all');
+  setPrio('all');
+}
+
+/* ── Apply filters to current view ─────────────────────────────────────── */
+function applyFilters() {
+  var tasks = filteredTasks();
+  var ids   = tasks.map(function(t) { return t.id; });
+
+  if (_view === 'kanban') {
+    // Show/hide kanban cards
+    document.querySelectorAll('.task-card[data-status]').forEach(function(card) {
+      var id = parseInt(card.getAttribute('data-task-id'));
+      card.style.display = ids.indexOf(id) > -1 ? '' : 'none';
+    });
+    // Update column counts
+    document.querySelectorAll('.kanban-col-task').forEach(function(col) {
+      var colKey  = col.getAttribute('data-col');
+      var visible = tasks.filter(function(t) { return t.status === colKey; }).length;
+      var badge   = col.querySelector('.col-count');
+      if (badge) badge.textContent = visible;
+    });
+  } else if (_view === 'list') {
+    document.querySelectorAll('#listBody .task-row').forEach(function(row) {
+      var id = parseInt(row.getAttribute('data-task-id'));
+      row.style.display = ids.indexOf(id) > -1 ? '' : 'none';
+    });
+  } else if (_view === 'grid') {
+    // Show/hide grid cards (each inside a .col-* wrapper)
+    document.querySelectorAll('#gridBody .task-card').forEach(function(card) {
+      var id  = parseInt(card.getAttribute('data-task-id'));
+      var col = card.closest('[class^="col-"]');
+      if (col) col.style.display = ids.indexOf(id) > -1 ? '' : 'none';
+    });
+  }
+}
+
+/* ── Open "Add task" for a specific column ─────────────────────────────── */
+function openNewTask(colKey) {
+  document.getElementById('newTaskStatus').value = colKey;
+  new bootstrap.Modal(document.getElementById('newTaskModal')).show();
+}
+
+/* ── Add new task to live board ─────────────────────────────────────────── */
+function addNewTask() {
+  var title  = (document.getElementById('newTaskTitle').value || '').trim();
+  var desc   = (document.getElementById('newTaskDesc').value  || '').trim();
+  var dept   = document.getElementById('newTaskDept').value;
+  var prio   = document.getElementById('newTaskPrio').value;
+  var status = document.getElementById('newTaskStatus').value;
+  var due    = document.getElementById('newTaskDue').value || 'TBD';
+  var tagsRaw= (document.getElementById('newTaskTags').value || '').trim();
+  var avSel  = document.getElementById('newTaskAv');
+  var avArr  = [];
+  for (var i=0; i < avSel.options.length; i++) {
+    if (avSel.options[i].selected) avArr.push(avSel.options[i].value);
+  }
+  if (!title || !dept) {
+    document.getElementById('newTaskTitle').style.borderColor = !title ? '#EF4444' : '';
+    document.getElementById('newTaskDept').style.borderColor  = !dept  ? '#EF4444' : '';
+    return;
+  }
+  var tags = tagsRaw ? tagsRaw.split(',').map(function(s){return s.trim();}).filter(Boolean) : ['Task'];
+  if (avArr.length === 0) avArr = ['SC'];
+
+  var newId = TASKS.length ? Math.max.apply(null, TASKS.map(function(t){return t.id;})) + 1 : 1;
+  var newTask = {id:newId, title:title, desc:desc||'No description', prio:prio, status:status, dept:dept, av:avArr, due:due, prog:0, tags:tags, c:0, f:0};
+  TASKS.push(newTask);
+
+  // Inject into kanban column
+  var col = document.querySelector('.kanban-col-task[data-col="' + status + '"] .col-cards');
+  if (col) {
+    var ps    = PS[prio];
+    var colObj= COLS.find(function(c){return c.key===status;});
+    var avHtml= avArr.map(function(a,i){
+      var bg = AVC[a] || '#5B8FF9';
+      return '<div style="margin-left:'+(i?'-8px':'0')+'px;z-index:'+(10-i)+';position:relative"><div style="width:24px;height:24px;border-radius:50%;background:'+bg+';display:flex;align-items:center;justify-content:center;color:white;font-size:.6rem;font-weight:700;border:2px solid var(--card-bg)">'+a+'</div></div>';
+    }).join('');
+    var tagHtml = tags.map(function(t){return '<span style="font-size:.6rem;font-weight:700;padding:.15rem .45rem;border-radius:4px;background:var(--body-bg);color:var(--body-text-muted);text-transform:uppercase;letter-spacing:.05em">'+t+'</span>';}).join('');
+    var card = document.createElement('div');
+    card.className='card-hr task-card';
+    card.setAttribute('data-task-id', newId);
+    card.setAttribute('data-dept', dept);
+    card.setAttribute('data-prio', prio);
+    card.setAttribute('data-status', status);
+    card.style.cssText='padding:1rem;margin-bottom:.625rem;cursor:pointer;transition:all .15s';
+    card.setAttribute('onmouseover',"this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'");
+    card.setAttribute('onmouseout', "this.style.transform='';this.style.boxShadow=''");
+    card.innerHTML=
+      '<div style="display:flex;gap:.25rem;flex-wrap:wrap;margin-bottom:.5rem">'+tagHtml+
+      '<span style="margin-left:auto;background:'+ps.bg+';color:'+ps.color+';font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;text-transform:uppercase">'+ps.label+'</span></div>'+
+      '<div style="font-weight:600;font-size:.875rem;margin-bottom:.25rem;line-height:1.4">'+title+'</div>'+
+      '<div style="font-size:.75rem;color:var(--body-text-muted);margin-bottom:.625rem">'+(desc||'No description')+'</div>'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;padding-top:.5rem;border-top:1px solid var(--body-border)">'+
+      '<div style="display:flex">'+avHtml+'</div>'+
+      '<div style="display:flex;gap:.5rem;font-size:.7rem;color:var(--body-text-muted)">'+
+      '<span><i class="bi bi-chat me-1"></i>0</span><span><i class="bi bi-calendar3 me-1"></i>'+due+'</span></div></div>';
+    col.appendChild(card);
+  }
+
+  // Also insert into the List view row and Grid view card — without this,
+  // a task added while in Kanban view would be completely missing the
+  // moment the user switches to List or Grid, even though it exists in
+  // TASKS and would correctly re-appear if the page were reloaded.
+  var statusLabel = (COLS.find(function(c){return c.key===status;})||{label:status}).label;
+  var avInline = avArr.map(function(a,i){
+    var bg = AVC[a] || '#5B8FF9';
+    return '<div class="av-stack-'+i+'"><div style="width:24px;height:24px;border-radius:50%;background:'+bg+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:700">'+a+'</div></div>';
+  }).join('');
+
+  var listBody = document.getElementById('listBody');
+  if (listBody) {
+    var row = document.createElement('tr');
+    row.className = 'task-row';
+    row.setAttribute('data-task-id', newId);
+    row.setAttribute('data-dept', dept);
+    row.setAttribute('data-prio', prio);
+    row.setAttribute('data-status', status);
+    row.innerHTML =
+      '<td class="mw260px"><div class="fw6-mb05">'+title+'</div><div class="fs75-muted-ellipsis">'+(desc||'No description')+'</div></td>'+
+      '<td>'+dept+'</td>'+
+      '<td><span style="font-size:.75rem;font-weight:700;padding:.2rem .5rem;border-radius:4px;background:'+ps.bg+';color:'+ps.color+'">'+ps.label+'</span></td>'+
+      '<td><span style="font-size:.75rem;font-weight:700;padding:.2rem .5rem;border-radius:4px;background:var(--body-bg);color:var(--body-text-muted)">'+statusLabel+'</span></td>'+
+      '<td><div class="flex">'+avInline+'</div></td>'+
+      '<td><span class="fw6-body">'+due+'</span></td>'+
+      '<td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-bar-wrap h5px"><div class="prog-bar-fill w0pct-bg-grad-blue-purple"></div></div></div><span class="mnw30px-fs75-fw7">0%</span></div></td>'+
+      '<td><div class="flex-g1">'+
+        '<button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="View"><i class="bi bi-eye"></i></button>'+
+        '<button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="Edit"><i class="bi bi-pencil"></i></button>'+
+        '<button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" title="More"><i class="bi bi-three-dots"></i></button>'+
+      '</div></td>';
+    listBody.appendChild(row);
+  }
+
+  var gridBody = document.getElementById('gridBody');
+  if (gridBody) {
+    var wrap = document.createElement('div');
+    wrap.className = 'col-xl-3 col-lg-4 col-md-6';
+    var gcard = document.createElement('div');
+    gcard.className = 'card-hr task-card h100pct-p-45-pointer-trans';
+    gcard.setAttribute('data-task-id', newId);
+    gcard.setAttribute('data-dept', dept);
+    gcard.setAttribute('data-prio', prio);
+    gcard.setAttribute('data-status', status);
+    gcard.setAttribute('onmouseover', "this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'");
+    gcard.setAttribute('onmouseout', "this.style.transform='';this.style.boxShadow=''");
+    gcard.innerHTML =
+      '<div class="flex-jsb-mb25">'+
+        '<span style="font-size:.65rem;font-weight:700;padding:.08rem .5rem;border-radius:4px;text-transform:uppercase;background:'+ps.bg+';color:'+ps.color+'">'+ps.label+'</span>'+
+        '<span style="font-size:.65rem;font-weight:700;padding:.08rem .5rem;border-radius:4px;text-transform:uppercase;background:var(--body-bg);color:var(--body-text-muted)">'+statusLabel+'</span>'+
+      '</div>'+
+      '<div class="fs9375-fw7-mb15-lh-13">'+title+'</div>'+
+      '<div class="fs8125-muted-mb35-lh">'+(desc||'No description')+'</div>'+
+      '<div class="mb-75rem"><div class="flex-jsb-fs75-mb12"><span class="c-muted">Progress</span><span class="fw7-cprimary">0%</span></div>'+
+      '<div class="prog-bar-wrap h8px"><div class="prog-bar-fill w0pct-bg-grad-blue-purple"></div></div></div>'+
+      '<div class="flex-wrap-g08-mb3">'+tagHtml+'</div>'+
+      '<div class="flex-ac-jsb-pt3-bt"><div class="flex">'+avInline+'</div>'+
+      '<div class="flex-ac-g15-fs7-c-muted"><span><i class="bi bi-chat me-1"></i>0</span>'+
+      '<span class="c-inherit"><i class="bi bi-calendar3 me-1"></i>'+due+'</span></div></div>';
+    wrap.appendChild(gcard);
+    gridBody.appendChild(wrap);
+  }
+
+  // Update column count badge
+  var badge = document.querySelector('.kanban-col-task[data-col="' + status + '"] .col-count');
+  if (badge) badge.textContent = parseInt(badge.textContent||0) + 1;
+
+  // Close modal and reset
+  bootstrap.Modal.getInstance(document.getElementById('newTaskModal')).hide();
+  document.getElementById('newTaskTitle').value = '';
+  document.getElementById('newTaskDesc').value  = '';
+  document.getElementById('newTaskDept').value  = '';
+  document.getElementById('newTaskTags').value  = '';
+
+  // Re-apply whatever filter is currently active — without this, a task
+  // added while a department/priority/search filter is active would stay
+  // visible even if it doesn't match the active filter.
+  applyFilters();
+}
+</script>
+</body>
+</html>

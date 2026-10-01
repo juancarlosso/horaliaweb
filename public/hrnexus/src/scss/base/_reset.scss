@@ -1,0 +1,37 @@
+@use '../abstracts' as *;
+
+*,
+*::before,
+*::after { box-sizing: border-box; margin: 0; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font);
+  background: var(--body-bg) !important;
+  color: var(--body-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background $transition-base, color $transition-base;
+  line-height: $line-height-base;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba($primary, 0.18);
+  color: var(--body-text);
+}
+
+* { @include scrollbar; }
+
+img,
+svg { max-width: 100%; vertical-align: middle; }
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+button { font-family: inherit; }

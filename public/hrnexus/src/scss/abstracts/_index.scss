@@ -1,0 +1,4 @@
+// abstracts/_index.scss — forwarding hub
+// Any partial: @use '../abstracts' as *;
+@forward 'variables';
+@forward 'mixins';

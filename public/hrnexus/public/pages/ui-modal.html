@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Modal — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Modal dialog component reference with size and content variants."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle>
+        <i class="bi bi-list fs125"></i>
+      </button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar">
+        <span>HRNexus</span><span class="bc-sep">/</span>
+        <span>UI Components</span><span class="bc-sep">/</span>
+        <span class="bc-current">Modal</span>
+      </nav>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-inner">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Modal</h1>
+          <p class="page-subtitle">12 modal variants — basic, confirm, form, drawer, fullscreen, wizard, image preview & more</p>
+        </div>
+      </div>
+
+      <!-- ══ 1. BASIC MODALS ════════════════════════════════════════ -->
+      <div class="sl">1 — Basic Modals</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Basic Modal Sizes</div>
+          <div class="card-subtitle-hr">Small, default, and large modal widths</div>
+        </div>
+        <div class="card-bd flex-g3-wrap">
+          <button type="button" class="btn-hr btn-primary-hr" data-bs-toggle="modal" data-bs-target="#mBasic">Basic Modal</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mSm">Small Modal</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mLg">Large Modal</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mXl">Extra Large</button>
+        </div>
+      </div>
+
+      <!-- ══ 2. CONFIRM / ALERT MODALS ═════════════════════════════ -->
+      <div class="sl">2 — Confirm &amp; Alert Dialogs</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Destructive &amp; Action Dialogs</div>
+          <div class="card-subtitle-hr">Delete confirm, warning, and success variants</div>
+        </div>
+        <div class="card-bd flex-g3-wrap">
+          <button type="button" class="btn-hr btn-outline-hr c-red-bc-red" data-bs-toggle="modal" data-bs-target="#mDel">Delete Confirm</button>
+          <button type="button" class="btn-hr btn-outline-hr c-amber-dk-bc-amber" data-bs-toggle="modal" data-bs-target="#mWarn">Warning</button>
+          <button type="button" class="btn-hr btn-outline-hr c-green-bc-green" data-bs-toggle="modal" data-bs-target="#mSuccess">Success</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mInfo">Info Dialog</button>
+        </div>
+      </div>
+
+      <!-- ══ 3. FORM MODALS ═════════════════════════════════════════ -->
+      <div class="sl">3 — Form Modals</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Data Entry Modals</div>
+          <div class="card-subtitle-hr">Add employee, send email, quick note</div>
+        </div>
+        <div class="card-bd flex-g3-wrap">
+          <button type="button" class="btn-hr btn-primary-hr" data-bs-toggle="modal" data-bs-target="#mAddEmp"><i class="bi bi-person-plus-fill me-1"></i>Add Employee</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mEmail"><i class="bi bi-envelope me-1"></i>Send Email</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mNote"><i class="bi bi-sticky me-1"></i>Quick Note</button>
+        </div>
+      </div>
+
+      <!-- ══ 4. DRAWER / SIDE MODALS ════════════════════════════════ -->
+      <div class="sl">4 — Side Drawer Modals</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Right-Side Drawers</div>
+          <div class="card-subtitle-hr">Slide in from the right — keeps context visible</div>
+        </div>
+        <div class="card-bd flex-g3-wrap">
+          <button type="button" class="btn-hr btn-primary-hr" data-bs-toggle="modal" data-bs-target="#mDrawer">Employee Details</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mFilters">Filter Drawer</button>
+        </div>
+      </div>
+
+      <!-- ══ 5. WIZARD / MULTI-STEP ═════════════════════════════════ -->
+      <div class="sl">5 — Wizard / Multi-Step Modal</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Multi-Step Wizard</div>
+          <div class="card-subtitle-hr">Step-by-step form with progress indicator</div>
+        </div>
+        <div class="card-bd">
+          <button type="button" class="btn-hr btn-primary-hr" data-bs-toggle="modal" data-bs-target="#mWizard">
+            <i class="bi bi-person-plus me-1"></i>Onboard New Employee
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ 6. SPECIAL MODALS ══════════════════════════════════════ -->
+      <div class="sl">6 — Special Variants</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Image Preview, Loading, Rating, Fullscreen</div>
+          <div class="card-subtitle-hr">Purpose-built modal patterns</div>
+        </div>
+        <div class="card-bd flex-g3-wrap">
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mImage"><i class="bi bi-image me-1"></i>Image Preview</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mLoading"><i class="bi bi-hourglass me-1"></i>Loading Modal</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mRating"><i class="bi bi-star me-1"></i>Rating Modal</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mFullscreen"><i class="bi bi-fullscreen me-1"></i>Fullscreen</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mScrollable"><i class="bi bi-scroll me-1"></i>Scrollable</button>
+          <button type="button" class="btn-hr btn-outline-hr" data-bs-toggle="modal" data-bs-target="#mToast"><i class="bi bi-bell me-1"></i>Toast Modal</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  MODALS — all 12 variants
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+
+<!-- 1a. Basic Modal -->
+<div class="modal fade" id="mBasic" tabindex="-1" aria-labelledby="mBasicLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mBasicLabel"><i class="bi bi-person-badge-fill me-2 c-primary"></i>Employee Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="flex-ac-g4-mb5">
+          <div class="avatar-blue-purple-56-2">SC</div>
+          <div>
+            <div class="fs10625-fw8-c-body">Sarah Chen</div>
+            <div class="fs8125-muted">Senior UX Designer · Product</div>
+            <div class="flex-g15-mt15">
+              <span class="fs65-fw7-c-blue-bg-blue-10-br4px-p-06-18">Active</span>
+              <span class="fs65-fw7-c-green-bg-green-10-br4px-p-06-18">Full-time</span>
+            </div>
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-6"><div class="bg-bg-br25-p-3-b-1"><div class="fs7-fw6-c-muted-mb08">Department</div><div class="fw7-fs875">Product</div></div></div>
+          <div class="col-6"><div class="bg-bg-br25-p-3-b-1"><div class="fs7-fw6-c-muted-mb08">Joined</div><div class="fw7-fs875">Mar 2021</div></div></div>
+          <div class="col-6"><div class="bg-bg-br25-p-3-b-1"><div class="fs7-fw6-c-muted-mb08">Performance</div><div class="fs875-fw7-c-green">94 / 100</div></div></div>
+          <div class="col-6"><div class="bg-bg-br25-p-3-b-1"><div class="fs7-fw6-c-muted-mb08">Leave Balance</div><div class="fw7-fs875">18 days</div></div></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn-hr btn-primary-hr">View Full Profile</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 1b. Small Modal -->
+<div class="modal fade" id="mSm" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Quick Action</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="fs875-c-muted-mb4">Select an action for Sarah Chen:</p>
+        <div class="flex-col-g2">
+          <button type="button" class="btn-hr btn-outline-hr justify-content-2"><i class="bi bi-envelope me-2 c-primary"></i>Send Message</button>
+          <button type="button" class="btn-hr btn-outline-hr justify-content-2"><i class="bi bi-calendar-plus me-2 c-green"></i>Schedule 1:1</button>
+          <button type="button" class="btn-hr btn-outline-hr justify-content-2"><i class="bi bi-graph-up me-2 c-amber"></i>View Performance</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 1c. Large Modal -->
+<div class="modal fade" id="mLg" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-file-earmark-bar-graph-fill me-2 c-primary"></i>Q4 Performance Report</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3 mb-75rem">
+          <div class="col-sm-3"><div class="bg-bg-br3-p-4-tc-b-1"><div class="fs175-fw9-c-blue">128</div><div class="fs75-muted">Employees</div></div></div>
+          <div class="col-sm-3"><div class="bg-bg-br3-p-4-tc-b-1"><div class="fs175-fw9-c-green">88.2</div><div class="fs75-muted">Avg Score</div></div></div>
+          <div class="col-sm-3"><div class="bg-bg-br3-p-4-tc-b-1"><div class="fs175-fw9-c-amber">94%</div><div class="fs75-muted">Attendance</div></div></div>
+          <div class="col-sm-3"><div class="bg-bg-br3-p-4-tc-b-1"><div class="fs175-fw9-c-red">14</div><div class="fs75-muted">Pending</div></div></div>
+        </div>
+        <div class="br3-b-1-ov-hidden">
+          <div class="flex-g4-fs78-fw7-c-muted-bg-bg-p-3-4-uc-bb-1">
+            <span class="fl1">Employee</span><span class="w80px-tc">Score</span><span class="w80px-tc">Trend</span><span class="w80px-tr">Status</span>
+          </div>
+          <div class="flex-ac-g4-p-3-4-bb-1">
+            <div class="flex-ac-g25-fl1"><div class="avatar-blue-purple-32">SC</div><div><div class="fs875-fw6">Sarah Chen</div><div class="fs75-muted">UX Designer</div></div></div>
+            <div class="w80px-fw8-c-green-tc">94</div>
+            <div class="w80px-fs8-fw7-c-green-tc"><i class="bi bi-arrow-up-right"></i>+3.4</div>
+            <div class="w80px-tr"><span class="badge-green-10-xs-fs72-p08-2">Excellent</span></div>
+          </div>
+          <div class="flex-ac-g4-p-3-4-bb-1">
+            <div class="flex-ac-g25-fl1"><div class="avatar-green-sky-32-3">MJ</div><div><div class="fs875-fw6">Marcus Johnson</div><div class="fs75-muted">Backend Engineer</div></div></div>
+            <div class="w80px-fw8-c-blue-tc">88</div>
+            <div class="w80px-fs8-fw7-c-green-tc"><i class="bi bi-arrow-up-right"></i>+1.2</div>
+            <div class="w80px-tr"><span class="badge-blue-10-xs-fs72-p08-2">Good</span></div>
+          </div>
+          <div class="flex-ac-g4-p-3-4">
+            <div class="flex-ac-g25-fl1"><div class="avatar-amber-red-32">PN</div><div><div class="fs875-fw6">Priya Nair</div><div class="fs75-muted">Product Manager</div></div></div>
+            <div class="w80px-fw8-c-green-tc">91</div>
+            <div class="w80px-fs8-fw7-c-red-tc"><i class="bi bi-arrow-down-right"></i>-0.8</div>
+            <div class="w80px-tr"><span class="badge-green-10-xs-fs72-p08-2">Excellent</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn-hr btn-outline-hr"><i class="bi bi-download me-1"></i>Export PDF</button>
+        <button type="button" class="btn-hr btn-primary-hr">View Full Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 1d. XL Modal -->
+<div class="modal fade" id="mXl" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-people-fill me-2 c-primary"></i>Employee Directory</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="flex-wrap-g3-mb5">
+          <div class="rel-mnw200px-fl1"><i class="bi bi-search abs-t50pct-l3-fs875-c-muted-pe-none"></i><input class="hr-inp pl9" placeholder="Search employees..." /></div>
+          <select class="hr-inp mw160px"><option>All Departments</option><option>Engineering</option><option>Product</option><option>HR</option></select>
+        </div>
+        <div class="row g-2">
+          <div class="col-sm-6 col-lg-4"><div class="flex-ac-g3-bg-bg-br3-p-35-b-1"><div class="avatar-blue-purple-40-3">SC</div><div class="mnw0"><div class="fs875-fw7-c-body-ellipsis-nowrap-ov-hidden">Sarah Chen</div><div class="fs75-muted">UX Designer · Product</div></div><span class="fs65-fw7-c-green-bg-green-10-br4px-p-06-16-shrink0">Active</span></div></div>
+          <div class="col-sm-6 col-lg-4"><div class="flex-ac-g3-bg-bg-br3-p-35-b-1"><div class="avatar-green-sky-40-3">MJ</div><div class="mnw0"><div class="fs875-fw7-c-body-ellipsis-nowrap-ov-hidden">Marcus Johnson</div><div class="fs75-muted">Backend Eng · Engineering</div></div><span class="fs65-fw7-c-green-bg-green-10-br4px-p-06-16-shrink0">Active</span></div></div>
+          <div class="col-sm-6 col-lg-4"><div class="flex-ac-g3-bg-bg-br3-p-35-b-1"><div class="avatar-amber-red-40-3">PN</div><div class="mnw0"><div class="fs875-fw7-c-body-ellipsis-nowrap-ov-hidden">Priya Nair</div><div class="fs75-muted">Product Manager · Product</div></div><span class="fs65-fw7-c-amber-dk-bg-amber-10-br4px-p-06-16-shrink0">Leave</span></div></div>
+          <div class="col-sm-6 col-lg-4"><div class="flex-ac-g3-bg-bg-br3-p-35-b-1"><div class="avatar-sky-blue-40">DK</div><div class="mnw0"><div class="fs875-fw7-c-body-ellipsis-nowrap-ov-hidden">David Kim</div><div class="fs75-muted">Data Analyst · Analytics</div></div><span class="fs65-fw7-c-green-bg-green-10-br4px-p-06-16-shrink0">Active</span></div></div>
+          <div class="col-sm-6 col-lg-4"><div class="flex-ac-g3-bg-bg-br3-p-35-b-1"><div class="avatar-purple-pink-40-3">ER</div><div class="mnw0"><div class="fs875-fw7-c-body-ellipsis-nowrap-ov-hidden">Emily Rodriguez</div><div class="fs75-muted">HR Specialist · HR</div></div><span class="fs65-fw7-c-green-bg-green-10-br4px-p-06-16-shrink0">Active</span></div></div>
+          <div class="col-sm-6 col-lg-4"><div class="flex-ac-g3-bg-bg-br3-p-35-b-1"><div class="avatar-red-amber-40">TN</div><div class="mnw0"><div class="fs875-fw7-c-body-ellipsis-nowrap-ov-hidden">Tom Nakamura</div><div class="fs75-muted">DevOps Eng · Engineering</div></div><span class="fs65-fw7-c-blue-bg-blue-10-br4px-p-06-16-shrink0">Pending</span></div></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn-hr btn-primary-hr"><i class="bi bi-person-plus-fill me-1"></i>Add Employee</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2a. Delete Confirm -->
+<div class="modal fade" id="mDel" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body tc-p8">
+        <div class="avatar-red-10-60"><i class="bi bi-trash3-fill fs15-c-red"></i></div>
+        <h5 class="fw8-c-body-mb2">Delete Employee?</h5>
+        <p class="fs9-c-muted-mb5-lh-16">This will permanently delete <strong>Sarah Chen</strong> and all associated data. This action cannot be undone.</p>
+        <div class="flex-g2">
+          <button type="button" class="btn-hr btn-outline-hr fl1-jfc" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn-hr fw7-c-white-bg-red-br25-p-25-5-b-none-pointer-fl1" data-bs-dismiss="modal">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2b. Warning -->
+<div class="modal fade" id="mWarn" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body tc-p8">
+        <div class="avatar-amber-10-60"><i class="bi bi-exclamation-triangle-fill fs15-c-amber"></i></div>
+        <h5 class="fw8-c-body-mb2">Unsaved Changes</h5>
+        <p class="fs9-c-muted-mb5-lh-16">You have unsaved changes to Sarah Chen's profile. Are you sure you want to leave without saving?</p>
+        <div class="flex-g2">
+          <button type="button" class="btn-hr btn-outline-hr fl1-jfc" data-bs-dismiss="modal">Discard</button>
+          <button type="button" class="btn-hr fw7-c-white-bg-amber-br25-p-25-5-b-none-pointer-fl1" data-bs-dismiss="modal">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2c. Success -->
+<div class="modal fade" id="mSuccess" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body tc-p8">
+        <div class="avatar-green-10-60"><i class="bi bi-check-circle-fill fs15-c-green"></i></div>
+        <h5 class="fw8-c-body-mb2">Payroll Processed!</h5>
+        <p class="fs9-c-muted-mb15-lh-16">December 2024 payroll has been successfully disbursed.</p>
+        <div class="fs175-fw9-c-green-m-2-0">₹1.24Cr</div>
+        <div class="fs8-c-muted-mb5">128 employees · Dec 28, 2024</div>
+        <button type="button" class="btn-hr btn-primary-hr w100pct-6" data-bs-dismiss="modal">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2d. Info Dialog -->
+<div class="modal fade" id="mInfo" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-blue-6">
+        <h5 class="modal-title"><i class="bi bi-info-circle-fill me-2 c-primary"></i>Policy Update</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="fs9-c-body-mb35-lh-17">The <strong>Hybrid Work Policy</strong> has been updated effective <strong>April 1, 2026</strong>. Key changes include:</p>
+        <ul class="fs875-c-muted-pl5-lh-18">
+          <li>Minimum 3 in-office days per week for all team leads</li>
+          <li>Core hours changed to 10 AM – 3 PM in local timezone</li>
+          <li>Geo-fencing requirement removed for senior employees (L5+)</li>
+          <li>Equipment allowance increased to ₹30,000/year</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Dismiss</button>
+        <button type="button" class="btn-hr btn-primary-hr">Acknowledge &amp; Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3a. Add Employee Form -->
+<div class="modal fade" id="mAddEmp" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-person-plus-fill me-2 c-primary"></i>Add Employee</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-6"><label class="hr-lbl">First Name *</label><input class="hr-inp" placeholder="Sarah"/></div>
+          <div class="col-6"><label class="hr-lbl">Last Name *</label><input class="hr-inp" placeholder="Chen"/></div>
+          <div class="col-12"><label class="hr-lbl">Email *</label><input class="hr-inp" type="email" placeholder="sarah.chen@hrnexus.com"/></div>
+          <div class="col-6"><label class="hr-lbl">Department *</label>
+            <select class="hr-inp"><option value="">Select...</option><option>Engineering</option><option>Product</option><option>HR</option><option>Analytics</option><option>Finance</option></select>
+          </div>
+          <div class="col-6"><label class="hr-lbl">Role / Title *</label><input class="hr-inp" placeholder="UX Designer"/></div>
+          <div class="col-6"><label class="hr-lbl">Start Date *</label><input class="hr-inp" type="date"/></div>
+          <div class="col-6"><label class="hr-lbl">Employment Type</label>
+            <select class="hr-inp"><option>Full-time</option><option>Part-time</option><option>Contract</option></select>
+          </div>
+          <div class="col-12"><label class="hr-lbl">Monthly CTC (₹)</label><input class="hr-inp" type="number" placeholder="75000"/></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="submitForm(this)"><i class="bi bi-person-plus me-1"></i>Add Employee</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3b. Send Email -->
+<div class="modal fade" id="mEmail" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-envelope-fill me-2 c-primary"></i>Send Email</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="flex-col-g35">
+          <div><label class="hr-lbl">To *</label><input class="hr-inp" placeholder="sarah.chen@hrnexus.com"/></div>
+          <div class="flex-g2">
+            <div class="fl1"><label class="hr-lbl">CC</label><input class="hr-inp" placeholder="manager@hrnexus.com"/></div>
+            <div class="fl1"><label class="hr-lbl">BCC</label><input class="hr-inp" placeholder="hr@hrnexus.com"/></div>
+          </div>
+          <div><label class="hr-lbl">Subject *</label><input class="hr-inp" placeholder="Performance Review — Q4 2024"/></div>
+          <div><label class="hr-lbl">Message *</label>
+            <textarea class="hr-inp" rows="5" placeholder="Dear Sarah,&#10;&#10;Your Q4 performance review is now available..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Discard</button>
+        <button type="button" class="btn-hr btn-outline-hr"><i class="bi bi-paperclip me-1"></i>Attach</button>
+        <button type="button" class="btn-hr btn-primary-hr" onclick="submitForm(this)"><i class="bi bi-send-fill me-1"></i>Send Email</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3c. Quick Note -->
+<div class="modal fade" id="mNote" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-sticky-fill me-2 c-amber"></i>Quick Note</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-75rem"><label class="hr-lbl">Note about</label><input class="hr-inp" value="Sarah Chen" /></div>
+        <div><label class="hr-lbl">Note *</label><textarea class="hr-inp" rows="4" placeholder="Add a note..."></textarea></div>
+        <div class="flex-g2-mt3">
+          <span class="badge-blue-10-xs-fs72-p1-25">Positive</span>
+          <span class="badge-red-10-xs-fs72-p1-25">Concern</span>
+          <span class="badge-amber-10-xs-fs72-p1-25">Follow-up</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" data-bs-dismiss="modal">Save Note</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4a. Drawer — Employee Details -->
+<div class="modal fade modal-drawer" id="mDrawer" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog width">
+    <div class="modal-content">
+      <div class="modal-header pos-sticky-hdr2">
+        <h5 class="modal-title"><i class="bi bi-person-badge-fill me-2 c-primary"></i>Employee Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Profile header -->
+        <div class="p-6-0-4-mb5-tc-bb-1">
+          <div class="avatar-blue-purple-72-2">SC</div>
+          <div class="fs1125-fw8-c-body">Sarah Chen</div>
+          <div class="fs8125-c-muted-mt08">Senior UX Designer · Product</div>
+          <div class="flex-jfc-g15-mt25">
+            <span class="fs65-fw7-c-green-bg-green-10-br4px-p-06-18">Active</span>
+            <span class="fs65-fw7-c-blue-bg-blue-10-br4px-p-06-18">Full-time</span>
+          </div>
+        </div>
+        <!-- Details sections -->
+        <div class="fs68-fw7-c-muted-mb25-uc">Contact Info</div>
+        <div class="flex-col-g2-mb5">
+          <div class="flex-ac-g3-fs875"><i class="bi bi-envelope w16px-c-primary-shrink0"></i><span>sarah.chen@hrnexus.com</span></div>
+          <div class="flex-ac-g3-fs875"><i class="bi bi-phone w16px-c-primary-shrink0"></i><span>+91 98765 43210</span></div>
+          <div class="flex-ac-g3-fs875"><i class="bi bi-geo-alt w16px-c-primary-shrink0"></i><span>Bangalore, India · IST</span></div>
+        </div>
+        <div class="fs68-fw7-c-muted-mb25-uc">Employment</div>
+        <div class="row g-2 mb-1rem">
+          <div class="col-6"><div class="bg-bg-br2-p-25-3-b-1"><div class="fs7-c-muted-mb06">Employee ID</div><div class="fw7-fs875">#EMP-0042</div></div></div>
+          <div class="col-6"><div class="bg-bg-br2-p-25-3-b-1"><div class="fs7-c-muted-mb06">Start Date</div><div class="fw7-fs875">Mar 15, 2021</div></div></div>
+          <div class="col-6"><div class="bg-bg-br2-p-25-3-b-1"><div class="fs7-c-muted-mb06">Reports to</div><div class="fw7-fs875">James Park</div></div></div>
+          <div class="col-6"><div class="bg-bg-br2-p-25-3-b-1"><div class="fs7-c-muted-mb06">Performance</div><div class="fs875-fw7-c-green">94 / 100</div></div></div>
+        </div>
+        <div class="fs68-fw7-c-muted-mb25-uc">Skills</div>
+        <div class="flex-g15-wrap">
+          <span class="badge-blue-10-xs-fs75-p12-3">Figma</span>
+          <span class="badge-blue-10-xs-fs75-p12-3">UX Research</span>
+          <span class="badge-blue-10-xs-fs75-p12-3">Prototyping</span>
+          <span class="badge-blue-10-xs-fs75-p12-3">Design Systems</span>
+          <span class="badge-blue-10-xs-fs75-p12-3">A/B Testing</span>
+        </div>
+      </div>
+      <div class="modal-footer sticky-b0-bg-card-bg">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn-hr btn-outline-hr"><i class="bi bi-pencil me-1"></i>Edit</button>
+        <button type="button" class="btn-hr btn-primary-hr">Full Profile</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4b. Filter Drawer -->
+<div class="modal fade modal-drawer" id="mFilters" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog width-3">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-funnel-fill me-2 c-primary"></i>Filter Employees</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="flex-col-g5">
+          <div><label class="hr-lbl">Department</label>
+            <div class="flex-wrap-g15-mt15">
+              <span class="filter-pill on badge-blue-12-xs-fs8-p14-35-2" onclick="togglePill(this)">All</span>
+              <span class="filter-pill badge-transparent-xs-fs8-p14-35" onclick="togglePill(this)">Engineering</span>
+              <span class="filter-pill badge-transparent-xs-fs8-p14-35" onclick="togglePill(this)">Product</span>
+              <span class="filter-pill badge-transparent-xs-fs8-p14-35" onclick="togglePill(this)">HR</span>
+              <span class="filter-pill badge-transparent-xs-fs8-p14-35" onclick="togglePill(this)">Finance</span>
+            </div>
+          </div>
+          <div><label class="hr-lbl">Status</label>
+            <div class="flex-wrap-g15-mt15">
+              <span class="filter-pill on badge-blue-12-xs-fs8-p14-35" onclick="togglePill(this)">All</span>
+              <span class="filter-pill badge-transparent-xs-fs8-p14-35-2" onclick="togglePill(this)">Active</span>
+              <span class="filter-pill badge-transparent-xs-fs8-p14-35-2" onclick="togglePill(this)">On Leave</span>
+              <span class="filter-pill badge-transparent-xs-fs8-p14-35-2" onclick="togglePill(this)">Pending</span>
+            </div>
+          </div>
+          <div><label class="hr-lbl">Performance Score</label>
+            <div class="flex-ac-g3-mt15">
+              <input class="hr-inp w80px" type="number" placeholder="Min" />
+              <span class="c-muted">to</span>
+              <input class="hr-inp w80px" type="number" placeholder="Max" />
+            </div>
+          </div>
+          <div><label class="hr-lbl">Sort By</label>
+            <select class="hr-inp mt-15"><option>Name (A–Z)</option><option>Performance Score</option><option>Join Date</option><option>Department</option></select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" onclick="document.querySelectorAll('.filter-pill').forEach(function(p){p.classList.remove('on');p.style.background='transparent';p.style.borderColor='var(--body-border)';p.style.color='var(--body-text-muted)'})">Reset</button>
+        <button type="button" class="btn-hr btn-primary-hr" data-bs-dismiss="modal">Apply Filters</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Wizard Modal -->
+<div class="modal fade" id="mWizard" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered mw520px">
+    <div class="modal-content">
+      <div class="modal-header align-items">
+        <div class="flex-jsb-ac">
+          <h5 class="modal-title"><i class="bi bi-person-plus-fill me-2 c-primary"></i>Onboard New Employee</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+        </div>
+        <!-- Steps -->
+        <div class="flex-ac" id="wiz-steps">
+          <div class="wiz-step active"><div class="wiz-num">1</div><span class="wiz-label">Personal</span></div>
+          <div class="h2px-bg-border-m-0-2-fl1" id="wiz-line1"></div>
+          <div class="wiz-step"><div class="wiz-num">2</div><span class="wiz-label">Employment</span></div>
+          <div class="h2px-bg-border-m-0-2-fl1" id="wiz-line2"></div>
+          <div class="wiz-step"><div class="wiz-num">3</div><span class="wiz-label">Compensation</span></div>
+          <div class="h2px-bg-border-m-0-2-fl1" id="wiz-line3"></div>
+          <div class="wiz-step"><div class="wiz-num">4</div><span class="wiz-label">Review</span></div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <!-- Step 1 -->
+        <div id="wiz-p1">
+          <div class="row g-3">
+            <div class="col-6"><label class="hr-lbl">First Name *</label><input class="hr-inp" placeholder="Sarah"/></div>
+            <div class="col-6"><label class="hr-lbl">Last Name *</label><input class="hr-inp" placeholder="Chen"/></div>
+            <div class="col-12"><label class="hr-lbl">Personal Email *</label><input class="hr-inp" type="email" placeholder="sarah.chen@gmail.com"/></div>
+            <div class="col-6"><label class="hr-lbl">Phone</label><input class="hr-inp" placeholder="+91 98765 43210"/></div>
+            <div class="col-6"><label class="hr-lbl">Date of Birth</label><input class="hr-inp" type="date"/></div>
+            <div class="col-12"><label class="hr-lbl">Address</label><input class="hr-inp" placeholder="Koramangala, Bangalore, India"/></div>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="d-none" id="wiz-p2">
+          <div class="row g-3">
+            <div class="col-12"><label class="hr-lbl">Work Email *</label><input class="hr-inp" placeholder="sarah.chen@hrnexus.com"/></div>
+            <div class="col-6"><label class="hr-lbl">Department *</label><select class="hr-inp"><option value="">Select...</option><option>Engineering</option><option>Product</option><option>HR</option><option>Analytics</option></select></div>
+            <div class="col-6"><label class="hr-lbl">Role / Title *</label><input class="hr-inp" placeholder="UX Designer"/></div>
+            <div class="col-6"><label class="hr-lbl">Employment Type</label><select class="hr-inp"><option>Full-time</option><option>Part-time</option><option>Contract</option></select></div>
+            <div class="col-6"><label class="hr-lbl">Start Date *</label><input class="hr-inp" type="date"/></div>
+            <div class="col-12"><label class="hr-lbl">Reports To</label><input class="hr-inp" placeholder="James Park (Engineering Lead)"/></div>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="d-none" id="wiz-p3">
+          <div class="row g-3">
+            <div class="col-12"><label class="hr-lbl">Monthly CTC (₹) *</label><input class="hr-inp" type="number" placeholder="75000"/></div>
+            <div class="col-6"><label class="hr-lbl">Basic Salary (%)</label><input class="hr-inp" type="number" placeholder="50"/></div>
+            <div class="col-6"><label class="hr-lbl">HRA (%)</label><input class="hr-inp" type="number" placeholder="20"/></div>
+            <div class="col-6"><label class="hr-lbl">PF Enrolled</label><select class="hr-inp"><option>Yes</option><option>No</option></select></div>
+            <div class="col-6"><label class="hr-lbl">Bank Account</label><input class="hr-inp" placeholder="XXXX XXXX XXXX 1234"/></div>
+            <div class="col-12"><label class="hr-lbl">Annual Bonus (₹)</label><input class="hr-inp" type="number" placeholder="100000"/></div>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div class="d-none" id="wiz-p4">
+          <div class="bg-bg-br3-p-4-mb4-b-1">
+            <div class="fs78-fw7-c-muted-mb3-uc">Summary</div>
+            <div class="flex-col-g2">
+              <div class="flex-jsb-fs875"><span class="c-muted">Name</span><span class="fw6">Sarah Chen</span></div>
+              <div class="flex-jsb-fs875"><span class="c-muted">Role</span><span class="fw6">UX Designer · Product</span></div>
+              <div class="flex-jsb-fs875"><span class="c-muted">Start Date</span><span class="fw6">Jan 15, 2026</span></div>
+              <div class="flex-jsb-fs875"><span class="c-muted">CTC</span><span class="c-green-fw6">₹75,000 / mo</span></div>
+            </div>
+          </div>
+          <div class="bg-green-6-br3-p-35-b-1">
+            <div class="flex-ac-g25-fs875-c-body">
+              <i class="bi bi-envelope-fill c-green"></i>
+              Welcome email with login credentials will be sent to sarah.chen@hrnexus.com automatically on Start Date.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr d-none" id="wiz-back" onclick="wizStep(-1)">Back</button>
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal" id="wiz-cancel">Cancel</button>
+        <button type="button" class="btn-hr btn-primary-hr" id="wiz-next" onclick="wizStep(1)">Next <i class="bi bi-arrow-right ms-1"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6a. Image Preview -->
+<div class="modal fade" id="mImage" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered mw480px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-image me-2 c-primary"></i>Profile Photo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body tc-p6">
+        <div class="avatar-blue-purple-180">SC</div>
+        <div class="fs1125-fw8-c-body">Sarah Chen</div>
+        <div class="fs8125-c-muted-mt1">Senior UX Designer</div>
+        <div class="flex-jfc-g2-mt4">
+          <button type="button" class="btn-hr btn-outline-hr btn-sm-hr"><i class="bi bi-camera me-1"></i>Change Photo</button>
+          <button type="button" class="btn-hr btn-outline-hr btn-sm-hr c-red-bc-red"><i class="bi bi-trash me-1"></i>Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6b. Loading Modal -->
+<div class="modal fade" id="mLoading" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body tc-p8">
+        <div class="sq52px-m-0-auto-4"></div>
+        <div class="fs9375-fw7-c-body-mb15">Processing Payroll</div>
+        <div class="fs8125-muted" id="load-txt">Calculating deductions...</div>
+        <div class="h4px-bg-border-br999px-mt4-ov-hidden">
+          <div class="w0pct-h100pct-bg-primary-br999px-trans" id="load-bar"></div>
+        </div>
+        <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr mt-1rem" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6c. Rating Modal -->
+<div class="modal fade" id="mRating" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-star-fill me-2 c-amber"></i>Rate Performance</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body tc">
+        <div class="flex-ac-jfc-g3-mb5">
+          <div class="avatar-blue-purple-48-2">SC</div>
+          <div class="tl"><div class="fw7-body">Sarah Chen</div><div class="fs78-muted">Q4 2024 Review</div></div>
+        </div>
+        <div class="flex-jfc-g15-mb25" id="star-row">
+          <i class="bi bi-star-fill star-pick lit" data-v="1" onclick="rateStar(1)"></i>
+          <i class="bi bi-star-fill star-pick lit" data-v="2" onclick="rateStar(2)"></i>
+          <i class="bi bi-star-fill star-pick lit" data-v="3" onclick="rateStar(3)"></i>
+          <i class="bi bi-star-fill star-pick lit" data-v="4" onclick="rateStar(4)"></i>
+          <i class="bi bi-star-fill star-pick" data-v="5" onclick="rateStar(5)"></i>
+        </div>
+        <div class="fs8125-c-muted-mb4" id="star-lbl">4 stars — Exceeds Expectations</div>
+        <textarea class="hr-inp tl" rows="3" placeholder="Optional feedback comment..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Skip</button>
+        <button type="button" class="btn-hr btn-primary-hr" data-bs-dismiss="modal">Submit Rating</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6d. Fullscreen Modal -->
+<div class="modal fade modal-fullscreen" id="mFullscreen" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-fullscreen me-2 c-primary"></i>Employee Directory — Fullscreen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid mw960px-m-0-auto">
+          <div class="flex-wrap-g3-mb6">
+            <div class="rel-mnw200px-fl1"><i class="bi bi-search abs-t50pct-l3-c-muted-pe-none"></i><input class="hr-inp pl9" placeholder="Search all employees..." /></div>
+            <select class="hr-inp mw180px"><option>All Departments</option><option>Engineering</option><option>Product</option><option>HR</option></select>
+            <select class="hr-inp mw160px"><option>Sort: Name</option><option>Score</option><option>Join Date</option></select>
+          </div>
+          <div class="row g-3">
+            <div class="col-sm-6 col-lg-4"><div class="flex-ac-g35-bg-bg-br35-p-45-b-1-pointer-trans" onmouseover="this.style.borderColor='var(--color-primary)'" onmouseout="this.style.borderColor='var(--body-border)'"><div class="avatar-blue-purple-44-2">SC</div><div class="fl1-mnw0"><div class="fw7-fs9375">Sarah Chen</div><div class="fs78-muted">UX Designer · Product</div></div><span class="fs72-fw7-c-green">94</span></div></div>
+            <div class="col-sm-6 col-lg-4"><div class="flex-ac-g35-bg-bg-br35-p-45-b-1-pointer-trans" onmouseover="this.style.borderColor='var(--color-primary)'" onmouseout="this.style.borderColor='var(--body-border)'"><div class="avatar-green-sky-44-4">MJ</div><div class="fl1-mnw0"><div class="fw7-fs9375">Marcus Johnson</div><div class="fs78-muted">Backend Eng · Engineering</div></div><span class="fs72-fw7-c-blue">88</span></div></div>
+            <div class="col-sm-6 col-lg-4"><div class="flex-ac-g35-bg-bg-br35-p-45-b-1-pointer-trans" onmouseover="this.style.borderColor='var(--color-primary)'" onmouseout="this.style.borderColor='var(--body-border)'"><div class="avatar-amber-red-44-3">PN</div><div class="fl1-mnw0"><div class="fw7-fs9375">Priya Nair</div><div class="fs78-muted">Product Manager · Product</div></div><span class="fs72-fw7-c-green">91</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn-hr btn-primary-hr"><i class="bi bi-person-plus-fill me-1"></i>Add Employee</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6e. Scrollable Modal -->
+<div class="modal fade" id="mScrollable" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-file-text-fill me-2 c-primary"></i>Hybrid Work Policy</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"> aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="fs875-c-body-mb4-lh-18"><strong>Effective date:</strong> April 1, 2026</p>
+        <p class="fs875-c-body-mb4-lh-18">This policy outlines HRNexus's hybrid work guidelines. All employees are expected to review and acknowledge this document before April 1, 2026.</p>
+        <h6 class="fw7-mb2">1. Eligibility</h6>
+        <p class="fs875-c-muted-mb4-lh-18">All full-time employees at Level 2 and above are eligible for hybrid work arrangements. Contract employees and interns are expected to be on-site full-time during their engagement.</p>
+        <h6 class="fw7-mb2">2. In-Office Requirements</h6>
+        <p class="fs875-c-muted-mb4-lh-18">Employees must be present in the office a minimum of 3 days per week. Core hours of 10 AM to 3 PM in the local timezone must be observed regardless of working location. Team leads and above must be on-site every Tuesday and Thursday.</p>
+        <h6 class="fw7-mb2">3. Equipment Allowance</h6>
+        <p class="fs875-c-muted-mb4-lh-18">The annual equipment allowance is increased to ₹30,000 per year. This covers peripherals, ergonomic furniture, and internet connectivity costs. Reimbursement requires receipts submitted within 30 days of purchase.</p>
+        <h6 class="fw7-mb2">4. Security Requirements</h6>
+        <p class="fs875-c-muted-mb4-lh-18">All employees working remotely must use the company VPN, have their device's disk encryption enabled, and use MFA for all company accounts. Violations may result in immediate revocation of remote work privileges.</p>
+        <h6 class="fw7-mb2">5. Performance Standards</h6>
+        <p class="fs875-c-muted-mb4-lh-18">Remote work is a privilege contingent on maintaining performance standards. Employees with performance scores below 70/100 for two consecutive quarters will be required to return to full on-site work for a minimum of 90 days.</p>
+        <h6 class="fw7-mb2">6. Expense Claims</h6>
+        <p class="fs875-c-muted-mb0-lh-18">Travel to and from the office is not reimbursable. Business travel expenses are reimbursed per the Expense Reimbursement Policy. Co-working space costs are reimbursable up to ₹5,000/month with manager approval.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Decline</button>
+        <button type="button" class="btn-hr btn-primary-hr" data-bs-dismiss="modal"><i class="bi bi-check2-circle me-1"></i>Acknowledge &amp; Accept</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6f. Toast Modal -->
+<div class="modal fade modal-toast" id="mToast" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body p-125rem">
+        <div class="flex-afs-g35">
+          <div class="icon-box-green-10-38"><i class="bi bi-check-circle-fill fs1-c-green"></i></div>
+          <div class="fl1">
+            <div class="fw7-fs9375-body">Payroll Processed Successfully</div>
+            <div class="fs8125-c-muted-mt1-lh-15">₹1.24Cr disbursed to 128 employees. Payslips emailed automatically.</div>
+            <div class="flex-g2-mt3">
+              <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr" data-bs-dismiss="modal">Dismiss</button>
+              <button type="button" class="btn-hr btn-primary-hr btn-sm-hr" data-bs-dismiss="modal">View Report</button>
+            </div>
+          </div>
+          <button type="button" class="btn-close p-1-shrink0" data-bs-dismiss="modal"> aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ── Form submit simulation ────────────────────────────────────── */
+function submitForm(btn) {
+  var orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin-sm"></span> Processing...';
+  setTimeout(function() {
+    btn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Done!';
+    btn.style.background = '#10B981';
+    setTimeout(function() {
+      var modal = bootstrap.Modal.getInstance(btn.closest('.modal'));
+      if (modal) modal.hide();
+      btn.disabled = false;
+      btn.innerHTML = orig;
+      btn.style.background = '';
+    }, 1000);
+  }, 1500);
+}
+
+/* ── Wizard multi-step ─────────────────────────────────────────── */
+var wizCur = 1;
+var wizTotal = 4;
+function wizStep(dir) {
+  var pages = [null,
+    document.getElementById('wiz-p1'),
+    document.getElementById('wiz-p2'),
+    document.getElementById('wiz-p3'),
+    document.getElementById('wiz-p4')
+  ];
+  var stepEls = document.querySelectorAll('#wiz-steps .wiz-step');
+  var lines   = [null,
+    document.getElementById('wiz-line1'),
+    document.getElementById('wiz-line2'),
+    document.getElementById('wiz-line3')
+  ];
+
+  if (pages[wizCur]) { pages[wizCur].classList.add('d-none'); pages[wizCur].style.display = ''; }
+  wizCur += dir;
+  if (wizCur < 1) wizCur = 1;
+  if (wizCur > wizTotal) wizCur = wizTotal;
+  if (pages[wizCur]) { pages[wizCur].classList.remove('d-none'); pages[wizCur].style.display = ''; }
+
+  /* Update step indicator */
+  stepEls.forEach(function(s, i) {
+    var idx = i + 1;
+    s.classList.remove('active','done');
+    var num = s.querySelector('.wiz-num');
+    if (idx < wizCur) {
+      s.classList.add('done');
+      num.innerHTML = '<i class="bi bi-check-lg" style="font-size:.65rem"></i>';
+    } else if (idx === wizCur) {
+      s.classList.add('active');
+      num.textContent = idx;
+    } else {
+      num.textContent = idx;
+    }
+    if (lines[idx]) lines[idx].style.background = idx < wizCur ? 'var(--color-primary)' : 'var(--body-border)';
+  });
+
+  /* Show/hide Back + next/submit */
+  document.getElementById('wiz-back').style.display = wizCur > 1 ? '' : 'none';
+  document.getElementById('wiz-cancel').style.display = wizCur === 1 ? '' : 'none';
+  var nxt = document.getElementById('wiz-next');
+  if (wizCur === wizTotal) {
+    nxt.innerHTML = '<i class="bi bi-person-check-fill me-1"></i>Complete Onboarding';
+    nxt.onclick = function() { submitForm(nxt); };
+  } else {
+    nxt.innerHTML = 'Next <i class="bi bi-arrow-right ms-1"></i>';
+    nxt.onclick = function() { wizStep(1); };
+  }
+}
+
+/* Reset wizard on modal close */
+function wizReset() {
+  ['wiz-p1', 'wiz-p2', 'wiz-p3', 'wiz-p4'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    el.classList.toggle('d-none', i !== 0);
+    el.style.display = '';
+  });
+  wizCur = 1;
+  var stepEls = document.querySelectorAll('#wiz-steps .wiz-step');
+  var lines = [null, document.getElementById('wiz-line1'), document.getElementById('wiz-line2'), document.getElementById('wiz-line3')];
+  stepEls.forEach(function(s, i) {
+    var idx = i + 1;
+    s.classList.remove('active', 'done');
+    if (idx === 1) s.classList.add('active');
+    var num = s.querySelector('.wiz-num');
+    num.textContent = idx;
+    if (lines[idx]) lines[idx].style.background = 'var(--body-border)';
+  });
+  document.getElementById('wiz-back').style.display = 'none';
+  document.getElementById('wiz-cancel').style.display = '';
+  var nxt = document.getElementById('wiz-next');
+  nxt.innerHTML = 'Next <i class="bi bi-arrow-right ms-1"></i>';
+  nxt.onclick = function() { wizStep(1); };
+}
+document.getElementById('mWizard').addEventListener('hidden.bs.modal', wizReset);
+
+/* ── Loading modal progress ────────────────────────────────────── */
+var loadSteps = ['Calculating deductions...','Processing PF / ESI...','Applying TDS rules...','Generating payslips...','Disbursing payments...','Done!'];
+var loadTimer = null;
+document.getElementById('mLoading').addEventListener('shown.bs.modal', function() {
+  clearInterval(loadTimer);
+  var i = 0;
+  var bar = document.getElementById('load-bar');
+  var txt = document.getElementById('load-txt');
+  bar.style.width = '0%';
+  txt.textContent = loadSteps[0];
+  loadTimer = setInterval(function() {
+    i++;
+    if (i >= loadSteps.length) { clearInterval(loadTimer); return; }
+    txt.textContent = loadSteps[i];
+    bar.style.width = ((i / (loadSteps.length - 1)) * 100) + '%';
+  }, 600);
+});
+document.getElementById('mLoading').addEventListener('hidden.bs.modal', function() {
+  clearInterval(loadTimer);
+});
+
+/* ── Star rating ───────────────────────────────────────────────── */
+var starLabels = ['','Needs Improvement','Below Expectations','Meets Expectations','Exceeds Expectations','Outstanding'];
+var curRating = 4;
+function rateStar(v) {
+  curRating = v;
+  document.querySelectorAll('.star-pick').forEach(function(s) {
+    s.classList.toggle('lit', parseInt(s.dataset.v) <= v);
+  });
+  document.getElementById('star-lbl').textContent = v + ' star' + (v > 1 ? 's' : '') + ' — ' + starLabels[v];
+}
+
+/* ── Filter pill toggle ────────────────────────────────────────── */
+function togglePill(el) {
+  var on = !el.classList.contains('on');
+  el.classList.toggle('on', on);
+  el.style.background = on ? 'rgba(91,143,249,.12)' : 'transparent';
+  el.style.borderColor = on ? '#5B8FF9' : 'var(--body-border)';
+  el.style.color = on ? '#5B8FF9' : 'var(--body-text-muted)';
+}
+</script>
+</body>
+</html>

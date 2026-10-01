@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Employee Analytics &#8212; HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Employee analytics dashboard — headcount trends, department distribution, and workforce composition charts."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle><i class="bi bi-list fs125"></i></button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar"><span>HRNexus</span><span class="bc-sep">/</span><span class="bc-current">Employee Analytics</span></nav>
+      <div class="search-wrap"><i class="bi bi-search search-icon-i"></i><input type="search" class="search-input" placeholder="Search analytics..."/></div>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel"><i class="bi bi-bell-fill"></i><span class="badge-dot"></span></button>
+      <button type="button" class="btn-icon-top" data-theme-toggle><i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-fill theme-icon-dark"></i></button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="../pages/activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="../pages/settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="../pages/login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- Page header: title + period tab-bar + Export -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Employee Analytics</h1>
+          <p class="page-subtitle" id="analyticsSubtitle">Workforce insights, trends &amp; HR metrics for 2024</p>
+        </div>
+        <div class="flex-g2-ac-wrap">
+          <div class="tab-bar flex-2" id="periodTabs"><button type="button" class="tab-btn" id="period-q1" onclick="setPeriod('q1')">Q1</button><button type="button" class="tab-btn" id="period-q2" onclick="setPeriod('q2')">Q2</button><button type="button" class="tab-btn" id="period-q3" onclick="setPeriod('q3')">Q3</button><button type="button" class="tab-btn" id="period-q4" onclick="setPeriod('q4')">Q4</button><button type="button" class="tab-btn active" id="period-year" onclick="setPeriod('year')">YEAR</button></div>
+          <button type="button" class="btn-hr btn-outline-hr" onclick="handleExportPdf()"><i class="bi bi-download me-1"></i>Export PDF</button>
+        </div>
+      </div>
+
+      <!-- 6 stat cards: col-xl-2 col-lg-4 col-sm-6 -->
+      <div class="row g-3 mb-1rem">
+        <div class="col-xl-2 col-lg-4 col-sm-6"><div class="stat-card s-blue anim-fiu d1"><div class="stat-icon bg-blue-12"><i class="bi bi-people-fill c-blue"></i></div><div class="stat-value" id="statHeadcountVal">204</div><div class="stat-label">Total Headcount</div><div class="stat-delta delta-up" id="statHeadcountDelta"><i class="bi bi-arrow-up-short"></i>+18 vs last yr</div></div></div>
+        <div class="col-xl-2 col-lg-4 col-sm-6"><div class="stat-card s-green anim-fiu d2"><div class="stat-icon bg-green-12"><i class="bi bi-arrow-left-right c-green"></i></div><div class="stat-value" id="statTurnoverVal">2.9%</div><div class="stat-label">Avg Turnover Rate</div><div class="stat-delta delta-up" id="statTurnoverDelta"><i class="bi bi-arrow-up-short"></i>-1.2% vs last yr</div></div></div>
+        <div class="col-xl-2 col-lg-4 col-sm-6"><div class="stat-card s-violet anim-fiu d3"><div class="stat-icon bg-purple-12"><i class="bi bi-hourglass c-purple"></i></div><div class="stat-value" id="statTenureVal">3.4yr</div><div class="stat-label">Avg Tenure</div><div class="stat-delta delta-up" id="statTenureDelta"><i class="bi bi-arrow-up-short"></i>+0.3 vs last yr</div></div></div>
+        <div class="col-xl-2 col-lg-4 col-sm-6"><div class="stat-card s-violet anim-fiu d4"><div class="stat-icon bg-pink-12"><i class="bi bi-heart-fill c-pink"></i></div><div class="stat-value" id="statEngagementVal">87%</div><div class="stat-label">Engagement Score</div><div class="stat-delta delta-up" id="statEngagementDelta"><i class="bi bi-arrow-up-short"></i>+5pt vs last yr</div></div></div>
+        <div class="col-xl-2 col-lg-4 col-sm-6"><div class="stat-card s-amber anim-fiu d5"><div class="stat-icon bg-amber-12"><i class="bi bi-currency-dollar c-amber"></i></div><div class="stat-value" id="statCostVal">$8.4K</div><div class="stat-label">Cost Per Hire</div><div class="stat-delta delta-up" id="statCostDelta"><i class="bi bi-arrow-up-short"></i>-$640 vs last yr</div></div></div>
+        <div class="col-xl-2 col-lg-4 col-sm-6"><div class="stat-card s-red anim-fiu d6"><div class="stat-icon bg-red-12"><i class="bi bi-briefcase-fill c-red"></i></div><div class="stat-value" id="statRolesVal">17</div><div class="stat-label">Open Roles</div><div class="stat-delta delta-down" id="statRolesDelta"><i class="bi bi-arrow-down-short"></i>+3 vs last yr</div></div></div>
+      </div>
+
+      <!-- Workforce Trends + Demographics -->
+      <div class="row g-3 mb-75rem">
+        <!-- Workforce Trends card (col-xl-8) -->
+        <div class="col-xl-8">
+          <div class="card-hr anim-fiu d2">
+            <div class="card-hd">
+              <div>
+                <div class="card-title-hr">Workforce Trends</div>
+                <div class="card-subtitle-hr">Monthly headcount, hires &amp; attrition &mdash; 2024</div>
+              </div>
+              <div class="tab-bar flex-2" id="metricTabs"><button type="button" class="tab-btn active" id="metric-headcount" onclick="setMetric('headcount')">Headcount</button><button type="button" class="tab-btn" id="metric-hiring" onclick="setMetric('hiring')">Hiring</button><button type="button" class="tab-btn" id="metric-engagement" onclick="setMetric('engagement')">Engagement</button></div>
+            </div>
+            <div class="card-bd">
+              <!-- Legend (changes with tab) -->
+              <div class="flex-wrap-g4-mb4" id="legendHeadcount">
+                <div class="flex-ac-g15"><div class="sq10px-bg-blue-br2px"></div><span class="fs75-muted">Headcount</span></div>
+                <div class="flex-ac-g15"><div class="sq10px-bg-green-br2px"></div><span class="fs75-muted">Hires</span></div>
+                <div class="flex-ac-g15"><div class="sq10px-bg-red-br2px"></div><span class="fs75-muted">Leavers</span></div>
+              </div>
+              <div class="d-none-mb4" id="legendHiring">
+                <div class="flex-ac-g15"><div class="sq10px-bg-blue-br2px"></div><span class="fs75-muted">New Hires</span></div>
+                <div class="flex-ac-g15"><div class="sq10px-bg-amber-70-br2px"></div><span class="fs75-muted">Cost ($K)</span></div>
+              </div>
+              <div class="d-none-mb4" id="legendEngagement">
+                <div class="flex-ac-g15"><div class="sq10px-bg-pink-br2px"></div><span class="fs75-muted">Engagement Score %</span></div>
+              </div>
+
+              <!-- Chart: Headcount -->
+              <div class="chart-box h160px" id="chartHeadcount"><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h12px-bg-red-br1" title="Jan Leavers: 3"></div><div class="h32px-bg-green-br1" title="Jan Hired: 8"></div></div><div class="w85pct-h37px-bg-blue-25-br1-b-2" title="Jan Headcount: 108"></div><span class="fs55-muted">Jan</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h16px-bg-red-br1" title="Feb Leavers: 4"></div><div class="h48px-bg-green-br1" title="Feb Hired: 12"></div></div><div class="w85pct-h40px-bg-blue-25-br1-b-2" title="Feb Headcount: 116"></div><span class="fs55-muted">Feb</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h20px-bg-red-br1" title="Mar Leavers: 5"></div><div class="h24px-bg-green-br1" title="Mar Hired: 6"></div></div><div class="w85pct-h40px-bg-blue-25-br1-b-2" title="Mar Headcount: 117"></div><span class="fs55-muted">Mar</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h8px-bg-red-br1" title="Apr Leavers: 2"></div><div class="h60px-bg-green-br1" title="Apr Hired: 15"></div></div><div class="w85pct-h45px-bg-blue-25-br1-b-2" title="Apr Headcount: 130"></div><span class="fs55-muted">Apr</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h24px-bg-red-br1" title="May Leavers: 6"></div><div class="h36px-bg-green-br1" title="May Hired: 9"></div></div><div class="w85pct-h46px-bg-blue-25-br1-b-2" title="May Headcount: 133"></div><span class="fs55-muted">May</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h12px-bg-red-br1" title="Jun Leavers: 3"></div><div class="h72px-bg-green-br1" title="Jun Hired: 18"></div></div><div class="w85pct-h51px-bg-blue-25-br1-b-2" title="Jun Headcount: 148"></div><span class="fs55-muted">Jun</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h16px-bg-red-br1" title="Jul Leavers: 4"></div><div class="h44px-bg-green-br1" title="Jul Hired: 11"></div></div><div class="w85pct-h53px-bg-blue-25-br1-b-2" title="Jul Headcount: 155"></div><span class="fs55-muted">Jul</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h28px-bg-red-br1" title="Aug Leavers: 7"></div><div class="h56px-bg-green-br1" title="Aug Hired: 14"></div></div><div class="w85pct-h56px-bg-blue-25-br1-b-2" title="Aug Headcount: 162"></div><span class="fs55-muted">Aug</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h20px-bg-red-br1" title="Sep Leavers: 5"></div><div class="h28px-bg-green-br1" title="Sep Hired: 7"></div></div><div class="w85pct-h56px-bg-blue-25-br1-b-2" title="Sep Headcount: 164"></div><span class="fs55-muted">Sep</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h12px-bg-red-br1" title="Oct Leavers: 3"></div><div class="h64px-bg-green-br1" title="Oct Hired: 16"></div></div><div class="w85pct-h61px-bg-blue-25-br1-b-2" title="Oct Headcount: 177"></div><span class="fs55-muted">Oct</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h16px-bg-red-br1" title="Nov Leavers: 4"></div><div class="h80px-bg-green-br1" title="Nov Hired: 20"></div></div><div class="w85pct-h66px-bg-blue-25-br1-b-2" title="Nov Headcount: 193"></div><span class="fs55-muted">Nov</span></div><div class="flex-col-chart-inner"><div class="flex-jfs-g1px-w100pct"><div class="h8px-bg-red-br1" title="Dec Leavers: 2"></div><div class="h52px-bg-green-br1" title="Dec Hired: 13"></div></div><div class="w85pct-h70px-bg-blue-25-br1-b-2" title="Dec Headcount: 204"></div><span class="fs55-muted">Dec</span></div></div>
+              <!-- Chart: Hiring -->
+              <div class="chart-box d-none-h160px" id="chartHiring"><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h56px-bg-blue-fl1" title="Jan Hires: 8"></div><div class="h64px-bg-amber-70-fl1" title="Jan Cost: $142,000"></div></div><span class="fs55-muted">Jan</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h84px-bg-blue-fl1" title="Feb Hires: 12"></div><div class="h89px-bg-amber-70-fl1" title="Feb Cost: $198,000"></div></div><span class="fs55-muted">Feb</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h42px-bg-blue-fl1" title="Mar Hires: 6"></div><div class="h48px-bg-amber-70-fl1" title="Mar Cost: $107,000"></div></div><span class="fs55-muted">Mar</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h105px-bg-blue-fl1" title="Apr Hires: 15"></div><div class="h104px-bg-amber-70-fl1" title="Apr Cost: $231,000"></div></div><span class="fs55-muted">Apr</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h63px-bg-blue-fl1" title="May Hires: 9"></div><div class="h75px-bg-amber-70-fl1" title="May Cost: $167,000"></div></div><span class="fs55-muted">May</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h126px-bg-blue-fl1" title="Jun Hires: 18"></div><div class="h130px-bg-amber-70-fl1" title="Jun Cost: $289,000"></div></div><span class="fs55-muted">Jun</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h77px-bg-blue-fl1" title="Jul Hires: 11"></div><div class="h92px-bg-amber-70-fl1" title="Jul Cost: $204,000"></div></div><span class="fs55-muted">Jul</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h98px-bg-blue-fl1" title="Aug Hires: 14"></div><div class="h106px-bg-amber-70-fl1" title="Aug Cost: $237,000"></div></div><span class="fs55-muted">Aug</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h49px-bg-blue-fl1" title="Sep Hires: 7"></div><div class="h66px-bg-amber-70-fl1" title="Sep Cost: $148,000"></div></div><span class="fs55-muted">Sep</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h112px-bg-blue-fl1" title="Oct Hires: 16"></div><div class="h117px-bg-amber-70-fl1" title="Oct Cost: $261,000"></div></div><span class="fs55-muted">Oct</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h140px-bg-blue-fl1" title="Nov Hires: 20"></div><div class="h140px-bg-amber-70-fl1" title="Nov Cost: $312,000"></div></div><span class="fs55-muted">Nov</span></div><div class="flex-col-chart-inner"><div class="flex-afe-g1px-w100pct-fl1"><div class="h91px-bg-blue-fl1" title="Dec Hires: 13"></div><div class="h98px-bg-amber-70-fl1" title="Dec Cost: $219,000"></div></div><span class="fs55-muted">Dec</span></div></div>
+              <!-- Chart: Engagement -->
+              <div class="d-none-rel-h160px" id="chartEngagement">
+                <div class="flex-afe-g15-abs-r0-b24px-l0-h136px"><div class="flex-col-chart-inner"><div class="rel-w100pct-h94px-bg-pink-34" title="Jan: 72%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">72%</div></div><span class="fs55-muted">Jan</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h96px-bg-pink-38" title="Feb: 74%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">74%</div></div><span class="fs55-muted">Feb</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h92px-bg-pink-32" title="Mar: 71%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">71%</div></div><span class="fs55-muted">Mar</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h101px-bg-pink-46" title="Apr: 78%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">78%</div></div><span class="fs55-muted">Apr</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h99px-bg-pink-42" title="May: 76%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">76%</div></div><span class="fs55-muted">May</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h105px-bg-pink-52" title="Jun: 81%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">81%</div></div><span class="fs55-muted">Jun</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h103px-bg-pink-48" title="Jul: 79%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">79%</div></div><span class="fs55-muted">Jul</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h98px-bg-pink-40" title="Aug: 75%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">75%</div></div><span class="fs55-muted">Aug</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h100px-bg-pink-44" title="Sep: 77%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">77%</div></div><span class="fs55-muted">Sep</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h107px-bg-pink-54" title="Oct: 82%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">82%</div></div><span class="fs55-muted">Oct</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h110px-bg-pink-60" title="Nov: 85%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">85%</div></div><span class="fs55-muted">Nov</span></div><div class="flex-col-chart-inner"><div class="rel-w100pct-h113px-bg-pink-64" title="Dec: 87%"><div class="abs-t-16px-l50pct-fs55-fw7-c-pink-nowrap">87%</div></div><span class="fs55-muted">Dec</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Demographics card (col-xl-4) -->
+        <div class="col-xl-4">
+          <div class="card-hr anim-fiu d3 h100pct">
+            <div class="card-hd"><div class="card-title-hr">Demographics</div></div>
+            <div class="card-bd flex-col-g5">
+              <!-- Gender -->
+              <div>
+                <div class="fs8125-fw7-c-body-mb25">Gender Distribution</div>
+                <div class="flex-g15-h12px-br999px-mb2-ov-hidden"><div class="w54pct-bg-blue-trans"></div><div class="w44pct-bg-pink-trans"></div><div class="w2pct-bg-green-trans"></div></div><div class="flex-g3-wrap"><div class="flex-ac-g15"><div class="sq8px-bg-blue-shrink0"></div><span class="fs75-muted">Male <strong class="c-body">54%</strong></span></div><div class="flex-ac-g15"><div class="sq8px-bg-pink-shrink0"></div><span class="fs75-muted">Female <strong class="c-body">44%</strong></span></div><div class="flex-ac-g15"><div class="sq8px-bg-green-shrink0"></div><span class="fs75-muted">Non-binary <strong class="c-body">2%</strong></span></div></div>
+              </div>
+              <!-- Age -->
+              <div>
+                <div class="fs8125-fw7-c-body-mb25">Age Breakdown</div>
+                <div class="flex-ac-g25-mb16"><span class="w44px-fs75-c-muted-shrink0">18-25</span><div class="fl1"><div class="prog-md"><div class="w12pct-h100pct-bg-blue-br999px-trans"></div></div></div><span class="w28px-fs75-fw7-c-blue-tr">12%</span></div><div class="flex-ac-g25-mb16"><span class="w44px-fs75-c-muted-shrink0">26-35</span><div class="fl1"><div class="prog-md"><div class="w38pct-h100pct-bg-purple-br999px-trans"></div></div></div><span class="w28px-fs75-fw7-c-purple-tr">38%</span></div><div class="flex-ac-g25-mb16"><span class="w44px-fs75-c-muted-shrink0">36-45</span><div class="fl1"><div class="prog-md"><div class="w29pct-h100pct-bg-green-br999px-trans"></div></div></div><span class="w28px-fs75-fw7-c-green-tr">29%</span></div><div class="flex-ac-g25-mb16"><span class="w44px-fs75-c-muted-shrink0">46-55</span><div class="fl1"><div class="prog-md"><div class="w16pct-h100pct-bg-amber-br999px-trans"></div></div></div><span class="w28px-fs75-fw7-c-amber-tr">16%</span></div><div class="flex-ac-g25-mb16"><span class="w44px-fs75-c-muted-shrink0">56+</span><div class="fl1"><div class="prog-md"><div class="w5pct-h100pct-bg-red-br999px-trans"></div></div></div><span class="w28px-fs75-fw7-c-red-tr">5%</span></div>
+              </div>
+              <!-- Tenure -->
+              <div>
+                <div class="fs8125-fw7-c-body-mb25">Tenure Distribution</div>
+                <div class="flex-g15-h12px-br999px-mb2-ov-hidden"><div class="w18pct-bg-amber"></div><div class="w32pct-bg-blue"></div><div class="w27pct-bg-green"></div><div class="w16pct-bg-purple"></div><div class="w7pct-bg-red"></div></div><div class="flex-g2-wrap"><div class="flex-ac-g03"><div class="sq8px-bg-amber-br2px"></div><span class="fs7-muted"><1 yr <strong class="c-body">18%</strong></span></div><div class="flex-ac-g03"><div class="sq8px-bg-blue-br2px"></div><span class="fs7-muted">1-3 yr <strong class="c-body">32%</strong></span></div><div class="flex-ac-g03"><div class="sq8px-bg-green-br2px"></div><span class="fs7-muted">3-5 yr <strong class="c-body">27%</strong></span></div><div class="flex-ac-g03"><div class="sq8px-bg-purple-br2px"></div><span class="fs7-muted">5-10 yr <strong class="c-body">16%</strong></span></div><div class="flex-ac-g03"><div class="sq8px-bg-red-br2px"></div><span class="fs7-muted">10+ yr <strong class="c-body">7%</strong></span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Department Analytics table -->
+      <div class="card-hr anim-fiu d4 mb-75rem">
+        <div class="card-hd">
+          <div><div class="card-title-hr">Department Analytics</div><div class="card-subtitle-hr">Headcount, engagement &amp; compensation by team</div></div>
+        </div>
+        <div class="table-wrap">
+          <table class="hr-table" data-sortable>
+            <thead><tr>
+              <th data-sort>Department</th>
+              <th data-sort>Headcount</th>
+              <th data-sort>Turnover Rate</th>
+              <th>Engagement</th>
+              <th data-sort>Avg Salary</th>
+              <th>Open Roles</th>
+              <th>Health Score</th>
+            </tr></thead>
+            <tbody><tr>
+          <td><div class="flex-ac-g25"><div class="sq10px-bg-blue-shrink0"></div><span class="fw6">Engineering</span></div></td>
+          <td><span class="fw7-fs9375">42</span></td>
+          <td><span class="fw6-c-amber">3.2%</span></td>
+          <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-sm"><div class="w84pct-h100pct-bg-green-br999px-trans"></div></div></div><span class="fs75-fw7">84%</span></div></td>
+          <td><span class="mono-fw6">$108K</span></td>
+          <td><span class="fw7-camber">6 open</span></td>
+          <td><div class="flex-ac-g2"><div class="avatar-blue-12-32"><span class="fs7-fw8-c-blue">76</span></div><div class="fl1-mw40"><div class="prog-xs"><div class="w76pct-h100pct-bg-blue-br999px-trans"></div></div></div></div></td>
+        </tr><tr>
+          <td><div class="flex-ac-g25"><div class="sq10px-bg-purple-shrink0"></div><span class="fw6">Product</span></div></td>
+          <td><span class="fw7-fs9375">18</span></td>
+          <td><span class="c-green-fw6">2.1%</span></td>
+          <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-sm"><div class="w88pct-h100pct-bg-green-br999px-trans"></div></div></div><span class="fs75-fw7">88%</span></div></td>
+          <td><span class="mono-fw6">$102K</span></td>
+          <td><span class="fw7-camber">2 open</span></td>
+          <td><div class="flex-ac-g2"><div class="avatar-green-12-32"><span class="fs7-fw8-c-green">84</span></div><div class="fl1-mw40"><div class="prog-xs"><div class="w84pct-h100pct-bg-green-br999px-trans"></div></div></div></div></td>
+        </tr><tr>
+          <td><div class="flex-ac-g25"><div class="sq10px-bg-green-shrink0"></div><span class="fw6">Sales</span></div></td>
+          <td><span class="fw7-fs9375">31</span></td>
+          <td><span class="fw6-c-red">8.4%</span></td>
+          <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-sm"><div class="w71pct-h100pct-bg-blue-br999px-trans"></div></div></div><span class="fs75-fw7">71%</span></div></td>
+          <td><span class="mono-fw6">$95K</span></td>
+          <td><span class="fw7-camber">4 open</span></td>
+          <td><div class="flex-ac-g2"><div class="avatar-red-12-32"><span class="fs7-fw8-c-red">44</span></div><div class="fl1-mw40"><div class="prog-xs"><div class="w44pct-h100pct-bg-red-br999px-trans"></div></div></div></div></td>
+        </tr><tr>
+          <td><div class="flex-ac-g25"><div class="sq10px-bg-amber-shrink0"></div><span class="fw6">Marketing</span></div></td>
+          <td><span class="fw7-fs9375">15</span></td>
+          <td><span class="fw6-c-amber">4.6%</span></td>
+          <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-sm"><div class="w79pct-h100pct-bg-blue-br999px-trans"></div></div></div><span class="fs75-fw7">79%</span></div></td>
+          <td><span class="mono-fw6">$87K</span></td>
+          <td><span class="fw7-camber">1 open</span></td>
+          <td><div class="flex-ac-g2"><div class="avatar-blue-12-32"><span class="fs7-fw8-c-blue">66</span></div><div class="fl1-mw40"><div class="prog-xs"><div class="w66pct-h100pct-bg-blue-br999px-trans"></div></div></div></div></td>
+        </tr><tr>
+          <td><div class="flex-ac-g25"><div class="sq10px-bg-sky-shrink0"></div><span class="fw6">HR & Ops</span></div></td>
+          <td><span class="fw7-fs9375">22</span></td>
+          <td><span class="c-green-fw6">2.9%</span></td>
+          <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-sm"><div class="w81pct-h100pct-bg-green-br999px-trans"></div></div></div><span class="fs75-fw7">81%</span></div></td>
+          <td><span class="mono-fw6">$78K</span></td>
+          <td><span class="fw7-camber">3 open</span></td>
+          <td><div class="flex-ac-g2"><div class="avatar-blue-12-32"><span class="fs7-fw8-c-blue">76</span></div><div class="fl1-mw40"><div class="prog-xs"><div class="w76pct-h100pct-bg-blue-br999px-trans"></div></div></div></div></td>
+        </tr><tr>
+          <td><div class="flex-ac-g25"><div class="sq10px-bg-pink-shrink0"></div><span class="fw6">Finance</span></div></td>
+          <td><span class="fw7-fs9375">12</span></td>
+          <td><span class="c-green-fw6">1.8%</span></td>
+          <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-sm"><div class="w86pct-h100pct-bg-green-br999px-trans"></div></div></div><span class="fs75-fw7">86%</span></div></td>
+          <td><span class="mono-fw6">$92K</span></td>
+          <td><span class="flex-ac-g12-fw6-c-green"><i class="bi bi-check-circle-fill"></i>Full</span></td>
+          <td><div class="flex-ac-g2"><div class="avatar-green-12-32"><span class="fs7-fw8-c-green">84</span></div><div class="fl1-mw40"><div class="prog-xs"><div class="w84pct-h100pct-bg-green-br999px-trans"></div></div></div></div></td>
+        </tr><tr>
+          <td><div class="flex-ac-g25"><div class="sq10px-bg-orange-shrink0"></div><span class="fw6">Legal</span></div></td>
+          <td><span class="fw7-fs9375">8</span></td>
+          <td><span class="c-green-fw6">0.0%</span></td>
+          <td><div class="flex-ac-g2"><div class="fl1-mw60"><div class="prog-sm"><div class="w90pct-h100pct-bg-green-br999px-trans"></div></div></div><span class="fs75-fw7">90%</span></div></td>
+          <td><span class="mono-fw6">$118K</span></td>
+          <td><span class="fw7-camber">1 open</span></td>
+          <td><div class="flex-ac-g2"><div class="avatar-green-12-32"><span class="fs7-fw8-c-green">95</span></div><div class="fl1-mw40"><div class="prog-xs"><div class="w95pct-h100pct-bg-green-br999px-trans"></div></div></div></div></td>
+        </tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Hiring Funnel + Salary Distribution -->
+      <div class="row g-3">
+        <!-- Hiring Funnel (col-xl-5) -->
+        <div class="col-xl-5">
+          <div class="card-hr anim-fiu d5">
+            <div class="card-hd">
+              <div><div class="card-title-hr">Hiring Funnel</div><div class="card-subtitle-hr">Q4 2024 recruitment pipeline</div></div>
+            </div>
+            <div class="card-bd"><div class="flex-ac-g35-mb25"><div class="w110px-fs8125-fw5-c-muted-shrink0">Applications</div><div class="rel-h32px-bg-bg-br15-ov-hidden-fl1"><div class="abs-t0-l0-w100pct-h100pct-bg-blue-br15-trans-op85"></div><div class="abs-t50pct-l25-fs75-fw7-c-white">847</div></div><div class="w36px-fs75-fw7-c-blue-tr">100%</div></div><div class="flex-ac-g35-mb25"><div class="w110px-fs8125-fw5-c-muted-shrink0">Screened</div><div class="rel-h32px-bg-bg-br15-ov-hidden-fl1"><div class="abs-t0-l0-w37pct-h100pct-bg-purple-br15-trans-op85"></div><div class="abs-t50pct-l25-fs75-fw7-c-white">312</div></div><div class="w36px-fs75-fw7-c-purple-tr">37%</div></div><div class="flex-ac-g35-mb25"><div class="w110px-fs8125-fw5-c-muted-shrink0">Interviewed</div><div class="rel-h32px-bg-bg-br15-ov-hidden-fl1"><div class="abs-t0-l0-w17pct-h100pct-bg-sky-br15-trans-op85"></div><div class="abs-t50pct-l25-fs75-fw7-c-sky">148</div></div><div class="w36px-fs75-fw7-c-sky-tr">17%</div></div><div class="flex-ac-g35-mb25"><div class="w110px-fs8125-fw5-c-muted-shrink0">Offer Extended</div><div class="rel-h32px-bg-bg-br15-ov-hidden-fl1"><div class="abs-t0-l0-w5pct-h100pct-bg-green-br15-trans-op85"></div><div class="abs-t50pct-l25-fs75-fw7-c-green">43</div></div><div class="w36px-fs75-fw7-c-green-tr">5%</div></div><div class="flex-ac-g35-mb25"><div class="w110px-fs8125-fw5-c-muted-shrink0">Hired</div><div class="rel-h32px-bg-bg-br15-ov-hidden-fl1"><div class="abs-t0-l0-w37pct-h100pct-bg-amber-br15-trans-op85"></div><div class="abs-t50pct-l25-fs75-fw7-c-amber">31</div></div><div class="w36px-fs75-fw7-c-amber-tr">3.7%</div></div></div>
+          </div>
+        </div>
+        <!-- Salary Distribution (col-xl-7) -->
+        <div class="col-xl-7">
+          <div class="card-hr anim-fiu d5">
+            <div class="card-hd">
+              <div><div class="card-title-hr">Salary Distribution</div><div class="card-subtitle-hr">By department &mdash; annual compensation bands</div></div>
+            </div>
+            <div class="card-bd">
+              <div class="flex-afe-g25-h160px-mb4"><div class="flex-col-ac-jfe-g15-h100pct-fl1"><div class="flex-col-jfe-rel-w100pct-bg-bg-br15-ov-hidden"><div class="h125px-bg-blue-op85" title="$108,000"></div></div><div class="tc"><div class="fs6-fw7-c-blue">$108K</div><div class="fs55-c-muted-mt5px">Engineering</div></div></div><div class="flex-col-ac-jfe-g15-h100pct-fl1"><div class="flex-col-jfe-rel-w100pct-bg-bg-br15-ov-hidden"><div class="h118px-bg-purple-op85" title="$102,000"></div></div><div class="tc"><div class="fs6-fw7-c-purple">$102K</div><div class="fs55-c-muted-mt5px">Product</div></div></div><div class="flex-col-ac-jfe-g15-h100pct-fl1"><div class="flex-col-jfe-rel-w100pct-bg-bg-br15-ov-hidden"><div class="h110px-bg-green-op85" title="$95,000"></div></div><div class="tc"><div class="fs6-fw7-c-green">$95K</div><div class="fs55-c-muted-mt5px">Sales</div></div></div><div class="flex-col-ac-jfe-g15-h100pct-fl1"><div class="flex-col-jfe-rel-w100pct-bg-bg-br15-ov-hidden"><div class="h100px-bg-amber-op85" title="$87,000"></div></div><div class="tc"><div class="fs6-fw7-c-amber">$87K</div><div class="fs55-c-muted-mt5px">Marketing</div></div></div><div class="flex-col-ac-jfe-g15-h100pct-fl1"><div class="flex-col-jfe-rel-w100pct-bg-bg-br15-ov-hidden"><div class="h90px-bg-sky-op85" title="$78,000"></div></div><div class="tc"><div class="fs6-fw7-c-sky">$78K</div><div class="fs55-c-muted-mt5px">HR</div></div></div><div class="flex-col-ac-jfe-g15-h100pct-fl1"><div class="flex-col-jfe-rel-w100pct-bg-bg-br15-ov-hidden"><div class="h106px-bg-pink-op85" title="$92,000"></div></div><div class="tc"><div class="fs6-fw7-c-pink">$92K</div><div class="fs55-c-muted-mt5px">Finance</div></div></div><div class="flex-col-ac-jfe-g15-h100pct-fl1"><div class="flex-col-jfe-rel-w100pct-bg-bg-br15-ov-hidden"><div class="h136px-bg-orange-op85" title="$118,000"></div></div><div class="tc"><div class="fs6-fw7-c-orange">$118K</div><div class="fs55-c-muted-mt5px">Legal</div></div></div></div>
+              <div class="flex-wrap-g3-pt3-bt-1">
+                <div class="fs75-muted">Highest: <strong class="c-orange">Legal $118K</strong></div>
+                <div class="fs75-muted">Lowest: <strong class="c-cyan">HR &amp; Ops $78K</strong></div>
+                <div class="fs75-muted">Company Avg: <strong class="c-body">$97K</strong></div>
+                <div class="fs75-c-muted-ml-auto">Total payroll: <strong class="c-body">$19.8M/yr</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ── Period tab switcher ────────────────────────────────────────── */
+var PERIOD_DATA = {
+  q1:   { label: 'Q1 2024',  headcount: '186', headcountD: '+6 vs Q4 2023',   headcountUp: true,
+          turnover: '3.4%',  turnoverD: '+0.5 vs prior qtr', turnoverUp: false,
+          tenure: '3.1yr',   tenureD: '+0.1 vs prior qtr',   tenureUp: true,
+          engagement: '82%', engagementD: '+2pt vs prior qtr', engagementUp: true,
+          cost: '$9.2K',     costD: '+$460 vs prior qtr',    costUp: false,
+          roles: '22',       rolesD: '+5 vs prior qtr',      rolesUp: false },
+  q2:   { label: 'Q2 2024',  headcount: '192', headcountD: '+6 vs Q1 2024',   headcountUp: true,
+          turnover: '3.1%',  turnoverD: '-0.3 vs prior qtr', turnoverUp: true,
+          tenure: '3.2yr',   tenureD: '+0.1 vs prior qtr',   tenureUp: true,
+          engagement: '84%', engagementD: '+2pt vs prior qtr', engagementUp: true,
+          cost: '$8.7K',     costD: '-$500 vs prior qtr',    costUp: true,
+          roles: '19',       rolesD: '-3 vs prior qtr',      rolesUp: true },
+  q3:   { label: 'Q3 2024',  headcount: '198', headcountD: '+6 vs Q2 2024',   headcountUp: true,
+          turnover: '2.6%',  turnoverD: '-0.5 vs prior qtr', turnoverUp: true,
+          tenure: '3.3yr',   tenureD: '+0.1 vs prior qtr',   tenureUp: true,
+          engagement: '85%', engagementD: '+1pt vs prior qtr', engagementUp: true,
+          cost: '$8.3K',     costD: '-$400 vs prior qtr',    costUp: true,
+          roles: '15',       rolesD: '-4 vs prior qtr',      rolesUp: true },
+  q4:   { label: 'Q4 2024',  headcount: '204', headcountD: '+6 vs Q3 2024',   headcountUp: true,
+          turnover: '2.4%',  turnoverD: '-0.2 vs prior qtr', turnoverUp: true,
+          tenure: '3.4yr',   tenureD: '+0.1 vs prior qtr',   tenureUp: true,
+          engagement: '87%', engagementD: '+2pt vs prior qtr', engagementUp: true,
+          cost: '$7.8K',     costD: '-$500 vs prior qtr',    costUp: true,
+          roles: '17',       rolesD: '+2 vs prior qtr',      rolesUp: false },
+  year: { label: '2024',     headcount: '204', headcountD: '+18 vs last yr',  headcountUp: true,
+          turnover: '2.9%',  turnoverD: '-1.2% vs last yr',  turnoverUp: true,
+          tenure: '3.4yr',   tenureD: '+0.3 vs last yr',     tenureUp: true,
+          engagement: '87%', engagementD: '+5pt vs last yr', engagementUp: true,
+          cost: '$8.4K',     costD: '-$640 vs last yr',      costUp: true,
+          roles: '17',       rolesD: '+3 vs last yr',        rolesUp: false }
+};
+var CURRENT_PERIOD = 'year';
+
+function setPeriod(p) {
+  var d = PERIOD_DATA[p];
+  if (!d) return;
+  CURRENT_PERIOD = p;
+
+  document.querySelectorAll('#periodTabs .tab-btn').forEach(function(b) {
+    b.classList.toggle('active', b.id === 'period-' + p);
+  });
+
+  document.getElementById('analyticsSubtitle').textContent = 'Workforce insights, trends & HR metrics for ' + d.label;
+
+  updateStat('statHeadcountVal', 'statHeadcountDelta', d.headcount, d.headcountD, d.headcountUp);
+  updateStat('statTurnoverVal', 'statTurnoverDelta', d.turnover, d.turnoverD, d.turnoverUp);
+  updateStat('statTenureVal', 'statTenureDelta', d.tenure, d.tenureD, d.tenureUp);
+  updateStat('statEngagementVal', 'statEngagementDelta', d.engagement, d.engagementD, d.engagementUp);
+  updateStat('statCostVal', 'statCostDelta', d.cost, d.costD, d.costUp);
+  updateStat('statRolesVal', 'statRolesDelta', d.roles, d.rolesD, d.rolesUp);
+}
+
+function updateStat(valId, deltaId, val, deltaText, isUp) {
+  document.getElementById(valId).textContent = val;
+  var deltaEl = document.getElementById(deltaId);
+  deltaEl.classList.toggle('delta-up', isUp);
+  deltaEl.classList.toggle('delta-down', !isUp);
+  var icon = isUp ? 'bi-arrow-up-short' : 'bi-arrow-down-short';
+  deltaEl.innerHTML = '<i class="bi ' + icon + '"></i>' + deltaText;
+}
+
+/* ── Export PDF ── */
+function showToast(message, kind) {
+  var bg = kind === 'success' ? 'linear-gradient(135deg,#10B981,#06B6D4)' : 'linear-gradient(135deg,#4F6EF7,#8B5CF6)';
+  var icon = kind === 'success' ? 'bi-check-circle-fill' : 'bi-download';
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:' + bg + ';color:#fff;padding:.875rem 1.25rem;border-radius:.875rem;font-size:.875rem;font-weight:700;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:.625rem;opacity:0;transition:opacity .25s';
+  toast.innerHTML = '<i class="bi ' + icon + '"></i><span>' + message + '</span>';
+  document.body.appendChild(toast);
+  requestAnimationFrame(function () { toast.style.opacity = '1'; });
+  setTimeout(function () {
+    toast.style.opacity = '0';
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 3000);
+}
+
+function handleExportPdf() {
+  var label = PERIOD_DATA[CURRENT_PERIOD].label;
+  showToast('Employee Analytics (' + label + ') exported as PDF', 'success');
+}
+
+/* ── Workforce Trend metric tab switcher ────────────────────────── */
+function setMetric(v) {
+  ['headcount','hiring','engagement'].forEach(function(m) {
+    var btn = document.getElementById('metric-' + m);
+    if (btn) btn.classList.toggle('active', m === v);
+    var chart = document.getElementById('chart' + m.charAt(0).toUpperCase() + m.slice(1));
+    if (chart) chart.style.display = m === v ? (m === 'engagement' ? 'block' : 'flex') : 'none';
+    var legend = document.getElementById('legend' + m.charAt(0).toUpperCase() + m.slice(1));
+    if (legend) legend.style.display = m === v ? 'flex' : 'none';
+  });
+}
+</script>
+</body>
+</html>

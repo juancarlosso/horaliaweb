@@ -1,0 +1,17 @@
+// =============================================================================
+// HRNexus — "Pages" SCSS Entry
+// =============================================================================
+// Compiles to dist/css/hrnexus-pages.css, loaded by every page in
+// public/pages/*.html. Two sources:
+//   1. pages/_extracted-legacy.scss    — pre-existing per-page styles that
+//      shipped before this file had any SCSS source (see that file's header)
+//   2. components/_dashboard-widgets.scss — the Assets/IT Admin/Finance/
+//      Attendance/Recruitment dashboard components added this release
+
+// BUILD:  npm run build:css:pages        (dev, with source maps)
+//         npm run build:css:pages:prod   (compressed, no maps)
+// =============================================================================
+
+@use 'abstracts' as *;
+@use 'pages/extracted-legacy';
+@use 'components/dashboard-widgets';

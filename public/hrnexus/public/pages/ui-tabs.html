@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#13142B"/>
+  <title>Tabs — HRNexus Admin</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="description" content="Tabbed navigation component reference for switching between content panels."/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-core.css"/>
+<!-- Preconnect to CDN origins -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <!-- External CSS — loaded synchronously for maximum compatibility (incl. file:// / offline use) -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-utils.css"/>
+  <link rel="stylesheet" href="../../dist/css/hrnexus-pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+        rel="stylesheet"/>
+</head>
+<body>
+<div id="sb-main-popup" role="menu" aria-hidden="true"></div>
+<div class="mobile-backdrop d-none" aria-hidden="true"></div>
+<nav class="sidebar anim-sil" aria-label="Main navigation">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-icon"><i class="bi bi-people-fill c-white"></i></div>
+    <div><span class="brand-name">HRNexus</span><span class="brand-tagline">Admin Suite</span></div>
+  </a>
+  <div class="sidebar-nav" id="sidebarNav"><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Dashboards" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span><span class="nav-text">Dashboards</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="../index.html" class="nav-lnk nav-child" data-sidebar-tooltip="Main Dashboard"><span class="nav-icon"><i class="bi bi-speedometer2"></i></span><span class="nav-text">Main Dashboard</span></a></div>
+<div class="nav-li"><a href="dashboard-ecommerce.html" class="nav-lnk nav-child" data-sidebar-tooltip="E-Commerce"><span class="nav-icon"><i class="bi bi-bag-fill"></i></span><span class="nav-text">E-Commerce</span></a></div>
+<div class="nav-li"><a href="dashboard-employees.html" class="nav-lnk nav-child" data-sidebar-tooltip="Employees"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="dashboard-leads.html" class="nav-lnk nav-child" data-sidebar-tooltip="Leads"><span class="nav-icon"><i class="bi bi-person-lines-fill"></i></span><span class="nav-text">Leads</span></a></div>
+<div class="nav-li"><a href="dashboard-hr.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR"><span class="nav-icon"><i class="bi bi-heart-pulse-fill"></i></span><span class="nav-text">HR</span></a></div>
+<div class="nav-li"><a href="dashboard-it.html" class="nav-lnk nav-child" data-sidebar-tooltip="IT Admin"><span class="nav-icon"><i class="bi bi-hdd-network-fill"></i></span><span class="nav-text">IT Admin</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="HR Core" aria-expanded="false"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">HR Core</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="employees.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-people-fill"></i></span><span class="nav-text">Employees</span></a></div>
+<div class="nav-li"><a href="recruitment.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus-fill"></i></span><span class="nav-text">Recruitment</span><span class="nav-badge">7</span></a></div>
+<div class="nav-li"><a href="attendance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span><span class="nav-text">Attendance</span></a></div>
+<div class="nav-li"><a href="leaves.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar2-x-fill"></i></span><span class="nav-text">Leave Management</span></a></div>
+<div class="nav-li"><a href="tasks.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-kanban-fill"></i></span><span class="nav-text">Task Management</span></a></div>
+<div class="nav-li"><a href="payroll.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card-fill"></i></span><span class="nav-text">Payroll</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Analytics" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Analytics</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="performance.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance</span></a></div>
+<div class="nav-li"><a href="analytics.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span><span class="nav-text">Analytics</span></a></div>
+<div class="nav-li"><a href="reports.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-bar-graph-fill"></i></span><span class="nav-text">Reports</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Communication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Communication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chat.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chat-dots-fill"></i></span><span class="nav-text">Team Chat</span><span class="nav-badge">12</span></a></div>
+<div class="nav-li"><a href="email.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-envelope-fill"></i></span><span class="nav-text">Email</span><span class="nav-badge">4</span></a></div>
+<div class="nav-li"><a href="calendar.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-calendar3"></i></span><span class="nav-text">Calendar</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Operations" aria-expanded="false"><span class="nav-icon"><i class="bi bi-lightning-fill"></i></span><span class="nav-text">Operations</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="training.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-book-fill"></i></span><span class="nav-text">Training & Dev</span></a></div>
+<div class="nav-li"><a href="announcements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-megaphone-fill"></i></span><span class="nav-text">Announcements</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-files"></i></span><span class="nav-text">Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="pricing.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-tag-fill"></i></span><span class="nav-text">Pricing Plans</span></a></div>
+<div class="nav-li"><a href="faq.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-question-circle-fill"></i></span><span class="nav-text">FAQ</span></a></div>
+<div class="nav-li"><a href="coming-soon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-rocket-fill"></i></span><span class="nav-text">Coming Soon</span></a></div>
+<div class="nav-li"><a href="profile.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-badge-fill"></i></span><span class="nav-text">Employee Profile</span></a></div>
+<div class="nav-li"><a href="roles.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-shield-check-fill"></i></span><span class="nav-text">Roles & Permissions</span></a></div>
+<div class="nav-li"><a href="blog-grid.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-1x2"></i></span><span class="nav-text">Blog Grid</span></a></div>
+<div class="nav-li"><a href="blog-list.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-list-ul"></i></span><span class="nav-text">Blog List</span></a></div>
+<div class="nav-li"><a href="blog-detail.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-richtext-fill"></i></span><span class="nav-text">Blog Detail</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Error Pages" aria-expanded="false"><span class="nav-icon"><i class="bi bi-exclamation-octagon-fill"></i></span><span class="nav-text">Error Pages</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="error-simple.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-circle"></i></span><span class="nav-text">Error: Simple</span></a></div>
+<div class="nav-li"><a href="error-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-square"></i></span><span class="nav-text">Error: Cover</span></a></div>
+<div class="nav-li"><a href="error-full.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-x-octagon-fill"></i></span><span class="nav-text">Error: Full</span></a></div>
+<div class="nav-li"><a href="under-construction-1.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-hammer"></i></span><span class="nav-text">Under Construction 1</span></a></div>
+<div class="nav-li"><a href="under-construction-2.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bricks"></i></span><span class="nav-text">Under Construction 2</span></a></div>
+<div class="nav-li"><a href="under-construction-3.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Under Construction 3</span></a></div>
+<div class="nav-li"><a href="blank.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark"></i></span><span class="nav-text">Blank Page</span></a></div>
+<div class="nav-li"><a href="activity.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-activity"></i></span><span class="nav-text">Activity Log</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Files & Billing" aria-expanded="false"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">Files & Billing</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="files.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-folder-fill"></i></span><span class="nav-text">File Manager</span></a></div>
+<div class="nav-li"><a href="invoice-classic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt"></i></span><span class="nav-text">Invoice: Classic</span></a></div>
+<div class="nav-li"><a href="invoice-modern.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span><span class="nav-text">Invoice: Modern</span></a></div>
+<div class="nav-li"><a href="invoice-minimal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span class="nav-text">Invoice: Minimal</span></a></div>
+<div class="nav-li"><a href="invoice-create.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-plus-circle-fill"></i></span><span class="nav-text">Create Invoice</span></a></div>
+<div class="nav-li"><a href="invoice-manager.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-clipboard2-data-fill"></i></span><span class="nav-text">Invoice Manager</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="UI Components" aria-expanded="false"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">UI Components</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ui-accordion.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-chevron-bar-down"></i></span><span class="nav-text">Accordion</span></a></div>
+<div class="nav-li"><a href="ui-alerts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span><span class="nav-text">Alerts</span></a></div>
+<div class="nav-li"><a href="ui-badge.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-patch-check"></i></span><span class="nav-text">Badge</span></a></div>
+<div class="nav-li"><a href="ui-buttons.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-square"></i></span><span class="nav-text">Buttons</span></a></div>
+<div class="nav-li"><a href="ui-cards.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-credit-card"></i></span><span class="nav-text">Cards</span></a></div>
+<div class="nav-li"><a href="ui-carousel.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-images"></i></span><span class="nav-text">Carousel</span></a></div>
+<div class="nav-li"><a href="ui-modal.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window"></i></span><span class="nav-text">Modal</span></a></div>
+<div class="nav-li"><a href="ui-tabs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-journals"></i></span><span class="nav-text">Tabs</span></a></div>
+<div class="nav-li"><a href="ui-typography.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-type"></i></span><span class="nav-text">Typography</span></a></div>
+<div class="nav-li"><a href="avatars.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-circle"></i></span><span class="nav-text">Avatars</span></a></div>
+<div class="nav-li"><a href="card-designs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-card-checklist"></i></span><span class="nav-text">Card Designs</span></a></div>
+<div class="nav-li"><a href="drag-drop.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-arrows-move"></i></span><span class="nav-text">Drag & Drop</span></a></div>
+<div class="nav-li"><a href="swiper.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-collection-play-fill"></i></span><span class="nav-text">Swiper Sliders</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Icons" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Icons</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="icons-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x2-gap-fill"></i></span><span class="nav-text">Bootstrap Icons</span></a></div>
+<div class="nav-li"><a href="icons-lucide.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Lucide Icons</span></a></div>
+<div class="nav-li"><a href="icons-fontawesome.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-flag-fill"></i></span><span class="nav-text">Font Awesome</span></a></div>
+<div class="nav-li"><a href="icons-flaticon.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-fire"></i></span><span class="nav-text">Flaticon</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Forms & Tables" aria-expanded="false"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Forms & Tables</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="form-elements.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-ui-checks"></i></span><span class="nav-text">Form Elements</span></a></div>
+<div class="nav-li"><a href="form-layouts.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span><span class="nav-text">Form Layouts</span></a></div>
+<div class="nav-li"><a href="tables-bootstrap.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-table"></i></span><span class="nav-text">Bootstrap Tables</span></a></div>
+<div class="nav-li"><a href="tables-datatable.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span><span class="nav-text">DataTables</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Authentication" aria-expanded="false"><span class="nav-icon"><i class="bi bi-shield-lock-fill"></i></span><span class="nav-text">Authentication</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="login-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-box-arrow-in-right"></i></span><span class="nav-text">Login: Basic</span></a></div>
+<div class="nav-li"><a href="login-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Login: Cover</span></a></div>
+<div class="nav-li"><a href="login-frame.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-window-fullscreen"></i></span><span class="nav-text">Login: Frame</span></a></div>
+<div class="nav-li"><a href="register-basic.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-person-plus"></i></span><span class="nav-text">Register: Basic</span></a></div>
+<div class="nav-li"><a href="register-cover.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Register: Cover</span></a></div>
+<div class="nav-li"><a href="forgot-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-lock-fill"></i></span><span class="nav-text">Forgot Password</span></a></div>
+<div class="nav-li"><a href="new-password.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-key-fill"></i></span><span class="nav-text">New Password</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Chart & Map Libs" aria-expanded="false"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart & Map Libs</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="chart-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-bar-chart-fill"></i></span><span class="nav-text">Chart Libraries</span></a></div>
+<div class="nav-li"><a href="map-libs.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-geo-alt-fill"></i></span><span class="nav-text">Map Libraries</span></a></div>
+<div class="nav-li"><a href="sidebar-menu.html" class="nav-lnk nav-child"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Sidebar Menu</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="Layouts" aria-expanded="false"><span class="nav-icon"><i class="bi bi-layout-three-columns"></i></span><span class="nav-text">Layouts</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner">
+<div class="nav-li"><a href="layout-horizontal.html" class="nav-lnk nav-child" data-sidebar-tooltip="Horizontal"><span class="nav-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></span><span class="nav-text">Horizontal</span></a></div>
+<div class="nav-li"><a href="layout-detached.html" class="nav-lnk nav-child" data-sidebar-tooltip="Detached Sidebar"><span class="nav-icon"><i class="bi bi-layout-sidebar"></i></span><span class="nav-text">Detached Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-modern.html" class="nav-lnk nav-child" data-sidebar-tooltip="Modern Sidebar"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">Modern Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-twocol.html" class="nav-lnk nav-child" data-sidebar-tooltip="Two Column Sidebar"><span class="nav-icon"><i class="bi bi-layout-split"></i></span><span class="nav-text">Two Column Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-hover.html" class="nav-lnk nav-child" data-sidebar-tooltip="Hover Sidebar"><span class="nav-icon"><i class="bi bi-arrow-bar-right"></i></span><span class="nav-text">Hover Sidebar</span></a></div>
+<div class="nav-li"><a href="layout-boxed.html" class="nav-lnk nav-child" data-sidebar-tooltip="Boxed Layout"><span class="nav-icon"><i class="bi bi-app-indicator"></i></span><span class="nav-text">Boxed Layout</span></a></div>
+</div></div><div class="nav-li"><button type="button" class="nav-lnk nav-group-hd" data-sidebar-tooltip="AI Features" aria-expanded="false"><span class="nav-icon"><i class="bi bi-stars"></i></span><span class="nav-text">AI Features</span><span class="nav-chevron"><i class="bi bi-chevron-right"></i></span></button></div>
+<div class="nav-group-body"><div class="nav-group-inner"><div class="nav-li"><a href="ai-resume-screener.html" class="nav-lnk nav-child" data-sidebar-tooltip="Resume Screener"><span class="nav-icon"><i class="bi bi-file-earmark-person-fill"></i></span><span class="nav-text">Resume Screener</span></a></div>
+<div class="nav-li"><a href="ai-attrition-risk.html" class="nav-lnk nav-child" data-sidebar-tooltip="Attrition Risk"><span class="nav-icon"><i class="bi bi-shield-exclamation"></i></span><span class="nav-text">Attrition Risk</span></a></div>
+<div class="nav-li"><a href="ai-performance-summary.html" class="nav-lnk nav-child" data-sidebar-tooltip="Performance AI"><span class="nav-icon"><i class="bi bi-graph-up-arrow"></i></span><span class="nav-text">Performance AI</span></a></div>
+<div class="nav-li"><a href="ai-hr-chatbot.html" class="nav-lnk nav-child" data-sidebar-tooltip="HR Chatbot"><span class="nav-icon"><i class="bi bi-robot"></i></span><span class="nav-text">HR Chatbot</span></a></div>
+</div></div></div>
+</nav>
+
+<div class="main-content" id="mainContent">
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <button type="button" class="btn-icon-top" data-sidebar-toggle>
+        <i class="bi bi-list fs125"></i>
+      </button>
+      <button class="btn-icon-top d-none" type="button" data-sidebar-mobile-toggle aria-label="Open menu"><i class="bi bi-list fs125"></i></button>
+      <nav class="breadcrumb-bar">
+        <span>HRNexus</span><span class="bc-sep">/</span>
+        <span>UI Components</span><span class="bc-sep">/</span>
+        <span class="bc-current">Tabs</span>
+      </nav>
+    </div>
+    <div class="topbar-right pos-rel">
+      <button type="button" class="btn-icon-top" data-panel-toggle="notif-panel" aria-label="Notifications">
+        <i class="bi bi-bell-fill"></i><span class="badge-dot" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Toggle dark mode">
+        <i class="bi bi-sun-fill theme-icon-light"></i>
+        <i class="bi bi-moon-fill theme-icon-dark"></i>
+      </button>
+      <button type="button" class="topbar-avatar" data-panel-toggle="profile-panel" aria-label="Profile">R</button>
+      <div class="hr-panel panel-notif" id="notif-panel">
+      <div class="card-hd pos-sticky-hdr2">
+        <span class="card-title-hr">Notifications</span>
+        <div class="flex-g2-ac">
+          <span class="badge-primary-xs">4 new</span>
+          <button class="btn-hr btn-ghost-hr btn-sm-hr fs75" type="button">Mark all read</button>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <div class="icon-box-blue">
+          <i class="bi bi-calendar2-x-fill c-blue-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Leave Request</div>
+          <div class="notif-text">Sarah Chen requested 3 days PTO starting Mar 18.</div>
+          <span class="notif-time">2 min ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-green">
+          <i class="bi bi-credit-card-fill c-green-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Payroll Processed</div>
+          <div class="notif-text">March 2026 payroll ₹1.24Cr disbursed successfully.</div>
+          <span class="notif-time">1 hr ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-cyan">
+          <i class="bi bi-person-check-fill c-cyan-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">New Hire Onboarded</div>
+          <div class="notif-text">Tom Nakamura (Engineering) completed onboarding.</div>
+          <span class="notif-time">3 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item unread">
+        <div class="icon-box-amber">
+          <i class="bi bi-graph-up-arrow c-amber-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Performance Reviews Due</div>
+          <div class="notif-text">Q1 2026 reviews due in 5 days for 68 engineers.</div>
+          <span class="notif-time">5 hrs ago</span>
+        </div>
+        <div class="legend-dot-primary"></div>
+      </div><div class="notif-item">
+        <div class="icon-box-red">
+          <i class="bi bi-exclamation-triangle-fill c-red-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Attendance Alert</div>
+          <div class="notif-text">12 employees marked absent today — above 5% threshold.</div>
+          <span class="notif-time">Yesterday</span>
+        </div>
+        
+      </div><div class="notif-item">
+        <div class="icon-box-purple">
+          <i class="bi bi-file-text-fill c-purple-fs875"></i>
+        </div>
+        <div class="fl1-mnw0">
+          <div class="notif-title">Policy Updated</div>
+          <div class="notif-text">Hybrid work policy effective April 1, 2026.</div>
+          <span class="notif-time">2 days ago</span>
+        </div>
+        
+      </div>
+      <div class="p-35-tc-bt">
+        <a href="activity.html" class="btn-hr btn-ghost-hr btn-sm-hr">View all notifications</a>
+      </div>
+    </div>
+      <div class="hr-panel panel-w260" id="profile-panel">
+      <div class="card-bd p-45">
+        <div class="flex-ac-g35-mb4">
+          <div class="icon-box-primary-violet-48-fs1125">R</div>
+          <div>
+            <div class="fw7-fs9375-body">Ravindra S.</div>
+            <div class="fs775-muted">HR Manager</div>
+            <div class="flex-ac-g1-mt05">
+              <span class="d-iblock-sq6px-bg-green"></span>
+              <span class="fs7-fw6-c-green">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="profile.html"><i class="bi bi-person-fill c-primary-icon"></i>My Profile</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="settings.html"><i class="bi bi-gear-fill c-primary-icon"></i>Settings</a>
+        <a class="notif-item flex-ac-g25-fs845-fw5-c-body-p-2-1-tdn-b-none" href="#"><i class="bi bi-question-circle-fill c-primary-icon"></i>Help & Support</a>
+        <div class="divider-hr m-2-0"></div>
+        <div class="flex-ac-jsb-p-1-0">
+          <span class="fs8-muted">Appearance</span>
+          <button type="button" class="btn-hr btn-ghost-hr btn-sm-hr btn-icon-hr" data-theme-toggle aria-label="Toggle dark mode">
+            <i class="bi bi-sun-fill theme-icon-light"></i>
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+          </button>
+        </div>
+        <div class="divider-hr m-2-0"></div>
+        <a class="btn-hr btn-danger-hr w100pct-mt1" href="login-basic.html">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-inner">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Tabs</h1>
+          <p class="page-subtitle">12 tab variants — pill, underline, segmented, icon, vertical, scrollable, badge, step-wizard &amp; more</p>
+        </div>
+      </div>
+
+      <!-- ══ 1. DEFAULT PILL TABS ════════════════════════════════ -->
+      <div class="sl">1 — Default Pill Tabs</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">HR Dashboard Tabs</div>
+          <div class="card-subtitle-hr">Solid filled pill on active tab</div>
+        </div>
+        <div class="card-bd">
+          <div class="ht-bar" id="g1">
+            <button type="button" class="ht-btn on" onclick="switchTab('g1','g1-p1')">Overview</button>
+            <button type="button" class="ht-btn" onclick="switchTab('g1','g1-p2')">Employees</button>
+            <button type="button" class="ht-btn" onclick="switchTab('g1','g1-p3')">Payroll</button>
+            <button type="button" class="ht-btn" onclick="switchTab('g1','g1-p4')">Settings</button>
+          </div>
+          <div class="ht-pane on tcb" id="g1-p1">
+            <div class="row g-3 mb-75rem">
+              <div class="col-6 col-sm-3"><div class="ms"><div class="v">128</div><div class="l">Total Employees</div></div></div>
+              <div class="col-6 col-sm-3"><div class="ms"><div class="v c-green">94.3%</div><div class="l">Attendance</div></div></div>
+              <div class="col-6 col-sm-3"><div class="ms"><div class="v c-amber">14</div><div class="l">Pending Leave</div></div></div>
+              <div class="col-6 col-sm-3"><div class="ms"><div class="v c-blue">12</div><div class="l">Reviews Due</div></div></div>
+            </div>
+            <p class="fs875-c-muted-m-0-lh-17">High-level snapshot of all HR activities this month. Team headcount up 12 from last month. Twelve performance reviews due by December 20.</p>
+          </div>
+          <div class="ht-pane tcb" id="g1-p2">
+            <div class="flex-col-g25">
+              <div class="flex-ac-g35-bg-card-bg-br25-p-3-b-1">
+                <div class="avatar-blue-purple-38">SC</div>
+                <div class="fl1"><div class="fw7-body">Sarah Chen</div><div class="fs8-muted">Senior UX Designer · Product</div></div>
+                <span class="badge-green-10-xs-fs72-p08-2">94</span>
+              </div>
+              <div class="flex-ac-g35-bg-card-bg-br25-p-3-b-1">
+                <div class="avatar-green-sky-38">MJ</div>
+                <div class="fl1"><div class="fw7-body">Marcus Johnson</div><div class="fs8-muted">Backend Engineer · Engineering</div></div>
+                <span class="badge-blue-10-xs-fs72-p08-2">88</span>
+              </div>
+              <div class="flex-ac-g35-bg-card-bg-br25-p-3-b-1">
+                <div class="avatar-amber-red-38">PN</div>
+                <div class="fl1"><div class="fw7-body">Priya Nair</div><div class="fs8-muted">Product Manager · Product</div></div>
+                <span class="badge-green-10-xs-fs72-p08-2">91</span>
+              </div>
+            </div>
+          </div>
+          <div class="ht-pane tcb" id="g1-p3">
+            <div class="row g-2 mb-75rem">
+              <div class="col-6"><div class="bg-card-bg-br25-p-3-b-1"><div class="fs72-c-muted-mb08">Gross Pay</div><div class="fs1125-fw8-c-body">&#8377;1.58Cr</div></div></div>
+              <div class="col-6"><div class="bg-card-bg-br25-p-3-b-1"><div class="fs72-c-muted-mb08">Deductions</div><div class="fs1125-fw8-c-red">&#8377;34L</div></div></div>
+              <div class="col-6"><div class="bg-card-bg-br25-p-3-b-1"><div class="fs72-c-muted-mb08">Net Disbursed</div><div class="fs1125-fw8-c-green">&#8377;1.24Cr</div></div></div>
+              <div class="col-6"><div class="bg-card-bg-br25-p-3-b-1"><div class="fs72-c-muted-mb08">Status</div><div class="fs875-fw8-c-green"><i class="bi bi-check-circle-fill me-1"></i>Processed</div></div></div>
+            </div>
+            <p class="fs8125-c-muted-m-0">December 2024 payroll processed on Dec 28. Payslips emailed to all 128 employees.</p>
+          </div>
+          <div class="ht-pane tcb" id="g1-p4">
+            <div class="flex-col-g3">
+              <div class="flex-ac-jsb-bg-card-bg-br25-p-35-b-1"><div><div class="fs9-fw6-c-body">Email Notifications</div><div class="fs8-muted">Leave requests, payroll, performance alerts</div></div><input class="w5-h5-pointer-accent-primary" type="checkbox" checked /></div>
+              <div class="flex-ac-jsb-bg-card-bg-br25-p-35-b-1"><div><div class="fs9-fw6-c-body">Two-Factor Authentication</div><div class="fs8-muted">Require MFA for all admin accounts</div></div><input class="w5-h5-pointer-accent-primary" type="checkbox" /></div>
+              <div class="flex-ac-jsb-bg-card-bg-br25-p-35-b-1"><div><div class="fs9-fw6-c-body">Auto Payroll Processing</div><div class="fs8-muted">Process payroll on last working day automatically</div></div><input class="w5-h5-pointer-accent-primary" type="checkbox" checked /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 2. UNDERLINE TABS ══════════════════════════════════ -->
+      <div class="sl">2 — Underline / Classic Tabs</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Underline Indicator</div>
+          <div class="card-subtitle-hr">Bottom border marks the active tab — no background</div>
+        </div>
+        <div class="card-bd">
+          <div class="ht-ul" id="g2">
+            <button type="button" class="ht-ul-btn on" onclick="switchTab('g2','g2-p1')">Dashboard</button>
+            <button type="button" class="ht-ul-btn" onclick="switchTab('g2','g2-p2')">Analytics</button>
+            <button type="button" class="ht-ul-btn" onclick="switchTab('g2','g2-p3')">Reports</button>
+            <button type="button" class="ht-ul-btn" onclick="switchTab('g2','g2-p4')">Compliance</button>
+          </div>
+          <div class="ht-pane on ht-ul-content" id="g2-p1"><p class="fs875-c-body-m-0-lh-17">Dashboard: Real-time KPIs — 128 employees, 94.3% attendance, &#8377;1.24Cr payroll, 7 open positions. Performance average for Q4: 88.2/100 across all departments.</p></div>
+          <div class="ht-pane ht-ul-content" id="g2-p2"><p class="fs875-c-body-m-0-lh-17">Analytics: 30+ pre-built workforce reports. Attrition trend &#8211;2.1% vs Q3. Hiring velocity: 12 hires in 30 days. Cost-per-hire: &#8377;84,000. Drill down by squad, level, and region.</p></div>
+          <div class="ht-pane ht-ul-content" id="g2-p3"><p class="fs875-c-body-m-0-lh-17">Reports: 6 scheduled reports delivered to leadership every Monday — payroll summary, attendance heatmap, leave balance, and performance percentile distribution. Export in PDF, Excel, or CSV.</p></div>
+          <div class="ht-pane ht-ul-content" id="g2-p4"><p class="fs875-c-body-m-0-lh-17">Compliance: PF filings current through November 2024. TDS Form 24Q submitted Q2. ESIC 100%. DPDP Act data-retention review due March 2026. SOC 2 Type II renewed.</p></div>
+        </div>
+      </div>
+
+      <!-- ══ 3 + 4 ════════════════════════════════════════════════ -->
+      <div class="row g-4 mb-2">
+        <!-- 3. SEGMENTED -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">3 — Segmented Control</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Button-Group Tabs</div>
+              <div class="card-subtitle-hr">Compact grouped toggle — view-switcher style</div>
+            </div>
+            <div class="card-bd">
+              <div class="ht-seg" id="g3">
+                <button type="button" class="ht-seg-btn on" onclick="switchTab('g3','g3-p1')">Month</button>
+                <button type="button" class="ht-seg-btn" onclick="switchTab('g3','g3-p2')">Quarter</button>
+                <button type="button" class="ht-seg-btn" onclick="switchTab('g3','g3-p3')">Year</button>
+              </div>
+              <div class="ht-pane on tcb" id="g3-p1">
+                <div class="row g-2 mb-2">
+                  <div class="col-6"><div class="ms"><div class="v">12</div><div class="l">New Hires</div></div></div>
+                  <div class="col-6"><div class="ms"><div class="v c-red">2</div><div class="l">Departures</div></div></div>
+                </div>
+                <p class="fs8-c-muted-m-0">December 2024 &#8212; net headcount +10. On track for Q1 2025 hiring targets.</p>
+              </div>
+              <div class="ht-pane tcb" id="g3-p2">
+                <div class="row g-2 mb-2">
+                  <div class="col-6"><div class="ms"><div class="v">34</div><div class="l">New Hires</div></div></div>
+                  <div class="col-6"><div class="ms"><div class="v c-red">8</div><div class="l">Departures</div></div></div>
+                </div>
+                <p class="fs8-c-muted-m-0">Q4 2024 &#8212; net +26. Attrition 6.25%, below industry average of 12%.</p>
+              </div>
+              <div class="ht-pane tcb" id="g3-p3">
+                <div class="row g-2 mb-2">
+                  <div class="col-6"><div class="ms"><div class="v">92</div><div class="l">New Hires</div></div></div>
+                  <div class="col-6"><div class="ms"><div class="v c-red">22</div><div class="l">Departures</div></div></div>
+                </div>
+                <p class="fs8-c-muted-m-0">FY 2024 &#8212; net +70. YoY headcount growth 120%. Retention rate: 92.4%.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. PILL OUTLINE -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">4 — Pill Outline Tabs</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Outlined Pill Tabs</div>
+              <div class="card-subtitle-hr">Border-only until clicked, then fills solid</div>
+            </div>
+            <div class="card-bd">
+              <div class="ht-pill" id="g4">
+                <button type="button" class="ht-pill-btn on" onclick="switchTab('g4','g4-p1')">All</button>
+                <button type="button" class="ht-pill-btn" onclick="switchTab('g4','g4-p2')">Engineering</button>
+                <button type="button" class="ht-pill-btn" onclick="switchTab('g4','g4-p3')">Product</button>
+                <button type="button" class="ht-pill-btn" onclick="switchTab('g4','g4-p4')">HR &amp; Finance</button>
+              </div>
+              <div class="ht-pane on tcb" id="g4-p1"><p class="fs875-c-body-m-0-lh-17">128 employees across 6 departments. Average tenure 2.8 years. Gender ratio 54/46. 92% permanent, 8% contract. Average age 31.4 years.</p></div>
+              <div class="ht-pane tcb" id="g4-p2"><p class="fs875-c-body-m-0-lh-17">42 engineers across Backend, Frontend, DevOps, and QA. Sprint 24 on track. Average performance 87.6/100. 3 open senior roles in active recruitment.</p></div>
+              <div class="ht-pane tcb" id="g4-p3"><p class="fs875-c-body-m-0-lh-17">18 product team members including PMs, designers, and researchers. 8 active product initiatives. Q4 review avg 91/100. 2 promotions pending approval.</p></div>
+              <div class="ht-pane tcb" id="g4-p4"><p class="fs875-c-body-m-0-lh-17">HR: 12 specialists handling recruitment, payroll, and compliance. Finance: 8 team members. Both departments fully staffed. Year-end audit complete with zero findings.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 5. ICON TABS ════════════════════════════════════════ -->
+      <div class="sl">5 — Icon + Label Tabs</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Icon Tabs</div>
+          <div class="card-subtitle-hr">Icon stacked above label — great for feature-dense navigation bars</div>
+        </div>
+        <div class="card-bd">
+          <div class="ht-icon-bar" id="g5">
+            <button type="button" class="ht-icon-btn on" onclick="switchTab('g5','g5-p1')"><i class="bi bi-people-fill"></i>Team</button>
+            <button type="button" class="ht-icon-btn" onclick="switchTab('g5','g5-p2')"><i class="bi bi-calendar-check-fill"></i>Attendance</button>
+            <button type="button" class="ht-icon-btn" onclick="switchTab('g5','g5-p3')"><i class="bi bi-credit-card-fill"></i>Payroll</button>
+            <button type="button" class="ht-icon-btn" onclick="switchTab('g5','g5-p4')"><i class="bi bi-graph-up-arrow"></i>Performance</button>
+            <button type="button" class="ht-icon-btn" onclick="switchTab('g5','g5-p5')"><i class="bi bi-gear-fill"></i>Settings</button>
+          </div>
+          <div class="ht-pane on tcb" id="g5-p1"><p class="fs875-c-body-m-0-lh-17">Team view: Browse 128 employees by department, role, or status. Org chart with reporting lines available. People Search for quick contact lookup.</p></div>
+          <div class="ht-pane tcb" id="g5-p2"><p class="fs875-c-body-m-0-lh-17">Attendance: 94.3% average this month. 14 late arrivals flagged. 3 employees on unplanned leave today. Geo-fenced check-in enabled for all remote staff.</p></div>
+          <div class="ht-pane tcb" id="g5-p3"><p class="fs875-c-body-m-0-lh-17">Payroll: December &#8377;1.24Cr disbursed. All 128 payslips generated and emailed. PF, ESI, TDS computed per latest statutory rates. Next run: January 28.</p></div>
+          <div class="ht-pane tcb" id="g5-p4"><p class="fs875-c-body-m-0-lh-17">Performance: Q4 2024 reviews in progress. 68 of 128 employees submitted self-assessments. Average so far: 88.2/100. Reviews close December 20.</p></div>
+          <div class="ht-pane tcb" id="g5-p5"><p class="fs875-c-body-m-0-lh-17">Settings: Configure leave policies, notification preferences, payroll frequency, role permissions, and third-party integrations. Last updated December 10.</p></div>
+        </div>
+      </div>
+
+      <!-- ══ 6 + 7 ════════════════════════════════════════════════ -->
+      <div class="row g-4 mb-2">
+        <!-- 6. VERTICAL -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">6 — Vertical Tabs</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Vertical Side Tabs</div>
+              <div class="card-subtitle-hr">Tab list left, content right</div>
+            </div>
+            <div class="card-bd">
+              <div class="flex-g5">
+                <div class="ht-vert-bar" id="g6">
+                  <button type="button" class="ht-vert-btn on" onclick="switchTab('g6','g6-p1')"><i class="bi bi-person-badge-fill me-2"></i>Personal</button>
+                  <button type="button" class="ht-vert-btn" onclick="switchTab('g6','g6-p2')"><i class="bi bi-briefcase-fill me-2"></i>Employment</button>
+                  <button type="button" class="ht-vert-btn" onclick="switchTab('g6','g6-p3')"><i class="bi bi-shield-lock-fill me-2"></i>Security</button>
+                  <button type="button" class="ht-vert-btn" onclick="switchTab('g6','g6-p4')"><i class="bi bi-bell-fill me-2"></i>Notifications</button>
+                </div>
+                <div class="fl1-mnw0">
+                  <div class="ht-pane on" id="g6-p1">
+                    <div class="fs68-fw7-c-muted-mb3-uc">Personal Info</div>
+                    <div class="flex-col-g15">
+                      <div class="flex-jsb-fs875-p-16-0-bb-1"><span class="c-muted">Full Name</span><span class="fw6">Sarah Chen</span></div>
+                      <div class="flex-jsb-fs875-p-16-0-bb-1"><span class="c-muted">Email</span><span class="fw6">sarah.chen@hr.com</span></div>
+                      <div class="flex-jsb-fs875-p-16-0-bb-1"><span class="c-muted">Phone</span><span class="fw6">+91 98765 43210</span></div>
+                      <div class="flex-jsb-fs875-p-16-0"><span class="c-muted">Location</span><span class="fw6">Bangalore, IN</span></div>
+                    </div>
+                  </div>
+                  <div class="ht-pane" id="g6-p2">
+                    <div class="fs68-fw7-c-muted-mb3-uc">Employment</div>
+                    <div class="flex-col-g15">
+                      <div class="flex-jsb-fs875-p-16-0-bb-1"><span class="c-muted">Department</span><span class="fw6">Product</span></div>
+                      <div class="flex-jsb-fs875-p-16-0-bb-1"><span class="c-muted">Role</span><span class="fw6">Sr UX Designer</span></div>
+                      <div class="flex-jsb-fs875-p-16-0-bb-1"><span class="c-muted">Start Date</span><span class="fw6">Mar 15, 2021</span></div>
+                      <div class="flex-jsb-fs875-p-16-0"><span class="c-muted">Reports To</span><span class="fw6">James Park</span></div>
+                    </div>
+                  </div>
+                  <div class="ht-pane" id="g6-p3">
+                    <div class="fs68-fw7-c-muted-mb3-uc">Security</div>
+                    <div class="flex-col-g25">
+                      <div class="flex-ac-jsb-bg-bg-br2-p-3-b-1"><div class="fs875-fw6">Two-Factor Auth</div><span class="badge-green-10-xs-fs72-p08-2">Enabled</span></div>
+                      <div class="flex-ac-jsb-bg-bg-br2-p-3-b-1"><div class="fs875-fw6">Last Login</div><span class="fs8-muted">Dec 14, 9:15 AM</span></div>
+                    </div>
+                  </div>
+                  <div class="ht-pane" id="g6-p4">
+                    <div class="fs68-fw7-c-muted-mb3-uc">Notifications</div>
+                    <div class="flex-col-g15">
+                      <div class="flex-ac-jsb-fs875-p-16-0-bb-1"><span>Leave requests</span><input class="accent-primary" type="checkbox" checked /></div>
+                      <div class="flex-ac-jsb-fs875-p-16-0-bb-1"><span>Payroll alerts</span><input class="accent-primary" type="checkbox" checked /></div>
+                      <div class="flex-ac-jsb-fs875-p-16-0"><span>Review reminders</span><input class="accent-primary" type="checkbox" /></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. BADGE TABS -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">7 — Badge / Count Tabs</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Notification Badge Tabs</div>
+              <div class="card-subtitle-hr">Red badge shows pending item count</div>
+            </div>
+            <div class="card-bd">
+              <div class="ht-bar" id="g7">
+                <button type="button" class="ht-btn on" onclick="switchTab('g7','g7-p1')">Leave<span class="tab-bdg">14</span></button>
+                <button type="button" class="ht-btn" onclick="switchTab('g7','g7-p2')">Reviews<span class="tab-bdg">12</span></button>
+                <button type="button" class="ht-btn" onclick="switchTab('g7','g7-p3')">Approvals<span class="tab-bdg">3</span></button>
+                <button type="button" class="ht-btn" onclick="switchTab('g7','g7-p4')">Messages</button>
+              </div>
+              <div class="ht-pane on tcb" id="g7-p1">
+                <div class="flex-col-g2">
+                  <div class="flex-ac-g3-bg-card-bg-br2-p-3-b-1"><div class="avatar-blue-purple-32-3">SC</div><div class="fl1"><div class="fs875-fw6">Sarah Chen &#8212; Annual Leave</div><div class="fs78-muted">Dec 23&#8211;27 &middot; 3 days &middot; 2h ago</div></div><div class="flex-g15"><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr fs75-c-green-p-1-2">Approve</button><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr fs75-c-red-p-1-2">Reject</button></div></div>
+                  <div class="flex-ac-g3-bg-card-bg-br2-p-3-b-1"><div class="avatar-green-sky-32-2">MJ</div><div class="fl1"><div class="fs875-fw6">Marcus Johnson &#8212; Sick Leave</div><div class="fs78-muted">Dec 16 &middot; 1 day &middot; Medical cert attached</div></div><div class="flex-g15"><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr fs75-c-green-p-1-2">Approve</button><button type="button" class="btn-hr btn-ghost-hr btn-sm-hr fs75-c-red-p-1-2">Reject</button></div></div>
+                </div>
+              </div>
+              <div class="ht-pane tcb" id="g7-p2"><p class="fs875-c-body-m-0-lh-17">12 performance reviews pending manager submission. Deadline December 20. Team leads notified. 6 self-assessments still incomplete &#8212; reminder sent today.</p></div>
+              <div class="ht-pane tcb" id="g7-p3"><p class="fs875-c-body-m-0-lh-17">3 expense claims pending CFO approval: Tom Nakamura (travel &#8377;18,200), Emily Rodriguez (training &#8377;12,500), David Kim (equipment &#8377;28,900). Total pending: &#8377;59,600.</p></div>
+              <div class="ht-pane tcb" id="g7-p4"><p class="fs875-c-body-m-0-lh-17">No unread messages. Last message from James Park (Dec 14): "Budget review meeting moved to Dec 18 at 2 PM."</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 8. CARD / BOXED TABS ════════════════════════════════ -->
+      <div class="sl">8 — Card / Boxed Tabs</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Card-Lid Tabs</div>
+          <div class="card-subtitle-hr">Each tab looks like a card lid connected to the content below</div>
+        </div>
+        <div class="card-bd">
+          <div class="ht-card-bar" id="g8">
+            <button type="button" class="ht-card-btn on" onclick="switchTab('g8','g8-p1')"><i class="bi bi-person-badge-fill me-1"></i>Profile</button>
+            <button type="button" class="ht-card-btn" onclick="switchTab('g8','g8-p2')"><i class="bi bi-activity me-1"></i>Activity</button>
+            <button type="button" class="ht-card-btn" onclick="switchTab('g8','g8-p3')"><i class="bi bi-folder-fill me-1"></i>Documents</button>
+            <button type="button" class="ht-card-btn" onclick="switchTab('g8','g8-p4')"><i class="bi bi-calendar3 me-1"></i>Calendar</button>
+          </div>
+          <div class="ht-pane on ht-card-content" id="g8-p1">
+            <div class="flex-ac-g4">
+              <div class="avatar-blue-purple-52">SC</div>
+              <div class="fl1"><div class="fs1-fw8-c-body">Sarah Chen</div><div class="fs8125-muted">Senior UX Designer &middot; 3 yrs 9 months</div></div>
+              <button type="button" class="btn-hr btn-outline-hr btn-sm-hr"><i class="bi bi-pencil me-1"></i>Edit</button>
+            </div>
+          </div>
+          <div class="ht-pane ht-card-content" id="g8-p2">
+            <div class="flex-col-g25">
+              <div class="flex-g25-fs875"><i class="bi bi-clock c-primary-mt04-shrink0"></i><span><strong>Checked in</strong> at 9:03 AM via web &mdash; <span class="c-muted">Dec 14</span></span></div>
+              <div class="flex-g25-fs875"><i class="bi bi-file-earmark-text c-amber-mt04-shrink0"></i><span><strong>Submitted self-assessment</strong> for Q4 review &mdash; <span class="c-muted">Dec 12</span></span></div>
+              <div class="flex-g25-fs875"><i class="bi bi-calendar-check c-green-mt04-shrink0"></i><span><strong>Leave approved</strong> Dec 23&#8211;27 (3 days) &mdash; <span class="c-muted">Dec 10</span></span></div>
+            </div>
+          </div>
+          <div class="ht-pane ht-card-content" id="g8-p3">
+            <div class="flex-col-g25">
+              <div class="flex-ac-g3-fs875"><i class="bi bi-file-earmark-pdf-fill fs1125-c-red"></i><span class="fl1">Offer Letter &mdash; March 2021.pdf</span><span class="fs75-muted">124 KB</span></div>
+              <div class="flex-ac-g3-fs875"><i class="bi bi-file-earmark-text-fill fs1125-c-blue"></i><span class="fl1">Q4 Performance Review.docx</span><span class="fs75-muted">38 KB</span></div>
+              <div class="flex-ac-g3-fs875"><i class="bi bi-file-earmark-bar-graph-fill fs1125-c-green"></i><span class="fl1">Payslip Dec 2024.pdf</span><span class="fs75-muted">56 KB</span></div>
+            </div>
+          </div>
+          <div class="ht-pane ht-card-content" id="g8-p4">
+            <div class="flex-col-g2">
+              <div class="flex-ac-bg-blue-6-br2-p-25-bl-3-blue"><div class="fs875-fw6-fl1">Q4 Review Submission</div><div class="fs78-muted">Dec 20</div></div>
+              <div class="flex-ac-bg-pink-6-br2-p-25-bl-3-pink"><div class="fs875-fw6-fl1">Holiday Party &mdash; 6 PM</div><div class="fs78-muted">Dec 22</div></div>
+              <div class="flex-ac-bg-green-6-br2-p-25-bl-3-green"><div class="fs875-fw6-fl1">Annual Leave Begins</div><div class="fs78-muted">Dec 23</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 9 + 10 ═══════════════════════════════════════════════ -->
+      <div class="row g-4 mb-2">
+        <!-- 9. COLOUR CODED -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">9 — Colour-Coded Tabs</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Category Colour Tabs</div>
+              <div class="card-subtitle-hr">Each tab gets its own accent colour</div>
+            </div>
+            <div class="card-bd">
+              <div class="flex-wrap-g15-mb35" id="g9">
+                <button type="button" class="ht-color-btn" id="g9-btn1" onclick="switchColor('g9','g9-p1','#5B8FF9')">Overview</button>
+                <button type="button" class="ht-color-btn" id="g9-btn2" onclick="switchColor('g9','g9-p2','#10B981')">Active</button>
+                <button type="button" class="ht-color-btn" id="g9-btn3" onclick="switchColor('g9','g9-p3','#F59E0B')">On Leave</button>
+                <button type="button" class="ht-color-btn" id="g9-btn4" onclick="switchColor('g9','g9-p4','#EF4444')">Issues</button>
+              </div>
+              <div class="ht-pane on tcb" id="g9-p1"><p class="fs875-c-body-m-0-lh-17">Total workforce 128. Active: 112. On leave: 9. Pending onboarding: 4. Exit process: 3. Headcount up 12% YoY.</p></div>
+              <div class="ht-pane tcb bl-3-green" id="g9-p2"><p class="fs875-c-body-m-0-lh-17"><strong class="c-green">112 Active</strong> &mdash; all checked in today. 6 working remotely. Core hours 10 AM&#8211;3 PM observed across all timezones.</p></div>
+              <div class="ht-pane tcb bl-3-amber" id="g9-p3"><p class="fs875-c-body-m-0-lh-17"><strong class="c-amber-dk">9 On Leave</strong> &mdash; 5 annual, 2 sick, 2 paternity. All approved and coverage arranged. Return dates confirmed.</p></div>
+              <div class="ht-pane tcb bl-3-red" id="g9-p4"><p class="fs875-c-body-m-0-lh-17"><strong class="c-red">3 flagged</strong> &mdash; 1 attendance violation, 1 PIP active, 1 exit notice served. HR follow-up scheduled.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. SCROLLABLE -->
+        <div class="col-12 col-xl-6">
+          <div class="sl">10 — Scrollable Tab Bar</div>
+          <div class="card-hr h-100">
+            <div class="card-hd">
+              <div class="card-title-hr">Horizontally Scrollable</div>
+              <div class="card-subtitle-hr">Overflows with scroll on small screens &#8212; no wrapping</div>
+            </div>
+            <div class="card-bd">
+              <div class="ht-scroll-wrap">
+                <div class="ht-ul flex-no-wrap" id="g10">
+                  <button type="button" class="ht-ul-btn on" onclick="switchTab('g10','g10-p1')">Jan</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p2')">Feb</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p3')">Mar</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p4')">Apr</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p5')">May</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p6')">Jun</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p7')">Jul</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p8')">Aug</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p9')">Sep</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p10')">Oct</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p11')">Nov</button>
+                  <button type="button" class="ht-ul-btn" onclick="switchTab('g10','g10-p12')">Dec</button>
+                </div>
+              </div>
+              <div class="p-4-bt-1-none-b-1" id="g10-content">
+                <div class="ht-pane on" id="g10-p1"><p class="fs875-c-body-m-0">January: 12 new hires, payroll &#8377;1.18Cr, attendance 93.1%. Q1 planning sessions began.</p></div>
+                <div class="ht-pane" id="g10-p2"><p class="fs875-c-body-m-0">February: 8 hires, payroll &#8377;1.19Cr, attendance 91.8%. 2 senior departures.</p></div>
+                <div class="ht-pane" id="g10-p3"><p class="fs875-c-body-m-0">March: 15 hires, payroll &#8377;1.21Cr, attendance 95.2%. Holi holiday. Q1 reviews complete.</p></div>
+                <div class="ht-pane" id="g10-p4"><p class="fs875-c-body-m-0">April: 11 hires, payroll &#8377;1.22Cr, attendance 94.5%. Hybrid policy fully in effect.</p></div>
+                <div class="ht-pane" id="g10-p5"><p class="fs875-c-body-m-0">May: 9 hires, payroll &#8377;1.22Cr, attendance 93.7%. Company offsite in Goa.</p></div>
+                <div class="ht-pane" id="g10-p6"><p class="fs875-c-body-m-0">June: 14 hires, payroll &#8377;1.23Cr, attendance 94.0%. H1 performance reviews. SOC 2 audit complete.</p></div>
+                <div class="ht-pane" id="g10-p7"><p class="fs875-c-body-m-0">July: 6 hires, payroll &#8377;1.23Cr, attendance 92.3%. 2 promotions effective Jul 1.</p></div>
+                <div class="ht-pane" id="g10-p8"><p class="fs875-c-body-m-0">August: 10 hires, payroll &#8377;1.24Cr, attendance 94.8%. New engineering squad formed.</p></div>
+                <div class="ht-pane" id="g10-p9"><p class="fs875-c-body-m-0">September: 13 hires, payroll &#8377;1.24Cr, attendance 95.1%. Q3 reviews kicked off.</p></div>
+                <div class="ht-pane" id="g10-p10"><p class="fs875-c-body-m-0">October: 7 hires, payroll &#8377;1.24Cr, attendance 93.5%. Diwali holiday. Annual appraisals announced.</p></div>
+                <div class="ht-pane" id="g10-p11"><p class="fs875-c-body-m-0">November: 9 hires, payroll &#8377;1.24Cr, attendance 94.2%. Salary increments effective Dec 1.</p></div>
+                <div class="ht-pane" id="g10-p12"><p class="fs875-c-body-m-0">December: 12 hires, payroll &#8377;1.24Cr, attendance 94.3%. Q4 reviews + holiday party Dec 22.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 11. NESTED TABS ═════════════════════════════════════ -->
+      <div class="sl">11 — Nested Tabs</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Parent Tabs with Child Tab Sets</div>
+          <div class="card-subtitle-hr">Each parent section contains its own independent child tab group</div>
+        </div>
+        <div class="card-bd">
+          <div class="ht-bar mb-35" id="g11">
+            <button type="button" class="ht-btn on" onclick="switchTab('g11','g11-p1')">Engineering</button>
+            <button type="button" class="ht-btn" onclick="switchTab('g11','g11-p2')">Product</button>
+            <button type="button" class="ht-btn" onclick="switchTab('g11','g11-p3')">HR</button>
+          </div>
+          <!-- Engineering nested -->
+          <div class="ht-pane on" id="g11-p1">
+            <div class="ht-ul" id="g11a">
+              <button type="button" class="ht-ul-btn on" onclick="switchTab('g11a','g11a-p1')">Backend</button>
+              <button type="button" class="ht-ul-btn" onclick="switchTab('g11a','g11a-p2')">Frontend</button>
+              <button type="button" class="ht-ul-btn" onclick="switchTab('g11a','g11a-p3')">DevOps</button>
+            </div>
+            <div class="ht-pane on ht-ul-content" id="g11a-p1"><p class="fs875-c-body-m-0">Backend: 12 engineers, Node.js + PostgreSQL + Redis. Sprint 24 &#8212; 9 in progress, 3 in review. Average score 87/100.</p></div>
+            <div class="ht-pane ht-ul-content" id="g11a-p2"><p class="fs875-c-body-m-0">Frontend: 10 engineers, React 18 + TypeScript. Sprint 24 &#8212; 7 tickets closed. Component library migration 80% complete. Average score 88/100.</p></div>
+            <div class="ht-pane ht-ul-content" id="g11a-p3"><p class="fs875-c-body-m-0">DevOps: 8 engineers, AWS EKS + Terraform. Uptime 99.97% MTD. Cost savings 28% vs Q3. Average score 91/100.</p></div>
+          </div>
+          <!-- Product nested -->
+          <div class="ht-pane" id="g11-p2">
+            <div class="ht-ul" id="g11b">
+              <button type="button" class="ht-ul-btn on" onclick="switchTab('g11b','g11b-p1')">Product Mgmt</button>
+              <button type="button" class="ht-ul-btn" onclick="switchTab('g11b','g11b-p2')">Design</button>
+            </div>
+            <div class="ht-pane on ht-ul-content" id="g11b-p1"><p class="fs875-c-body-m-0">Product Management: 5 PMs across 4 product lines. Q1 roadmap finalised. AI features scoped for H1 2025. Average score 89/100.</p></div>
+            <div class="ht-pane ht-ul-content" id="g11b-p2"><p class="fs875-c-body-m-0">Design: 8 designers (UX, UI, research). Design system v3.0 shipped. 6 user-testing sessions this month. Average score 94/100.</p></div>
+          </div>
+          <!-- HR nested -->
+          <div class="ht-pane" id="g11-p3">
+            <div class="ht-ul" id="g11c">
+              <button type="button" class="ht-ul-btn on" onclick="switchTab('g11c','g11c-p1')">Recruitment</button>
+              <button type="button" class="ht-ul-btn" onclick="switchTab('g11c','g11c-p2')">Payroll</button>
+            </div>
+            <div class="ht-pane on ht-ul-content" id="g11c-p1"><p class="fs875-c-body-m-0">Recruitment: 7 open roles, 42 applications this week, 3 offers extended. Time-to-hire avg: 28 days. Cost-per-hire: &#8377;84,000.</p></div>
+            <div class="ht-pane ht-ul-content" id="g11c-p2"><p class="fs875-c-body-m-0">Payroll: 4 specialists. December payroll closed on time, zero errors. PF/ESI/TDS fully compliant. Next review: Jan 5, 2025.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 12. STEP / WIZARD TABS ═════════════════════════════ -->
+      <div class="sl">12 — Step / Wizard Tabs</div>
+      <div class="card-hr mb-1rem">
+        <div class="card-hd">
+          <div class="card-title-hr">Wizard Step Indicator</div>
+          <div class="card-subtitle-hr">Visual stepper &#8212; click numbered steps or use Next/Back buttons</div>
+        </div>
+        <div class="card-bd">
+          <!-- Step indicator -->
+          <div class="ht-step-bar" id="g12-steps">
+            <div class="ht-step-item active" id="g12-s1" onclick="goStep(1)">
+              <div class="ht-step-num">1</div>
+              <span class="ht-step-lbl">Personal</span>
+            </div>
+            <div class="ht-step-item" id="g12-s2" onclick="goStep(2)">
+              <div class="ht-step-num">2</div>
+              <span class="ht-step-lbl">Employment</span>
+            </div>
+            <div class="ht-step-item" id="g12-s3" onclick="goStep(3)">
+              <div class="ht-step-num">3</div>
+              <span class="ht-step-lbl">Compensation</span>
+            </div>
+            <div class="ht-step-item" id="g12-s4" onclick="goStep(4)">
+              <div class="ht-step-num">4</div>
+              <span class="ht-step-lbl">Review</span>
+            </div>
+          </div>
+          <!-- Step content -->
+          <div class="ht-pane on tcb" id="g12-p1">
+            <div class="row g-3">
+              <div class="col-6"><label class="d-block-fs78-fw7-c-muted-mb15">First Name *</label><input class="w100pct-fs875-c-body-bg-bg-br2-p-24-35" placeholder="Sarah"/></div>
+              <div class="col-6"><label class="d-block-fs78-fw7-c-muted-mb15">Last Name *</label><input class="w100pct-fs875-c-body-bg-bg-br2-p-24-35" placeholder="Chen"/></div>
+              <div class="col-12"><label class="d-block-fs78-fw7-c-muted-mb15">Email *</label><input class="w100pct-fs875-c-body-bg-bg-br2-p-24-35" type="email" placeholder="sarah.chen@hrnexus.com"/></div>
+              <div class="col-6"><label class="d-block-fs78-fw7-c-muted-mb15">Phone</label><input class="w100pct-fs875-c-body-bg-bg-br2-p-24-35" placeholder="+91 98765 43210"/></div>
+              <div class="col-6"><label class="d-block-fs78-fw7-c-muted-mb15">Date of Birth</label><input class="w100pct-fs875-c-body-bg-bg-br2-p-24-35" type="date"/></div>
+            </div>
+          </div>
+          <div class="ht-pane tcb" id="g12-p2">
+            <div class="row g-3">
+              <div class="col-6"><label class="d-block-fs78-fw7-c-muted-mb15">Department *</label><select class="w100pct-fs875-c-body-bg-bg-br2-p-24-35-2"><option>Engineering</option><option>Product</option><option>HR</option><option>Finance</option></select></div>
+              <div class="col-6"><label class="d-block-fs78-fw7-c-muted-mb15">Role / Title *</label><input class="w100pct-fs875-c-body-bg-bg-br2-p-24-35" placeholder="UX Designer"/></div>
+              <div class="col-6"><label class="d-block-fs78-fw7-c-muted-mb15">Start Date *</label><input class="w100pct-fs875-c-body-bg-bg-br2-p-24-35" type="date"/></div>
+              <div class="col-6"><label class="d-block-fs78-fw7-c-muted-mb15">Employment Type</label><select class="w100pct-fs875-c-body-bg-bg-br2-p-24-35-2"><option>Full-time</option><option>Part-time</option><option>Contract</option></select></div>
+            </div>
+          </div>
+          <div class="ht-pane tcb" id="g12-p3">
+            <div class="row g-3">
+              <div class="col-12"><label class="d-block-fs78-fw7-c-muted-mb15">Monthly CTC (&#8377;) *</label><input class="w100pct-fs875-c-body-bg-bg-br2-p-24-35" type="number" placeholder="75000"/></div>
+              <div class="col-6"><label class="d-block-fs78-fw7-c-muted-mb15">PF Enrolled</label><select class="w100pct-fs875-c-body-bg-bg-br2-p-24-35-2"><option>Yes</option><option>No</option></select></div>
+              <div class="col-6"><label class="d-block-fs78-fw7-c-muted-mb15">Annual Bonus (&#8377;)</label><input class="w100pct-fs875-c-body-bg-bg-br2-p-24-35" type="number" placeholder="100000"/></div>
+            </div>
+          </div>
+          <div class="ht-pane tcb" id="g12-p4">
+            <div class="bg-card-bg-br3-p-4-mb4-b-1">
+              <div class="fs72-fw7-c-muted-mb3-uc">Summary</div>
+              <div class="flex-col-g2">
+                <div class="flex-jsb-fs875"><span class="c-muted">Name</span><span class="fw6">Sarah Chen</span></div>
+                <div class="flex-jsb-fs875"><span class="c-muted">Role</span><span class="fw6">UX Designer &middot; Product</span></div>
+                <div class="flex-jsb-fs875"><span class="c-muted">Start Date</span><span class="fw6">Jan 15, 2026</span></div>
+                <div class="flex-jsb-fs875"><span class="c-muted">CTC</span><span class="c-green-fw6">&#8377;75,000 / month</span></div>
+              </div>
+            </div>
+            <div class="fs875-c-body-bg-green-6-br3-p-35-b-1">
+              <i class="bi bi-envelope-fill me-2 c-green"></i>Welcome email with login credentials will be sent to sarah.chen@hrnexus.com on Start Date.
+            </div>
+          </div>
+          <!-- Step navigation -->
+          <div class="flex-jsb-mt4">
+            <button type="button" class="btn-hr btn-outline-hr d-none" id="g12-back" onclick="goStep(stepCur-1)"><i class="bi bi-arrow-left me-1"></i>Back</button>
+            <span></span>
+            <button type="button" class="btn-hr btn-primary-hr" id="g12-next" onclick="goStep(stepCur+1)">Next <i class="bi bi-arrow-right ms-1"></i></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script defer src="../../dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="../../dist/js/hrnexus.min.js"></script>
+<script>
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TAB ENGINE — explicit pane registry, no regex prefix guessing
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Map: barId -> [paneId, paneId, ...] — built at page load */
+var tabRegistry = {};
+
+function registerBar(barId) {
+  var bar = document.getElementById(barId);
+  if (!bar) return;
+  var paneIds = [];
+  bar.querySelectorAll('button[onclick]').forEach(function(btn) {
+    /* Extract paneId from onclick="switchTab('barId','paneId')" */
+    var m = btn.getAttribute('onclick').match(/switchTab\([^,]+,\s*['"]([^'"]+)['"]/);
+    if (m) paneIds.push(m[1]);
+  });
+  tabRegistry[barId] = paneIds;
+}
+
+function switchTab(barId, paneId) {
+  /* Deactivate all buttons in bar */
+  var bar = document.getElementById(barId);
+  if (!bar) return;
+  bar.querySelectorAll('button').forEach(function(b){ b.classList.remove('on'); });
+
+  /* Activate the clicked button */
+  bar.querySelectorAll('button[onclick]').forEach(function(btn) {
+    var m = btn.getAttribute('onclick').match(/switchTab\([^,]+,\s*['"]([^'"]+)['"]/);
+    if (m && m[1] === paneId) btn.classList.add('on');
+  });
+
+  /* Hide all panes in this group, show target */
+  var paneIds = tabRegistry[barId] || [];
+  paneIds.forEach(function(pid) {
+    var p = document.getElementById(pid);
+    if (p) p.classList.remove('on');
+  });
+  var target = document.getElementById(paneId);
+  if (target) target.classList.add('on');
+}
+
+/* ── Colour-coded tabs ──────────────────────────────────────── */
+var colorGroups = {};
+
+function registerColorGroup(barId) {
+  var bar = document.getElementById(barId);
+  if (!bar) return;
+  var paneIds = [];
+  bar.querySelectorAll('button[onclick]').forEach(function(btn) {
+    var m = btn.getAttribute('onclick').match(/switchColor\([^,]+,\s*['"]([^'"]+)['"]/);
+    if (m) paneIds.push(m[1]);
+  });
+  colorGroups[barId] = paneIds;
+}
+
+function switchColor(barId, paneId, color) {
+  var bar = document.getElementById(barId);
+  if (!bar) return;
+  /* Reset all colour buttons */
+  bar.querySelectorAll('.ht-color-btn').forEach(function(b) {
+    b.style.background = 'transparent';
+    b.style.color = 'var(--body-text-muted)';
+  });
+  /* Activate clicked button */
+  bar.querySelectorAll('.ht-color-btn[onclick]').forEach(function(btn) {
+    var m = btn.getAttribute('onclick').match(/switchColor\([^,]+,\s*['"]([^'"]+)['"]/);
+    if (m && m[1] === paneId) {
+      btn.style.background = color + '18';
+      btn.style.color = color;
+    }
+  });
+  /* Switch panes */
+  var paneIds = colorGroups[barId] || [];
+  paneIds.forEach(function(pid) {
+    var p = document.getElementById(pid);
+    if (p) p.classList.remove('on');
+  });
+  var target = document.getElementById(paneId);
+  if (target) target.classList.add('on');
+}
+
+/* ── Step wizard tabs ────────────────────────────────────────── */
+var stepCur = 1;
+var stepTotal = 4;
+
+function goStep(n) {
+  if (n > stepTotal) { completeStepWizard(); return; }
+  if (n < 1) return;
+  /* Hide current pane */
+  var cur = document.getElementById('g12-p' + stepCur);
+  if (cur) cur.classList.remove('on');
+  stepCur = n;
+  /* Show new pane */
+  var next = document.getElementById('g12-p' + stepCur);
+  if (next) next.classList.add('on');
+  /* Update step indicators */
+  for (var i = 1; i <= stepTotal; i++) {
+    var si = document.getElementById('g12-s' + i);
+    if (!si) continue;
+    si.classList.remove('active','done');
+    var num = si.querySelector('.ht-step-num');
+    if (i < stepCur) {
+      si.classList.add('done');
+      if (num) num.innerHTML = '<i class="bi bi-check-lg" style="font-size:.65rem"></i>';
+    } else if (i === stepCur) {
+      si.classList.add('active');
+      if (num) num.textContent = i;
+    } else {
+      if (num) num.textContent = i;
+    }
+    /* Update connector line */
+    if (i < stepTotal) si.classList.toggle('done', i < stepCur);
+  }
+  /* Back/Next buttons */
+  var back = document.getElementById('g12-back');
+  var nextBtn = document.getElementById('g12-next');
+  if (back) back.style.display = stepCur > 1 ? '' : 'none';
+  if (nextBtn) {
+    if (stepCur === stepTotal) {
+      nextBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i>Complete Onboarding';
+    } else {
+      nextBtn.innerHTML = 'Next <i class="bi bi-arrow-right ms-1"></i>';
+    }
+  }
+}
+
+/* "Complete Onboarding" on the final step previously did nothing —
+   goStep(stepCur+1) at stepCur===stepTotal called goStep(5), which the
+   n > stepTotal guard silently swallowed. This gives it a real,
+   genuine completion action instead. */
+function completeStepWizard() {
+  var nextBtn = document.getElementById('g12-next');
+  var backBtn = document.getElementById('g12-back');
+  var pane = document.getElementById('g12-p' + stepCur);
+  if (!pane || !nextBtn) return;
+
+  nextBtn.disabled = true;
+  nextBtn.innerHTML = '<span class="spin-sm me-2"></span>Processing...';
+  if (backBtn) backBtn.style.display = 'none';
+
+  setTimeout(function() {
+    pane.innerHTML =
+      '<div class="tc-p6">' +
+        '<i class="bi bi-check-circle-fill" style="font-size:3rem;color:#10B981"></i>' +
+        '<div class="fs11-fw8-mt3">Onboarding Complete!</div>' +
+        '<div class="fs875-c-muted-mt15">Sarah Chen has been successfully onboarded. A welcome email with login credentials will be sent on Jan 15, 2026.</div>' +
+      '</div>';
+    var navRow = nextBtn.parentElement;
+    if (navRow) navRow.style.display = 'none';
+  }, 1200);
+}
+
+/* ━━━ INIT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+document.addEventListener('DOMContentLoaded', function() {
+  /* Register all tab bars */
+  ['g1','g2','g3','g4','g5','g6','g7','g8','g10',
+   'g11','g11a','g11b','g11c'].forEach(registerBar);
+
+  /* Register colour groups */
+  registerColorGroup('g9');
+
+  /* Init colour tab 9 — activate first */
+  switchColor('g9','g9-p1','#5B8FF9');
+
+  /* Init step wizard */
+  goStep(1);
+});
+</script>
+</body>
+</html>

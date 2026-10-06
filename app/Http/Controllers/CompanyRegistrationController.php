@@ -6,6 +6,7 @@ use App\Services\RegisterCompanyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class CompanyRegistrationController extends Controller
 {
@@ -49,7 +50,23 @@ class CompanyRegistrationController extends Controller
 
         $registration->register($data);
 
-        return redirect()->route('login')->with('status', 'Tu cuenta fue creada. Ya puedes iniciar sesión.');
+        $request->session()->flash('registro_confirmacion_autorizada', true);
+        $request->session()->flash('registro_event_id', (string) Str::uuid());
+
+        return redirect()->route('registro.completado');
+    }
+
+    public function completed(Request $request)
+    {
+        if (!$request->session()->pull('registro_confirmacion_autorizada')) {
+            return redirect()->route('login');
+        }
+
+        $eventId = $request->session()->pull('registro_event_id');
+
+        return response()->view('auth.registration-completed', [
+            'eventId' => $eventId,
+        ])->header('Cache-Control', 'no-store, private');
     }
 
     private function verifyTurnstile(Request $request, string $secretKey): bool

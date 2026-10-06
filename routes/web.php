@@ -27,6 +27,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/registro', [CompanyRegistrationController::class, 'store'])
         ->middleware('throttle:5,1')
         ->name('registro.store');
+    Route::get('/registro/completado', [CompanyRegistrationController::class, 'completed'])
+        ->name('registro.completado');
     Route::get('/login', [SessionController::class, 'create'])->name('login');
     Route::post('/login', [SessionController::class, 'store'])->name('login.store');
     Route::get('/password/forgot', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');

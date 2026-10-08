@@ -220,10 +220,9 @@ class ReporteAsistenciaController extends Controller
         $company = Empresa::query()->findOrFail($companyId);
         $file = (new AsistenciaReporteExport())->generate(
             $query,
-            $company->razon_social,
+            $company,
             $filters['desde'],
             $filters['hasta'],
-            $company->logo,
         );
 
         return response()->download($file, $filename, [
@@ -234,7 +233,7 @@ class ReporteAsistenciaController extends Controller
     private function attendanceQuery(int $companyId, string $startDate, string $endDate)
     {
         return Asistencia::query()
-            ->with(['personal.empresa'])
+            ->with(['personal.empresa', 'personal.horarios'])
             ->whereHas('personal', fn ($query) => $query->where('empresa_id', $companyId))
             ->whereBetween('fecha', [$startDate, $endDate])
             ->orderByDesc('fecha')

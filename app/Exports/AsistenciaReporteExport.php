@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Empresa;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 use ZipArchive;
@@ -11,12 +12,12 @@ use XMLWriter;
 class AsistenciaReporteExport
 {
     private const HEADINGS = [
-        'Empresa', 'Personal', 'Fecha', 'Entrada', 'Rango entrada', 'Retardo (min)',
-        'Salida', 'Rango salida', 'Salida temprana (min)', 'Latitud entrada',
-        'Longitud entrada', 'Latitud salida', 'Longitud salida', 'Foto entrada', 'Foto salida',
+        'Empresa', 'Personal', 'Fecha', 'Hr. entrada', 'Entrada', 'Retardo (min)', 'Rango entrada',
+        'Hr. salida', 'Salida', 'Salida temprana (min)', 'Rango salida', 'Latitud entrada',
+        'Longitud entrada', 'Latitud salida', 'Longitud salida',
     ];
 
-    public function generate(Builder $query, string $companyName, string $startDate, string $endDate, ?string $logoPath = null): string
+    public function generate(Builder $query, Empresa $company, string $startDate, string $endDate): string
     {
         if (!class_exists(ZipArchive::class) || !class_exists(XMLWriter::class)) {
             throw new RuntimeException('La exportación de Excel no está disponible en este servidor.');
@@ -30,14 +31,14 @@ class AsistenciaReporteExport
         }
 
         try {
-            $logo = $this->logoImage($logoPath);
+            $logo = $this->logoImage($company->logo);
             if ($logo !== null) {
                 $logoTempPath = tempnam(sys_get_temp_dir(), 'horalia-logo-');
                 if ($logoTempPath === false || file_put_contents($logoTempPath, $logo['bytes']) === false) {
                     throw new RuntimeException('No se pudo preparar el logotipo para Excel.');
                 }
             }
-            $this->writeSheet($query, $companyName, $startDate, $endDate, $sheetPath, $logo !== null);
+            $this->writeSheet($query, $company, $startDate, $endDate, $sheetPath, $logo !== null);
             $zip = new ZipArchive();
             if ($zip->open($xlsxPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
                 throw new RuntimeException('No se pudo crear el archivo de Excel.');
@@ -52,7 +53,7 @@ class AsistenciaReporteExport
             if ($logoTempPath !== null && $logo !== null) {
                 $zip->addFile($logoTempPath, 'xl/media/image1.' . $logo['extension']);
                 $zip->addFromString('xl/worksheets/_rels/sheet1.xml.rels', $this->drawingRelationshipsXml());
-                $zip->addFromString('xl/drawings/drawing1.xml', $this->drawingXml());
+                $zip->addFromString('xl/drawings/drawing1.xml', $this->drawingXml($logo['width'], $logo['height']));
                 $zip->addFromString('xl/drawings/_rels/drawing1.xml.rels', $this->drawingImageRelationshipsXml($logo['extension']));
             }
             $zip->close();
@@ -67,7 +68,7 @@ class AsistenciaReporteExport
         }
     }
 
-    private function writeSheet(Builder $query, string $companyName, string $startDate, string $endDate, string $path, bool $hasLogo): void
+    private function writeSheet(Builder $query, Empresa $company, string $startDate, string $endDate, string $path, bool $hasLogo): void
     {
         $xml = new XMLWriter();
         if (!$xml->openUri($path)) {
@@ -78,7 +79,7 @@ class AsistenciaReporteExport
         $xml->writeAttribute('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
         $xml->writeAttribute('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships');
         $xml->writeAttribute('xmlns:xdr', 'http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing');
-        $lastDataRow = max(3, (clone $query)->count() + 3);
+        $lastDataRow = max(7, (clone $query)->count() + 7);
         $xml->startElement('dimension');
         $xml->writeAttribute('ref', 'A1:O' . $lastDataRow);
         $xml->endElement();
@@ -86,8 +87,8 @@ class AsistenciaReporteExport
         $xml->startElement('sheetView');
         $xml->writeAttribute('workbookViewId', '0');
         $xml->startElement('pane');
-        $xml->writeAttribute('ySplit', '3');
-        $xml->writeAttribute('topLeftCell', 'A4');
+        $xml->writeAttribute('ySplit', '7');
+        $xml->writeAttribute('topLeftCell', 'A8');
         $xml->writeAttribute('activePane', 'bottomLeft');
         $xml->writeAttribute('state', 'frozen');
         $xml->endElement();
@@ -97,7 +98,7 @@ class AsistenciaReporteExport
         $xml->writeAttribute('defaultRowHeight', '18');
         $xml->endElement();
         $xml->startElement('cols');
-        foreach ([28, 30, 14, 12, 18, 16, 12, 18, 22, 18, 18, 18, 18, 42, 42] as $index => $width) {
+        foreach ([28, 30, 14, 12, 12, 16, 18, 12, 12, 22, 18, 18, 18, 18, 18] as $index => $width) {
             $xml->startElement('col');
             $xml->writeAttribute('min', (string) ($index + 1));
             $xml->writeAttribute('max', (string) ($index + 1));
@@ -108,34 +109,42 @@ class AsistenciaReporteExport
         $xml->endElement();
         $xml->startElement('sheetData');
 
-        $this->writeRow($xml, 1, $hasLogo
-            ? [['', 0], ['', 0], ['', 0], ['REPORTE DE ASISTENCIA', 1]]
-            : [['REPORTE DE ASISTENCIA', 1]]);
-        $this->writeRow($xml, 2, $hasLogo
-            ? [['', 0], ['', 0], ['', 0], ["{$companyName} | Periodo: {$startDate} al {$endDate}", 2]]
-            : [["{$companyName} | Periodo: {$startDate} al {$endDate}", 2]]);
+        $companyName = $company->razon_social;
+        $headerOffset = $hasLogo ? 3 : 0;
+        $fiscalLines = $this->fiscalDetailLines($company);
+        $headerRows = [1 => ['REPORTE DE ASISTENCIA', 1], 2 => [$companyName, 2]];
+        foreach ($fiscalLines as $index => $line) {
+            $headerRows[$index + 3] = [$line, 2];
+        }
+        $periodRow = count($fiscalLines) + 3;
+        $headerRows[$periodRow] = ["Periodo: {$startDate} al {$endDate}", 2];
+        ksort($headerRows);
+        foreach ($headerRows as $row => [$text, $style]) {
+            $this->writeRow($xml, $row, array_merge(array_fill(0, $headerOffset, ['', 0]), [[$text, $style]]));
+        }
         $headingCells = array_map(fn ($heading) => [$heading, 3], self::HEADINGS);
-        $this->writeRow($xml, 3, $headingCells);
+        $this->writeRow($xml, 7, $headingCells);
 
-        $rowNumber = 4;
+        $rowNumber = 8;
         $query->orderByDesc('id')->chunk(500, function ($records) use ($xml, &$rowNumber, $companyName): void {
             foreach ($records as $record) {
+                $schedule = $record->personal?->horarios?->firstWhere('dia', $record->fecha?->dayOfWeekIso);
                 $values = [
                     $companyName,
                     $record->personal?->nombre ?? '',
                     $record->fecha?->format('d/m/Y') ?? '',
+                    $schedule?->entrada ? substr($schedule->entrada, 0, 5) : '',
                     $record->llegada?->format('H:i') ?? '',
-                    $record->rango_entrada ?? '',
                     (int) ($record->minutos_tarde ?? 0),
+                    $record->rango_entrada ?? '',
+                    $schedule?->salida ? substr($schedule->salida, 0, 5) : '',
                     $record->salida?->format('H:i') ?? '',
-                    $record->rango_salida ?? '',
                     (int) ($record->minutos_salida_temprano ?? 0),
+                    $record->rango_salida ?? '',
                     $record->latitud,
                     $record->longitud,
                     $record->latitud_salida,
                     $record->longitud_salida,
-                    $record->fotoEntradaUrl() ?? '',
-                    $record->fotoSalidaUrl() ?? '',
                 ];
                 $this->writeRow($xml, $rowNumber++, array_map(fn ($value) => [$value, 0], $values));
             }
@@ -143,11 +152,13 @@ class AsistenciaReporteExport
 
         $xml->endElement();
         $xml->startElement('autoFilter');
-        $xml->writeAttribute('ref', 'A3:O' . max(3, $rowNumber - 1));
+        $xml->writeAttribute('ref', 'A7:O' . max(7, $rowNumber - 1));
         $xml->endElement();
         $xml->startElement('mergeCells');
-        $xml->writeAttribute('count', '2');
-        foreach ($hasLogo ? ['D1:O1', 'D2:O2'] : ['A1:O1', 'A2:O2'] as $range) {
+        $xml->writeAttribute('count', (string) count($headerRows));
+        $startColumn = $hasLogo ? 'D' : 'A';
+        foreach (array_keys($headerRows) as $row) {
+            $range = $startColumn . $row . ':O' . $row;
             $xml->startElement('mergeCell');
             $xml->writeAttribute('ref', $range);
             $xml->endElement();
@@ -223,11 +234,45 @@ class AsistenciaReporteExport
             }
 
             return in_array($mime, ['image/png', 'image/jpeg'], true)
-                ? ['bytes' => $bytes, 'extension' => $mime === 'image/png' ? 'png' : 'jpeg']
+                ? ['bytes' => $bytes, 'extension' => $mime === 'image/png' ? 'png' : 'jpeg', 'width' => (int) $image[0], 'height' => (int) $image[1]]
                 : null;
         } catch (\Throwable) {
             return null;
         }
+    }
+
+    private function fiscalDetailLines(Empresa $company): array
+    {
+        $lines = [];
+        $regimenes = config('constantes.regimenes_fiscales', []);
+        $regimen = $company->regimen_fiscal
+            ? $company->regimen_fiscal . (isset($regimenes[$company->regimen_fiscal]['descripcion']) ? ' - ' . $regimenes[$company->regimen_fiscal]['descripcion'] : '')
+            : null;
+        $identity = array_filter([
+            $company->rfc ? 'RFC: ' . $company->rfc : null,
+            $regimen ? 'Régimen fiscal: ' . $regimen : null,
+        ]);
+        if ($identity) $lines[] = implode(' | ', $identity);
+
+        $street = trim(implode(' ', array_filter([
+            $company->domicilio_calle,
+            $company->domicilio_numero_exterior ? 'No. ' . $company->domicilio_numero_exterior : null,
+            $company->domicilio_numero_interior ? 'Int. ' . $company->domicilio_numero_interior : null,
+        ])));
+        if ($street !== '') $lines[] = $street;
+
+        $neighborhood = $company->domicilio_colonia ? 'Colonia: ' . $company->domicilio_colonia : null;
+        $locality = array_filter([
+            $company->domicilio_codigo_postal ? 'C.P. ' . $company->domicilio_codigo_postal : null,
+            $company->domicilio_municipio,
+            $company->domicilio_ciudad,
+            $company->domicilio_estado,
+        ]);
+        if ($neighborhood || $locality) {
+            $lines[] = implode(' | ', array_filter([$neighborhood, implode(', ', $locality)]));
+        }
+
+        return array_slice($lines, 0, 3);
     }
 
     private function contentTypesXml(?string $imageExtension = null): string
@@ -248,9 +293,17 @@ class AsistenciaReporteExport
         return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image1.' . $extension . '"/></Relationships>';
     }
 
-    private function drawingXml(): string
+    private function drawingXml(int $imageWidth, int $imageHeight): string
     {
-        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><xdr:twoCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>0</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:to><xdr:col>3</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>2</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="2" name="Logotipo de la empresa"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rId1" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:twoCellAnchor></xdr:wsDr>';
+        $boxWidth = 2_800_000;
+        $boxHeight = 800_000;
+        $scale = min($boxWidth / $imageWidth, $boxHeight / $imageHeight);
+        $width = (int) round($imageWidth * $scale);
+        $height = (int) round($imageHeight * $scale);
+        $offsetX = (int) round((4_800_000 - $width) / 2);
+        $offsetY = 0;
+
+        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><xdr:oneCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>' . $offsetX . '</xdr:colOff><xdr:row>0</xdr:row><xdr:rowOff>' . $offsetY . '</xdr:rowOff></xdr:from><xdr:ext cx="' . $width . '" cy="' . $height . '"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="2" name="Logotipo de la empresa"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rId1" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="' . $width . '" cy="' . $height . '"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor></xdr:wsDr>';
     }
 
     private function rootRelationshipsXml(): string

@@ -17,7 +17,7 @@
     $centerOptionsJson = $centros->map(fn ($center) => ['id' => $center->id, 'empresa_id' => $center->empresa_id, 'nombre' => $center->nombre])->values()->toJson();
     $departmentOptionsJson = $departamentos->map(fn ($department) => ['id' => $department->id, 'empresa_id' => $department->empresa_id, 'nombre' => $department->nombre])->values()->toJson();
     $positionOptionsJson = $puestos->map(fn ($position) => ['id' => $position->id, 'empresa_id' => $position->empresa_id, 'nombre' => $position->nombre])->values()->toJson();
-    $scheduleOptionsJson = $horarios->map(fn ($schedule) => ['id' => $schedule->id, 'empresa_id' => $schedule->empresa_id, 'nombre' => $schedule->nombre_horario, 'entrada' => substr($schedule->hora_entrada, 0, 5), 'salida' => substr($schedule->hora_salida, 0, 5)])->values()->toJson();
+    $scheduleOptionsJson = $horarios->map(fn ($schedule) => ['id' => $schedule->id, 'empresa_id' => $schedule->empresa_id, 'nombre' => $schedule->nombre_horario, 'entrada' => substr($schedule->hora_entrada, 0, 5), 'salida' => substr($schedule->hora_salida, 0, 5), 'dia_siguiente' => substr((string) $schedule->hora_salida, 0, 8) <= substr((string) $schedule->hora_entrada, 0, 8)])->values()->toJson();
 @endphp
 <style>
     .page-inner { max-width:none; }
@@ -193,7 +193,7 @@
                                     <select class="hr-input select2 schedule-select @error('horarios.' . $day) personal-input-error @enderror" id="horario_{{ $day }}" name="horarios[{{ $day }}]" data-selected="{{ $selectedScheduleId }}" @if($isChecked) required @endif>
                                         <option value="">Selecciona un horario</option>
                                         @foreach($horarios as $horario)
-                                            <option value="{{ $horario->id }}" data-company-id="{{ $horario->empresa_id }}" @selected((string) $selectedScheduleId === (string) $horario->id)>{{ $horario->nombre_horario }} · {{ substr($horario->hora_entrada, 0, 5) }}–{{ substr($horario->hora_salida, 0, 5) }}</option>
+                                            <option value="{{ $horario->id }}" data-company-id="{{ $horario->empresa_id }}" @selected((string) $selectedScheduleId === (string) $horario->id)>{{ $horario->nombre_horario }} · {{ substr($horario->hora_entrada, 0, 5) }}–{{ substr($horario->hora_salida, 0, 5) }}@if(substr((string) $horario->hora_salida, 0, 8) <= substr((string) $horario->hora_entrada, 0, 8)) (día siguiente)@endif</option>
                                         @endforeach
                                     </select>
                                     @error('horarios.' . $day)<span class="personal-field-error">{{ $message }}</span>@enderror
@@ -274,7 +274,7 @@
             const oldValue = preserveValue ? $select.val() : '';
             $select.empty().append(new Option(placeholder, ''));
             rows.filter(row => String(row.empresa_id) === String(companyId)).forEach(row => {
-                const label = row.entrada ? `${row.nombre} · ${row.entrada}–${row.salida}` : row.nombre;
+                const label = row.entrada ? `${row.nombre} · ${row.entrada}–${row.salida}${row.dia_siguiente ? ' (día siguiente)' : ''}` : row.nombre;
                 $select.append(new Option(label, row.id));
             });
             const stillExists = $select.find('option').toArray().some(option => option.value === String(oldValue));

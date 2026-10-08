@@ -47,6 +47,7 @@
                     <div class="col-lg-6 col-md-12">
                         <label class="form-label-hr" for="hora_salida">Hora de salida <span class="text-danger" aria-hidden="true">*</span></label>
                         <input class="hr-input @error('hora_salida') schedule-input-error @enderror" id="hora_salida" name="hora_salida" type="time" value="{{ old('hora_salida', $horario->hora_salida ? substr($horario->hora_salida, 0, 5) : '') }}" required>
+                        <small class="d-block mt-1 text-muted">Si la salida es igual o anterior a la entrada, se considera al día siguiente.</small>
                         @error('hora_salida')<span class="schedule-field-error">{{ $message }}</span>@enderror
                     </div>
                 </div>

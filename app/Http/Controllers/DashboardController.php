@@ -6,6 +6,7 @@ use App\Models\Asistencia;
 use App\Models\Empresa;
 use App\Models\IntentoPago;
 use App\Models\Personal;
+use App\Services\RegistroAsistenciaService;
 use App\Services\StripeCardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +32,7 @@ class DashboardController extends Controller
         return self::SECTIONS;
     }
 
-    public function index(Request $request, StripeCardService $stripe)
+    public function index(Request $request, StripeCardService $stripe, RegistroAsistenciaService $registration)
     {
         $data = [
             'navigation' => self::SECTIONS,
@@ -48,6 +49,9 @@ class DashboardController extends Controller
             $schedules = $personal?->horarios()->get()->keyBy('dia') ?? collect();
             $worksToday = $personal && in_array((string) $today->dayOfWeekIso, $workDays, true);
             $todaySchedule = $worksToday ? $schedules->get($today->dayOfWeekIso) : null;
+            $overnightAttendance = $personal
+                ? $registration->pendingOvernightAttendance($personal)
+                : null;
             $monthScheduledDays = 0;
             if ($personal) {
                 for ($date = $today->copy()->startOfMonth(); $date->lte($today); $date->addDay()) {
@@ -65,9 +69,11 @@ class DashboardController extends Controller
                 'personal' => $personal,
                 'todayAttendance' => $todayAttendance,
                 'todaySchedule' => $todaySchedule,
+                'overnightAttendance' => $overnightAttendance,
                 'worksToday' => $worksToday,
-                'canMarkEntry' => $personal?->empresa?->activa && $worksToday && $todaySchedule && !$todayAttendance,
-                'canMarkExit' => $personal?->empresa?->activa && $todayAttendance?->llegada && !$todayAttendance?->salida && $todaySchedule,
+                'canMarkEntry' => $personal?->empresa?->activa && $worksToday && $todaySchedule && !$todayAttendance && !$overnightAttendance,
+                'canMarkExit' => $personal?->empresa?->activa
+                    && (($todayAttendance?->llegada && !$todayAttendance?->salida) || (!$todayAttendance && $overnightAttendance)),
                 'monthAttendanceCount' => $monthAttendance ? (clone $monthAttendance)->count() : 0,
                 'monthScheduledDays' => $monthScheduledDays,
                 'monthLateCount' => $monthAttendance ? (clone $monthAttendance)->where('minutos_tarde', '>', 0)->count() : 0,

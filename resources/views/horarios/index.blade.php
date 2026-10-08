@@ -50,7 +50,7 @@
                         <td>{{ $horario->empresa?->razon_social ?? '—' }}</td>
                         <td class="fw-bold">{{ $horario->nombre_horario }}</td>
                         <td>{{ substr($horario->hora_entrada, 0, 5) }}</td>
-                        <td>{{ substr($horario->hora_salida, 0, 5) }}</td>
+                        <td>{{ substr($horario->hora_salida, 0, 5) }}@if(substr((string) $horario->hora_salida, 0, 8) <= substr((string) $horario->hora_entrada, 0, 8)) <small class="d-block text-muted">Día siguiente</small>@endif</td>
                         <td><div class="schedule-actions">
                             @if(in_array($horario->empresa_id, $manageableIds, true))
                                 <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('horarios.edit', $horario) }}" title="Editar" aria-label="Editar {{ $horario->nombre_horario }}"><i class="fa-light fa-pen-to-square" aria-hidden="true"></i> Editar</a>

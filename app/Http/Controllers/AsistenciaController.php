@@ -16,7 +16,7 @@ class AsistenciaController extends Controller
 {
     use ManagesCompanyCatalogs;
 
-    public function index(Request $request)
+    public function index(Request $request, RegistroAsistenciaService $registration)
     {
         $companies = $this->companiesFor($request);
         $companyIds = $companies->modelKeys();
@@ -64,8 +64,12 @@ class AsistenciaController extends Controller
         $todaySchedule = $canMarkAttendance
             ? $personal->horarios()->where('dia', now()->dayOfWeekIso)->first()
             : null;
-        $canMarkEntry = $canMarkAttendance && !$todayAttendance && $todaySchedule !== null;
-        $canMarkExit = $canMarkAttendance && $todayAttendance?->llegada && !$todayAttendance?->salida && $todaySchedule !== null;
+        $overnightAttendance = $canMarkAttendance
+            ? $registration->pendingOvernightAttendance($personal)
+            : null;
+        $canMarkEntry = $canMarkAttendance && !$todayAttendance && !$overnightAttendance && $todaySchedule !== null;
+        $canMarkExit = $canMarkAttendance
+            && (($todayAttendance?->llegada && !$todayAttendance?->salida) || (!$todayAttendance && $overnightAttendance));
 
         return view('asistencia.index', [
             'navigation' => DashboardController::navigation(),
@@ -81,6 +85,7 @@ class AsistenciaController extends Controller
             'personal' => $personal,
             'todayAttendance' => $todayAttendance,
             'todaySchedule' => $todaySchedule,
+            'overnightAttendance' => $overnightAttendance,
             'canMarkAttendance' => $canMarkAttendance,
             'canMarkEntry' => $canMarkEntry,
             'canMarkExit' => $canMarkExit,
@@ -141,14 +146,7 @@ class AsistenciaController extends Controller
             throw ValidationException::withMessages(['asistencia' => 'Configura el centro de trabajo y su geolocalización antes de registrar asistencia.']);
         }
 
-        $day = now()->dayOfWeekIso;
-        $laborados = array_filter(explode('@', (string) $personal->laborados));
-        $schedule = $personal->horarios()->where('dia', $day)->first();
-        if (!in_array((string) $day, $laborados, true) || !$schedule) {
-            throw ValidationException::withMessages(['asistencia' => 'No tienes un horario laboral configurado para hoy.']);
-        }
-
-        return [$personal, $schedule];
+        return [$personal, null];
     }
 
     private function validatedCoordinates(Request $request, string $latitudeKey, string $longitudeKey): array

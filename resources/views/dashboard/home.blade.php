@@ -49,7 +49,9 @@
             <div class="wb-copy">
                 <h1 class="wb-greeting" id="welcome-title">Hola, {{ $personal->nombre ?: auth()->user()->name }} 👋</h1>
                 <div class="wb-sub">
-                    @if(!$worksToday)
+                    @if($overnightAttendance && !$todayAttendance)
+                        Jornada iniciada el {{ $overnightAttendance->fecha->format('d/m/Y') }} · Entrada {{ $overnightAttendance->llegada?->format('H:i') ?? '—' }} · Salida pendiente
+                    @elseif(!$worksToday)
                         Hoy no tienes jornada programada
                     @elseif(!$todaySchedule)
                         <span class="wb-highlight">Horario pendiente de configuración</span>
@@ -58,7 +60,7 @@
                     @elseif($todayAttendance?->llegada)
                         Entrada registrada a las <span class="wb-highlight">{{ $todayAttendance->llegada->format('H:i') }}</span> · Tu salida está pendiente
                     @else
-                        Tu horario de hoy es <span class="wb-highlight">{{ substr((string) $todaySchedule->entrada, 0, 5) }}–{{ substr((string) $todaySchedule->salida, 0, 5) }}</span>
+                        Tu horario de hoy es <span class="wb-highlight">{{ substr((string) $todaySchedule->entrada, 0, 5) }}–{{ substr((string) $todaySchedule->salida, 0, 5) }}@if(substr((string) $todaySchedule->salida, 0, 8) <= substr((string) $todaySchedule->entrada, 0, 8)) (día siguiente)@endif</span>
                     @endif
                     @if($personal->centro) · {{ $personal->centro->nombre }}@endif
                 </div>

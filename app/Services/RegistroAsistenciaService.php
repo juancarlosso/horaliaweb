@@ -14,21 +14,27 @@ class RegistroAsistenciaService
     {
         $personal = Personal::query()->with(['empresa', 'centro'])->findOrFail($personal->id);
         $this->assertEligible($personal, $expectedScope);
-        $this->scheduleForToday($personal);
 
         $attendance = Asistencia::query()
             ->where('personal_id', $personal->id)
             ->whereDate('fecha', today())
             ->first();
 
-        if (!$attendance) {
-            return 'entrada';
-        }
-        if ($attendance->llegada && !$attendance->salida) {
+        if ($attendance?->llegada && !$attendance->salida) {
             return 'salida';
         }
 
-        throw ValidationException::withMessages(['pin' => 'La asistencia de hoy ya está completa.']);
+        if ($attendance?->salida) {
+            throw ValidationException::withMessages(['pin' => 'La asistencia de hoy ya está completa.']);
+        }
+
+        if ($this->pendingOvernightShift($personal)) {
+            return 'salida';
+        }
+
+        $this->scheduleForDate($personal, today());
+
+        return 'entrada';
     }
 
     public function register(Personal $personal, string $ip, ?array $coordinates = null, ?string $photoPath = null, ?string $expectedKind = null, ?string $range = null, ?array $expectedScope = null): string
@@ -36,15 +42,34 @@ class RegistroAsistenciaService
         return DB::transaction(function () use ($personal, $ip, $coordinates, $photoPath, $expectedKind, $range, $expectedScope) {
             $personal = Personal::query()->with(['empresa', 'centro'])->lockForUpdate()->findOrFail($personal->id);
             $this->assertEligible($personal, $expectedScope);
-            $schedule = $this->scheduleForToday($personal);
-
             $today = today()->toDateString();
             $now = now();
             $attendance = Asistencia::query()->where('personal_id', $personal->id)->whereDate('fecha', $today)->lockForUpdate()->first();
             if (!$attendance) {
+                $overnightShift = $this->pendingOvernightShift($personal);
+                if ($overnightShift) {
+                    if ($expectedKind === 'entrada') {
+                        throw ValidationException::withMessages(['pin' => 'Primero registra la salida de tu jornada anterior.']);
+                    }
+
+                    [$attendance, $schedule] = $overnightShift;
+                    $scheduledExit = $this->scheduledExit($schedule, $attendance->fecha);
+                    $earlyMinutes = $now->lessThan($scheduledExit) ? (int) $now->diffInMinutes($scheduledExit) : 0;
+                    $attendance->update([
+                        'salida' => $now, 'latitud_salida' => $coordinates['latitud_salida'] ?? null,
+                        'longitud_salida' => $coordinates['longitud_salida'] ?? null, 'ip_salida' => $ip,
+                        'minutos_salida_temprano' => $earlyMinutes,
+                        'rango_salida' => $range ?? ($coordinates ? null : 'Checador PIN'), 'foto_salida' => $photoPath,
+                    ]);
+
+                    return 'salida';
+                }
+
                 if ($expectedKind === 'salida') {
                     throw ValidationException::withMessages(['pin' => 'Primero registra tu entrada de hoy.']);
                 }
+
+                $schedule = $this->scheduleForDate($personal, Carbon::parse($today));
                 $scheduledEntry = Carbon::parse($schedule->entrada)->setDateFrom($now);
                 $cutoff = $scheduledEntry->copy()->addMinutes((int) ($personal->empresa->minutos_tolerancia_entrada ?? 0));
                 $lateMinutes = $now->greaterThan($cutoff) ? (int) $cutoff->diffInMinutes($now) : 0;
@@ -68,7 +93,8 @@ class RegistroAsistenciaService
                 throw ValidationException::withMessages(['pin' => 'La entrada de hoy ya está registrada.']);
             }
 
-            $scheduledExit = Carbon::parse($schedule->salida)->setDateFrom($now);
+            $schedule = $this->scheduleForDate($personal, $attendance->fecha);
+            $scheduledExit = $this->scheduledExit($schedule, $attendance->fecha);
             $earlyMinutes = $now->lessThan($scheduledExit) ? (int) $now->diffInMinutes($scheduledExit) : 0;
             $attendance->update([
                 'salida' => $now, 'latitud_salida' => $coordinates['latitud_salida'] ?? null,
@@ -92,15 +118,62 @@ class RegistroAsistenciaService
         }
     }
 
-    private function scheduleForToday(Personal $personal)
+    public function pendingOvernightAttendance(Personal $personal): ?Asistencia
     {
-        $day = now()->dayOfWeekIso;
+        $shift = $this->pendingOvernightShift($personal);
+
+        return $shift[0] ?? null;
+    }
+
+    private function pendingOvernightShift(Personal $personal): ?array
+    {
+        $attendance = Asistencia::query()
+            ->where('personal_id', $personal->id)
+            ->whereNotNull('llegada')
+            ->whereNull('salida')
+            ->whereDate('fecha', '<', today())
+            ->orderByDesc('fecha')
+            ->first();
+
+        if (!$attendance) {
+            return null;
+        }
+
+        $schedule = $this->scheduleForDate($personal, $attendance->fecha, false);
+        if (!$schedule || !$this->scheduleEndsNextDay($schedule)) {
+            return null;
+        }
+
+        return [$attendance, $schedule];
+    }
+
+    private function scheduleForDate(Personal $personal, Carbon $date, bool $required = true)
+    {
+        $day = $date->dayOfWeekIso;
         $laborados = array_filter(explode('@', (string) $personal->laborados));
         $schedule = $personal->horarios()->where('dia', $day)->first();
         if (!in_array((string) $day, $laborados, true) || !$schedule) {
+            if (!$required) {
+                return null;
+            }
             throw ValidationException::withMessages(['pin' => 'No tienes un horario laboral configurado para hoy.']);
         }
 
         return $schedule;
+    }
+
+    private function scheduleEndsNextDay($schedule): bool
+    {
+        return substr((string) $schedule->salida, 0, 8) <= substr((string) $schedule->entrada, 0, 8);
+    }
+
+    private function scheduledExit($schedule, Carbon $shiftDate): Carbon
+    {
+        $scheduledExit = Carbon::parse($schedule->salida)->setDateFrom($shiftDate);
+        if ($this->scheduleEndsNextDay($schedule)) {
+            $scheduledExit->addDay();
+        }
+
+        return $scheduledExit;
     }
 }

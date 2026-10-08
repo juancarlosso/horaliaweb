@@ -81,20 +81,23 @@
     <header class="attendance-heading"><div><h1>Asistencias</h1><p>Consulta y registra las entradas y salidas del personal.</p></div></header>
     @if($canMarkAttendance)
         @php
-            $workedSeconds = $todayAttendance?->llegada
-                ? max(0, ($todayAttendance->salida ?? now())->getTimestamp() - $todayAttendance->llegada->getTimestamp())
+            $displayAttendance = $todayAttendance ?? $overnightAttendance;
+            $workedSeconds = $displayAttendance?->llegada
+                ? max(0, ($displayAttendance->salida ?? now())->getTimestamp() - $displayAttendance->llegada->getTimestamp())
                 : 0;
             $workedHours = intdiv($workedSeconds, 3600);
             $workedMinutes = intdiv($workedSeconds % 3600, 60);
-            $entryUnavailableReason = $todayAttendance?->llegada
+            $entryUnavailableReason = $overnightAttendance
+                ? 'Registra primero la salida de tu jornada anterior.'
+                : ($todayAttendance?->llegada
                 ? 'La entrada ya está registrada.'
-                : ($todaySchedule ? 'No disponible por el momento.' : 'No tienes un horario laboral configurado para hoy.');
+                : ($todaySchedule ? 'No disponible por el momento.' : 'No tienes un horario laboral configurado para hoy.'));
             $exitUnavailableReason = $todayAttendance?->salida
                 ? 'La salida ya está registrada.'
-                : (!$todayAttendance?->llegada ? 'Registra primero tu entrada.' : (!$todaySchedule ? 'No tienes un horario laboral configurado para hoy.' : 'No disponible por el momento.'));
+                : (!$todayAttendance?->llegada && !$overnightAttendance ? 'Registra primero tu entrada.' : 'No disponible por el momento.');
         @endphp
         <article class="card-hr attendance-today">
-            <div class="card-hd"><h2 class="card-title-hr">Mi asistencia de hoy</h2></div>
+            <div class="card-hd"><h2 class="card-title-hr">{{ $overnightAttendance && !$todayAttendance ? 'Mi jornada pendiente' : 'Mi asistencia de hoy' }}</h2></div>
             <div class="attendance-today-body">
                 <div class="attendance-live-clock" id="attendance-live-clock" data-now="{{ now()->toIso8601String() }}" data-timezone="{{ config('app.timezone') }}">{{ now()->format('h:i:s A') }}</div>
                 <div class="attendance-live-date" id="attendance-live-date">{{ now()->locale('es_MX')->translatedFormat('l, d \\d\\e F \\d\\e Y') }}</div>
@@ -103,10 +106,10 @@
                     <button class="attendance-check-button is-exit" type="button" @if($canMarkExit) data-open-attendance data-kind="salida" data-url="{{ route('asistencia.salida') }}" @else disabled title="{{ $exitUnavailableReason }}" @endif><i class="fa-light fa-right-from-bracket" aria-hidden="true"></i> Registrar salida</button>
                 </div>
                 <div class="attendance-today-log">
-                    <div class="attendance-today-log-title">Registro de hoy</div>
-                    <div class="attendance-today-log-row"><span>Entrada</span><strong class="is-entry">{{ $todayAttendance?->llegada?->format('h:i A') ?? 'Sin registrar' }}</strong></div>
-                    <div class="attendance-today-log-row"><span>Salida</span><strong>{{ $todayAttendance?->salida?->format('h:i A') ?? 'Pendiente' }}</strong></div>
-                    <div class="attendance-today-log-row"><span>Horas trabajadas</span><strong class="is-hours" id="attendance-worked-time" @if($todayAttendance?->llegada && !$todayAttendance?->salida) data-start="{{ $todayAttendance->llegada->getTimestamp() }}" @endif>{{ $workedHours }} h {{ $workedMinutes }} min</strong></div>
+                    <div class="attendance-today-log-title">{{ $overnightAttendance && !$todayAttendance ? 'Jornada iniciada el ' . $overnightAttendance->fecha->format('d/m/Y') : 'Registro de hoy' }}</div>
+                    <div class="attendance-today-log-row"><span>Entrada</span><strong class="is-entry">{{ $displayAttendance?->llegada?->format('h:i A') ?? 'Sin registrar' }}</strong></div>
+                    <div class="attendance-today-log-row"><span>Salida</span><strong>{{ $displayAttendance?->salida?->format('h:i A') ?? 'Pendiente' }}</strong></div>
+                    <div class="attendance-today-log-row"><span>Horas trabajadas</span><strong class="is-hours" id="attendance-worked-time" @if($displayAttendance?->llegada && !$displayAttendance?->salida) data-start="{{ $displayAttendance->llegada->getTimestamp() }}" @endif>{{ $workedHours }} h {{ $workedMinutes }} min</strong></div>
                 </div>
             </div>
         </article>

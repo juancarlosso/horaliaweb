@@ -8,6 +8,7 @@ use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\PaymentAttemptController;
+use App\Http\Controllers\PaymentHistoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\MembershipPaymentController;
@@ -51,6 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/mi-perfil/cambiar-contrasena', [ProfileController::class, 'editPassword'])->name('profile.password.edit');
     Route::put('/mi-perfil/cambiar-contrasena', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
     Route::get('/mi-perfil/metodos-de-pago', [PaymentMethodController::class, 'index'])->name('payment-methods.index');
+    Route::get('/home/pagos', [PaymentHistoryController::class, 'index'])->name('payment-history.index');
+    Route::get('/home/pagos/{payment}', [PaymentHistoryController::class, 'show'])->whereNumber('payment')->name('payment-history.show');
     Route::post('/mi-perfil/metodos-de-pago/setup-intent', [PaymentMethodController::class, 'setupIntent'])->name('payment-methods.setup-intent');
     Route::post('/mi-perfil/metodos-de-pago/confirm', [PaymentMethodController::class, 'completeSetup'])->name('payment-methods.confirm');
     Route::put('/mi-perfil/metodos-de-pago/{paymentMethod}/predeterminada', [PaymentMethodController::class, 'makeDefault'])->where('paymentMethod', 'pm_[A-Za-z0-9]+')->name('payment-methods.default');

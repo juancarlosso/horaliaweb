@@ -132,9 +132,18 @@ class StripeCardService
             return ['outcome' => 'failed', 'message' => 'La tarjeta ya no está disponible para esta empresa.', 'code' => 'invalid_payment_method'];
         }
 
+        $cardBrand = data_get($method, 'card.brand');
+        $cardLast4 = data_get($method, 'card.last4');
+
         $amountMinor = (int) round(((float) $amount) * 100);
         if ($amountMinor < 1) {
-            return ['outcome' => 'failed', 'message' => 'El importe de la membresía no es válido.', 'code' => 'invalid_amount'];
+            return [
+                'outcome' => 'failed',
+                'message' => 'El importe de la membresía no es válido.',
+                'code' => 'invalid_amount',
+                'card_brand' => $cardBrand,
+                'card_last4' => $cardLast4,
+            ];
         }
 
         try {
@@ -152,7 +161,13 @@ class StripeCardService
                 'metadata[concepto]' => 'MEMBRESIA HORALIA',
             ]);
         } catch (ConnectionException $exception) {
-            return ['outcome' => 'indeterminate', 'message' => 'No fue posible confirmar la respuesta del proveedor.', 'code' => 'connection_error'];
+            return [
+                'outcome' => 'indeterminate',
+                'message' => 'No fue posible confirmar la respuesta del proveedor.',
+                'code' => 'connection_error',
+                'card_brand' => $cardBrand,
+                'card_last4' => $cardLast4,
+            ];
         }
 
         $error = $response->json('error', []);
@@ -172,6 +187,8 @@ class StripeCardService
                 'message' => 'Pago procesado correctamente.',
                 'code' => null,
                 'transaction_id' => $intentId,
+                'card_brand' => $cardBrand,
+                'card_last4' => $cardLast4,
             ];
         }
 
@@ -182,6 +199,8 @@ class StripeCardService
                 'code' => 'authentication_required',
                 'transaction_id' => $intentId,
                 'client_secret' => $intent['client_secret'] ?? null,
+                'card_brand' => $cardBrand,
+                'card_last4' => $cardLast4,
             ];
         }
 
@@ -191,6 +210,8 @@ class StripeCardService
                 'message' => 'El pago continúa pendiente de confirmación por el proveedor.',
                 'code' => $status,
                 'transaction_id' => $intentId,
+                'card_brand' => $cardBrand,
+                'card_last4' => $cardLast4,
             ];
         }
 
@@ -203,6 +224,8 @@ class StripeCardService
                 'error_type' => $error['type'] ?? null,
                 'http_status' => $response->status(),
                 'transaction_id' => $intentId,
+                'card_brand' => $cardBrand,
+                'card_last4' => $cardLast4,
             ];
         }
 
@@ -220,6 +243,8 @@ class StripeCardService
             'error_type' => $error['type'] ?? null,
             'http_status' => $response->status(),
             'transaction_id' => $intentId,
+            'card_brand' => $cardBrand,
+            'card_last4' => $cardLast4,
         ];
     }
 

@@ -14,11 +14,9 @@
     .company-logo svg { width:20px; height:20px; stroke:currentColor; stroke-width:1.8; }
     .company-rfc { color:var(--body-text-muted); font-size:.78rem; white-space:nowrap; }
     .company-name { font-weight:700; }
-    .company-address { display:block; max-width:260px; overflow:hidden; color:var(--body-text-muted); text-overflow:ellipsis; white-space:nowrap; }
     .company-actions { display:flex; justify-content:flex-end; gap:.4rem; white-space:nowrap; }
     .company-actions i { display:inline-block; width:15px; min-width:15px; font-size:15px; line-height:1; text-align:center; }
     .company-actions form { margin:0; }
-    .company-payment-history { display:inline-flex; align-items:center; justify-content:center; width:36px; min-width:36px; padding:.45rem; }
     .companies-page a.btn-hr,.companies-page a.btn-hr:hover,.companies-page a.btn-hr:focus-visible { text-decoration:none; }
     .company-empty { padding:2.5rem 1rem; color:var(--body-text-muted); text-align:center; }
     .company-pagination { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.25rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); font-size:.8rem; }
@@ -61,7 +59,6 @@
                             <th scope="col">Logotipo</th>
                             <th scope="col">RFC</th>
                             <th scope="col">Razón social</th>
-                            <th scope="col">Dirección</th>
                             <th scope="col">Teléfono</th>
                             <th scope="col">Min.Tolerancia</th>
                             <th scope="col">Mts.Tolerancia</th>
@@ -82,7 +79,6 @@
                                 </td>
                                 <td><span class="company-rfc">{{ $empresa->rfc }}</span></td>
                                 <td><span class="company-name">{{ $empresa->razon_social }}</span></td>
-                                <td><span class="company-address" title="{{ $empresa->direccion }}">{{ $empresa->direccion ?: '—' }}</span></td>
                                 <td>{{ $empresa->telefono ?: '—' }}</td>
                                 <td>{{ $empresa->minutos_tolerancia_entrada }}</td>
                                 <td>{{ $empresa->metros_distancia_entrada }}</td>
@@ -101,9 +97,6 @@
                                                     Eliminar
                                                 </button>
                                             </form>
-                                            <a class="btn-hr btn-outline-hr btn-sm-hr company-payment-history" href="{{ route('empresas.payment-attempts.index', $empresa) }}" aria-label="Ver intentos de pago de {{ $empresa->razon_social }}" title="Intentos de pago">
-                                                <i class="fa-light fa-dollar-sign" aria-hidden="true"></i>
-                                            </a>
                                         @else
                                             <span class="company-rfc">Solo lectura</span>
                                         @endif

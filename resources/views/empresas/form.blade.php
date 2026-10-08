@@ -22,6 +22,9 @@
     .company-logo-filename { display:block; max-width:360px; overflow:hidden; color:var(--body-text-muted); font-size:.775rem; text-overflow:ellipsis; white-space:nowrap; }
     .company-form-actions { display:flex; justify-content:flex-start; gap:.5rem; flex-wrap:wrap; padding-top:1.25rem; margin-top:1.25rem; border-top:1px solid var(--body-border); }
     .company-form-actions svg,.company-logo-label svg { width:16px; height:16px; stroke:currentColor; stroke-width:1.8; }
+    .company-form-section { padding-top:1.25rem; margin-top:1.25rem; border-top:1px solid var(--body-border); }
+    .company-form-section h3 { margin:0 0 .35rem; color:var(--body-text); font-size:1rem; font-weight:750; }
+    .company-form-section p { margin:0 0 1rem; color:var(--body-text-muted); font-size:.825rem; }
     @media(max-width:575px) { .company-form-heading { align-items:stretch; flex-direction:column; } .company-logo-row { align-items:flex-start; } .company-logo-preview { width:68px; height:68px; } }
 </style>
 
@@ -73,11 +76,6 @@
                         <input class="hr-input @error('razon_social') company-form-input-error @enderror" id="razon_social" name="razon_social" type="text" value="{{ old('razon_social', $empresa->razon_social) }}" maxlength="255" required autocomplete="organization">
                         @error('razon_social') <span class="company-form-error">{{ $message }}</span> @enderror
                     </div>
-                    <div class="col-12 company-form-field">
-                        <label class="form-label-hr" for="direccion">Dirección</label>
-                        <textarea class="hr-input @error('direccion') company-form-input-error @enderror" id="direccion" name="direccion" rows="3" maxlength="2000">{{ old('direccion', $empresa->direccion) }}</textarea>
-                        @error('direccion') <span class="company-form-error">{{ $message }}</span> @enderror
-                    </div>
                     <div class="col-lg-6 col-md-12 company-form-field">
                         <label class="form-label-hr" for="telefono">Teléfono</label>
                         <input class="hr-input @error('telefono') company-form-input-error @enderror" id="telefono" name="telefono" type="tel" value="{{ old('telefono', $empresa->telefono) }}" maxlength="100" autocomplete="tel">
@@ -94,6 +92,61 @@
                         @error('metros_distancia_entrada') <span class="company-form-error">{{ $message }}</span> @enderror
                     </div>
                 </div>
+
+                <section class="company-form-section" aria-labelledby="fiscal-details-heading">
+                    <h3 id="fiscal-details-heading">Domicilio fiscal</h3>
+                    <p>Completa tus datos fiscales para facilitar la emisión de facturas por tus pagos de Horalia</p>
+                    <div class="row g-3">
+                        @php
+                            $fiscalFields = [
+                                'domicilio_calle' => ['Calle', 'text', 255, 'address-line1', 'col-md-8'],
+                                'domicilio_numero_exterior' => ['Número exterior', 'text', 30, 'off', 'col-md-2'],
+                                'domicilio_numero_interior' => ['Número interior', 'text', 30, 'off', 'col-md-2'],
+                                'domicilio_colonia' => ['Colonia', 'text', 150, 'address-level3', 'col-md-6'],
+                                'domicilio_municipio' => ['Alcaldía / Municipio', 'text', 150, 'address-level2', 'col-md-6'],
+                                'domicilio_ciudad' => ['Ciudad', 'text', 150, 'address-level2', 'col-md-5'],
+                            ];
+                        @endphp
+                        @foreach($fiscalFields as $name => $field)
+                            @php [$label, $type, $maxlength, $autocomplete] = array_slice($field, 0, 4); @endphp
+                            <div class="{{ $field[4] ?? 'col-lg-4 col-md-6' }} company-form-field">
+                                <label class="form-label-hr" for="{{ $name }}">{{ $label }}</label>
+                                <input class="hr-input @error($name) company-form-input-error @enderror" id="{{ $name }}" name="{{ $name }}" type="{{ $type }}" value="{{ old($name, $empresa->{$name}) }}" maxlength="{{ $maxlength }}" autocomplete="{{ $autocomplete }}">
+                                @error($name) <span class="company-form-error">{{ $message }}</span> @enderror
+                            </div>
+                        @endforeach
+                        <div class="col-md-3 company-form-field">
+                            <label class="form-label-hr" for="domicilio_codigo_postal">Código postal fiscal</label>
+                            <input class="hr-input @error('domicilio_codigo_postal') company-form-input-error @enderror" id="domicilio_codigo_postal" name="domicilio_codigo_postal" type="text" inputmode="numeric" pattern="[0-9]{5}" minlength="5" maxlength="5" value="{{ old('domicilio_codigo_postal', $empresa->domicilio_codigo_postal) }}" autocomplete="postal-code">
+                            @error('domicilio_codigo_postal') <span class="company-form-error">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="col-md-4 company-form-field">
+                            <label class="form-label-hr" for="domicilio_estado">Estado</label>
+                            <select class="hr-input select2 @error('domicilio_estado') company-form-input-error @enderror" id="domicilio_estado" name="domicilio_estado" autocomplete="address-level1">
+                                <option value="">Selecciona un estado</option>
+                                @foreach($entidadesFederativas as $estado)
+                                    <option value="{{ $estado }}" @selected(old('domicilio_estado', $empresa->domicilio_estado) === $estado)>{{ $estado }}</option>
+                                @endforeach
+                            </select>
+                            @error('domicilio_estado') <span class="company-form-error">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="col-md-6 company-form-field">
+                            <label class="form-label-hr" for="regimen_fiscal">Régimen fiscal</label>
+                            <select class="hr-input select2 @error('regimen_fiscal') company-form-input-error @enderror" id="regimen_fiscal" name="regimen_fiscal">
+                                <option value="">Selecciona un régimen</option>
+                                @foreach($regimenesFiscales as $clave => $regimen)
+                                    <option value="{{ $clave }}" @selected((string) old('regimen_fiscal', $empresa->regimen_fiscal) === (string) $clave)>{{ $clave }} — {{ $regimen['descripcion'] }}</option>
+                                @endforeach
+                            </select>
+                            @error('regimen_fiscal') <span class="company-form-error">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="col-md-6 company-form-field">
+                            <label class="form-label-hr" for="correo_facturacion">Correo de facturación</label>
+                            <input class="hr-input @error('correo_facturacion') company-form-input-error @enderror" id="correo_facturacion" name="correo_facturacion" type="email" value="{{ old('correo_facturacion', $empresa->correo_facturacion) }}" maxlength="255" autocomplete="email">
+                            @error('correo_facturacion') <span class="company-form-error">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+                </section>
 
                 <div class="company-form-actions">
                     <button class="btn-hr btn-primary-hr" type="submit">

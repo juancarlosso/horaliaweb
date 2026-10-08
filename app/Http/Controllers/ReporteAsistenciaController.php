@@ -217,11 +217,13 @@ class ReporteAsistenciaController extends Controller
 
         $query = $this->attendanceQuery($companyId, $filters['desde'], $filters['hasta']);
         $filename = 'reporte_asistencia_' . $filters['desde'] . '_' . $filters['hasta'] . '.xlsx';
+        $company = Empresa::query()->findOrFail($companyId);
         $file = (new AsistenciaReporteExport())->generate(
             $query,
-            Empresa::query()->findOrFail($companyId)->razon_social,
+            $company->razon_social,
             $filters['desde'],
             $filters['hasta'],
+            $company->logo,
         );
 
         return response()->download($file, $filename, [

@@ -56,7 +56,7 @@ class ChecadorController extends Controller
             ->map(function (ChecadorSesion $session) {
                 $linkExpiration = $session->activated_at
                     ? $session->expires_at
-                    : $session->created_at->copy()->addDay();
+                    : $session->created_at->copy()->addMinutes(15);
                 $session->activation_url = URL::temporarySignedRoute(
                     'checador.activate',
                     $linkExpiration,
@@ -64,7 +64,7 @@ class ChecadorController extends Controller
                 );
                 $session->link_status = $session->activated_at
                     ? 'Sesión activa hasta ' . $session->expires_at?->timezone(config('app.timezone'))->format('d/m/Y H:i')
-                    : 'Pendiente de activar';
+                    : 'Pendiente de activar · duración: ' . $session->duracion_dias . ' ' . ($session->duracion_dias === 1 ? 'día' : 'días');
 
                 return $session;
             });
@@ -82,6 +82,7 @@ class ChecadorController extends Controller
     {
         $data = $request->validate([
             'empresa_id' => ['required', 'integer', 'exists:empresas,id'],
+            'duracion_dias' => ['required', 'integer', 'between:1,7'],
         ]);
         $this->authorizeManageableCompany($request, (int) $data['empresa_id']);
         $company = Empresa::query()->whereKey($data['empresa_id'])->where('activa', true)->first();
@@ -94,6 +95,7 @@ class ChecadorController extends Controller
             'user_id' => $request->user()->id,
             'token' => $token,
             'token_hash' => hash('sha256', $token),
+            'duracion_dias' => $data['duracion_dias'],
         ]);
         return redirect()->route('checador.index');
     }
@@ -124,7 +126,7 @@ class ChecadorController extends Controller
 
         $linkExpiration = $activationSession->activated_at
             ? $activationSession->expires_at
-            : $activationSession->created_at->copy()->addDay();
+            : $activationSession->created_at->copy()->addMinutes(15);
         $activationUrl = URL::temporarySignedRoute(
             'checador.activate',
             $linkExpiration,
@@ -136,6 +138,7 @@ class ChecadorController extends Controller
             Mail::to($recipients)->queue(new ChecadorActivationLinkMail(
                 companyName: (string) $activationSession->empresa->razon_social,
                 activationUrl: $activationUrl,
+                durationDays: (int) $activationSession->duracion_dias,
                 expiresAt: $activationSession->activated_at
                     ? $activationSession->expires_at->timezone(config('app.timezone'))->format('d/m/Y H:i')
                     : null,
@@ -159,7 +162,7 @@ class ChecadorController extends Controller
         } else {
             abort_if($session->created_at->lt(now()->subMinutes(15)), 410, 'El enlace de activación expiró. Genera uno nuevo desde Horalia.');
             $session->update([
-                'activated_at' => now(), 'expires_at' => now()->addDay(),
+                'activated_at' => now(), 'expires_at' => now()->addDays((int) $session->duracion_dias),
                 'activation_ip' => $request->ip(),
                 'activation_user_agent' => mb_substr((string) $request->userAgent(), 0, 500),
             ]);

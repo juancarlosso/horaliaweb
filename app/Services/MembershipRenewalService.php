@@ -15,7 +15,10 @@ class MembershipRenewalService
 {
     public const CONCEPT = 'MEMBRESIA HORALIA';
 
-    public function __construct(private readonly StripeCardService $stripe)
+    public function __construct(
+        private readonly StripeCardService $stripe,
+        private readonly PaymentFolioService $folios,
+    )
     {
     }
 
@@ -92,6 +95,7 @@ class MembershipRenewalService
                     $key = "horalia:auto:{$empresa->id}:{$cycleDate}:{$execution}:{$paymentMethodId}";
                     $attempt = $this->pendingAttempt($empresa, $cycleDate, $paymentMethodId, 'automatico', $key, $execution);
                     if ($attempt->resultado === 'exitoso') {
+                        $this->folios->assign($attempt);
                         return ['status' => 'paid', 'empresa' => $empresa, 'amount' => $empresa->precio, 'renewal_date' => $cycleDate, 'new_date' => $empresa->fecha_renovacion->toDateString()];
                     }
                     if ($attempt->resultado === 'fallido') {
@@ -104,6 +108,8 @@ class MembershipRenewalService
                             'descripcion' => $charge['message'],
                             'codigo_respuesta' => $charge['code'],
                             'transaccion_id' => $charge['transaction_id'] ?? null,
+                            'tarjeta_marca' => $charge['card_brand'] ?? null,
+                            'tarjeta_ultimos4' => $charge['card_last4'] ?? null,
                         ])->save();
                         return ['status' => 'indeterminate', 'empresa_id' => $empresa->id, 'tarjeta_id' => $paymentMethodId];
                     }
@@ -113,7 +119,12 @@ class MembershipRenewalService
                         'descripcion' => $charge['message'],
                         'codigo_respuesta' => $charge['code'],
                         'transaccion_id' => $charge['transaction_id'] ?? null,
+                        'tarjeta_marca' => $charge['card_brand'] ?? null,
+                        'tarjeta_ultimos4' => $charge['card_last4'] ?? null,
                     ])->save();
+                    if ($charge['outcome'] === 'succeeded') {
+                        $this->folios->assign($attempt);
+                    }
                     Log::info('Resultado de un intento individual de renovación.', [
                         'empresa_id' => $empresa->id,
                         'tarjeta_id' => $paymentMethodId,
@@ -242,6 +253,8 @@ class MembershipRenewalService
                     'descripcion' => $charge['message'],
                     'codigo_respuesta' => $charge['code'],
                     'transaccion_id' => $charge['transaction_id'] ?? null,
+                    'tarjeta_marca' => $charge['card_brand'] ?? null,
+                    'tarjeta_ultimos4' => $charge['card_last4'] ?? null,
                 ])->save();
 
                 return ['status' => 'indeterminate', 'message' => 'El proveedor aún no confirma el resultado. Reintenta con esta misma tarjeta en unos momentos.'];
@@ -252,6 +265,8 @@ class MembershipRenewalService
                     'descripcion' => $charge['message'],
                     'codigo_respuesta' => $charge['code'],
                     'transaccion_id' => $charge['transaction_id'] ?? null,
+                    'tarjeta_marca' => $charge['card_brand'] ?? null,
+                    'tarjeta_ultimos4' => $charge['card_last4'] ?? null,
                 ])->save();
 
                 return [
@@ -267,7 +282,12 @@ class MembershipRenewalService
                 'descripcion' => $charge['message'],
                 'codigo_respuesta' => $charge['code'],
                 'transaccion_id' => $charge['transaction_id'] ?? null,
+                'tarjeta_marca' => $charge['card_brand'] ?? null,
+                'tarjeta_ultimos4' => $charge['card_last4'] ?? null,
             ])->save();
+            if ($charge['outcome'] === 'succeeded') {
+                $this->folios->assign($attempt);
+            }
             Log::info('Resultado de un intento manual de pago de membresía.', [
                 'empresa_id' => $locked->id,
                 'tarjeta_id' => $paymentMethodId,
@@ -332,6 +352,7 @@ class MembershipRenewalService
             }
 
             if ($attempt->resultado === 'exitoso') {
+                $this->folios->assign($attempt);
                 return ['status' => 'succeeded', 'message' => 'El pago ya fue confirmado.', 'new_date' => $locked->fecha_renovacion?->toDateString()];
             }
             if ($attempt->resultado === 'fallido') {
@@ -345,6 +366,7 @@ class MembershipRenewalService
                     'descripcion' => 'Pago confirmado correctamente por el proveedor.',
                     'transaccion_id' => $paymentIntentId,
                 ])->save();
+                $this->folios->assign($attempt);
                 $locked->forceFill(['activa' => true, 'intentos' => 0, 'fecha_renovacion' => $newDate])->save();
 
                 return ['status' => 'succeeded', 'message' => 'El pago de la membresía se realizó correctamente.', 'empresa' => $locked, 'amount' => $attempt->cantidad, 'new_date' => $newDate];

@@ -22,7 +22,7 @@
                     @if($expiresAt)
                         <p style="margin:0 0 22px;padding:13px 16px;border:1px solid #e5e8f1;border-radius:9px;background:#f8f9fc;color:#626a83;font-size:14px;line-height:1.6;">La sesión estará activa hasta <strong>{{ $expiresAt }}</strong>.</p>
                     @else
-                        <p style="margin:0 0 22px;padding:13px 16px;border:1px solid #e5e8f1;border-radius:9px;background:#f8f9fc;color:#626a83;font-size:14px;line-height:1.6;">El enlace debe abrirse durante los próximos 15 minutos para activar el checador. Una vez activado, la sesión durará 24 horas.</p>
+                        <p style="margin:0 0 22px;padding:13px 16px;border:1px solid #e5e8f1;border-radius:9px;background:#f8f9fc;color:#626a83;font-size:14px;line-height:1.6;">El enlace debe abrirse durante los próximos 15 minutos para activar el checador. Una vez activado, la sesión durará {{ $durationDays }} {{ $durationDays === 1 ? 'día' : 'días' }}.</p>
                     @endif
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 25px;">
                         <tr><td align="center" bgcolor="#536df5" style="border-radius:8px;box-shadow:0 5px 12px rgba(83,109,245,.22);">

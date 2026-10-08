@@ -22,7 +22,7 @@
     @media(max-width:600px) { .kiosk-admin-heading { align-items:stretch; flex-direction:column; } }
 </style>
 <section class="kiosk-admin">
-    <header class="kiosk-admin-heading"><div><h1>Reloj Checador</h1><p>Selecciona la empresa para generar un enlace que permita registrar la asistencia de su personal, sin importar el centro de trabajo. La sesión dura 24 horas después de activarse.</p></div><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index') }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
+    <header class="kiosk-admin-heading"><div><h1>Reloj Checador</h1><p>Selecciona la empresa y la vigencia de la sesión para generar un enlace que permita registrar la asistencia de su personal, sin importar el centro de trabajo.</p></div><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index') }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
     @if($errors->any())<div class="personal-error" role="alert">{{ $errors->first() }}</div>@endif
     <article class="card-hr">
         <div class="card-hd"><div><h2 class="card-title-hr">Nueva sesión de checador</h2><p class="card-subtitle-hr">La tablet quedará vinculada a una empresa.</p></div></div>
@@ -30,7 +30,8 @@
             <form method="POST" action="{{ route('checador.store') }}" class="d-grid gap-3">
                 @csrf
                 <div><label class="form-label-hr" for="empresa_id">Empresa</label><select class="hr-input select2" id="empresa_id" name="empresa_id" required><option value="">Selecciona una empresa</option>@foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) old('empresa_id', $selectedCompanyId) === (string) $company->id)>{{ $company->razon_social }}</option>@endforeach</select></div>
-                <p class="kiosk-note">Abre el enlace generado en la tablet de la empresa. El enlace puede activarse una sola vez durante los siguientes 15 minutos.</p>
+                <div><label class="form-label-hr" for="duracion_dias">Vigencia de la sesión</label><select class="hr-input select2" id="duracion_dias" name="duracion_dias" required>@for($days = 1; $days <= 7; $days++)<option value="{{ $days }}" @selected((int) old('duracion_dias', 1) === $days)>{{ $days }} {{ $days === 1 ? 'día' : 'días' }}</option>@endfor</select></div>
+                <p class="kiosk-note">Abre el enlace generado en la tablet de la empresa. El enlace puede activarse una sola vez durante los siguientes 15 minutos; después, la sesión durará el periodo seleccionado.</p>
                 <div><button class="btn-hr btn-primary-hr" type="submit"><i class="fa-light fa-link" aria-hidden="true"></i> Generar enlace del checador</button></div>
             </form>
             <div class="kiosk-link-list">

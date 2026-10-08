@@ -138,6 +138,11 @@
                     <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'card'])</span><span class="nav-text">Métodos de Pago</span>
                 </a>
             </div>
+            <div class="nav-li">
+                <a href="{{ route('payment-history.index') }}" class="nav-lnk {{ request()->routeIs('payment-history.*') ? 'active' : '' }}" @if(request()->routeIs('payment-history.*')) aria-current="page" @endif data-sidebar-tooltip="Historial de pagos">
+                    <span class="nav-icon"><i class="fa-light fa-clock-rotate-left" aria-hidden="true"></i></span><span class="nav-text">Historial de pagos</span>
+                </a>
+            </div>
         @endif
         <div class="sidebar-section">SESIÓN</div>
         <div class="nav-li">

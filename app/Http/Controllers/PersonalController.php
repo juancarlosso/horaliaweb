@@ -135,10 +135,20 @@ class PersonalController extends Controller
             return back()->withInput()->withErrors(['personal' => 'No se pudo guardar el registro de personal. Inténtalo de nuevo.']);
         }
 
+        $message = 'El personal se creó correctamente.';
+        try {
+            Mail::to($empleado->email, $empleado->nombre)->queue(new ChecadorPinMail(
+                recipientName: (string) $empleado->nombre,
+                pin: (string) $empleado->pin,
+                companyName: (string) ($empleado->empresa?->razon_social ?? config('app.name', 'Horalia')),
+            ));
+        } catch (Throwable $exception) {
+            report($exception);
+        }
+
         $mailStatus = Password::sendResetLink(['email' => $empleado->email]);
-        $message = 'El personal se creó correctamente. PIN del checador: ' . $empleado->pin . '.';
         if ($mailStatus === Password::RESET_LINK_SENT) {
-            $message .= ' Enviamos a su correo un enlace para crear su contraseña e ingresar.';
+            $message .= ' También enviamos un enlace para crear su contraseña e ingresar.';
         } else {
             report(new \RuntimeException('No fue posible enviar el correo de acceso inicial: ' . $mailStatus));
             $message .= ' No se pudo enviar el correo de acceso; puede reenviarse desde recuperación de contraseña.';

@@ -12,6 +12,8 @@ class IntentoPago extends Model
         'empresa_id',
         'fecha_renovacion',
         'tarjeta_id',
+        'tarjeta_marca',
+        'tarjeta_ultimos4',
         'origen',
         'concepto',
         'cantidad',
@@ -33,6 +35,15 @@ class IntentoPago extends Model
             'numero_ejecucion' => 'integer',
             'intentado_en' => 'datetime',
         ];
+    }
+
+    public function setFolioAttribute(?string $value): void
+    {
+        if (isset($this->attributes['folio']) && $this->attributes['folio'] !== null && $value !== $this->attributes['folio']) {
+            throw new \LogicException('El folio de un pago confirmado es inmutable.');
+        }
+
+        $this->attributes['folio'] = $value;
     }
 
     public function empresa()

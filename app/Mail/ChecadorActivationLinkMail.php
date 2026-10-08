@@ -17,6 +17,7 @@ class ChecadorActivationLinkMail extends Mailable implements ShouldQueue
         public string $companyName,
         public string $activationUrl,
         public ?string $expiresAt,
+        public int $durationDays,
     ) {}
 
     public function envelope(): Envelope

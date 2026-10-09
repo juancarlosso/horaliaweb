@@ -54,7 +54,7 @@ class IntentoPago extends Model
         return $this->belongsTo(Empresa::class);
     }
 
-    public function factura()
+    public function facturaEmitida()
     {
         return $this->hasOne(Factura::class);
     }

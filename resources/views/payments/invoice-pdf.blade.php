@@ -41,9 +41,13 @@
         .verify td { vertical-align:middle; }
         .qr { width:110px; height:110px; }
         .footer { margin-top:12px; padding-top:7px; border-top:1px solid #e2e6f0; color:#69718d; font-size:7px; text-align:center; }
+        .sample-notice { margin:0 0 12px; padding:8px 10px; border:1px solid #d92d20; border-radius:5px; color:#b42318; background:#fff3f1; font-size:9px; font-weight:bold; text-align:center; letter-spacing:.5px; }
     </style>
 </head>
 <body>
+    @if($sample ?? false)
+        <div class="sample-notice">MUESTRA - SIN VALIDEZ FISCAL · DATOS FICTICIOS</div>
+    @endif
     <div class="top">
         <table class="top-table"><tr>
             <td><img class="logo" src="{{ $logoDataUri }}" alt="Horalia"></td>
@@ -51,7 +55,7 @@
                 <div class="title">Factura electrónica</div>
                 <div class="subtitle">CFDI versión 4.0 - Comprobante de ingreso</div>
                 <div class="subtitle">Serie y folio: {{ $invoice->serie }}-{{ $invoice->folio }}</div>
-                <div class="badge">TIMBRADO</div>
+                <div class="badge">{{ ($sample ?? false) ? 'EJEMPLO VISUAL' : 'TIMBRADO' }}</div>
             </td>
         </tr></table>
     </div>

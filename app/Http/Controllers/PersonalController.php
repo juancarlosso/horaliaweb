@@ -15,6 +15,7 @@ use App\Models\Puesto;
 use App\Models\User;
 use App\Models\UserEmpresa;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -130,6 +131,9 @@ class PersonalController extends Controller
             });
         } catch (Throwable $exception) {
             $this->deletePhoto($newPhotoPath);
+            if ($this->isPinCollision($exception)) {
+                return back()->withInput()->withErrors(['pin' => 'Ese PIN acaba de asignarse a otra persona. Genera otro PIN e inténtalo de nuevo.']);
+            }
             report($exception);
 
             return back()->withInput()->withErrors(['personal' => 'No se pudo guardar el registro de personal. Inténtalo de nuevo.']);
@@ -264,6 +268,9 @@ class PersonalController extends Controller
             });
         } catch (Throwable $exception) {
             $this->deletePhoto($newPhotoPath);
+            if ($this->isPinCollision($exception)) {
+                return back()->withInput()->withErrors(['pin' => 'Ese PIN acaba de asignarse a otra persona. Genera otro PIN e inténtalo de nuevo.']);
+            }
             report($exception);
 
             return back()->withInput()->withErrors(['personal' => 'No se pudieron guardar los cambios. Inténtalo de nuevo.']);
@@ -453,6 +460,19 @@ class PersonalController extends Controller
         } while (Personal::query()->where('pin', $pin)->exists());
 
         return $pin;
+    }
+
+    private function isPinCollision(Throwable $exception): bool
+    {
+        if (!$exception instanceof QueryException) {
+            return false;
+        }
+
+        $state = (string) ($exception->errorInfo[0] ?? $exception->getCode());
+        $message = strtolower($exception->getMessage());
+
+        return in_array($state, ['23000', '23505'], true)
+            && (str_contains($message, 'personal_pin_unique') || str_contains($message, 'personal.pin'));
     }
 
     private function syncWorkSchedules(Personal $empleado, array $selectedDays, array $selectedSchedules, int $companyId): void

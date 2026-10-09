@@ -92,7 +92,7 @@ class PaymentInvoiceIssuingService
                 $invoice->uso_cfdi,
                 $invoice->forma_pago_sat,
             );
-            $stampedXml = $this->sifei->stamp($unsignedAndSignedXml, $invoice->serie);
+            $stampedXml = $this->sifei->stamp($unsignedAndSignedXml, $invoice->serie, $invoice->id, $invoice->folio);
             $timbre = $this->readTimbre($stampedXml);
 
             $stagingPath = sprintf('facturas/staging/%d/%s-%d.xml', $invoice->id, $invoice->serie, $invoice->folio);

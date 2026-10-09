@@ -7,47 +7,64 @@ use App\Models\Personal;
 use App\Models\User;
 use App\Models\UserEmpresa;
 use App\Mail\ChecadorPinMail;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class RegisterCompanyService
 {
     public function register(array $data): array
     {
-        [$empresa, $usuario, $personal] = DB::transaction(function () use ($data) {
-            $empresa = Empresa::create([
-                'razon_social' => $data['razon_social'],
-                'rfc' => $data['rfc'] ?: $this->generateUniquePlaceholderRfc(),
-                'activa' => true,
-            ]);
+        for ($attempt = 0; ; $attempt++) {
+            try {
+                [$empresa, $usuario, $personal] = DB::transaction(function () use ($data) {
+                    $empresa = Empresa::create([
+                        'razon_social' => $data['razon_social'],
+                        'rfc' => $data['rfc'] ?: $this->generateUniquePlaceholderRfc(),
+                        'activa' => true,
+                    ]);
 
-            $usuario = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'profile' => 2,
-                'password' => $data['password'],
-            ]);
+                    $usuario = User::create([
+                        'name' => $data['name'],
+                        'email' => $data['email'],
+                        'profile' => 2,
+                        'password' => $data['password'],
+                    ]);
 
-            $personal = Personal::create([
-                'nombre' => $data['name'],
-                'email' => $data['email'],
-                'activo' => true,
-                'empresa_id' => $empresa->id,
-                'pin' => $this->generateUniquePin(),
-            ]);
+                    $personal = Personal::create([
+                        'nombre' => $data['name'],
+                        'email' => $data['email'],
+                        'activo' => true,
+                        'empresa_id' => $empresa->id,
+                        'pin' => $this->generateUniquePin(),
+                    ]);
 
-            $usuario->personal()->associate($personal);
-            $usuario->save();
+                    $usuario->personal()->associate($personal);
+                    $usuario->save();
 
-            UserEmpresa::create([
-                'user_id' => $usuario->id,
-                'empresa_id' => $empresa->id,
-                'control_total' => true,
-            ]);
+                    UserEmpresa::create([
+                        'user_id' => $usuario->id,
+                        'empresa_id' => $empresa->id,
+                        'control_total' => true,
+                    ]);
 
-            return [$empresa, $usuario, $personal];
-        });
+                    return [$empresa, $usuario, $personal];
+                });
+                break;
+            } catch (QueryException $exception) {
+                if (!$this->isPinCollision($exception)) {
+                    throw $exception;
+                }
+
+                if ($attempt >= 4) {
+                    throw ValidationException::withMessages([
+                        'pin' => 'No fue posible asignar un PIN disponible. Inténtalo de nuevo.',
+                    ]);
+                }
+            }
+        }
 
         try {
             Mail::to($personal->email, $personal->nombre)->queue(new ChecadorPinMail(
@@ -69,6 +86,15 @@ class RegisterCompanyService
         } while (Personal::query()->where('pin', $pin)->exists());
 
         return $pin;
+    }
+
+    private function isPinCollision(QueryException $exception): bool
+    {
+        $state = (string) ($exception->errorInfo[0] ?? $exception->getCode());
+        $message = strtolower($exception->getMessage());
+
+        return in_array($state, ['23000', '23505'], true)
+            && (str_contains($message, 'personal_pin_unique') || str_contains($message, 'personal.pin'));
     }
 
     private function generateUniquePlaceholderRfc(): string

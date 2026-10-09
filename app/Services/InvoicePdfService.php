@@ -9,7 +9,7 @@ use RuntimeException;
 
 class InvoicePdfService
 {
-    public function render(Factura $invoice, string $xml): string
+    public function render(Factura $invoice, string $xml, bool $sample = false): string
     {
         $document = new \DOMDocument();
         $previous = libxml_use_internal_errors(true);
@@ -76,6 +76,7 @@ class InvoicePdfService
             'tasaIva' => $taxRate,
             'issuedAt' => now()->format('d/m/Y H:i'),
             'verificationUrl' => $qrUrl,
+            'sample' => $sample,
         ])->setPaper('a4', 'portrait')->output();
     }
 

@@ -58,6 +58,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/mi-perfil/empresas/{empresa}/suscripcion/cancelacion', [SubscriptionController::class, 'resume'])->whereNumber('empresa')->name('subscription.resume');
     Route::get('/home/pagos', [PaymentHistoryController::class, 'index'])->name('payment-history.index');
     Route::get('/home/pagos/{payment}', [PaymentHistoryController::class, 'show'])->whereNumber('payment')->name('payment-history.show');
+    Route::get('/home/pagos/{payment}/factura/{format}', [PaymentHistoryController::class, 'invoiceDocument'])
+        ->whereNumber('payment')
+        ->whereIn('format', ['pdf', 'xml'])
+        ->name('payment-history.invoice.document');
     Route::get('/home/pagos/{payment}/facturar', [PaymentHistoryController::class, 'invoice'])->whereNumber('payment')->name('payment-history.invoice');
     Route::post('/home/pagos/{payment}/facturar', [PaymentHistoryController::class, 'storeInvoiceOptions'])->whereNumber('payment')->name('payment-history.invoice.store');
     Route::post('/mi-perfil/metodos-de-pago/setup-intent', [PaymentMethodController::class, 'setupIntent'])->name('payment-methods.setup-intent');

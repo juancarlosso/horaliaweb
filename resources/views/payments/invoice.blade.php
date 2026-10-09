@@ -31,6 +31,10 @@
     .invoice-fiscal-field label { color:var(--body-text-muted); font-size:.8rem; font-weight:650; }
     .invoice-fiscal-actions { display:flex; justify-content:flex-end; padding:0 1.25rem 1.25rem; }
     .invoice-field-error { display:block; color:#b42318; font-size:.775rem; }
+    .invoice-submit-spinner { display:inline-block; width:.9rem; height:.9rem; margin-right:.45rem; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; vertical-align:-.12rem; animation:invoice-spin .7s linear infinite; }
+    .invoice-submit-spinner[hidden] { display:none; }
+    .btn-hr.invoice-submit-loading { opacity:.82; cursor:wait; }
+    @keyframes invoice-spin { to { transform:rotate(360deg); } }
     @media(max-width:800px) { .invoice-company-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .invoice-company-field.address { grid-column:span 1; } }
     @media(max-width:650px) { .invoice-summary-meta { grid-template-columns:1fr 1fr; } .invoice-summary-meta > :last-child { grid-column:1 / -1; } }
     @media(max-width:560px) { .invoice-page-header { align-items:flex-start; flex-direction:column; } .invoice-company-grid,.invoice-fiscal-grid,.invoice-summary-meta { grid-template-columns:1fr; } .invoice-company-field.address,.invoice-summary-meta > :last-child { grid-column:auto; } .invoice-summary-table th,.invoice-summary-table td { padding:.7rem .6rem; font-size:.75rem; } .invoice-summary-totals { gap:.45rem 1rem; } }
@@ -126,7 +130,10 @@
             </div>
             @if($canGenerateInvoice)
                 <div class="invoice-fiscal-actions">
-                    <button class="btn-hr btn-primary-hr" type="submit">Generar Factura</button>
+                    <button class="btn-hr btn-primary-hr" id="generate-invoice-button" type="submit" aria-live="polite">
+                        <span class="invoice-submit-spinner" id="invoice-submit-spinner" aria-hidden="true" hidden></span>
+                        <span id="invoice-submit-label">Generar Factura</span>
+                    </button>
                 </div>
             @endif
         </div>
@@ -137,6 +144,9 @@
         const form = document.getElementById('invoice-options-form');
         const select = document.getElementById('forma_pago_sat');
         const error = document.getElementById('forma-pago-error');
+        const submitButton = document.getElementById('generate-invoice-button');
+        const submitSpinner = document.getElementById('invoice-submit-spinner');
+        const submitLabel = document.getElementById('invoice-submit-label');
 
         if (!form || !select || !error) return;
 
@@ -153,6 +163,21 @@
                 event.preventDefault();
                 setInvalid(true);
                 if (window.jQuery && window.jQuery(select).data('select2')) window.jQuery(select).select2('open');
+                return;
+            }
+
+            if (form.dataset.submitting === 'true') {
+                event.preventDefault();
+                return;
+            }
+
+            form.dataset.submitting = 'true';
+            if (submitButton && submitSpinner && submitLabel) {
+                submitButton.disabled = true;
+                submitButton.classList.add('invoice-submit-loading');
+                submitButton.setAttribute('aria-busy', 'true');
+                submitSpinner.hidden = false;
+                submitLabel.textContent = 'Generando factura…';
             }
         });
 

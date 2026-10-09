@@ -6,6 +6,7 @@ use App\Models\IntentoPago;
 use App\Models\Empresa;
 use App\Services\PaymentInvoiceAmounts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class PaymentHistoryController extends Controller
@@ -27,7 +28,7 @@ class PaymentHistoryController extends Controller
         $filters['hasta'] = $filters['hasta'] ?? today()->toDateString();
 
         $payments = IntentoPago::query()
-            ->with('empresa:id,razon_social')
+            ->with(['empresa:id,razon_social', 'facturaEmitida:id,intento_pago_id,serie,folio,uuid,estado,xml_path,pdf_path'])
             ->whereIn('empresa_id', $companyIds)
             ->when($filters['empresa_id'] ?? null, fn ($query, $companyId) => $query->where('empresa_id', $companyId))
             ->when(($filters['estado'] ?? null) === 'exitosos', fn ($query) => $query->where('resultado', 'exitoso'))
@@ -77,6 +78,55 @@ class PaymentHistoryController extends Controller
             'safeFailureReason' => $this->safeFailureReason($record->codigo_respuesta),
             'navigation' => DashboardController::navigation(),
             'activeSection' => 'payment-history',
+        ]);
+    }
+
+    public function invoiceDocument(Request $request, int $payment, string $format)
+    {
+        abort_unless(in_array($format, ['pdf', 'xml'], true), 404);
+
+        $user = $request->user();
+        abort_unless((int) $user->profile === 2, 403);
+
+        $companyIds = $user->empresas()->pluck('empresas.id');
+        $record = IntentoPago::query()
+            ->with('facturaEmitida')
+            ->whereIn('empresa_id', $companyIds)
+            ->findOrFail($payment);
+        $invoice = $record->facturaEmitida;
+
+        abort_unless(
+            $record->resultado === 'exitoso'
+                && (int) $record->factura === 1
+                && $invoice?->uuid,
+            404
+        );
+
+        $path = $format === 'pdf' ? $invoice->pdf_path : $invoice->xml_path;
+        if (!$path) {
+            return response('El archivo de la factura todavía se está preparando.', 503)
+                ->header('Retry-After', '10')
+                ->header('Cache-Control', 'no-store');
+        }
+
+        $disk = Storage::disk('wasabi');
+        abort_unless($disk->exists($path), 404);
+        $stream = $disk->readStream($path);
+        abort_unless(is_resource($stream), 404);
+
+        $extension = $format;
+        $contentType = $format === 'pdf' ? 'application/pdf' : 'application/xml; charset=UTF-8';
+        $safeSeries = preg_replace('/[^A-Za-z0-9_-]/', '', (string) $invoice->serie);
+        $filename = sprintf('Factura-%s-%d.%s', $safeSeries, $invoice->folio, $extension);
+
+        return response()->stream(function () use ($stream): void {
+            fpassthru($stream);
+            fclose($stream);
+        }, 200, [
+            'Content-Type' => $contentType,
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
+            'X-Content-Type-Options' => 'nosniff',
+            'Cache-Control' => 'private, no-store',
         ]);
     }
 
@@ -142,7 +192,7 @@ class PaymentHistoryController extends Controller
             }
 
             if ($fresh?->uuid) {
-                return redirect()->route('payment-history.index')->with('status', 'La factura fue timbrada. El sistema está preparando los archivos y el correo.');
+                return redirect()->route('payment-history.index')->with('status', 'La factura fue timbrada, puedes consultar en tu correo o en los enlaces correspondientes.');
             }
 
             return redirect()->route('payment-history.invoice', $record->id)
@@ -152,7 +202,7 @@ class PaymentHistoryController extends Controller
 
         $message = $invoice->estado === 'requiere_revision'
             ? 'SIFEI no confirmó el resultado. El intento se bloqueó para evitar un CFDI duplicado; soporte revisará el estado antes de volver a timbrar.'
-            : 'La factura fue timbrada. El sistema está preparando los archivos y el correo.';
+            : 'La factura fue timbrada, puedes consultar en tu correo o en los enlaces correspondientes.';
 
         return redirect()->route('payment-history.index')->with('status', $message);
     }

@@ -19,6 +19,8 @@
     .payment-actions .btn-hr { box-sizing:border-box; height:34px; min-height:34px; }
     .payment-actions .payment-detail { width:34px; padding:0 !important; justify-content:center; color:#536df5; font-size:1rem; }
     .payment-actions .payment-invoice { padding:0 .75rem !important; }
+    .payment-actions .payment-document { min-width:46px; padding:0 .55rem !important; justify-content:center; }
+    .payment-actions .payment-document[aria-disabled="true"] { opacity:.55; cursor:wait; }
     .payment-empty { padding:2.5rem 1rem; color:var(--body-text-muted); text-align:center; }
     .payment-footer { display:flex; justify-content:space-between; gap:1rem; padding:1rem 1.25rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); font-size:.8rem; }
     @media(max-width:700px) { .payment-footer { flex-direction:column; } }
@@ -55,6 +57,16 @@
                         <td style="white-space:nowrap">
                             <div class="payment-actions">
                             <a class="btn-hr btn-outline-hr btn-sm-hr payment-detail" href="{{ route('payment-history.show', array_merge(['payment' => $payment->id], request()->query())) }}" aria-label="Ver detalle" title="Ver detalle"><i class="fa-light fa-circle-info" aria-hidden="true"></i></a>
+                            @if((int) $payment->factura === 1 && $payment->facturaEmitida?->uuid)
+                                @foreach(['pdf' => 'PDF', 'xml' => 'XML'] as $format => $label)
+                                    @php($documentPath = $format === 'pdf' ? $payment->facturaEmitida->pdf_path : $payment->facturaEmitida->xml_path)
+                                    @if($documentPath)
+                                        <a class="btn-hr btn-outline-hr btn-sm-hr payment-document" href="{{ route('payment-history.invoice.document', ['payment' => $payment->id, 'format' => $format]) }}" target="_blank" rel="noopener" aria-label="Abrir {{ $label }} de la factura en una pestaña nueva" title="Abrir {{ $label }} en una pestaña nueva">{{ $label }}</a>
+                                    @else
+                                        <span class="btn-hr btn-outline-hr btn-sm-hr payment-document" aria-disabled="true" title="El archivo se está preparando">{{ $label }}</span>
+                                    @endif
+                                @endforeach
+                            @endif
                             @if($payment->resultado === 'exitoso' && (int) $payment->factura === 0 && $payment->intentado_en?->isCurrentMonth())
                                 <a class="btn-hr btn-outline-hr btn-sm-hr payment-invoice" href="{{ route('payment-history.invoice', array_merge(['payment' => $payment->id], request()->query())) }}">Facturar</a>
                             @endif

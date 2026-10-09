@@ -44,6 +44,7 @@ class Empresa extends Model
         'stripe_customer_id',
         'stripe_default_payment_method_id',
         'intentos',
+        'cancelar_al_renovar',
     ];
 
     protected function casts(): array
@@ -56,6 +57,7 @@ class Empresa extends Model
             'fecha_inicio' => 'date',
             'fecha_renovacion' => 'date',
             'intentos' => 'integer',
+            'cancelar_al_renovar' => 'boolean',
         ];
     }
 

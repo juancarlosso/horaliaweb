@@ -15,6 +15,10 @@
     .payment-status.success { color:#087f5b; background:rgba(16,185,129,.1); }
     .payment-status.failed { color:#b42318; background:rgba(239,68,68,.09); }
     .payment-status.pending { color:#9a6700; background:rgba(234,179,8,.13); }
+    .payment-actions { display:inline-flex; align-items:center; gap:.35rem; }
+    .payment-actions .btn-hr { box-sizing:border-box; height:34px; min-height:34px; }
+    .payment-actions .payment-detail { width:34px; padding:0 !important; justify-content:center; color:#536df5; font-size:1rem; }
+    .payment-actions .payment-invoice { padding:0 .75rem !important; }
     .payment-empty { padding:2.5rem 1rem; color:var(--body-text-muted); text-align:center; }
     .payment-footer { display:flex; justify-content:space-between; gap:1rem; padding:1rem 1.25rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); font-size:.8rem; }
     @media(max-width:700px) { .payment-footer { flex-direction:column; } }
@@ -48,7 +52,14 @@
                         <td>{{ $payment->concepto }}</td>
                         <td>${{ number_format((float) $payment->cantidad, 2) }} {{ strtoupper($payment->moneda) }}</td>
                         <td><span class="payment-status {{ $statusClass }}">{{ $statusLabel }}</span></td>
-                        <td><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('payment-history.show', array_merge(['payment' => $payment->id], request()->query())) }}">Ver detalle</a></td>
+                        <td style="white-space:nowrap">
+                            <div class="payment-actions">
+                            <a class="btn-hr btn-outline-hr btn-sm-hr payment-detail" href="{{ route('payment-history.show', array_merge(['payment' => $payment->id], request()->query())) }}" aria-label="Ver detalle" title="Ver detalle"><i class="fa-light fa-circle-info" aria-hidden="true"></i></a>
+                            @if($payment->resultado === 'exitoso' && (int) $payment->factura === 0 && $payment->intentado_en?->isCurrentMonth())
+                                <a class="btn-hr btn-outline-hr btn-sm-hr payment-invoice" href="{{ route('payment-history.invoice', array_merge(['payment' => $payment->id], request()->query())) }}">Facturar</a>
+                            @endif
+                            </div>
+                        </td>
                     </tr>
                 @endforeach</tbody>
             </table></div>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\IntentoPago;
+use App\Models\Empresa;
+use App\Services\PaymentInvoiceAmounts;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -76,6 +78,125 @@ class PaymentHistoryController extends Controller
             'navigation' => DashboardController::navigation(),
             'activeSection' => 'payment-history',
         ]);
+    }
+
+    public function invoice(Request $request, int $payment, PaymentInvoiceAmounts $amounts)
+    {
+        $user = $request->user();
+        $record = $this->eligibleInvoicePayment($request, $payment);
+
+        $regimenesFiscales = config('constantes.regimenes_fiscales', []);
+        $regimenFiscal = $regimenesFiscales[$record->empresa?->regimen_fiscal]['descripcion'] ?? null;
+        $empresa = $record->empresa;
+        $invoiceValidationErrors = $this->invoiceCompanyValidationErrors($empresa);
+
+        $canEditCompany = $user->empresas()
+            ->wherePivot('control_total', true)
+            ->where('empresas.id', $record->empresa_id)
+            ->exists();
+
+        return view('payments.invoice', [
+            'payment' => $record,
+            'regimenFiscal' => $regimenFiscal,
+            'invoiceAmounts' => $amounts->fromTaxInclusiveTotal((string) $record->cantidad),
+            'usosCfdi' => config('constantes.uso_cfdi', []),
+            'formasPagoSat' => config('constantes.formas_pago_sat', []),
+            'invoiceValidationErrors' => $invoiceValidationErrors,
+            'canGenerateInvoice' => $invoiceValidationErrors === [],
+            'canEditCompany' => $canEditCompany,
+            'navigation' => DashboardController::navigation(),
+            'activeSection' => 'payment-history',
+        ]);
+    }
+
+    public function storeInvoiceOptions(Request $request, int $payment, \App\Services\PaymentInvoiceIssuingService $issuing)
+    {
+        $record = $this->eligibleInvoicePayment($request, $payment);
+        $invoiceValidationErrors = $this->invoiceCompanyValidationErrors($record->empresa);
+
+        if ($invoiceValidationErrors !== []) {
+            return redirect()->route('payment-history.invoice', $record->id);
+        }
+
+        $formasPagoSat = config('constantes.formas_pago_sat', []);
+        $usosCfdi = config('constantes.uso_cfdi', []);
+        $validated = $request->validate([
+            'uso_cfdi' => ['required', 'string', Rule::in(array_keys($usosCfdi))],
+            'forma_pago_sat' => ['required', 'string', Rule::in(array_keys($formasPagoSat))],
+            'correo_facturacion' => ['required', 'email', 'max:255'],
+        ], [
+            'uso_cfdi.required' => 'Selecciona el uso de CFDI.',
+            'uso_cfdi.in' => 'Selecciona un uso de CFDI válido.',
+            'forma_pago_sat.required' => 'Selecciona la forma de pago con la que se realizó el cobro.',
+            'forma_pago_sat.in' => 'Selecciona una forma de pago SAT válida.',
+            'correo_facturacion.required' => 'Captura el correo al que enviaremos la factura.',
+            'correo_facturacion.email' => 'Captura un correo válido para recibir la factura.',
+        ]);
+
+        try {
+            $invoice = $issuing->issue($record, $validated, (int) $request->user()->id);
+        } catch (\RuntimeException $exception) {
+            $fresh = \App\Models\Factura::query()->where('intento_pago_id', $record->id)->first();
+            if ($fresh?->estado === 'requiere_revision') {
+                return redirect()->route('payment-history.index')->with('error', 'SIFEI no confirmó el resultado. El intento se bloqueó para evitar un CFDI duplicado; soporte revisará el estado antes de volver a timbrar.');
+            }
+
+            if ($fresh?->uuid) {
+                return redirect()->route('payment-history.index')->with('status', 'La factura fue timbrada. El sistema está preparando los archivos y el correo.');
+            }
+
+            return redirect()->route('payment-history.invoice', $record->id)
+                ->withInput($request->only(['uso_cfdi', 'forma_pago_sat', 'correo_facturacion']))
+                ->with('error', $exception->getMessage());
+        }
+
+        $message = $invoice->estado === 'requiere_revision'
+            ? 'SIFEI no confirmó el resultado. El intento se bloqueó para evitar un CFDI duplicado; soporte revisará el estado antes de volver a timbrar.'
+            : 'La factura fue timbrada. El sistema está preparando los archivos y el correo.';
+
+        return redirect()->route('payment-history.index')->with('status', $message);
+    }
+
+    private function eligibleInvoicePayment(Request $request, int $payment): IntentoPago
+    {
+        $user = $request->user();
+        abort_unless((int) $user->profile === 2, 403);
+
+        $companyIds = $user->empresas()->pluck('empresas.id');
+        $record = IntentoPago::query()
+            ->with('empresa')
+            ->whereIn('empresa_id', $companyIds)
+            ->findOrFail($payment);
+
+        abort_unless(
+            $record->resultado === 'exitoso'
+                && (int) $record->factura === 0
+                && $record->intentado_en?->isCurrentMonth(),
+            404
+        );
+
+        return $record;
+    }
+
+    private function invoiceCompanyValidationErrors(Empresa $empresa): array
+    {
+        $errors = [];
+        $rfc = mb_strtoupper(trim((string) $empresa->rfc), 'UTF-8');
+
+        if (preg_match('/^[A-ZÑ&]{3,4}[0-9]{6}[A-Z0-9]{3}$/u', $rfc) !== 1) {
+            $errors[] = 'No es posible generar la factura porque el RFC de la empresa no está capturado o tiene un formato inválido (12 o 13 caracteres).';
+        }
+
+        $regimenesFiscales = config('constantes.regimenes_fiscales', []);
+        if (!isset($regimenesFiscales[(string) $empresa->regimen_fiscal])) {
+            $errors[] = 'No es posible generar la factura porque la empresa no tiene un régimen fiscal válido seleccionado.';
+        }
+
+        if (preg_match('/^[0-9]{5}$/', trim((string) $empresa->domicilio_codigo_postal)) !== 1) {
+            $errors[] = 'No es posible generar la factura porque el código postal fiscal no está capturado o no contiene cinco dígitos.';
+        }
+
+        return $errors;
     }
 
     private function safeFailureReason(?string $code): string

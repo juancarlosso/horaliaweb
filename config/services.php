@@ -50,4 +50,14 @@ return [
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
 
+    'sifei' => [
+        'usuario' => env('SIFEI_USUARIO'),
+        'password' => env('SIFEI_PASSWORD'),
+        'id_equipo' => env('SIFEI_ID_EQUIPO'),
+        'url_timbrar' => env('SIFEI_URL_TIMBRAR'),
+        'url_cancelar' => env('SIFEI_URL_CANCELAR'),
+        'modo' => env('SIFEI_MODO', 'pruebas'),
+        'password_csd_emisor' => env('SIFEI_PWD_CSD_EMISOR'),
+    ],
+
 ];

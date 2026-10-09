@@ -134,6 +134,11 @@
         </div>
         @if($isCompanyAdmin)
             <div class="nav-li">
+                <a href="{{ route('subscription.index') }}" class="nav-lnk {{ request()->routeIs('subscription.*') ? 'active' : '' }}" @if(request()->routeIs('subscription.*')) aria-current="page" @endif data-sidebar-tooltip="Suscripción">
+                    <span class="nav-icon"><i class="fa-light fa-crown" aria-hidden="true"></i></span><span class="nav-text">Suscripción</span>
+                </a>
+            </div>
+            <div class="nav-li">
                 <a href="{{ route('payment-methods.index') }}" class="nav-lnk {{ request()->routeIs('payment-methods.*') ? 'active' : '' }}" @if(request()->routeIs('payment-methods.*')) aria-current="page" @endif data-sidebar-tooltip="Métodos de Pago">
                     <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'card'])</span><span class="nav-text">Métodos de Pago</span>
                 </a>

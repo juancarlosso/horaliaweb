@@ -43,6 +43,10 @@ class MembershipRenewalService
             }
 
             $cycleDate = $empresa->fecha_renovacion->toDateString();
+            if ($empresa->cancelar_al_renovar) {
+                $empresa->forceFill(['activa' => false])->save();
+                return ['status' => 'canceled', 'empresa_id' => $empresa->id, 'fecha_fin' => $cycleDate];
+            }
             $existingSuccess = IntentoPago::query()
                 ->where('empresa_id', $empresa->id)
                 ->whereDate('fecha_renovacion', $cycleDate)
@@ -138,6 +142,7 @@ class MembershipRenewalService
                             'fecha_renovacion' => $newDate,
                             'intentos' => 0,
                             'activa' => true,
+                            'cancelar_al_renovar' => false,
                         ])->save();
 
                         return ['status' => 'paid', 'empresa' => $empresa, 'amount' => $empresa->precio, 'renewal_date' => $cycleDate, 'new_date' => $newDate];
@@ -183,6 +188,8 @@ class MembershipRenewalService
             }
         } elseif ($result['status'] === 'indeterminate') {
             Log::error('Stripe no confirmó el resultado de una renovación; se conserva el intento para reconciliarlo sin duplicar el cargo.', $result);
+        } elseif ($result['status'] === 'canceled') {
+            Log::info('La membresía terminó al vencer el periodo tras solicitar la cancelación.', $result);
         }
 
         return $result;
@@ -314,6 +321,7 @@ class MembershipRenewalService
                 'activa' => true,
                 'intentos' => 0,
                 'fecha_renovacion' => $newDate,
+                'cancelar_al_renovar' => false,
             ])->save();
 
             return [
@@ -367,7 +375,7 @@ class MembershipRenewalService
                     'transaccion_id' => $paymentIntentId,
                 ])->save();
                 $this->folios->assign($attempt);
-                $locked->forceFill(['activa' => true, 'intentos' => 0, 'fecha_renovacion' => $newDate])->save();
+                $locked->forceFill(['activa' => true, 'intentos' => 0, 'fecha_renovacion' => $newDate, 'cancelar_al_renovar' => false])->save();
 
                 return ['status' => 'succeeded', 'message' => 'El pago de la membresía se realizó correctamente.', 'empresa' => $locked, 'amount' => $attempt->cantidad, 'new_date' => $newDate];
             }

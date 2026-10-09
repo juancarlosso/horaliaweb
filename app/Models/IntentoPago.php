@@ -14,11 +14,13 @@ class IntentoPago extends Model
         'tarjeta_id',
         'tarjeta_marca',
         'tarjeta_ultimos4',
+        'forma_pago_sat',
         'origen',
         'concepto',
         'cantidad',
         'moneda',
         'resultado',
+        'factura',
         'descripcion',
         'codigo_respuesta',
         'transaccion_id',
@@ -33,6 +35,7 @@ class IntentoPago extends Model
             'fecha_renovacion' => 'date',
             'cantidad' => 'decimal:2',
             'numero_ejecucion' => 'integer',
+            'factura' => 'integer',
             'intentado_en' => 'datetime',
         ];
     }
@@ -49,5 +52,10 @@ class IntentoPago extends Model
     public function empresa()
     {
         return $this->belongsTo(Empresa::class);
+    }
+
+    public function factura()
+    {
+        return $this->hasOne(Factura::class);
     }
 }

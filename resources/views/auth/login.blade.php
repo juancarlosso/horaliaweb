@@ -23,8 +23,13 @@
         }
         .login-panel > .abs-t-100px-r-100px-sq400px-bg-primary-8,
         .login-panel > .abs-b-50px-l-50px-sq250px-bg-violet-6 { display: none; }
+        .login-mobile-brand { display: none; }
         .login-form-scroll { box-sizing: border-box; justify-content: flex-start; max-height: 100vh; min-height: 100vh; overflow-y: auto; padding-top: clamp(2rem, 5vh, 3rem); padding-bottom: 2rem; }
-        @media (max-width: 767.98px) { .login-panel { min-height: auto; } .login-form-scroll { max-height: none; min-height: 100vh; overflow: visible; } }
+        @media (max-width: 767.98px) {
+            .login-panel { display: none; }
+            .login-mobile-brand { display: inline-flex; margin-bottom: 1.5rem; }
+            .login-form-scroll { box-sizing: border-box; flex: 1 1 100%; width: 100%; min-width: 0; max-height: none; min-height: 100vh; overflow: visible; padding: clamp(1.5rem, 6vw, 3rem); }
+        }
     </style>
 </head>
 <body class="bg-body-var">
@@ -47,6 +52,9 @@
     </aside>
     <main class="flex-col-jfc-w480px-bg-bg-p-12-ov-y-auto-shrink0 login-form-scroll">
         <div class="w100pct-mw380px-m-0-auto">
+            <a class="login-mobile-brand" href="{{ route('inicio') }}" aria-label="{{ config('app.name') }}, inicio">
+                <img src="{{ asset('assets/logos/logoLN.png') }}" alt="{{ config('app.name') }}" height="48">
+            </a>
             <h1 class="fs1625-fw8-c-body-m-0-0-2">Bienvenido a {{ config('app.name') }}</h1>
             <p class="fs9-c-muted-m-0-0-8">Inicia sesión para continuar con tu equipo.</p>
             @if(session('status'))<div class="alert alert-success" role="status">{{ session('status') }}</div>@endif

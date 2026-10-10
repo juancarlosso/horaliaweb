@@ -17,7 +17,7 @@
         .auth-brand-panel { min-height: 100vh; background-image: linear-gradient(rgba(19,20,43,.16),rgba(19,20,43,.16)),url("{{ asset('assets/images/fondoreloj.jpg') }}"); background-position:center; background-repeat:no-repeat; background-size:cover; }
         .auth-brand-panel > .abs-t-100px-r-100px-sq400px-bg-primary-8, .auth-brand-panel > .abs-b-50px-l-50px-sq250px-bg-violet-6 { display:none; }
         .auth-form-scroll { box-sizing:border-box; justify-content:flex-start; max-height:100vh; min-height:100vh; overflow-y:auto; padding-top:clamp(2rem,5vh,3rem); padding-bottom:2rem; }
-        @media (max-width:767.98px) { .auth-brand-panel { min-height:auto; } .auth-form-scroll { max-height:none; min-height:100vh; overflow:visible; } }
+        @media (max-width:767.98px) { .auth-brand-panel { display:none; } .auth-form-scroll { box-sizing:border-box; flex:1 1 100%; width:100%; min-width:0; max-height:none; min-height:100vh; overflow:visible; padding:clamp(1.5rem,6vw,3rem); } }
     </style>
 </head>
 <body class="bg-body-var">

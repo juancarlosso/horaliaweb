@@ -97,6 +97,18 @@ class StripeCardService
         $this->request()->post('/payment_methods/' . rawurlencode($paymentMethodId) . '/detach')->throw();
     }
 
+    public function deleteCustomer(Empresa $empresa): void
+    {
+        if (!$empresa->stripe_customer_id) {
+            return;
+        }
+
+        $response = $this->request()->delete('/customers/' . rawurlencode($empresa->stripe_customer_id));
+        if (!$response->successful() && $response->status() !== 404) {
+            $response->throw();
+        }
+    }
+
     public function setDefaultCard(Empresa $empresa, ?string $paymentMethodId): void
     {
         if ($paymentMethodId !== null) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\Wasabi;
 use App\Models\Empresa;
 use App\Models\UserEmpresa;
+use App\Services\StripeCardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -142,13 +143,82 @@ class EmpresaController extends Controller
         return redirect()->route('empresas.index')->with('status', 'La empresa se actualizó correctamente.');
     }
 
-    public function destroy(Request $request, int $empresa)
+    public function destroy(Request $request, int $empresa, StripeCardService $stripe)
     {
         $record = $this->manageableCompany($request, $empresa);
+        $personalIds = DB::table('personal')->where('empresa_id', $record->id)->pluck('id');
+        $attemptIds = DB::table('intentos_pago')->where('empresa_id', $record->id)->pluck('id');
+        $attendancePhotos = DB::table('asistencias')
+            ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
+            ->where('personal.empresa_id', $record->id)
+            ->get(['asistencias.foto_entrada', 'asistencias.foto_salida'])
+            ->flatMap(fn ($row) => [$row->foto_entrada, $row->foto_salida]);
+        $personalPhotos = DB::table('personal')->where('empresa_id', $record->id)->pluck('foto');
+        $invoiceFiles = DB::table('facturas')->whereIn('intento_pago_id', $attemptIds)
+            ->get(['xml_path', 'pdf_path', 'xml_staging_path', 'pdf_staging_path'])
+            ->flatMap(fn ($row) => [$row->xml_path, $row->pdf_path, $row->xml_staging_path, $row->pdf_staging_path]);
         $logoPath = $record->logo;
 
-        DB::transaction(fn () => $record->delete());
-        $this->deleteLogo($logoPath);
+        try {
+            // Remove the company's saved payment methods at Stripe before deleting its local customer.
+            $stripe->deleteCustomer($record);
+
+            DB::transaction(function () use ($record, $personalIds, $attemptIds) {
+                DB::table('facturas')->whereIn('intento_pago_id', $attemptIds)->delete();
+                DB::table('users_empresas')->where('empresa_id', $record->id)->delete();
+
+                // Employee accounts with no other company association belong only to this company.
+                $companyOnlyUserIds = DB::table('users')
+                    ->whereIn('personal_id', $personalIds)
+                    ->whereNotIn('id', function ($query) use ($record) {
+                        $query->select('user_id')->from('users_empresas')->where('empresa_id', '!=', $record->id);
+                    })
+                    ->pluck('id');
+                if ($companyOnlyUserIds->isNotEmpty()) {
+                    $companyOnlyUserEmails = DB::table('users')->whereIn('id', $companyOnlyUserIds)->pluck('email');
+                    DB::table('sessions')->whereIn('user_id', $companyOnlyUserIds)->delete();
+                    DB::table('password_reset_tokens')->whereIn('email', $companyOnlyUserEmails)->delete();
+                    DB::table('users')->whereIn('id', $companyOnlyUserIds)->delete();
+                }
+
+                DB::table('intentos_pago')->whereIn('id', $attemptIds)->delete();
+                $record->delete();
+            });
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return redirect()->route('empresas.index')->with(
+                'error',
+                'No se pudo completar la eliminación y los datos locales de la empresa siguen en Horalia. Si ya tenía cliente de Stripe, verifica su estado antes de reintentar.'
+            );
+        }
+
+        $cleanupPaths = collect([$logoPath])->merge($personalPhotos)->merge($attendancePhotos)->merge($invoiceFiles)->filter()->unique();
+        $cleanupFailed = false;
+        foreach ($cleanupPaths as $path) {
+            try {
+                $deleted = str_starts_with($path, 'storage/')
+                    ? Storage::disk('public')->delete(substr($path, strlen('storage/')))
+                    : (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')
+                        ? true
+                        : (str_starts_with($path, 'facturas/staging/')
+                            ? Storage::disk('local')->delete($path)
+                            : (str_starts_with($path, 'empresas/logos/')
+                                ? Storage::disk('public')->delete($path)
+                                : Storage::disk('wasabi')->delete($path))));
+                $cleanupFailed = !$deleted || $cleanupFailed;
+            } catch (Throwable $exception) {
+                report($exception);
+                $cleanupFailed = true;
+            }
+        }
+
+        if ($cleanupFailed) {
+            return redirect()->route('empresas.index')->with(
+                'warning',
+                'La empresa y sus registros se eliminaron, pero algunos archivos asociados no pudieron borrarse del almacenamiento.'
+            );
+        }
 
         return redirect()->route('empresas.index')->with('status', 'La empresa se eliminó correctamente.');
     }

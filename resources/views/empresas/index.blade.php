@@ -138,6 +138,21 @@
     </div>
 </section>
 <script>
+    function submitCompanyDeletion(form) {
+        var button = form.querySelector('button[type="submit"]');
+        if (button) {
+            button.disabled = true;
+            button.innerHTML = '<i class="fa-light fa-spinner fa-spin" aria-hidden="true"></i> Eliminando…';
+        }
+
+        form.dataset.confirmed = 'true';
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                form.requestSubmit();
+            });
+        });
+    }
+
     document.querySelectorAll('[data-company-delete]').forEach(function (form) {
         form.addEventListener('submit', function (event) {
             if (form.dataset.confirmed === 'true') {
@@ -147,9 +162,8 @@
 
             event.preventDefault();
             if (!window.Swal) {
-                if (window.confirm('¿Eliminar ' + form.dataset.companyName + '? Esta acción no se puede deshacer.')) {
-                    form.dataset.confirmed = 'true';
-                    form.requestSubmit();
+                if (window.confirm('¿Eliminar ' + form.dataset.companyName + ' y todos sus datos relacionados de Horalia? Se borrarán el personal y sus cuentas exclusivas, asistencias y fotos, horarios, centros, departamentos, puestos, tarjetas guardadas, historial de pagos, facturas y archivos. También se eliminará el cliente de Stripe. Los CFDI timbrados y movimientos que Stripe o el SAT deban conservar pueden permanecer en sus plataformas externas. Esta acción es permanente y no se puede deshacer.')) {
+                    submitCompanyDeletion(form);
                 }
                 return;
             }
@@ -157,7 +171,7 @@
             Swal.fire({
                 icon: 'warning',
                 title: '¿Eliminar empresa?',
-                text: 'Se eliminará ' + form.dataset.companyName + '. Esta acción no se puede deshacer.',
+                text: 'Se eliminarán de Horalia el personal y sus cuentas exclusivas, asistencias y fotos, horarios, centros, departamentos, puestos, tarjetas guardadas, historial de pagos, facturas y archivos. También se eliminará el cliente de Stripe. Los CFDI timbrados y movimientos que Stripe o el SAT deban conservar pueden permanecer en sus plataformas externas. Esta acción es permanente y no se puede deshacer.',
                 showCancelButton: true,
                 confirmButtonText: 'Sí, eliminar',
                 cancelButtonText: 'Cancelar',
@@ -169,8 +183,18 @@
                 reverseButtons: true
             }).then(function (result) {
                 if (result.isConfirmed) {
-                    form.dataset.confirmed = 'true';
-                    form.requestSubmit();
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Eliminando empresa',
+                        text: 'Estamos borrando sus datos relacionados y archivos. Espera a que termine el proceso.',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: function () {
+                            Swal.showLoading();
+                            submitCompanyDeletion(form);
+                        }
+                    });
                 }
             });
         });

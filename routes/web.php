@@ -46,6 +46,7 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
+    Route::get('/home/manual', [\App\Http\Controllers\ManualController::class, 'index'])->name('manual.index');
     Route::post('/home/empresas/{empresa}/membresia/pagar', [MembershipPaymentController::class, 'pay'])->whereNumber('empresa')->name('membership.pay');
     Route::post('/home/empresas/{empresa}/membresia/confirmar', [MembershipPaymentController::class, 'confirm'])->whereNumber('empresa')->name('membership.confirm');
     Route::get('/mi-perfil', [ProfileController::class, 'edit'])->name('profile.edit');

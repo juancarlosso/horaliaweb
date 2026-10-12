@@ -1,0 +1,1115 @@
+[
+  {
+    "id": "00-bienvenido-a-horalia",
+    "number": "00",
+    "title": "Bienvenido a Horalia",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Qué es Horalia?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Horalia es una plataforma de control de asistencia en la nube que permite registrar y consultar las entradas y salidas de los colaboradores de manera sencilla y segura."
+      },
+      {
+        "type": "paragraph",
+        "text": "Funciona directamente desde el navegador de una computadora, tableta o teléfono celular, sin necesidad de instalar aplicaciones ni adquirir equipos especializados."
+      },
+      {
+        "type": "paragraph",
+        "text": "Con Horalia podrás configurar horarios laborales, administrar colaboradores, registrar asistencias y generar reportes para llevar un mejor control de las jornadas de trabajo."
+      },
+      {
+        "type": "heading",
+        "text": "¿Qué encontrarás en este manual?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Esta guía te mostrará, paso a paso, cómo configurar y utilizar las principales funciones de Horalia, desde el registro de tus colaboradores hasta la consulta de reportes de asistencia."
+      },
+      {
+        "type": "heading",
+        "text": "¿Qué necesitas para comenzar?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Únicamente necesitas una cuenta activa de Horalia y un dispositivo con conexión a Internet."
+      },
+      {
+        "type": "paragraph",
+        "text": "Acceso: horalia.mx"
+      }
+    ]
+  },
+  {
+    "id": "01-primeros-pasos",
+    "number": "01",
+    "title": "Primeros pasos",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "Orden recomendado de configuración"
+      },
+      {
+        "type": "paragraph",
+        "text": "Antes de comenzar a registrar asistencias, es importante preparar la información de tu empresa en Horalia. Te recomendamos seguir este orden:"
+      },
+      {
+        "type": "step",
+        "text": "Centros de trabajo: Registra las ubicaciones donde tus colaboradores realizan sus actividades.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Departamentos y puestos (opcionales): Organiza a tus colaboradores según las áreas y funciones de tu empresa.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Horarios laborales: Define los horarios de entrada y salida que utilizarán tus colaboradores.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Colaboradores: Registra a tu personal y asigna sus días y horarios laborales.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Registro de asistencia: Una vez configurado todo, tus colaboradores podrán comenzar a registrar sus entradas y salidas.",
+        "number": 5
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "En esta sección únicamente te mostramos el orden recomendado de configuración. En los siguientes capítulos encontrarás las instrucciones detalladas para realizar cada paso."
+      }
+    ]
+  },
+  {
+    "id": "02-centros-de-trabajo",
+    "number": "02",
+    "title": "Centros de trabajo",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Qué es un centro de trabajo?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Un centro de trabajo es la ubicación física donde tus colaboradores realizan sus actividades."
+      },
+      {
+        "type": "paragraph",
+        "text": "Horalia permite registrar diferentes centros de trabajo para una misma empresa, facilitando la organización del personal y el control de asistencia en cada ubicación."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo registrar un centro de trabajo?"
+      },
+      {
+        "type": "step",
+        "text": "En el menú lateral, selecciona Organización → Centros de trabajo.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Agregar centro de trabajo.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Selecciona la empresa a la que pertenece.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Captura el nombre del centro de trabajo y su ubicación.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Ingresa las coordenadas geográficas correspondientes.",
+        "number": 5
+      },
+      {
+        "type": "step",
+        "text": "Define la distancia permitida para registrar asistencias.",
+        "number": 6
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Guardar.",
+        "number": 7
+      },
+      {
+        "type": "heading",
+        "text": "Validación de ubicación"
+      },
+      {
+        "type": "paragraph",
+        "text": "Horalia permite verificar las coordenadas capturadas abriendo su ubicación en Google Maps, para confirmar que corresponden al lugar deseado."
+      },
+      {
+        "type": "paragraph",
+        "text": "Al registrar una asistencia, el sistema compara la ubicación del colaborador con la del centro de trabajo y calcula la distancia entre ambos."
+      },
+      {
+        "type": "bullet",
+        "text": "En rango: El colaborador se encuentra dentro de la distancia permitida."
+      },
+      {
+        "type": "bullet",
+        "text": "Fuera de rango: El colaborador se encuentra fuera de la distancia permitida."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "Horalia no impide registrar una asistencia por encontrarse fuera del rango establecido. La asistencia se guarda y se identifica como Fuera de rango para su posterior consulta."
+      },
+      {
+        "type": "callout",
+        "kind": "tip",
+        "text": "Configura correctamente las coordenadas y la distancia permitida de cada centro de trabajo para obtener información más precisa sobre la ubicación desde la que se registran las asistencias."
+      }
+    ]
+  },
+  {
+    "id": "03-departamentos",
+    "number": "03",
+    "title": "Departamentos",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Qué son los departamentos?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Los departamentos permiten organizar a tus colaboradores de acuerdo con las diferentes áreas de tu empresa, como Administración, Ventas, Recursos Humanos u Operaciones."
+      },
+      {
+        "type": "paragraph",
+        "text": "Esta organización facilita la administración del personal y permite consultar reportes de asistencia por departamento."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo registrar un departamento?"
+      },
+      {
+        "type": "step",
+        "text": "En el menú lateral, selecciona Organización → Departamentos.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Agregar departamento.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Selecciona la empresa correspondiente.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Captura el nombre del departamento.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Verifica que su estado sea Activo.",
+        "number": 5
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Guardar departamento.",
+        "number": 6
+      },
+      {
+        "type": "paragraph",
+        "text": "Una vez registrado, el departamento estará disponible para asignarlo a tus colaboradores."
+      },
+      {
+        "type": "image",
+        "src": "image1.png",
+        "alt": "Formulario de registro de departamento"
+      },
+      {
+        "type": "heading",
+        "text": "¿Es obligatorio registrar departamentos?"
+      },
+      {
+        "type": "paragraph",
+        "text": "No. La configuración de departamentos es opcional."
+      },
+      {
+        "type": "paragraph",
+        "text": "Puedes utilizar Horalia sin registrar departamentos. Sin embargo, te recomendamos hacerlo para mantener una mejor organización, especialmente si tu empresa cuenta con diferentes áreas de trabajo. Además, esto te permitirá aprovechar los reportes de asistencia por departamento."
+      }
+    ]
+  },
+  {
+    "id": "04-puestos",
+    "number": "04",
+    "title": "Puestos",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Qué son los puestos?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Los puestos permiten identificar las funciones o responsabilidades que desempeñan los colaboradores dentro de tu empresa."
+      },
+      {
+        "type": "paragraph",
+        "text": "Por ejemplo: Gerente, Supervisor, Auxiliar Administrativo, Desarrollador o Vendedor."
+      },
+      {
+        "type": "paragraph",
+        "text": "Al registrar a tus colaboradores, podrás asignarles el puesto que corresponda, facilitando la organización de tu personal."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo registrar un puesto?"
+      },
+      {
+        "type": "step",
+        "text": "En el menú lateral, selecciona Organización → Puestos.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Agregar puesto.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Selecciona la empresa correspondiente.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Captura el nombre del puesto.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Verifica que su estado sea Activo.",
+        "number": 5
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Guardar puesto.",
+        "number": 6
+      },
+      {
+        "type": "paragraph",
+        "text": "Una vez registrado, el puesto estará disponible para asignarlo a tus colaboradores."
+      },
+      {
+        "type": "image",
+        "src": "image2.png",
+        "alt": "Formulario de registro de puesto"
+      },
+      {
+        "type": "heading",
+        "text": "¿Es obligatorio registrar puestos?"
+      },
+      {
+        "type": "paragraph",
+        "text": "No. La configuración de puestos es opcional. Puedes utilizar Horalia sin registrar puestos. Sin embargo, te recomendamos hacerlo para identificar fácilmente las funciones de cada colaborador y mantener una mejor organización de tu empresa."
+      }
+    ]
+  },
+  {
+    "id": "05-horarios-laborales",
+    "number": "05",
+    "title": "Horarios laborales",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Qué son los horarios laborales?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Los horarios laborales permiten establecer las horas de entrada y salida que deben cumplir tus colaboradores durante su jornada de trabajo. En Horalia puedes crear tantos horarios como necesites y asignarlos a tus colaboradores según sus días laborales."
+      },
+      {
+        "type": "bullet",
+        "text": "Matutino: De 08:00 a 16:00 horas."
+      },
+      {
+        "type": "bullet",
+        "text": "Vespertino: De 14:00 a 22:00 horas."
+      },
+      {
+        "type": "bullet",
+        "text": "Nocturno: De 22:00 a 06:00 horas del día siguiente."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo registrar un horario laboral?"
+      },
+      {
+        "type": "step",
+        "text": "En el menú lateral, selecciona Operación → Horarios.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Agregar horario.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Selecciona la empresa correspondiente.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Captura un nombre que permita identificar fácilmente el horario.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Establece la hora de entrada.",
+        "number": 5
+      },
+      {
+        "type": "step",
+        "text": "Establece la hora de salida.",
+        "number": 6
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Guardar horario.",
+        "number": 7
+      },
+      {
+        "type": "paragraph",
+        "text": "Una vez registrado, el horario estará disponible para asignarlo a tus colaboradores."
+      },
+      {
+        "type": "image",
+        "src": "image3.png",
+        "alt": "Formulario de configuración de horario laboral"
+      },
+      {
+        "type": "heading",
+        "text": "Horarios nocturnos"
+      },
+      {
+        "type": "paragraph",
+        "text": "Horalia también permite configurar jornadas laborales que terminan al día siguiente. Por ejemplo, si estableces una entrada a las 22:00 horas y una salida a las 06:00 horas, el sistema reconocerá automáticamente que la salida corresponde al día siguiente. No necesitas realizar ninguna configuración adicional."
+      },
+      {
+        "type": "heading",
+        "text": "¿Puedo asignar diferentes horarios a un colaborador?"
+      },
+      {
+        "type": "paragraph",
+        "text": "¡Por supuesto! Horalia permite asignar un horario diferente para cada día de la semana. Por ejemplo, un colaborador puede trabajar de lunes a viernes de 09:00 a 18:00 horas y los sábados de 09:00 a 14:00 horas. Esta configuración se realiza al registrar o editar al colaborador, como veremos más adelante."
+      }
+    ]
+  },
+  {
+    "id": "06-registro-de-colaboradores",
+    "number": "06",
+    "title": "Registro de colaboradores",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Cómo registrar a un colaborador?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Una vez que hayas configurado tus centros de trabajo y horarios laborales, podrás comenzar a registrar a las personas que utilizarán Horalia. Cada colaborador contará con su propio registro, donde podrás administrar su información y configurar la manera en que registrará sus asistencias."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo agregar un colaborador?"
+      },
+      {
+        "type": "step",
+        "text": "En el menú lateral, selecciona Operación → Personal.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Agregar personal.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Selecciona la empresa correspondiente.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Selecciona el centro de trabajo al que pertenece el colaborador.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Captura su nombre completo y los datos personales solicitados.",
+        "number": 5
+      },
+      {
+        "type": "step",
+        "text": "Selecciona su departamento y puesto, si previamente los configuraste.",
+        "number": 6
+      },
+      {
+        "type": "step",
+        "text": "Asigna el perfil de usuario que corresponda.",
+        "number": 7
+      },
+      {
+        "type": "step",
+        "text": "Configura su PIN de acceso, si utilizará el reloj checador.",
+        "number": 8
+      },
+      {
+        "type": "step",
+        "text": "Establece sus días y horarios laborales.",
+        "number": 9
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Guardar personal.",
+        "number": 10
+      },
+      {
+        "type": "image",
+        "src": "image4.png",
+        "alt": "Ficha de registro de personal: datos generales"
+      },
+      {
+        "type": "heading",
+        "text": "¿Qué es el PIN de acceso?"
+      },
+      {
+        "type": "paragraph",
+        "text": "El PIN es una clave personal de cinco dígitos que permite al colaborador identificarse al utilizar el reloj checador compartido. De esta manera, varios colaboradores pueden registrar sus entradas y salidas desde una misma tableta o dispositivo, sin necesidad de iniciar sesión individualmente."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "Cada colaborador debe mantener su PIN en privado y evitar compartirlo con otras personas."
+      },
+      {
+        "type": "heading",
+        "text": "Perfiles de usuario"
+      },
+      {
+        "type": "paragraph",
+        "text": "Al registrar a un colaborador, podrás asignarle el perfil que corresponda según las funciones que desempeñará dentro de Horalia. Los perfiles permiten determinar las opciones del sistema a las que tendrá acceso cada usuario."
+      },
+      {
+        "type": "callout",
+        "kind": "tip",
+        "text": "Antes de guardar, verifica que el colaborador tenga asignado el centro de trabajo correcto y que sus datos estén completos. Recuerda que los días y horarios laborales son necesarios para que pueda registrar sus asistencias correctamente. En el siguiente capítulo explicaremos cómo configurar los días y horarios de trabajo de cada colaborador."
+      }
+    ]
+  },
+  {
+    "id": "07-configuraci-n-de-d-as-y-horarios-laborales",
+    "number": "07",
+    "title": "Configuración de días y horarios laborales",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Cómo asignar los días y horarios de trabajo?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Horalia permite establecer los días de la semana en los que trabaja cada colaborador, así como el horario que deberá cumplir en cada uno de ellos. Esta configuración es importante para que el sistema pueda identificar correctamente las entradas, salidas, retardos y salidas anticipadas."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo configurar los días laborales?"
+      },
+      {
+        "type": "step",
+        "text": "Ingresa a Operación → Personal.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Selecciona al colaborador que deseas configurar o registra uno nuevo.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Localiza la sección Días y horarios laborales.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Marca los días de la semana en los que trabajará el colaborador.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Para cada día seleccionado, elige el horario laboral correspondiente.",
+        "number": 5
+      },
+      {
+        "type": "step",
+        "text": "Repite el procedimiento hasta completar su semana de trabajo.",
+        "number": 6
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Guardar personal para conservar los cambios.",
+        "number": 7
+      },
+      {
+        "type": "image",
+        "src": "image5.png",
+        "alt": "Asignación de días y horarios en la ficha del colaborador"
+      },
+      {
+        "type": "heading",
+        "text": "¿Puedo asignar diferentes horarios durante la semana?"
+      },
+      {
+        "type": "paragraph",
+        "text": "¡Claro que sí! Por ejemplo, puedes configurar a un colaborador de la siguiente manera:"
+      },
+      {
+        "type": "table",
+        "rows": [
+          [
+            "Día",
+            "Horario"
+          ],
+          [
+            "Lunes",
+            "09:00 a 18:00"
+          ],
+          [
+            "Martes",
+            "09:00 a 18:00"
+          ],
+          [
+            "Miércoles",
+            "10:00 a 19:00"
+          ],
+          [
+            "Jueves",
+            "09:00 a 18:00"
+          ],
+          [
+            "Viernes",
+            "09:00 a 17:00"
+          ],
+          [
+            "Sábado",
+            "Descanso"
+          ],
+          [
+            "Domingo",
+            "Descanso"
+          ]
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "De esta manera, Horalia utilizará el horario correspondiente a cada día para evaluar sus registros de asistencia."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "Los días que no estén seleccionados se consideran días no laborales para ese colaborador. Cada día laboral seleccionado debe tener un horario asignado. Verifica esta configuración antes de guardar para evitar inconvenientes al registrar las asistencias."
+      },
+      {
+        "type": "callout",
+        "kind": "tip",
+        "text": "Si varios colaboradores comparten el mismo horario, puedes utilizar los horarios que ya registraste sin necesidad de crear uno nuevo para cada persona."
+      }
+    ]
+  },
+  {
+    "id": "08-registro-de-entradas-y-salidas",
+    "number": "08",
+    "title": "Registro de entradas y salidas",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Cómo registrar una asistencia?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Horalia permite que los colaboradores registren sus entradas y salidas directamente desde una computadora, tableta o teléfono celular. Todo funciona desde el navegador web, sin necesidad de instalar aplicaciones adicionales."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo registrar una entrada?"
+      },
+      {
+        "type": "step",
+        "text": "Ingresa a horalia.mx e inicia sesión con tu cuenta.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "En el menú lateral, selecciona Operación → Asistencia.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Localiza la sección Mi asistencia de hoy.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Verifica que la fecha corresponda al día actual.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Registrar entrada.",
+        "number": 5
+      },
+      {
+        "type": "step",
+        "text": "Horalia registrará la hora de entrada y la ubicación desde la que realizaste el registro.",
+        "number": 6
+      },
+      {
+        "type": "paragraph",
+        "text": "Una vez registrada la entrada, podrás consultar la información correspondiente en la misma pantalla."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo registrar una salida?"
+      },
+      {
+        "type": "step",
+        "text": "Al finalizar tu jornada laboral, ingresa nuevamente a Horalia.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Selecciona Operación → Asistencia.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Localiza la sección Mi asistencia de hoy.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Registrar salida.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Horalia guardará la hora y ubicación de tu salida.",
+        "number": 5
+      },
+      {
+        "type": "paragraph",
+        "text": "¡Listo! Tu jornada quedará registrada."
+      },
+      {
+        "type": "image",
+        "src": "image6.png",
+        "alt": "Pantalla de asistencia e historial de registros"
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo funciona la validación de ubicación?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Al registrar una entrada o salida, Horalia compara tu ubicación con las coordenadas configuradas para tu centro de trabajo. El sistema calcula la distancia y clasifica el registro como:"
+      },
+      {
+        "type": "bullet",
+        "text": "En rango: Te encuentras dentro de la distancia permitida."
+      },
+      {
+        "type": "bullet",
+        "text": "Fuera de rango: Te encuentras fuera de la distancia establecida."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "Estar fuera del rango permitido no impide registrar tu asistencia. Horalia conservará el registro e indicará que se realizó fuera del rango configurado."
+      },
+      {
+        "type": "heading",
+        "text": "¿Puedo consultar mis asistencias anteriores?"
+      },
+      {
+        "type": "paragraph",
+        "text": "¡Por supuesto! Desde la misma sección de Asistencia podrás consultar tu historial de entradas y salidas. Utiliza los filtros disponibles de empresa, mes y año para localizar los registros que necesites revisar."
+      },
+      {
+        "type": "callout",
+        "kind": "tip",
+        "text": "Verifica que tu dispositivo tenga conexión a Internet. Permite el acceso a tu ubicación cuando el navegador lo solicite. Registra tu entrada al comenzar tu jornada y tu salida al finalizarla. Revisa que cada registro se haya realizado correctamente."
+      }
+    ]
+  },
+  {
+    "id": "09-reloj-checador-con-pin",
+    "number": "09",
+    "title": "Reloj checador con PIN",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Qué es el reloj checador?"
+      },
+      {
+        "type": "paragraph",
+        "text": "El reloj checador de Horalia permite que varios colaboradores registren sus entradas y salidas utilizando un mismo dispositivo, como una tableta, computadora o teléfono celular. Es ideal para colocarlo en la recepción, entrada principal o cualquier área designada por la empresa. Cada colaborador se identifica mediante su PIN personal de cinco dígitos, sin necesidad de iniciar sesión con una cuenta individual."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo configurar el reloj checador?"
+      },
+      {
+        "type": "step",
+        "text": "Ingresa a Horalia con una cuenta que tenga permisos de administración.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "En el menú lateral, selecciona Operación → Reloj Checador.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "En la sección Nueva sesión, selecciona la empresa correspondiente.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Establece la vigencia de la sesión, que puede ser de 1 a 7 días.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Generar enlace del checador.",
+        "number": 5
+      },
+      {
+        "type": "step",
+        "text": "Abre el enlace generado en el dispositivo que utilizarás como reloj checador.",
+        "number": 6
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Iniciar checador.",
+        "number": 7
+      },
+      {
+        "type": "step",
+        "text": "Autoriza el acceso a la cámara y ubicación cuando el navegador lo solicite.",
+        "number": 8
+      },
+      {
+        "type": "paragraph",
+        "text": "¡Listo! El dispositivo estará preparado para registrar las asistencias de tus colaboradores."
+      },
+      {
+        "type": "image",
+        "src": "image7.png",
+        "alt": "Pantalla de inicio del reloj checador"
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo registrar una asistencia con PIN?"
+      },
+      {
+        "type": "step",
+        "text": "El colaborador se acerca al dispositivo.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Introduce su PIN personal de cinco dígitos.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Horalia identifica al colaborador.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "El sistema registra la entrada o salida correspondiente.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Se muestra una confirmación del registro realizado.",
+        "number": 5
+      },
+      {
+        "type": "paragraph",
+        "text": "De esta manera, el dispositivo queda disponible para que el siguiente colaborador registre su asistencia."
+      },
+      {
+        "type": "heading",
+        "text": "¿Para qué se utiliza la cámara?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Cuando el reloj checador tiene acceso a una cámara, Horalia puede capturar una fotografía del colaborador al momento de registrar su asistencia. Esto permite contar con evidencia visual del registro realizado."
+      },
+      {
+        "type": "heading",
+        "text": "Vigencia de la sesión"
+      },
+      {
+        "type": "paragraph",
+        "text": "Por seguridad, las sesiones del reloj checador tienen una duración limitada, configurable entre 1 y 7 días. Cuando una sesión termina, será necesario generar una nueva para continuar utilizando el dispositivo."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "El enlace generado debe abrirse en el dispositivo correspondiente dentro de los siguientes 15 minutos y solo puede activarse una vez."
+      },
+      {
+        "type": "callout",
+        "kind": "tip",
+        "text": "Utiliza una tableta ubicada en un lugar accesible para los colaboradores. Mantén el dispositivo conectado a Internet. Verifica que la cámara y los permisos de ubicación funcionen correctamente. No compartas públicamente el enlace de activación. Cada colaborador debe utilizar exclusivamente su propio PIN."
+      }
+    ]
+  },
+  {
+    "id": "10-reporte-general-de-asistencias",
+    "number": "10",
+    "title": "Reporte general de asistencias",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Qué es el reporte general?"
+      },
+      {
+        "type": "paragraph",
+        "text": "El reporte general de Horalia permite consultar los registros de entrada y salida de tus colaboradores durante un periodo determinado. Desde esta sección podrás revisar las asistencias, identificar retardos, salidas anticipadas y registros realizados fuera del rango de ubicación permitido. También podrás exportar la información a Excel para su consulta y análisis."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo generar un reporte general?"
+      },
+      {
+        "type": "step",
+        "text": "En el menú lateral, selecciona Reportes → General.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Selecciona la empresa que deseas consultar.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "En el campo Desde, indica la fecha inicial del periodo.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "En el campo Hasta, selecciona la fecha final.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Generar reporte.",
+        "number": 5
+      },
+      {
+        "type": "step",
+        "text": "Horalia mostrará los registros correspondientes al periodo seleccionado.",
+        "number": 6
+      },
+      {
+        "type": "image",
+        "src": "image8.png",
+        "alt": "Reporte general de asistencias"
+      },
+      {
+        "type": "heading",
+        "text": "¿Qué información muestra el reporte?"
+      },
+      {
+        "type": "bullet",
+        "text": "Total de registros: Cantidad de asistencias registradas durante el periodo."
+      },
+      {
+        "type": "bullet",
+        "text": "Llegadas tarde: Registros cuya hora de entrada es posterior al horario establecido."
+      },
+      {
+        "type": "bullet",
+        "text": "Salidas anticipadas: Registros de salida realizados antes de la hora programada."
+      },
+      {
+        "type": "bullet",
+        "text": "Fuera de rango: Asistencias registradas fuera de la distancia permitida del centro de trabajo."
+      },
+      {
+        "type": "bullet",
+        "text": "Sin salida: Registros de entrada que no cuentan con una salida correspondiente."
+      },
+      {
+        "type": "paragraph",
+        "text": "Además, podrás consultar el detalle de las asistencias de tus colaboradores."
+      },
+      {
+        "type": "heading",
+        "text": "¿Puedo descargar el reporte?"
+      },
+      {
+        "type": "paragraph",
+        "text": "¡Por supuesto! Una vez generado el reporte, haz clic en Exportar a Excel para descargar un archivo con la información correspondiente al periodo seleccionado."
+      },
+      {
+        "type": "callout",
+        "kind": "tip",
+        "text": "Consulta periódicamente el reporte general para identificar retardos, salidas anticipadas o registros incompletos. Recuerda que los resultados dependen de los horarios laborales configurados para cada colaborador."
+      }
+    ]
+  },
+  {
+    "id": "11-reporte-por-departamento",
+    "number": "11",
+    "title": "Reporte por departamento",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¿Qué es el reporte por departamento?"
+      },
+      {
+        "type": "paragraph",
+        "text": "El reporte por departamento permite consultar y comparar los registros de asistencia de las diferentes áreas de tu empresa. Es especialmente útil para empresas que cuentan con varios departamentos, ya que facilita la identificación de retardos, salidas anticipadas y otras incidencias de asistencia."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo generar un reporte por departamento?"
+      },
+      {
+        "type": "step",
+        "text": "En el menú lateral, selecciona Reportes → Por Departamento.",
+        "number": 1
+      },
+      {
+        "type": "step",
+        "text": "Selecciona la empresa que deseas consultar.",
+        "number": 2
+      },
+      {
+        "type": "step",
+        "text": "Establece las fechas Desde y Hasta del periodo que deseas revisar.",
+        "number": 3
+      },
+      {
+        "type": "step",
+        "text": "Haz clic en Generar reporte.",
+        "number": 4
+      },
+      {
+        "type": "step",
+        "text": "Horalia mostrará un resumen de las asistencias agrupadas por departamento.",
+        "number": 5
+      },
+      {
+        "type": "heading",
+        "text": "¿Qué información muestra el reporte?"
+      },
+      {
+        "type": "bullet",
+        "text": "Total de registros: Cantidad de asistencias registradas por los colaboradores del departamento."
+      },
+      {
+        "type": "bullet",
+        "text": "Llegadas tarde: Registros realizados después del horario de entrada establecido."
+      },
+      {
+        "type": "bullet",
+        "text": "Salidas anticipadas: Registros de salida anteriores al horario programado."
+      },
+      {
+        "type": "bullet",
+        "text": "Fuera de rango: Asistencias registradas fuera de la distancia permitida."
+      },
+      {
+        "type": "bullet",
+        "text": "Sin salida: Registros que no cuentan con una salida correspondiente."
+      },
+      {
+        "type": "heading",
+        "text": "¿Puedo consultar el detalle de cada departamento?"
+      },
+      {
+        "type": "paragraph",
+        "text": "¡Por supuesto! Las cifras del reporte son interactivas. Al hacer clic sobre una cantidad, Horalia mostrará el detalle de los registros correspondientes al departamento y al tipo de incidencia seleccionado. Esto permite identificar fácilmente a los colaboradores relacionados con cada registro."
+      },
+      {
+        "type": "callout",
+        "kind": "tip",
+        "text": "Utiliza este reporte para revisar el comportamiento de asistencia de cada área e identificar situaciones que requieran seguimiento."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "Para aprovechar este reporte, es necesario haber registrado los departamentos y asignarlos a los colaboradores correspondientes."
+      }
+    ]
+  },
+  {
+    "id": "12-todo-listo-para-comenzar",
+    "number": "12",
+    "title": "¡Todo listo para comenzar!",
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "¡Bienvenido a una forma más sencilla de controlar la asistencia!"
+      },
+      {
+        "type": "paragraph",
+        "text": "Ahora que conoces las principales funciones de Horalia, estás listo para aprovechar todas las herramientas que hemos preparado para facilitar el control de asistencia de tu empresa."
+      },
+      {
+        "type": "paragraph",
+        "text": "Nuestro objetivo es que dediques menos tiempo a las tareas administrativas y más tiempo a lo que realmente importa: hacer crecer tu negocio."
+      },
+      {
+        "type": "paragraph",
+        "text": "Esperamos que Horalia se convierta en una herramienta útil para tu operación diaria, ayudándote a mantener un registro organizado, práctico y confiable de las entradas y salidas de tus colaboradores."
+      },
+      {
+        "type": "heading",
+        "text": "¡Gracias por confiar en Horalia!"
+      },
+      {
+        "type": "paragraph",
+        "text": "En SOLVENTIA SOFTWARE trabajamos para desarrollar soluciones tecnológicas que simplifiquen los procesos de las empresas."
+      },
+      {
+        "type": "paragraph",
+        "text": "Si tienes alguna duda o necesitas asistencia, nuestro equipo estará encantado de ayudarte."
+      },
+      {
+        "type": "paragraph",
+        "text": "¡Disfruta Horalia y comienza a llevar el control de asistencia de tu empresa al siguiente nivel!"
+      },
+      {
+        "type": "paragraph",
+        "text": "HORALIA  •  Tu reloj checador en la nube."
+      },
+      {
+        "type": "paragraph",
+        "text": "SOLVENTIA SOFTWARE  •  Transformamos ideas en Software."
+      }
+    ]
+  }
+]

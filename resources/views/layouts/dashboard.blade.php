@@ -47,6 +47,9 @@
         [data-sidebar-mobile-toggle] { display:none; }
         .nav-lnk .nav-icon svg { width:18px; height:18px; display:block; stroke:currentColor; }
         .main-content { min-height:100vh; }
+        .topbar-manual-link { width:auto; gap:.4rem; padding:0 .65rem; color:var(--body-text-muted); font-size:.78rem; font-weight:700; text-decoration:none; }
+        .topbar-manual-link:hover { color:var(--color-primary); text-decoration:none; }
+        .topbar-manual-link svg { flex:none; stroke:currentColor; }
         .topbar-user { display:flex; align-items:center; gap:.65rem; padding:0 .5rem; }
         .topbar-user-copy { display:flex; flex-direction:column; min-width:0; }
         .topbar-user-name { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.82rem; font-weight:700; color:var(--body-text); }
@@ -89,6 +92,7 @@
         @media(max-width:767px) { [data-sidebar-toggle] { display:none; } [data-sidebar-mobile-toggle] { display:flex; } }
         @media(max-width:575px) { .dashboard-welcome { padding:1.4rem; } .topbar-user-copy { display:none; } .page-inner { padding-left:1rem; padding-right:1rem; } }
     </style>
+    @stack('styles')
 </head>
 <body>
 <div class="mobile-backdrop" aria-hidden="true"></div>
@@ -168,6 +172,10 @@
             <nav class="breadcrumb-bar" aria-label="Ruta de navegación"><span>{{ config('app.name') }}</span><span class="bc-sep">/</span><span class="bc-current">{{ $pageTitle }}</span></nav>
         </div>
         <div class="topbar-right pos-rel">
+            <a class="btn-icon-top topbar-manual-link" href="{{ route('manual.index') }}" aria-label="Abrir Manual de usuario" title="Manual">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.2 1.8c-1.1 1-1.8 1.4-1.8 2.7m0 3h.01"/></svg>
+                <span>Manual</span>
+            </a>
             <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Cambiar entre tema claro y oscuro" title="Cambiar tema">
                 <svg class="theme-icon-light" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
                 <svg class="theme-icon-dark" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.9 13A8.5 8.5 0 0 1 11 3.1 8.5 8.5 0 1 0 20.9 13Z"/></svg>

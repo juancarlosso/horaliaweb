@@ -15,8 +15,6 @@
                     <img src="{{ $logoUrl }}" width="164" alt="{{ $appName }}" style="display:block;width:164px;max-width:100%;height:auto;border:0;">
                 </td></tr>
                 <tr><td style="padding:42px 42px 36px;color:#626a83;font-size:15px;line-height:1.7;">
-                    <p style="margin:0 0 12px;color:#536df5;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;">{{ $appName }}</p>
-                    <h1 style="margin:0 0 22px;color:#202541;font-size:27px;line-height:1.25;font-weight:700;">Novedades</h1>
                     <div style="color:#626a83;font-size:15px;line-height:1.7;">
                         {!! \Illuminate\Support\Str::markdown($contenido) !!}
                     </div>

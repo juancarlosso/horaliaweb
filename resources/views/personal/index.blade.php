@@ -91,7 +91,7 @@
             event.preventDefault();
             Swal.fire({
                 icon: 'warning', title: '¿Eliminar colaborador?',
-                text: 'Se eliminará «' + form.dataset.recordName + '». Esta acción no se puede deshacer.',
+                text: 'Se eliminará «' + form.dataset.recordName + '», su acceso al sistema y todas sus asistencias registradas. Esta acción no se puede deshacer.',
                 showCancelButton: true, confirmButtonText: 'Sí, eliminar', cancelButtonText: 'Cancelar',
                 buttonsStyling: false, reverseButtons: true,
                 customClass: { confirmButton: 'btn-hr btn-danger-hr', cancelButton: 'btn-hr btn-outline-hr' }

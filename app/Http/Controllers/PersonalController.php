@@ -354,15 +354,18 @@ class PersonalController extends Controller
         $photoPath = $empleado->foto;
         $deleted = DB::transaction(function () use ($empleado, $companyId) {
             Empresa::query()->whereKey($companyId)->lockForUpdate()->firstOrFail();
-            $usuario = $empleado->usuario()->lockForUpdate()->first();
-
-            if ($usuario
-                && (int) $usuario->profile === $this->administratorProfileId()
+            $usuarios = User::query()->where('personal_id', $empleado->id)->lockForUpdate()->get();
+            $hasCompanyAdministrator = $usuarios->contains(fn (User $usuario) =>
+                (int) $usuario->profile === $this->administratorProfileId()
                 && $usuario->empresas()->whereKey($companyId)->exists()
+            );
+
+            if ($hasCompanyAdministrator
                 && $this->adminCountForCompany($companyId, $empleado->id) === 0) {
                 return false;
             }
 
+            $usuarios->each->delete();
             $empleado->delete();
 
             return true;
@@ -375,7 +378,7 @@ class PersonalController extends Controller
         $this->deletePhoto($photoPath);
 
         return redirect()->route('personal.index', ['empresa_id' => $companyId])
-            ->with('status', 'El registro de personal se eliminó correctamente.');
+            ->with('status', 'El registro de personal, su acceso y sus asistencias se eliminaron correctamente.');
     }
 
     private function validatedData(Request $request): array

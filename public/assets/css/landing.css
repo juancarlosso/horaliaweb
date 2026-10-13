@@ -107,3 +107,36 @@
 .video-modal-frame iframe{display:block;width:100%;height:100%;border:0}
 .video-modal-open{overflow:hidden}
 @media(max-width:600px){.video-modal{padding:14px}.video-modal-dialog{padding:12px;border-radius:16px}.video-modal-header h2{font-size:16px}.video-modal-frame{border-radius:9px}}
+
+.labor-reform-badge{display:inline-flex;align-items:center;gap:8px;max-width:100%;margin:2px 0 4px;padding:9px 13px;border:1px solid #dce3ff;border-radius:999px;background:#f7f8ff;color:#4c58a5!important;font-size:12px;font-weight:700;line-height:1.35}
+.labor-section-eyebrow{gap:6px}.labor-section-eyebrow span{font-size:13px;line-height:1}
+.labor-reform-badge:hover{background:#eef1ff;border-color:#c9d2ff}
+.labor-reform-badge span{font-size:15px;flex:none}
+.labor-reform-section{padding:68px 0 62px;background:linear-gradient(115deg,#f8f9ff 0%,#fff 54%,#f1f4ff 100%);overflow:hidden}
+.labor-reform-inner{display:grid;grid-template-columns:1.08fr .92fr;column-gap:64px;row-gap:32px;align-items:center}
+.labor-reform-copy h2{max-width:650px;margin:13px 0 17px;color:var(--hor-dark);font-size:clamp(32px,4vw,44px);line-height:1.12;letter-spacing:-.045em}
+.labor-reform-copy>p{max-width:650px;margin:0 0 13px;color:#626986;font-size:14px;line-height:1.7}
+.labor-benefits{display:grid;gap:13px;margin:24px 0}
+.labor-benefits article{display:flex;align-items:flex-start;gap:13px}
+.labor-benefits article>i{display:grid;place-items:center;flex:none;width:39px;height:39px;border-radius:12px;background:#ecefff;color:var(--hor-primary);font-size:17px}
+.labor-benefits h3{margin:0 0 3px;color:var(--hor-dark);font-size:14px;line-height:1.4}
+.labor-benefits p{margin:0;color:var(--hor-muted);font-size:12px;line-height:1.5}
+.labor-visual{position:relative;isolation:isolate;align-self:stretch;display:grid;place-items:center;min-height:400px;border:1px solid #e6eaff;border-radius:28px;background:radial-gradient(ellipse at 50% 43%,#fff 0%,#f4f6ff 50%,#e9edff 100%);overflow:hidden}
+.labor-visual-image{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.labor-legal-note{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:15px;padding:17px 20px;border:1px solid #e0e6f4;border-radius:15px;background:#ffffffd9}
+.labor-legal-note>i{color:#6671c9;font-size:20px}
+.labor-legal-note p{margin:0;color:#606783;font-size:12px;line-height:1.6}
+.labor-legal-note a{display:inline-flex;align-items:center;gap:7px;color:var(--hor-primary)!important;font-size:12px;font-weight:700;white-space:nowrap}
+.legal-modal{position:fixed;inset:0;z-index:110;display:none;align-items:center;justify-content:center;padding:24px}
+.legal-modal.is-open{display:flex}
+.legal-modal-backdrop{position:absolute;inset:0;background:rgba(13,17,38,.72);backdrop-filter:blur(4px)}
+.legal-modal-dialog{position:relative;z-index:1;width:min(600px,100%);max-height:min(90vh,700px);overflow:auto;padding:28px;border:1px solid #e9ebf6;border-radius:20px;background:#fff;box-shadow:0 24px 80px #11162b40;color:#59617e}
+.legal-modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:14px}
+.legal-modal-header h2{margin:0;color:var(--hor-dark);font-size:23px;line-height:1.25;letter-spacing:-.025em}
+.legal-modal-close{display:grid;place-items:center;flex:none;width:38px;height:38px;margin:-5px -5px 0 0;border:0;border-radius:50%;background:#f1f2fa;color:#515a84;font-size:26px;line-height:1;cursor:pointer}
+.legal-modal-dialog>p{font-size:14px;line-height:1.7}
+.legal-modal-dialog>.button{margin:5px 0 10px}
+.legal-modal-dialog .legal-modal-note{padding-top:13px;border-top:1px solid #eceef6;color:#777d96;font-size:12px}
+.legal-modal-open{overflow:hidden}
+@media(max-width:760px){.labor-reform-section{padding:44px 0}.labor-reform-inner{grid-template-columns:1fr;gap:26px}.labor-reform-copy h2{font-size:32px}.labor-visual{aspect-ratio:1196 / 1315;min-height:0;border-radius:22px}.labor-legal-note{grid-column:1;grid-template-columns:auto 1fr;gap:10px 13px;padding:15px}.labor-legal-note a{grid-column:2;white-space:normal}.legal-modal{padding:14px}.legal-modal-dialog{padding:22px;border-radius:17px}.legal-modal-header h2{font-size:20px}}
+@media(max-width:390px){.labor-reform-badge{align-items:flex-start;border-radius:14px;font-size:11px}.labor-reform-copy h2{font-size:29px}.labor-legal-note{font-size:11px}.legal-modal-dialog{padding:18px}.legal-modal-dialog>.button{width:100%;font-size:12px;padding-inline:10px}}

@@ -59,7 +59,7 @@
             <a class="brand" href="#inicio" aria-label="{{ config('app.name') }}, inicio"><img src="{{ asset('assets/logos/logoLN.png') }}" alt="{{ config('app.name') }}, tu equipo a tiempo"></a>
             <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
             <div class="nav-content" id="main-nav">
-                <div class="nav-links"><a href="#inicio">Inicio</a><a href="#caracteristicas">Características</a><a href="#como-funciona">Cómo funciona</a><a href="#precios">Precios</a><a href="#preguntas">Preguntas</a></div>
+                <div class="nav-links"><a href="#inicio">Inicio</a><a href="#caracteristicas">Características</a><a href="#como-funciona">Cómo funciona</a><a href="#registro-electronico">Marco Legal</a><a href="#precios">Precios</a><a href="#preguntas">Preguntas</a></div>
                 <div class="nav-actions"><a class="button button-outline" href="{{ route('login') }}">Iniciar sesión</a><a class="button button-primary" href="{{ route('registro.create') }}">Comenzar ahora</a></div>
             </div>
         </nav>
@@ -71,7 +71,7 @@
         @endif
         <section class="hero section-shell" id="inicio">
             <div class="hero-copy">
-                <span class="eyebrow">Reloj checador en la nube</span>
+                <a class="labor-reform-badge" href="#registro-electronico"><span aria-hidden="true">🇲🇽</span> Prepárate para el registro electrónico de la jornada laboral</a>
                 <h1>Reloj checador.<br><span>En línea.</span></h1>
                 <p class="hero-lede">Controla entradas, salidas y asistencia de tu equipo de forma sencilla, desde cualquier lugar.</p>
                 <div class="hero-points">
@@ -118,11 +118,32 @@
         <section class="reports-story section-shell" id="reportes"><div class="report-window"><img class="screen-placeholder report-placeholder" src="{{ asset('assets/images/reportes.jpg') }}" alt="Reporte de asistencia por periodo en Horalia" width="1712" height="919" loading="lazy"></div>
             <div class="story-copy"><span class="eyebrow">Decisiones basadas en información</span><h2>Reportes claros y siempre disponibles</h2><p>Consulta la asistencia de tu equipo por periodo, revisa entradas, salidas, retardos y evidencias, y exporta la información a Excel cuando la necesites.</p><ul class="check-list"><li>Consulta por empresa y periodo</li><li>Detalle de entradas, salidas y retardos</li><li>Evidencias de asistencia</li><li>Exportación a Excel</li></ul></div></section>
 
-        <section class="pricing-section" id="precios"><div class="pricing-inner section-shell"><div class="pricing-copy"><span class="eyebrow">Un precio. Sin complicaciones.</span><h2>Todo esto por solo</h2><p class="price">${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} <span>MXN / mes</span></p><p class="price-unit">por empresa</p><small class="pricing-limit">Hasta 200 empleados</small><p>Acceso completo a las funcionalidades.<br>Sin costos ocultos ni planes complicados.</p><a class="button button-primary button-large" href="{{ route('registro.create') }}">Comenzar ahora <i class="fa-solid fa-arrow-right"></i></a></div><div class="pricing-card"><ul class="check-list"><li>Reloj checador para todos tus empleados</li><li>Gestión de horarios e incidencias</li><li>Reportes y exportación a Excel</li><li>Multiempresa: administra varias empresas, cada una con su suscripción</li><li>Soporte por correo</li><li>Actualizaciones incluidas</li></ul></div></div></section>
+        <section class="labor-reform-section" id="registro-electronico" aria-labelledby="labor-reform-title">
+            <div class="labor-reform-inner section-shell">
+                <div class="labor-reform-copy">
+                    <span class="eyebrow labor-section-eyebrow"><span aria-hidden="true">🇲🇽</span> REFORMA LABORAL EN MÉXICO</span>
+                    <h2 id="labor-reform-title">Tu empresa, preparada para el registro electrónico de asistencia.</h2>
+                    <p>La <strong>Ley Federal del Trabajo</strong> contempla disposiciones relacionadas con el registro electrónico de la jornada laboral.</p>
+                    <p>Con Horalia puedes digitalizar las entradas y salidas de tus colaboradores, mantener un historial de asistencia y generar reportes de manera sencilla, <strong>facilitando la adaptación de tu empresa a las nuevas disposiciones laborales sobre el registro electrónico de la jornada de trabajo.</strong></p>
+                    <div class="labor-benefits">
+                        <article><i class="fa-regular fa-clock" aria-hidden="true"></i><div><h3>Registro digital de entradas y salidas.</h3><p>Registra la fecha y hora de los movimientos de cada colaborador.</p></div></article>
+                        <article><i class="fa-solid fa-calendar-check" aria-hidden="true"></i><div><h3>Historial de asistencias.</h3><p>Consulta los registros de asistencia para facilitar su seguimiento.</p></div></article>
+                        <article><i class="fa-solid fa-file-excel" aria-hidden="true"></i><div><h3>Reportes exportables.</h3><p>Genera reportes en Excel para consulta y revisión de la información.</p></div></article>
+                    </div>
+                    <button class="button button-outline" type="button" data-legal-open>Conoce el marco legal <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="labor-visual">
+                    <img class="labor-visual-image" src="{{ asset('assets/images/ley.jpg') }}" alt="Diario Oficial de la Federación junto a iconos de registro de jornada y asistencia" width="1196" height="1315" loading="lazy">
+                </div>
+                <aside class="labor-legal-note"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><p>Horalia es una herramienta de apoyo para el registro electrónico de asistencia.<br>El cumplimiento de las obligaciones laborales depende de las disposiciones oficiales vigentes y de la implementación que realice cada empresa.</p><a href="https://www.dof.gob.mx/" target="_blank" rel="noopener noreferrer">Consultar fuente oficial <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></aside>
+            </div>
+        </section>
+
+        <section class="pricing-section" id="precios"><div class="pricing-inner section-shell"><div class="pricing-copy"><span class="eyebrow">Un precio. Sin complicaciones.</span><h2>Todo esto por solo</h2><p class="price">${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} <span>MXN / mes</span></p><p class="price-unit">por empresa</p><small class="pricing-limit">Hasta 200 empleados</small><p>Acceso completo a las funcionalidades.<br>Sin costos ocultos ni planes complicados.</p><p>¿Necesitas más capacidad? Cada bloque adicional de hasta 200 empleados cuesta ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} MXN mensuales.</p><a class="button button-primary button-large" href="{{ route('registro.create') }}">Comenzar ahora <i class="fa-solid fa-arrow-right"></i></a></div><div class="pricing-card"><ul class="check-list"><li>Reloj checador para todos tus empleados</li><li>Gestión de horarios e incidencias</li><li>Reportes y exportación a Excel</li><li>Multiempresa: administra varias empresas, cada una con su suscripción</li><li>Soporte por correo</li><li>Actualizaciones incluidas</li></ul></div></div></section>
 
         <section class="business-section section-shell"><h2>Ideal para todo tipo de negocios</h2><div class="business-grid"><div><i class="fa-regular fa-building"></i><span>Oficinas</span></div><div><i class="fa-solid fa-shop"></i><span>Comercios</span></div><div><i class="fa-solid fa-utensils"></i><span>Restaurantes</span></div><div><i class="fa-solid fa-screwdriver-wrench"></i><span>Talleres</span></div><div><i class="fa-solid fa-hospital"></i><span>Clínicas</span></div><div><i class="fa-solid fa-school"></i><span>Escuelas</span></div><div><i class="fa-solid fa-building"></i><span>Sucursales</span></div><div><i class="fa-solid fa-shapes"></i><span>Más...</span></div></div></section>
 
-        <section class="faq-section section-shell" id="preguntas"><h2 class="faq-title">Preguntas frecuentes</h2><div class="faq-list"><details><summary>¿Qué incluye la mensualidad de ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }}?</summary><p>Incluye el reloj checador, gestión de empleados, horarios, asistencias, incidencias, reportes, soporte y actualizaciones para una empresa.</p></details><details><summary>¿Puedo administrar varias empresas?</summary><p>Sí. Puedes administrar varias empresas desde una misma cuenta. La suscripción es de ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} MXN al mes por cada empresa.</p></details><details><summary>¿Mi equipo necesita un dispositivo especial?</summary><p>No. Puede registrar su asistencia desde una computadora, tablet o celular.</p></details><details><summary>¿Es obligatorio registrar la ubicación?</summary><p>No. La ubicación puede registrarse cuando aplique; el equipo también puede usar el reloj checador sin ella.</p></details></div></section>
+        <section class="faq-section section-shell" id="preguntas"><h2 class="faq-title">Preguntas frecuentes</h2><div class="faq-list"><details><summary>¿Qué incluye la mensualidad de ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }}?</summary><p>Incluye el reloj checador, gestión de empleados, horarios, asistencias, incidencias, reportes, soporte y actualizaciones para una empresa.</p></details><details><summary>¿Puedo administrar varias empresas?</summary><p>Sí. Puedes administrar varias empresas desde una misma cuenta. La suscripción es de ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} MXN al mes por cada empresa.</p></details><details><summary>¿Mi equipo necesita un dispositivo especial?</summary><p>No. Puede registrar su asistencia desde una computadora, tablet o celular.</p></details><details><summary>¿Es obligatorio registrar la ubicación?</summary><p>No. La ubicación puede registrarse cuando aplique; el equipo también puede usar el reloj checador sin ella.</p></details><details><summary>¿Horalia me ayuda a prepararme para las disposiciones sobre registro electrónico de asistencia?</summary><p>Sí. Horalia permite registrar electrónicamente entradas y salidas, consultar el historial de asistencias y exportar reportes. Estas herramientas ayudan a digitalizar el control de asistencia. El cumplimiento legal específico depende de la normativa aplicable y de cómo cada empresa implemente sus procesos.</p></details></div></section>
 
         <section class="final-cta" id="contacto"><div class="final-cta-inner section-shell"><div><h2>Empieza a controlar<br>la asistencia de tu equipo hoy.</h2><p>{{ config('app.name') }} es la forma más sencilla y accesible de mantener a tu equipo a tiempo.</p></div><a class="button button-primary button-large" href="{{ route('registro.create') }}">Comenzar ahora <i class="fa-solid fa-arrow-right"></i></a></div></section>
     </main>
@@ -134,6 +155,15 @@
                 <button class="video-modal-close" type="button" data-video-close aria-label="Cerrar video">&times;</button>
             </header>
             <div class="video-modal-frame" data-video-frame></div>
+        </section>
+    </div>
+    <div class="legal-modal" data-legal-modal aria-hidden="true" inert>
+        <div class="legal-modal-backdrop" data-legal-close></div>
+        <section class="legal-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="labor-legal-modal-title" tabindex="-1">
+            <header class="legal-modal-header"><h2 id="labor-legal-modal-title">Registro electrónico de la jornada laboral en México</h2><button class="legal-modal-close" type="button" data-legal-close aria-label="Cerrar marco legal">&times;</button></header>
+            <p>La normativa laboral mexicana contempla obligaciones relacionadas con el registro de la jornada de trabajo. Horalia facilita el registro de entradas y salidas y la consulta de reportes. La aplicabilidad y los requisitos específicos deben revisarse conforme a las disposiciones oficiales vigentes.</p>
+            <a class="button button-primary" href="https://www.dof.gob.mx/" target="_blank" rel="noopener noreferrer">Consultar el Diario Oficial de la Federación <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+            <p class="legal-modal-note">Horalia no cuenta con aval o certificación de la STPS y no sustituye la asesoría legal laboral.</p>
         </section>
     </div>
     <footer class="site-footer" id="footer">

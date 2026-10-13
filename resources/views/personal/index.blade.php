@@ -57,7 +57,7 @@
                         $photoUrl = $empleado->fotoUrl();
                     @endphp
                     <tr>
-                        <td><div class="personal-person-cell"><div class="personal-avatar"><span>{{ $initial }}</span>@if($photoUrl)<img src="{{ $photoUrl }}" alt="" loading="lazy" onerror="this.remove()">@endif</div><div><div class="personal-name">{{ $empleado->nombre }}</div><div class="personal-code">{{ $empleado->codigo ?: 'Sin código' }}</div></div></div></td>
+                        <td><div class="personal-person-cell"><div class="personal-avatar"><span>{{ $initial }}</span>@if($photoUrl)<img src="{{ $photoUrl }}" alt="" loading="lazy" onerror="this.remove()">@endif</div><div><div class="personal-name">{{ $empleado->nombre }} @unless($empleado->activo)<span class="company-rfc"> · Dado de baja</span>@endunless</div><div class="personal-code">{{ $empleado->codigo ?: 'Sin código' }}@if($empleado->fecha_baja) · Baja {{ $empleado->fecha_baja->format('d/m/Y H:i') }}@endif</div></div></div></td>
                         <td>{{ $empleado->email ?: '—' }}</td>
                         <td>{{ $empleado->empresa?->razon_social ?? '—' }}</td>
                         <td>{{ $empleado->centro?->nombre ?? '—' }}</td>
@@ -65,7 +65,7 @@
                         <td><div class="personal-actions">
                             @if(in_array($empleado->empresa_id, $manageableIds, true))
                                 <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('personal.edit', $empleado) }}" title="Editar" aria-label="Editar {{ $empleado->nombre }}"><i class="fa-light fa-pen-to-square" aria-hidden="true"></i> Editar</a>
-                                <form method="POST" action="{{ route('personal.destroy', $empleado) }}" data-confirm-delete data-record-name="{{ $empleado->nombre }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" title="Eliminar" aria-label="Eliminar {{ $empleado->nombre }}"><i class="fa-light fa-trash-can" aria-hidden="true"></i> Eliminar</button></form>
+                                @if($empleado->activo)<form method="POST" action="{{ route('personal.destroy', $empleado) }}" data-confirm-termination data-record-name="{{ $empleado->nombre }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" title="Dar de baja" aria-label="Dar de baja a {{ $empleado->nombre }}"><i class="fa-light fa-user-minus" aria-hidden="true"></i> Dar de baja</button></form>@endif
                             @else<span class="company-rfc">Solo lectura</span>@endif
                         </div></td>
                     </tr>
@@ -86,13 +86,13 @@
             window.location.assign(url);
         });
     });
-    document.querySelectorAll('[data-confirm-delete]').forEach(function (form) {
+    document.querySelectorAll('[data-confirm-termination]').forEach(function (form) {
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             Swal.fire({
-                icon: 'warning', title: '¿Eliminar colaborador?',
-                text: 'Se eliminará «' + form.dataset.recordName + '», su acceso al sistema y todas sus asistencias registradas. Esta acción no se puede deshacer.',
-                showCancelButton: true, confirmButtonText: 'Sí, eliminar', cancelButtonText: 'Cancelar',
+                icon: 'warning', title: '¿Dar de baja a este colaborador?',
+                text: form.dataset.recordName + ' dejará de acceder a Horalia y de registrar asistencias. Sus datos e historial se conservarán y seguirá contando para la suscripción.',
+                showCancelButton: true, confirmButtonText: 'Sí, dar de baja', cancelButtonText: 'Cancelar',
                 buttonsStyling: false, reverseButtons: true,
                 customClass: { confirmButton: 'btn-hr btn-danger-hr', cancelButton: 'btn-hr btn-outline-hr' }
             }).then(function (result) { if (result.isConfirmed) form.submit(); });

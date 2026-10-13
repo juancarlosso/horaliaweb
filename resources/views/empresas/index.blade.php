@@ -89,14 +89,18 @@
                                                 <i class="fa-light fa-pen-to-square" aria-hidden="true"></i>
                                                 Editar
                                             </a>
-                                            <form method="POST" action="{{ route('empresas.destroy', $empresa) }}" data-company-delete data-company-name="{{ $empresa->razon_social }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" aria-label="Eliminar {{ $empresa->razon_social }}" title="Eliminar">
-                                                    <i class="fa-light fa-trash-can" aria-hidden="true"></i>
-                                                    Eliminar
-                                                </button>
-                                            </form>
+                                            @if($empresa->personal_count === 0)
+                                                <form method="POST" action="{{ route('empresas.destroy', $empresa) }}" data-company-delete data-company-name="{{ $empresa->razon_social }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" aria-label="Eliminar {{ $empresa->razon_social }}" title="Eliminar">
+                                                        <i class="fa-light fa-trash-can" aria-hidden="true"></i>
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <span class="company-rfc" title="Conserva personal e historial; contacta a Solventia para una revisión de conservación.">Personal con historial</span>
+                                            @endif
                                         @else
                                             <span class="company-rfc">Solo lectura</span>
                                         @endif
@@ -162,7 +166,7 @@
 
             event.preventDefault();
             if (!window.Swal) {
-                if (window.confirm('¿Eliminar ' + form.dataset.companyName + ' y todos sus datos relacionados de Horalia? Se borrarán el personal y sus cuentas exclusivas, asistencias y fotos, horarios, centros, departamentos, puestos, tarjetas guardadas, historial de pagos, facturas y archivos. También se eliminará el cliente de Stripe. Los CFDI timbrados y movimientos que Stripe o el SAT deban conservar pueden permanecer en sus plataformas externas. Esta acción es permanente y no se puede deshacer.')) {
+                if (window.confirm('¿Eliminar ' + form.dataset.companyName + ' y sus datos relacionados de Horalia? Los CFDI timbrados y movimientos que Stripe o el SAT deban conservar pueden permanecer en sus plataformas externas. Esta acción es permanente y no se puede deshacer.')) {
                     submitCompanyDeletion(form);
                 }
                 return;
@@ -171,7 +175,7 @@
             Swal.fire({
                 icon: 'warning',
                 title: '¿Eliminar empresa?',
-                text: 'Se eliminarán de Horalia el personal y sus cuentas exclusivas, asistencias y fotos, horarios, centros, departamentos, puestos, tarjetas guardadas, historial de pagos, facturas y archivos. También se eliminará el cliente de Stripe. Los CFDI timbrados y movimientos que Stripe o el SAT deban conservar pueden permanecer en sus plataformas externas. Esta acción es permanente y no se puede deshacer.',
+                text: 'Se eliminarán de Horalia los datos relacionados de la empresa, horarios, centros, departamentos, puestos, tarjetas guardadas, historial de pagos, facturas y archivos. Los CFDI timbrados y movimientos que Stripe o el SAT deban conservar pueden permanecer en sus plataformas externas. Esta acción es permanente y no se puede deshacer.',
                 showCancelButton: true,
                 confirmButtonText: 'Sí, eliminar',
                 cancelButtonText: 'Cancelar',

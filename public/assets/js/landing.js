@@ -62,4 +62,57 @@
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') closeVideo();
     });
+
+    const legalModal = document.querySelector('[data-legal-modal]');
+    const legalDialog = legalModal?.querySelector('.legal-modal-dialog');
+    const legalOpenButtons = document.querySelectorAll('[data-legal-open]');
+    let legalPreviousFocus = null;
+
+    const closeLegalModal = () => {
+        if (!legalModal?.classList.contains('is-open')) return;
+        legalModal.classList.remove('is-open');
+        legalModal.setAttribute('aria-hidden', 'true');
+        legalModal.inert = true;
+        document.body.classList.remove('legal-modal-open');
+        legalPreviousFocus?.focus();
+    };
+
+    legalOpenButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            if (!legalModal || !legalDialog) return;
+            legalPreviousFocus = document.activeElement;
+            legalModal.inert = false;
+            legalModal.classList.add('is-open');
+            legalModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('legal-modal-open');
+            legalDialog.focus();
+        });
+    });
+
+    legalModal?.querySelectorAll('[data-legal-close]').forEach((element) => {
+        element.addEventListener('click', closeLegalModal);
+    });
+
+    legalModal?.addEventListener('keydown', (event) => {
+        if (event.key !== 'Tab' || !legalDialog) return;
+        const focusable = [...legalDialog.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')];
+        if (focusable.length === 0) {
+            event.preventDefault();
+            legalDialog.focus();
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && (document.activeElement === first || document.activeElement === legalDialog)) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeLegalModal();
+    });
 })();

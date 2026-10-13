@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Empresa;
+use App\Services\EmployeeSubscriptionPricing;
+use App\Services\PaymentInvoiceAmounts;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class SubscriptionController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, EmployeeSubscriptionPricing $pricing, PaymentInvoiceAmounts $invoiceAmounts)
     {
         $user = $request->user();
         abort_unless((int) $user->profile === 2, 403);
@@ -18,10 +20,19 @@ class SubscriptionController extends Controller
             'empresa_id' => ['nullable', 'integer', Rule::in($companies->modelKeys())],
         ]);
         $company = $companies->firstWhere('id', (int) ($data['empresa_id'] ?? 0)) ?? $companies->first();
+        $employeeCount = $company ? $pricing->employeeCount($company) : 0;
+        $blocks = $pricing->blocksFor($employeeCount);
+        $estimatedPrice = $pricing->priceForCount($employeeCount);
+        $estimatedAmounts = $invoiceAmounts->fromTaxInclusiveTotal($estimatedPrice);
 
         return view('subscription.index', [
             'companies' => $companies,
             'company' => $company,
+            'employeeCount' => $employeeCount,
+            'billableBlocks' => $blocks,
+            'blockUnitPrice' => (float) config('constantes.precio_mensual_por_empresa_mxn', 150),
+            'estimatedPrice' => $estimatedPrice,
+            'estimatedAmounts' => $estimatedAmounts,
             'navigation' => DashboardController::navigation(),
             'activeSection' => null,
         ]);

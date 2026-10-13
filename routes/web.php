@@ -19,6 +19,7 @@ use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\ChecadorController;
 use App\Http\Middleware\ValidateChecadorToken;
+use App\Http\Middleware\EnsureActiveLinkedPersonal;
 use App\Http\Controllers\ReporteAsistenciaController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -44,7 +45,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth')->name('logout');
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
     Route::get('/home/manual', [\App\Http\Controllers\ManualController::class, 'index'])->name('manual.index');
     Route::post('/home/empresas/{empresa}/membresia/pagar', [MembershipPaymentController::class, 'pay'])->whereNumber('empresa')->name('membership.pay');

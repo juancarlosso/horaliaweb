@@ -27,7 +27,7 @@ class DeleteCompanyCascadeTest extends TestCase
         Http::fake(['https://api.stripe.com/v1/customers/cus_company_delete' => Http::response(['id' => 'cus_company_delete', 'deleted' => true])]);
     }
 
-    public function test_deleting_company_removes_local_company_data_and_its_stripe_customer(): void
+    public function test_company_with_employees_cannot_be_deleted_from_self_service(): void
     {
         $admin = User::factory()->create(['profile' => 1]);
         $company = Empresa::query()->create([
@@ -105,28 +105,30 @@ class DeleteCompanyCascadeTest extends TestCase
         $this->actingAs($admin)
             ->get(route('empresas.index'))
             ->assertOk()
-            ->assertSee('todos sus datos relacionados de Horalia')
+            ->assertSee('Personal con historial')
             ->assertSee('movimientos que Stripe o el SAT deban conservar pueden permanecer', false)
             ->assertSee('Eliminando empresa')
             ->assertSee('fa-spinner fa-spin');
 
-        $this->actingAs($admin)->delete(route('empresas.destroy', $company))->assertRedirect(route('empresas.index'));
+        $this->actingAs($admin)->delete(route('empresas.destroy', $company))
+            ->assertRedirect(route('empresas.index'))
+            ->assertSessionHas('error');
 
-        $this->assertDatabaseMissing('empresas', ['id' => $company->id]);
-        $this->assertDatabaseMissing('personal', ['id' => $personalId]);
-        $this->assertDatabaseMissing('users', ['id' => $employee->id]);
-        $this->assertDatabaseMissing('asistencias', ['id' => $attendanceId]);
-        $this->assertDatabaseMissing('intentos_pago', ['id' => $attempt->id]);
-        $this->assertDatabaseMissing('facturas', ['intento_pago_id' => $attempt->id]);
-        $this->assertDatabaseMissing('payment_method_consents', ['empresa_id' => $company->id]);
-        $this->assertDatabaseMissing('users_empresas', ['empresa_id' => $company->id]);
-        Storage::disk('public')->assertMissing('empresas/logos/company-delete.png');
-        Storage::disk('wasabi')->assertMissing('personal/perfiles/empresa-' . $company->id . '/employee.png');
-        Storage::disk('wasabi')->assertMissing('asistencias/empresa-' . $company->id . '/in.jpg');
-        Storage::disk('wasabi')->assertMissing('asistencias/empresa-' . $company->id . '/out.jpg');
-        Storage::disk('wasabi')->assertMissing('facturas/H/H-1234.xml');
-        Storage::disk('local')->assertMissing('facturas/staging/1/H-1234.xml');
-        Http::assertSent(fn ($request) => $request->method() === 'DELETE'
+        $this->assertDatabaseHas('empresas', ['id' => $company->id]);
+        $this->assertDatabaseHas('personal', ['id' => $personalId]);
+        $this->assertDatabaseHas('users', ['id' => $employee->id]);
+        $this->assertDatabaseHas('asistencias', ['id' => $attendanceId]);
+        $this->assertDatabaseHas('intentos_pago', ['id' => $attempt->id]);
+        $this->assertDatabaseHas('facturas', ['intento_pago_id' => $attempt->id]);
+        $this->assertDatabaseHas('payment_method_consents', ['empresa_id' => $company->id]);
+        $this->assertDatabaseHas('users_empresas', ['empresa_id' => $company->id]);
+        Storage::disk('public')->assertExists('empresas/logos/company-delete.png');
+        Storage::disk('wasabi')->assertExists('personal/perfiles/empresa-' . $company->id . '/employee.png');
+        Storage::disk('wasabi')->assertExists('asistencias/empresa-' . $company->id . '/in.jpg');
+        Storage::disk('wasabi')->assertExists('asistencias/empresa-' . $company->id . '/out.jpg');
+        Storage::disk('wasabi')->assertExists('facturas/H/H-1234.xml');
+        Storage::disk('local')->assertExists('facturas/staging/1/H-1234.xml');
+        Http::assertNotSent(fn ($request) => $request->method() === 'DELETE'
             && str_ends_with($request->url(), '/customers/cus_company_delete'));
     }
 }

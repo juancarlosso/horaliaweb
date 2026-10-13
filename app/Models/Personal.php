@@ -17,6 +17,7 @@ class Personal extends Model
         'telefono',
         'foto',
         'activo',
+        'fecha_baja',
         'empresa_id',
         'centro_id',
         'departamento_id',
@@ -29,6 +30,7 @@ class Personal extends Model
     {
         return [
             'activo' => 'boolean',
+            'fecha_baja' => 'datetime',
         ];
     }
 

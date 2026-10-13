@@ -12,7 +12,9 @@
     .subscription-details { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
     .subscription-detail { padding:1rem; border:1px solid var(--body-border); border-radius:.65rem; background:var(--card-bg); }
     .subscription-detail-label { margin-bottom:.3rem; color:var(--body-text-muted); font-size:.78rem; }
+    .subscription-detail-note-title { font-weight:700; }
     .subscription-detail-value { color:var(--body-text); font-size:1rem; font-weight:750; }
+    .subscription-detail-note { color:var(--body-text-muted); font-size:.82rem; line-height:1.55; }
     .subscription-actions { display:flex; flex-wrap:wrap; gap:.65rem; margin-top:1.25rem; }
     .subscription-empty { padding:1.5rem; color:var(--body-text-muted); text-align:center; }
     @media(max-width:575px) { .subscription-heading { flex-direction:column; } .subscription-details { grid-template-columns:1fr; } }
@@ -50,9 +52,13 @@
                     @endphp
                     <div class="subscription-details">
                         <div class="subscription-detail"><div class="subscription-detail-label">Estado</div><div class="subscription-detail-value">{{ $subscriptionStatus }}</div></div>
-                        <div class="subscription-detail"><div class="subscription-detail-label">Precio mensual</div><div class="subscription-detail-value">${{ number_format((float) $company->precio, 2) }} MXN</div></div>
+                        <div class="subscription-detail"><div class="subscription-detail-label">Mensualidad vigente</div><div class="subscription-detail-value">${{ number_format((float) $company->precio, 2) }} MXN</div></div>
+                        <div class="subscription-detail"><div class="subscription-detail-label">Empleados registrados</div><div class="subscription-detail-value">{{ number_format($employeeCount) }}</div></div>
+                        <div class="subscription-detail"><div class="subscription-detail-label">Bloques facturables de hasta 200</div><div class="subscription-detail-value">{{ $billableBlocks }} × ${{ number_format($blockUnitPrice, 2) }} MXN</div></div>
+                        <div class="subscription-detail"><div class="subscription-detail-label">Estimado para la siguiente renovación</div><div class="subscription-detail-value">${{ number_format((float) $estimatedPrice, 2) }} MXN</div><div class="subscription-muted">Subtotal ${{ number_format((float) $estimatedAmounts['subtotal'], 2) }} + IVA ${{ number_format((float) $estimatedAmounts['iva'], 2) }} ({{ $estimatedAmounts['iva_rate'] }}%)</div></div>
                         <div class="subscription-detail"><div class="subscription-detail-label">Fecha de inicio</div><div class="subscription-detail-value">{{ $company->fecha_inicio?->format('d/m/Y') ?? '—' }}</div></div>
                         <div class="subscription-detail"><div class="subscription-detail-label">Próxima fecha de renovación</div><div class="subscription-detail-value">{{ $company->fecha_renovacion?->format('d/m/Y') ?? '—' }}</div></div>
+                        <div class="subscription-detail"><div class="subscription-detail-label subscription-detail-note-title">Información de renovación</div><div class="subscription-detail-note">Los empleados dados de baja conservan su historial y siguen contando para la suscripción. Los cambios de precio se aplican en la siguiente renovación. Este importe es una estimación; no es un cargo exigible ahora.</div></div>
                     </div>
 
                     @if($company->cancelar_al_renovar)

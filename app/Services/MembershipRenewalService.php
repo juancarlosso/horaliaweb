@@ -18,6 +18,7 @@ class MembershipRenewalService
     public function __construct(
         private readonly StripeCardService $stripe,
         private readonly PaymentFolioService $folios,
+        private readonly EmployeeSubscriptionPricing $pricing,
     )
     {
     }
@@ -66,6 +67,8 @@ class MembershipRenewalService
                 return ['status' => 'manual_pending', 'empresa_id' => $empresa->id];
             }
 
+            $this->pricing->prepareRenewal($empresa, $cycleDate);
+
             $execution = min(5, (int) $empresa->intentos + 1);
             $pendingAutomatic = IntentoPago::query()
                 ->where('empresa_id', $empresa->id)
@@ -100,13 +103,13 @@ class MembershipRenewalService
                     $attempt = $this->pendingAttempt($empresa, $cycleDate, $paymentMethodId, 'automatico', $key, $execution);
                     if ($attempt->resultado === 'exitoso') {
                         $this->folios->assign($attempt);
-                        return ['status' => 'paid', 'empresa' => $empresa, 'amount' => $empresa->precio, 'renewal_date' => $cycleDate, 'new_date' => $empresa->fecha_renovacion->toDateString()];
+                        return ['status' => 'paid', 'empresa' => $empresa, 'amount' => $attempt->cantidad, 'renewal_date' => $cycleDate, 'new_date' => $empresa->fecha_renovacion->toDateString()];
                     }
                     if ($attempt->resultado === 'fallido') {
                         continue;
                     }
 
-                    $charge = $this->stripe->chargeMembership($empresa, $paymentMethodId, (string) $empresa->precio, $key, true);
+                    $charge = $this->stripe->chargeMembership($empresa, $paymentMethodId, (string) $attempt->cantidad, $key, true);
                     if ($charge['outcome'] === 'indeterminate') {
                         $attempt->forceFill([
                             'descripcion' => $charge['message'],
@@ -145,7 +148,7 @@ class MembershipRenewalService
                             'cancelar_al_renovar' => false,
                         ])->save();
 
-                        return ['status' => 'paid', 'empresa' => $empresa, 'amount' => $empresa->precio, 'renewal_date' => $cycleDate, 'new_date' => $newDate];
+                        return ['status' => 'paid', 'empresa' => $empresa, 'amount' => $attempt->cantidad, 'renewal_date' => $cycleDate, 'new_date' => $newDate];
                     }
                 }
             }
@@ -204,6 +207,7 @@ class MembershipRenewalService
             }
 
             $cycleDate = $locked->fecha_renovacion->toDateString();
+            $this->pricing->prepareRenewal($locked, $cycleDate);
             if (IntentoPago::query()->where('empresa_id', $locked->id)->whereDate('fecha_renovacion', $cycleDate)->where('resultado', 'exitoso')->exists()) {
                 return ['status' => 'already_paid', 'message' => 'Esta renovación ya fue pagada.'];
             }
@@ -254,7 +258,7 @@ class MembershipRenewalService
             }
 
             $idempotencyKey = $attempt->idempotency_key;
-            $charge = $this->stripe->chargeMembership($locked, $paymentMethodId, (string) $locked->precio, $idempotencyKey, false);
+            $charge = $this->stripe->chargeMembership($locked, $paymentMethodId, (string) $attempt->cantidad, $idempotencyKey, false);
             if ($charge['outcome'] === 'indeterminate') {
                 $attempt->forceFill([
                     'descripcion' => $charge['message'],
@@ -328,7 +332,7 @@ class MembershipRenewalService
                 'status' => 'succeeded',
                 'message' => 'El pago de la membresía se realizó correctamente.',
                 'empresa' => $locked,
-                'amount' => $locked->precio,
+                'amount' => $attempt->cantidad,
                 'new_date' => $newDate,
             ];
         }, 3);

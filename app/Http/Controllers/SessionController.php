@@ -24,6 +24,15 @@ class SessionController extends Controller
                 ->withErrors(['email' => 'El correo o la contraseña no son correctos.']);
         }
 
+        if ($request->user()->personal && !$request->user()->personal->activo) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return back()->withInput($request->only('email'))
+                ->withErrors(['email' => 'El correo o la contraseña no son correctos.']);
+        }
+
         $request->session()->regenerate();
 
         return redirect()->route('home');

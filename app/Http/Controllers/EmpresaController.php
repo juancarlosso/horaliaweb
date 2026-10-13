@@ -19,6 +19,7 @@ class EmpresaController extends Controller
         $user = $request->user();
         $isAdmin = (int) $user->profile === 1;
         $query = Empresa::query();
+        $query->withCount('personal');
         if (!$isAdmin) {
             $query->whereHas('usuarios', fn ($users) => $users->where('users.id', $user->id));
         }
@@ -146,6 +147,12 @@ class EmpresaController extends Controller
     public function destroy(Request $request, int $empresa, StripeCardService $stripe)
     {
         $record = $this->manageableCompany($request, $empresa);
+        if (DB::table('personal')->where('empresa_id', $record->id)->exists()) {
+            return redirect()->route('empresas.index')->with(
+                'error',
+                'Esta empresa conserva registros de personal e historial. La eliminación definitiva requiere una solicitud a Solventia y revisión de las obligaciones de conservación.'
+            );
+        }
         $personalIds = DB::table('personal')->where('empresa_id', $record->id)->pluck('id');
         $attemptIds = DB::table('intentos_pago')->where('empresa_id', $record->id)->pluck('id');
         $attendancePhotos = DB::table('asistencias')

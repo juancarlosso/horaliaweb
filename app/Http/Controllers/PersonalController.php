@@ -309,6 +309,10 @@ class PersonalController extends Controller
             return back()->withErrors(['personal' => 'Este registro de personal no tiene un usuario asociado.']);
         }
 
+        if (!$empleado->activo) {
+            return back()->withErrors(['personal' => 'El colaborador está dado de baja y no puede recuperar el acceso.']);
+        }
+
         $status = Password::sendResetLink(['email' => $empleado->usuario->email]);
         if ($status !== Password::RESET_LINK_SENT) {
             report(new \RuntimeException('No fue posible reenviar el enlace de contraseña: ' . $status));
@@ -325,6 +329,10 @@ class PersonalController extends Controller
             ->whereIn('empresa_id', $this->companyIdsFor($request, true))
             ->with('empresa')
             ->findOrFail($personal);
+
+        if (!$empleado->activo) {
+            return back()->withErrors(['personal' => 'El colaborador está dado de baja.']);
+        }
 
         if (!$empleado->pin || !$empleado->email) {
             return back()->withErrors(['personal' => 'El colaborador debe tener un PIN y un correo electrónico para reenviarlo.']);
@@ -351,10 +359,13 @@ class PersonalController extends Controller
             ->whereIn('empresa_id', $this->companyIdsFor($request, true))
             ->findOrFail($personal);
         $companyId = (int) $empleado->empresa_id;
-        $photoPath = $empleado->foto;
-        $deleted = DB::transaction(function () use ($empleado, $companyId) {
+        $terminated = DB::transaction(function () use ($empleado, $companyId) {
             Empresa::query()->whereKey($companyId)->lockForUpdate()->firstOrFail();
+            $lockedEmployee = Personal::query()->whereKey($empleado->id)->lockForUpdate()->firstOrFail();
             $usuarios = User::query()->where('personal_id', $empleado->id)->lockForUpdate()->get();
+            if (!$lockedEmployee->activo) {
+                return true;
+            }
             $hasCompanyAdministrator = $usuarios->contains(fn (User $usuario) =>
                 (int) $usuario->profile === $this->administratorProfileId()
                 && $usuario->empresas()->whereKey($companyId)->exists()
@@ -365,20 +376,27 @@ class PersonalController extends Controller
                 return false;
             }
 
-            $usuarios->each->delete();
-            $empleado->delete();
+            $lockedEmployee->forceFill(['activo' => false, 'fecha_baja' => now()])->save();
+            foreach ($usuarios as $usuario) {
+                $usuario->forceFill(['remember_token' => Str::random(60)])->save();
+                if (config('session.driver') === 'database' && \Illuminate\Support\Facades\Schema::hasTable('sessions')) {
+                    DB::table('sessions')->where('user_id', $usuario->id)->delete();
+                }
+                if (\Illuminate\Support\Facades\Schema::hasTable('personal_access_tokens')) {
+                    DB::table('personal_access_tokens')->where('tokenable_type', $usuario::class)->where('tokenable_id', $usuario->id)->delete();
+                }
+                DB::table('password_reset_tokens')->where('email', $usuario->email)->delete();
+            }
 
             return true;
         });
 
-        if (!$deleted) {
+        if (!$terminated) {
             return back()->withErrors(['personal' => self::LAST_ADMIN_ERROR]);
         }
 
-        $this->deletePhoto($photoPath);
-
         return redirect()->route('personal.index', ['empresa_id' => $companyId])
-            ->with('status', 'El registro de personal, su acceso y sus asistencias se eliminaron correctamente.');
+            ->with('status', 'El colaborador quedó dado de baja. Sus datos e historial se conservaron y seguirá contando para la suscripción.');
     }
 
     private function validatedData(Request $request): array

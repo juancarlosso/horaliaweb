@@ -26,6 +26,13 @@
     .company-empty-icon svg { width:25px; height:25px; stroke:currentColor; stroke-width:1.8; }
     .company-empty h2 { margin:0 0 .4rem; color:var(--body-text); font-size:1rem; font-weight:750; }
     .company-empty p { margin:0 0 1rem; font-size:.845rem; }
+    .company-history-modal .modal-dialog { width:min(32rem,calc(100% - 2rem)); }
+    .company-history-modal .modal-content { border:1px solid var(--body-border); border-radius:.9rem; color:var(--body-text); background:var(--card-bg); }
+    .company-history-modal .modal-header,.company-history-modal .modal-footer { border-color:var(--body-border); }
+    .company-history-modal .modal-title { font-size:1.15rem; font-weight:800; }
+    .company-history-modal .modal-body p { margin:0 0 .8rem; color:var(--body-text-muted); font-size:.9rem; line-height:1.6; }
+    .company-history-modal .modal-body strong { color:var(--body-text); }
+    .company-history-modal .modal-body a { color:var(--color-primary); font-weight:700; }
     @media(max-width:700px) { .companies-heading { align-items:stretch; flex-direction:column; } .companies-heading .btn-hr { align-self:flex-start; } .company-pagination { align-items:flex-start; flex-direction:column; } }
 </style>
 
@@ -99,7 +106,10 @@
                                                     </button>
                                                 </form>
                                             @else
-                                                <span class="company-rfc" title="Conserva personal e historial; contacta a Solventia para una revisión de conservación.">Personal con historial</span>
+                                                <button class="btn-hr btn-danger-hr btn-sm-hr" type="button" data-company-history-modal aria-haspopup="dialog" aria-controls="company-history-modal" aria-label="Eliminar {{ $empresa->razon_social }}" title="Eliminar">
+                                                    <i class="fa-light fa-trash-can" aria-hidden="true"></i>
+                                                    Eliminar
+                                                </button>
                                             @endif
                                         @else
                                             <span class="company-rfc">Solo lectura</span>
@@ -141,7 +151,32 @@
         @endif
     </div>
 </section>
+<div class="modal fade company-history-modal" id="company-history-modal" tabindex="-1" aria-labelledby="company-history-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="company-history-modal-title">Solicitud de eliminación definitiva</h2>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Esta empresa cuenta con registros de asistencia y no puede eliminarse directamente.</strong></p>
+                <p>Para solicitar su eliminación definitiva, incluyendo toda la información y los registros asociados, es necesario contactar a <strong>Solventia Software</strong>.</p>
+                <p>Envía tu solicitud a <a href="mailto:contacto@solventia.com.mx">contacto@solventia.com.mx</a> y nuestro equipo te ayudará con el proceso.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-hr btn-outline-hr" type="button" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    var companyHistoryModalElement = document.getElementById('company-history-modal');
+    document.querySelectorAll('[data-company-history-modal]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            window.bootstrap.Modal.getOrCreateInstance(companyHistoryModalElement).show();
+        });
+    });
+
     function submitCompanyDeletion(form) {
         var button = form.querySelector('button[type="submit"]');
         if (button) {

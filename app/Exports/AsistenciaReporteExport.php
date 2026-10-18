@@ -126,7 +126,28 @@ class AsistenciaReporteExport
         $this->writeRow($xml, 7, $headingCells);
 
         $rowNumber = 8;
-        $query->orderByDesc('id')->chunk(500, function ($records) use ($xml, &$rowNumber, $companyName): void {
+        $lastRecord = null;
+        do {
+            $chunkQuery = clone $query;
+            if ($lastRecord !== null) {
+                $lastDate = $lastRecord->fecha->toDateString();
+                $lastId = $lastRecord->id;
+                $chunkQuery->where(function ($cursor) use ($lastDate, $lastId): void {
+                    $cursor->where('asistencias.fecha', '<', $lastDate)
+                        ->orWhere(function ($sameDate) use ($lastDate, $lastId): void {
+                            $sameDate->where('asistencias.fecha', '=', $lastDate)
+                                ->where('asistencias.id', '<', $lastId);
+                        });
+                });
+            }
+            $records = $chunkQuery->orderByDesc('asistencias.fecha')
+                ->orderByDesc('asistencias.id')
+                ->limit(500)
+                ->get();
+            if ($records->isEmpty()) {
+                break;
+            }
+
             foreach ($records as $record) {
                 $schedule = $record->personal?->horarios?->firstWhere('dia', $record->fecha?->dayOfWeekIso);
                 $values = [
@@ -148,7 +169,8 @@ class AsistenciaReporteExport
                 ];
                 $this->writeRow($xml, $rowNumber++, array_map(fn ($value) => [$value, 0], $values));
             }
-        });
+            $lastRecord = $records->last();
+        } while ($records->count() === 500);
 
         $xml->endElement();
         $xml->startElement('autoFilter');

@@ -8,6 +8,8 @@ use App\Models\Asistencia;
 use App\Models\Departamento;
 use App\Models\Empresa;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class ReporteAsistenciaController extends Controller
 {
@@ -39,16 +41,28 @@ class ReporteAsistenciaController extends Controller
 
         if ($reportGenerated) {
             $query = $this->attendanceQuery($selectedCompanyId, $startDate, $endDate);
+            $summary = DB::table('asistencias')
+                ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
+                ->where('personal.empresa_id', $selectedCompanyId)
+                ->whereBetween('asistencias.fecha', [$startDate, $endDate])
+                ->selectRaw('COUNT(*) as total')
+                ->selectRaw('SUM(CASE WHEN asistencias.minutos_tarde > 0 THEN 1 ELSE 0 END) as late')
+                ->selectRaw("SUM(CASE WHEN asistencias.rango_entrada = 'Fuera de rango' OR asistencias.rango_salida = 'Fuera de rango' THEN 1 ELSE 0 END) as out_of_range")
+                ->selectRaw('SUM(CASE WHEN asistencias.llegada IS NOT NULL AND asistencias.salida IS NULL THEN 1 ELSE 0 END) as without_exit')
+                ->first();
             $summary = [
-                'total' => (clone $query)->count(),
-                'late' => (clone $query)->where('minutos_tarde', '>', 0)->count(),
-                'outOfRange' => (clone $query)->where(function ($rangeQuery) {
-                    $rangeQuery->where('rango_entrada', 'Fuera de rango')
-                        ->orWhere('rango_salida', 'Fuera de rango');
-                })->count(),
-                'withoutExit' => (clone $query)->whereNotNull('llegada')->whereNull('salida')->count(),
+                'total' => (int) $summary->total,
+                'late' => (int) $summary->late,
+                'outOfRange' => (int) $summary->out_of_range,
+                'withoutExit' => (int) $summary->without_exit,
             ];
-            $attendance = $query->paginate(config('constantes.itemsPorPagina'))->withQueryString();
+            $perPage = (int) config('constantes.itemsPorPagina');
+            $page = LengthAwarePaginator::resolveCurrentPage();
+            $items = $query->forPage($page, $perPage)->get();
+            $attendance = new LengthAwarePaginator($items, $summary['total'], $perPage, $page, [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'query' => $request->query(),
+            ]);
         }
 
         return view('reportes.asistencia', [
@@ -90,7 +104,10 @@ class ReporteAsistenciaController extends Controller
         if ($reportGenerated) {
             $departments = Departamento::query()
                 ->where('departamentos.empresa_id', $selectedCompanyId)
-                ->leftJoin('personal', 'personal.departamento_id', '=', 'departamentos.id')
+                ->leftJoin('personal', function ($join) use ($selectedCompanyId) {
+                    $join->on('personal.departamento_id', '=', 'departamentos.id')
+                        ->where('personal.empresa_id', '=', $selectedCompanyId);
+                })
                 ->leftJoin('asistencias', function ($join) use ($startDate, $endDate) {
                     $join->on('asistencias.personal_id', '=', 'personal.id')
                         ->whereBetween('asistencias.fecha', [$startDate, $endDate]);
@@ -169,13 +186,15 @@ class ReporteAsistenciaController extends Controller
 
         $query = Asistencia::query()
             ->with(['personal.departamento'])
-            ->whereBetween('fecha', [$filters['desde'], $filters['hasta']])
-            ->whereHas('personal', fn ($personalQuery) => $personalQuery->where('empresa_id', $companyId));
+            ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
+            ->select('asistencias.*')
+            ->whereBetween('asistencias.fecha', [$filters['desde'], $filters['hasta']])
+            ->where('personal.empresa_id', $companyId);
 
         if ($department) {
-            $query->whereHas('personal', fn ($personalQuery) => $personalQuery->where('departamento_id', $department->id));
+            $query->where('personal.departamento_id', $department->id);
         } elseif ($withoutDepartment) {
-            $query->whereHas('personal', fn ($personalQuery) => $personalQuery->whereNull('departamento_id'));
+            $query->whereNull('personal.departamento_id');
         }
 
         match ($type) {
@@ -188,7 +207,7 @@ class ReporteAsistenciaController extends Controller
             default => null,
         };
 
-        $records = $query->orderByDesc('fecha')->orderByDesc('created_at')->orderByDesc('id')
+        $records = $query->orderByDesc('asistencias.fecha')->orderByDesc('asistencias.created_at')->orderByDesc('asistencias.id')
             ->paginate(config('constantes.itemsPorPagina'))
             ->withQueryString();
 
@@ -234,10 +253,12 @@ class ReporteAsistenciaController extends Controller
     {
         return Asistencia::query()
             ->with(['personal.empresa', 'personal.horarios'])
-            ->whereHas('personal', fn ($query) => $query->where('empresa_id', $companyId))
-            ->whereBetween('fecha', [$startDate, $endDate])
-            ->orderByDesc('fecha')
-            ->orderByDesc('created_at')
-            ->orderByDesc('id');
+            ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
+            ->select('asistencias.*')
+            ->where('personal.empresa_id', $companyId)
+            ->whereBetween('asistencias.fecha', [$startDate, $endDate])
+            ->orderByDesc('asistencias.fecha')
+            ->orderByDesc('asistencias.created_at')
+            ->orderByDesc('asistencias.id');
     }
 }

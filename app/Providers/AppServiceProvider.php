@@ -33,6 +33,15 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
+        RateLimiter::for('app-login', function (Request $request) {
+            $email = mb_strtolower(trim((string) $request->input('email')));
+
+            return [
+                Limit::perMinute(20)->by('app-login-ip:' . $request->ip()),
+                Limit::perMinute(5)->by('app-login-email:' . hash('sha256', $email)),
+            ];
+        });
+
         ResetPassword::toMailUsing(function ($notifiable, string $token) {
             $resetUrl = route('password.reset', [
                 'token' => $token,

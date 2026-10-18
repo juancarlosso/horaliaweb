@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Centro extends Model
 {
-    protected $fillable = ['nombre', 'activo', 'empresa_id', 'geolocalizacion'];
+    protected $fillable = ['nombre', 'activo', 'empresa_id', 'geolocalizacion', 'timezone'];
 
     protected function casts(): array
     {

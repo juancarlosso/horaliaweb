@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\ManagesCompanyCatalogs;
 use App\Models\Asistencia;
-use App\Models\Personal;
 use App\Services\AttendanceLocationService;
 use App\Services\AttendancePhotoService;
 use App\Services\RegistroAsistenciaService;
+use App\Support\HoraliaTimezones;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -23,10 +23,11 @@ class AsistenciaController extends Controller
         $selectedCompanyId = $this->selectedCompanyForFilter($request, $companies);
         $isEmployeeProfile = (int) $request->user()->profile === 3;
         $personal = $request->user()->personal;
+        $personal?->load('centro');
         $validated = $request->validate([
             'empresa_id' => ['nullable', 'integer'],
             'mes' => ['nullable', 'integer', 'between:1,12'],
-            'anio' => ['nullable', 'integer', 'in:' . implode(',', config('constantes.aniosAsistencia', []))],
+            'anio' => ['nullable', 'integer', 'in:'.implode(',', config('constantes.aniosAsistencia', []))],
         ]);
 
         if ($selectedCompanyId) {
@@ -41,7 +42,7 @@ class AsistenciaController extends Controller
             5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
             9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre',
         ];
-        $periodLabel = $monthNames[$selectedMonth] . ' ' . $selectedYear;
+        $periodLabel = $monthNames[$selectedMonth].' '.$selectedYear;
 
         $attendance = Asistencia::query()
             ->with(['personal.empresa', 'personal.centro'])
@@ -58,18 +59,21 @@ class AsistenciaController extends Controller
             ->withQueryString();
 
         $canMarkAttendance = $personal && $personal->empresa?->activa && in_array($personal->empresa_id, $companyIds, true);
+        $localNow = $canMarkAttendance
+            ? now('UTC')->setTimezone(HoraliaTimezones::forCenter($personal->centro?->timezone))
+            : null;
         $todayAttendance = $canMarkAttendance
-            ? Asistencia::query()->where('personal_id', $personal->id)->whereDate('fecha', today())->first()
+            ? Asistencia::query()->where('personal_id', $personal->id)->whereDate('fecha', $localNow->toDateString())->first()
             : null;
         $todaySchedule = $canMarkAttendance
-            ? $personal->horarios()->where('dia', now()->dayOfWeekIso)->first()
+            ? $personal->horarios()->where('dia', $localNow->dayOfWeekIso)->first()
             : null;
         $overnightAttendance = $canMarkAttendance
             ? $registration->pendingOvernightAttendance($personal)
             : null;
-        $canMarkEntry = $canMarkAttendance && !$todayAttendance && !$overnightAttendance && $todaySchedule !== null;
+        $canMarkEntry = $canMarkAttendance && ! $todayAttendance && ! $overnightAttendance && $todaySchedule !== null;
         $canMarkExit = $canMarkAttendance
-            && (($todayAttendance?->llegada && !$todayAttendance?->salida) || (!$todayAttendance && $overnightAttendance));
+            && (($todayAttendance?->llegada && ! $todayAttendance?->salida) || (! $todayAttendance && $overnightAttendance));
 
         return view('asistencia.index', [
             'navigation' => DashboardController::navigation(),
@@ -106,6 +110,7 @@ class AsistenciaController extends Controller
                 return back()->with('error', $exception->errors()['pin'][0] ?? 'No se pudo registrar la entrada.');
             }
             report($exception);
+
             return back()->with('error', 'No se pudo registrar la entrada. Inténtalo de nuevo.');
         }
 
@@ -126,6 +131,7 @@ class AsistenciaController extends Controller
                 return back()->with('error', $exception->errors()['pin'][0] ?? 'No se pudo registrar la salida.');
             }
             report($exception);
+
             return back()->with('error', 'No se pudo registrar la salida. Inténtalo de nuevo.');
         }
 
@@ -138,11 +144,11 @@ class AsistenciaController extends Controller
         abort_unless($personal && in_array($personal->empresa_id, $this->companyIdsFor($request), true), 403);
 
         $personal->load(['empresa', 'centro']);
-        if ((int) $request->user()->profile === 3 && !$personal->empresa?->activa) {
+        if ((int) $request->user()->profile === 3 && ! $personal->empresa?->activa) {
             throw ValidationException::withMessages(['asistencia' => 'EMPRESA INACTIVA, no podrás marcar asistencias.']);
         }
 
-        if (!$personal->centro || !$locations->parseCoordinates($personal->centro->geolocalizacion)) {
+        if (! $personal->centro || ! $locations->parseCoordinates($personal->centro->geolocalizacion)) {
             throw ValidationException::withMessages(['asistencia' => 'Configura el centro de trabajo y su geolocalización antes de registrar asistencia.']);
         }
 
@@ -155,8 +161,8 @@ class AsistenciaController extends Controller
             $latitudeKey => ['required', 'numeric', 'between:-90,90'],
             $longitudeKey => ['required', 'numeric', 'between:-180,180'],
         ], [
-            $latitudeKey . '.required' => 'Activa la ubicación para registrar tu asistencia.',
-            $longitudeKey . '.required' => 'Activa la ubicación para registrar tu asistencia.',
+            $latitudeKey.'.required' => 'Activa la ubicación para registrar tu asistencia.',
+            $longitudeKey.'.required' => 'Activa la ubicación para registrar tu asistencia.',
         ]);
     }
 
@@ -165,7 +171,7 @@ class AsistenciaController extends Controller
         $photoData = $request->validate([
             $field => ['required', 'string', 'max:4200000'],
         ], [
-            $field . '.required' => 'Toma una foto antes de registrar la asistencia.',
+            $field.'.required' => 'Toma una foto antes de registrar la asistencia.',
         ])[$field];
 
         return $photos->uploadBase64Jpeg($photoData, $companyId, $type, $field);

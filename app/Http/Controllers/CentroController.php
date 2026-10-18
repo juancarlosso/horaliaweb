@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\ManagesCompanyCatalogs;
+use App\Models\Asistencia;
 use App\Models\Centro;
+use App\Support\HoraliaTimezones;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class CentroController extends Controller
@@ -51,6 +54,7 @@ class CentroController extends Controller
             'companies' => $companies,
             'selectedCompanyId' => $this->selectedCompanyForForm($request, $companies),
             'isEdit' => false,
+            'timezones' => HoraliaTimezones::mexicoOptions(),
         ]);
     }
 
@@ -76,6 +80,7 @@ class CentroController extends Controller
             'centro' => $record,
             'companies' => $this->companiesFor($request, true),
             'isEdit' => true,
+            'timezones' => HoraliaTimezones::mexicoOptions(),
         ]);
     }
 
@@ -98,10 +103,39 @@ class CentroController extends Controller
             ->whereIn('empresa_id', $this->companyIdsFor($request, true))
             ->findOrFail($centro);
         $companyId = $record->empresa_id;
-        $record->delete();
+
+        if ($this->hasAttendanceHistory($record->id)) {
+            return redirect()->route('centros.index', ['empresa_id' => $companyId])
+                ->with('error', $this->attendanceDeletionMessage());
+        }
+
+        try {
+            $record->delete();
+        } catch (QueryException $exception) {
+            // The FK remains the final guard if an attendance is added after the pre-check.
+            if (! $this->hasAttendanceHistory($record->id) || ! in_array($exception->getCode(), ['23000', '23503'], true)) {
+                throw $exception;
+            }
+
+            return redirect()->route('centros.index', ['empresa_id' => $companyId])
+                ->with('error', $this->attendanceDeletionMessage());
+        }
 
         return redirect()->route('centros.index', ['empresa_id' => $companyId])
             ->with('status', 'El centro de trabajo se eliminó correctamente.');
+    }
+
+    private function hasAttendanceHistory(int $centerId): bool
+    {
+        return Asistencia::query()
+            ->where('centro_trabajo_entrada_id', $centerId)
+            ->orWhere('centro_trabajo_salida_id', $centerId)
+            ->exists();
+    }
+
+    private function attendanceDeletionMessage(): string
+    {
+        return 'No es posible eliminar este centro de trabajo. Este centro de trabajo tiene registros de asistencia asociados, por lo que no puede eliminarse. Para proteger el historial de asistencia de tus colaboradores, estos registros deben conservarse. Si necesitas eliminar definitivamente este centro de trabajo, comunícate con nuestro equipo de soporte a contacto@solventia.com.mx.';
     }
 
     private function validatedData(Request $request): array
@@ -111,11 +145,13 @@ class CentroController extends Controller
             'nombre' => ['required', 'string', 'max:255'],
             'activo' => ['required', 'boolean'],
             'geolocalizacion' => ['required', 'string', 'max:255'],
+            'timezone' => ['required', 'string', 'timezone', 'max:64'],
         ], [
             'empresa_id.required' => 'Selecciona la empresa.',
             'nombre.required' => 'Escribe el nombre del centro de trabajo.',
             'activo.required' => 'Selecciona el estatus del centro.',
             'geolocalizacion.required' => 'Indica la geolocalización del centro.',
+            'timezone.required' => 'Selecciona la zona horaria del centro.',
         ]);
     }
 }

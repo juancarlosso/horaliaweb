@@ -32,12 +32,13 @@ class CompanyRegistrationController extends Controller
         }
 
         $request->merge([
+            'nombre' => trim((string) ($request->input('nombre') ?: $request->input('razon_social'))),
             'email' => mb_strtolower(trim((string) $request->input('email'))),
             'rfc' => strtoupper(trim((string) $request->input('rfc'))),
         ]);
 
         $data = $request->validate([
-            'razon_social' => ['required', 'string', 'max:255'],
+            'nombre' => ['required', 'string', 'max:255'],
             'rfc' => ['nullable', 'string', 'min:12', 'max:13', 'regex:/^[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}$/u', Rule::unique('empresas', 'rfc')],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],

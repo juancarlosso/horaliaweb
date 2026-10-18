@@ -18,7 +18,7 @@
                     <p style="margin:0 0 12px;color:#536df5;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;">Factura electrónica</p>
                     <h1 style="margin:0 0 18px;color:#202541;font-size:27px;line-height:1.25;font-weight:700;">Tu factura está lista</h1>
                     <p style="margin:0 0 14px;color:#444b65;font-size:16px;line-height:1.65;">Hola,</p>
-                    <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">Adjuntamos el XML timbrado y la representación impresa en PDF de tu pago de membresía de <strong>{{ $empresa?->razon_social ?: $appName }}</strong>.</p>
+                    <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">Adjuntamos el XML timbrado y la representación impresa en PDF de tu pago de membresía de <strong>{{ $empresa?->nombre ?: $appName }}</strong>.</p>
                     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 24px;border:1px solid #e5e8f1;border-radius:10px;background:#f8f9fc;">
                         <tr><td style="padding:15px 18px;color:#626a83;font-size:13px;line-height:1.8;">
                             <strong style="color:#202541;">Serie y folio:</strong> {{ $factura->serie }}-{{ $factura->folio }}<br>

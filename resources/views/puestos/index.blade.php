@@ -37,7 +37,7 @@
             <label for="empresa_id">Empresa</label>
             <select class="hr-input select2" id="empresa_id" name="empresa_id">
                 @if($companies->count() !== 1)<option value="0" @selected(!$selectedCompanyId)>Todas las empresas</option>@endif
-                @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->razon_social }}</option>@endforeach
+                @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
             </select>
         </div>
         @if($canCreate)<a class="btn-hr btn-primary-hr catalog-toolbar-action" href="{{ route('puestos.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="fa-light fa-plus" aria-hidden="true"></i> Agregar puesto</a>@endif
@@ -51,7 +51,7 @@
                 <tbody>
                 @foreach($puestos as $puesto)
                     <tr>
-                        <td>{{ $puesto->empresa?->razon_social ?? '—' }}</td>
+                        <td>{{ $puesto->empresa?->nombre ?? '—' }}</td>
                         <td class="fw-bold">{{ $puesto->nombre }}</td>
                         <td><span class="catalog-state {{ $puesto->activo ? 'catalog-state-active' : 'catalog-state-inactive' }}">{{ $puesto->activo ? 'Activo' : 'Inactivo' }}</span></td>
                         <td><div class="catalog-actions">

@@ -38,7 +38,7 @@
                     <label class="form-label-hr" for="empresa_id">Empresa</label>
                     <select class="hr-input select2" id="empresa_id" name="empresa_id" onchange="this.form.submit()">
                         @foreach($companies as $item)
-                            <option value="{{ $item->id }}" @selected($company?->id === $item->id)>{{ $item->razon_social ?: 'Empresa #' . $item->id }}</option>
+                            <option value="{{ $item->id }}" @selected($company?->id === $item->id)>{{ $item->nombre ?: 'Empresa #' . $item->id }}</option>
                         @endforeach
                     </select>
                 </form>

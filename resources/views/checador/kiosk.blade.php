@@ -34,7 +34,7 @@
 </head>
 <body>
     <main class="kiosk" id="kiosk" data-token="{{ $token }}" data-now="{{ $serverTime }}" data-timezone="{{ config('app.timezone') }}" data-post-url="{{ route('checador.mark') }}" data-verify-url="{{ route('checador.verify-pin') }}" data-clock-url="{{ route('checador.clock') }}">
-        <header class="kiosk-head"><p class="kiosk-brand">Horalia</p><p class="kiosk-company">{{ $session->empresa->razon_social }}</p><div class="kiosk-clock" id="kiosk-clock">--:--:--</div><p class="kiosk-date" id="kiosk-date"></p><p class="kiosk-prompt" id="kiosk-prompt" hidden>Ingresa tu PIN de 5 dígitos</p></header>
+        <header class="kiosk-head"><p class="kiosk-brand">Horalia</p><p class="kiosk-company">{{ $session->empresa->nombre }}</p><div class="kiosk-clock" id="kiosk-clock">--:--:--</div><p class="kiosk-date" id="kiosk-date"></p><p class="kiosk-prompt" id="kiosk-prompt" hidden>Ingresa tu PIN de 5 dígitos</p></header>
         <section class="kiosk-permissions" id="kiosk-permissions">
             <p>Para registrar asistencia, permite el acceso a la cámara y a tu ubicación.</p>
             <button class="kiosk-start" id="kiosk-start" type="button">Iniciar checador</button>

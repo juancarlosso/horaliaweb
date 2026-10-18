@@ -112,7 +112,7 @@ class AppAuthenticationController extends Controller
             ->wherePivot('control_total', true)
             ->where('empresas.activa', true)
             ->when($companyId, fn ($query) => $query->where('empresas.id', $companyId))
-            ->orderBy('empresas.razon_social')
+            ->orderBy('empresas.nombre')
             ->first();
     }
 
@@ -140,7 +140,7 @@ class AppAuthenticationController extends Controller
     {
         return [
             'id' => $company->getKey(),
-            'nombre' => $company->razon_social,
+            'nombre' => $company->nombre,
             'direccion' => $company->direccion,
             'telefono' => $company->telefono,
         ];

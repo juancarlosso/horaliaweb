@@ -80,7 +80,7 @@
                         <label class="form-label-hr" for="empresa_id">Empresa <span class="text-danger" aria-hidden="true">*</span></label>
                         <select class="hr-input select2 @error('empresa_id') personal-input-error @enderror" id="empresa_id" name="empresa_id" required>
                             <option value="">Selecciona una empresa</option>
-                            @foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) $selectedCompany === (string) $company->id)>{{ $company->razon_social }}</option>@endforeach
+                            @foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) $selectedCompany === (string) $company->id)>{{ $company->nombre }}</option>@endforeach
                         </select>
                         @error('empresa_id')<span class="personal-field-error">{{ $message }}</span>@enderror
                     </div>

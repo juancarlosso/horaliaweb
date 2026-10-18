@@ -29,7 +29,7 @@
         if ($inactiveCompanies->isNotEmpty()) {
             $alerts[] = [
                 'type' => 'error',
-                'message' => 'EMPRESAS INACTIVAS: ' . $inactiveCompanies->pluck('razon_social')->join(', ') . '. El personal de estas empresas no podrá marcar asistencia.',
+                'message' => 'EMPRESAS INACTIVAS: ' . $inactiveCompanies->pluck('nombre')->join(', ') . '. El personal de estas empresas no podrá marcar asistencia.',
             ];
         }
     }

@@ -33,7 +33,7 @@
             <label for="empresa_id">Empresa</label>
             <select class="hr-input select2" id="empresa_id" name="empresa_id">
                 @if($companies->count() !== 1)<option value="0" @selected(!$selectedCompanyId)>Todas las empresas</option>@endif
-                @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->razon_social }}</option>@endforeach
+                @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
             </select>
         </div>
         @if($canCreate)<a class="btn-hr btn-primary-hr schedule-toolbar-action" href="{{ route('horarios.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="fa-light fa-plus" aria-hidden="true"></i> Agregar horario</a>@endif
@@ -47,7 +47,7 @@
                 <tbody>
                 @foreach($horarios as $horario)
                     <tr>
-                        <td>{{ $horario->empresa?->razon_social ?? '—' }}</td>
+                        <td>{{ $horario->empresa?->nombre ?? '—' }}</td>
                         <td class="fw-bold">{{ $horario->nombre_horario }}</td>
                         <td>{{ substr($horario->hora_entrada, 0, 5) }}</td>
                         <td>{{ substr($horario->hora_salida, 0, 5) }}@if(substr((string) $horario->hora_salida, 0, 8) <= substr((string) $horario->hora_entrada, 0, 8)) <small class="d-block text-muted">Día siguiente</small>@endif</td>

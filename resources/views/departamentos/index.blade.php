@@ -41,7 +41,7 @@
             <label for="empresa_id">Empresa</label>
             <select class="hr-input select2" id="empresa_id" name="empresa_id">
                 @if($companies->count() !== 1)<option value="0" @selected(!$selectedCompanyId)>Todas las empresas</option>@endif
-                @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->razon_social }}</option>@endforeach
+                @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
             </select>
         </div>
         @if($canCreate)
@@ -57,7 +57,7 @@
                 <tbody>
                 @foreach($departamentos as $departamento)
                     <tr>
-                        <td>{{ $departamento->empresa?->razon_social ?? '—' }}</td>
+                        <td>{{ $departamento->empresa?->nombre ?? '—' }}</td>
                         <td class="fw-bold">{{ $departamento->nombre }}</td>
                         <td><span class="catalog-state {{ $departamento->activo ? 'catalog-state-active' : 'catalog-state-inactive' }}">{{ $departamento->activo ? 'Activo' : 'Inactivo' }}</span></td>
                         <td><div class="catalog-actions">

@@ -67,12 +67,12 @@
                 <section aria-labelledby="company-heading">
                     <h2 id="company-heading" class="h6 fw-bold mb-3">Datos de la empresa</h2>
                     <div class="mb-3">
-                        <label class="form-label-hr" for="razon_social">Nombre de la empresa / razón social <span class="text-danger" aria-hidden="true">*</span></label>
-                        <input class="hr-input @error('razon_social') is-invalid @enderror" id="razon_social" name="razon_social" value="{{ old('razon_social') }}" maxlength="255" autocomplete="organization" required>
-                        @error('razon_social')<div class="form-hint error">{{ $message }}</div>@enderror
+                        <label class="form-label-hr" for="nombre">Nombre de la empresa <span class="text-danger" aria-hidden="true">*</span></label>
+                        <input class="hr-input @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre') }}" maxlength="255" autocomplete="organization" required>
+                        @error('nombre')<div class="form-hint error">{{ $message }}</div>@enderror
                     </div>
                     <div>
-                        <label class="form-label-hr" for="rfc">RFC</label>
+                        <label class="form-label-hr" for="rfc">RFC (opcional, para facturación)</label>
                         <input class="hr-input @error('rfc') is-invalid @enderror" id="rfc" name="rfc" value="{{ old('rfc') }}" minlength="12" maxlength="13" autocomplete="off" autocapitalize="characters">
                         <p class="form-hint">Si lo dejas vacío, asignaremos un RFC provisional que podrás actualizar después.</p>
                         @error('rfc')<div class="form-hint error">{{ $message }}</div>@enderror

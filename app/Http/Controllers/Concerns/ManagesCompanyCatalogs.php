@@ -13,10 +13,10 @@ trait ManagesCompanyCatalogs
         $user = $request->user();
 
         if ((int) $user->profile === 1) {
-            return Empresa::query()->orderBy('razon_social')->get();
+            return Empresa::query()->orderBy('nombre')->get();
         }
 
-        $query = $user->empresas()->orderBy('razon_social');
+        $query = $user->empresas()->orderBy('nombre');
         if ($manageableOnly) {
             $query->wherePivot('control_total', true);
         }

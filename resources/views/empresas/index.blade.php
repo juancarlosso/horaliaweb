@@ -64,8 +64,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Logotipo</th>
-                            <th scope="col">RFC</th>
-                            <th scope="col">Razón social</th>
+                            <th scope="col">Nombre de empresa</th>
                             <th scope="col">Teléfono</th>
                             <th scope="col">Min.Tolerancia</th>
                             <th scope="col">Mts.Tolerancia</th>
@@ -80,33 +79,32 @@
                                     <div class="company-logo">
                                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 21h18M5 21V7l8-4v18m0-12h6v12M8 9v.01M8 12v.01M8 15v.01M8 18v.01M16 13v.01M16 16v.01M16 19v.01"/></svg>
                                         @if($logoUrl)
-                                            <img src="{{ $logoUrl }}" alt="Logotipo de {{ $empresa->razon_social }}" width="42" height="42" loading="lazy" onerror="this.remove()">
+                                            <img src="{{ $logoUrl }}" alt="Logotipo de {{ $empresa->nombre }}" width="42" height="42" loading="lazy" onerror="this.remove()">
                                         @endif
                                     </div>
                                 </td>
-                                <td><span class="company-rfc">{{ $empresa->rfc }}</span></td>
-                                <td><span class="company-name">{{ $empresa->razon_social }}</span></td>
+                                <td><span class="company-name">{{ $empresa->nombre }}</span></td>
                                 <td>{{ $empresa->telefono ?: '—' }}</td>
                                 <td>{{ $empresa->minutos_tolerancia_entrada }}</td>
                                 <td>{{ $empresa->metros_distancia_entrada }}</td>
                                 <td>
                                     <div class="company-actions">
                                         @if($isAdmin || in_array($empresa->id, $manageableIds, true))
-                                            <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('empresas.edit', $empresa) }}" aria-label="Editar {{ $empresa->razon_social }}" title="Editar">
+                                            <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('empresas.edit', $empresa) }}" aria-label="Editar {{ $empresa->nombre }}" title="Editar">
                                                 <i class="fa-light fa-pen-to-square" aria-hidden="true"></i>
                                                 Editar
                                             </a>
                                             @if($empresa->personal_count === 0)
-                                                <form method="POST" action="{{ route('empresas.destroy', $empresa) }}" data-company-delete data-company-name="{{ $empresa->razon_social }}">
+                                                <form method="POST" action="{{ route('empresas.destroy', $empresa) }}" data-company-delete data-company-name="{{ $empresa->nombre }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" aria-label="Eliminar {{ $empresa->razon_social }}" title="Eliminar">
+                                                    <button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" aria-label="Eliminar {{ $empresa->nombre }}" title="Eliminar">
                                                         <i class="fa-light fa-trash-can" aria-hidden="true"></i>
                                                         Eliminar
                                                     </button>
                                                 </form>
                                             @else
-                                                <button class="btn-hr btn-danger-hr btn-sm-hr" type="button" data-company-history-modal aria-haspopup="dialog" aria-controls="company-history-modal" aria-label="Eliminar {{ $empresa->razon_social }}" title="Eliminar">
+                                                <button class="btn-hr btn-danger-hr btn-sm-hr" type="button" data-company-history-modal aria-haspopup="dialog" aria-controls="company-history-modal" aria-label="Eliminar {{ $empresa->nombre }}" title="Eliminar">
                                                     <i class="fa-light fa-trash-can" aria-hidden="true"></i>
                                                     Eliminar
                                                 </button>

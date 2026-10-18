@@ -16,7 +16,7 @@ class PaymentHistoryController extends Controller
         $user = $request->user();
         abort_unless((int) $user->profile === 2, 403);
 
-        $companies = $user->empresas()->orderBy('empresas.razon_social')->get(['empresas.id', 'empresas.razon_social']);
+        $companies = $user->empresas()->orderBy('empresas.nombre')->get(['empresas.id', 'empresas.nombre']);
         $companyIds = $companies->modelKeys();
         $filters = $request->validate([
             'estado' => ['nullable', 'in:exitosos,fallidos'],
@@ -28,7 +28,7 @@ class PaymentHistoryController extends Controller
         $filters['hasta'] = $filters['hasta'] ?? today()->toDateString();
 
         $payments = IntentoPago::query()
-            ->with(['empresa:id,razon_social', 'facturaEmitida:id,intento_pago_id,serie,folio,uuid,estado,xml_path,pdf_path'])
+            ->with(['empresa:id,nombre', 'facturaEmitida:id,intento_pago_id,serie,folio,uuid,estado,xml_path,pdf_path'])
             ->whereIn('empresa_id', $companyIds)
             ->when($filters['empresa_id'] ?? null, fn ($query, $companyId) => $query->where('empresa_id', $companyId))
             ->when(($filters['estado'] ?? null) === 'exitosos', fn ($query) => $query->where('resultado', 'exitoso'))
@@ -56,7 +56,7 @@ class PaymentHistoryController extends Controller
 
         $companyIds = $user->empresas()->pluck('empresas.id');
         $record = IntentoPago::query()
-            ->with('empresa:id,razon_social')
+            ->with('empresa:id,nombre')
             ->whereIn('empresa_id', $companyIds)
             ->findOrFail($payment);
 
@@ -231,10 +231,13 @@ class PaymentHistoryController extends Controller
     private function invoiceCompanyValidationErrors(Empresa $empresa): array
     {
         $errors = [];
+        if (trim((string) $empresa->razon_social) === '') {
+            $errors[] = 'No es posible generar la factura porque la razón social fiscal no está capturada.';
+        }
         $rfc = mb_strtoupper(trim((string) $empresa->rfc), 'UTF-8');
 
-        if (preg_match('/^[A-ZÑ&]{3,4}[0-9]{6}[A-Z0-9]{3}$/u', $rfc) !== 1) {
-            $errors[] = 'No es posible generar la factura porque el RFC de la empresa no está capturado o tiene un formato inválido (12 o 13 caracteres).';
+        if (preg_match('/^[A-ZÑ&]{3,4}[0-9]{6}[A-Z0-9]{3}$/u', $rfc) !== 1 || str_starts_with($rfc, 'FAL')) {
+            $errors[] = 'No es posible generar la factura porque el RFC fiscal no está capturado, es provisional o tiene un formato inválido (12 o 13 caracteres).';
         }
 
         $regimenesFiscales = config('constantes.regimenes_fiscales', []);

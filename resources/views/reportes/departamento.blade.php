@@ -45,7 +45,7 @@
                 <div class="department-report-filter"><label for="empresa_id">Empresa <span class="text-danger">*</span></label>
                     <select id="empresa_id" name="empresa_id" class="hr-input select2" required data-placeholder="Selecciona una empresa">
                         @if($companies->count() !== 1)<option value="">Selecciona una empresa</option>@endif
-                        @foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) $selectedCompanyId === (string) $company->id)>{{ $company->razon_social }}</option>@endforeach
+                        @foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) $selectedCompanyId === (string) $company->id)>{{ $company->nombre }}</option>@endforeach
                     </select>
                 </div>
                 <div class="department-report-filter"><label for="desde">Desde <span class="text-danger">*</span></label><input class="hr-input" id="desde" name="desde" type="date" value="{{ $startDate }}" required></div>

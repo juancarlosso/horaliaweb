@@ -24,7 +24,7 @@
     <header class="payment-attempts-heading">
         <div>
             <h1>Intentos de pago</h1>
-            <p>{{ $empresa->razon_social ?: 'Empresa #' . $empresa->id }} · {{ $attempts->total() }} {{ $attempts->total() === 1 ? 'intento registrado' : 'intentos registrados' }}</p>
+            <p>{{ $empresa->nombre ?: 'Empresa #' . $empresa->id }} · {{ $attempts->total() }} {{ $attempts->total() === 1 ? 'intento registrado' : 'intentos registrados' }}</p>
         </div>
         <a class="btn-hr btn-outline-hr" href="{{ route('empresas.index') }}">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7"/></svg>
@@ -35,7 +35,7 @@
     <div class="card-hr">
         <div class="card-hd">
             <div>
-                <h2 class="card-title-hr">Historial de {{ $empresa->razon_social ?: 'la empresa' }}</h2>
+                <h2 class="card-title-hr">Historial de {{ $empresa->nombre ?: 'la empresa' }}</h2>
             </div>
         </div>
         @if($attempts->count())

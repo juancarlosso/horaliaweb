@@ -32,7 +32,7 @@
             <h1>{{ $typeInfo['title'] }}</h1>
             <p>{{ $typeInfo['description'] }}</p>
             <div class="department-detail-context">
-                <span>Empresa: <strong>{{ $company->razon_social }}</strong></span>
+                <span>Empresa: <strong>{{ $company->nombre }}</strong></span>
                 <span>Periodo: <strong>{{ \Carbon\Carbon::parse($filters['desde'])->format('d/m/Y') }} – {{ \Carbon\Carbon::parse($filters['hasta'])->format('d/m/Y') }}</strong></span>
                 @if($department)<span>Departamento: <strong>{{ $department->nombre }}</strong></span>@elseif($withoutDepartment)<span><strong>Sin departamento</strong></span>@endif
             </div>
@@ -52,7 +52,7 @@
                         $outOfRange = $record->rango_entrada === 'Fuera de rango' || $record->rango_salida === 'Fuera de rango';
                     @endphp
                     <tr>
-                        <td class="department-detail-person"><strong>{{ $employee?->nombre ?? '—' }}</strong><small>{{ $company->razon_social }}</small></td>
+                        <td class="department-detail-person"><strong>{{ $employee?->nombre ?? '—' }}</strong><small>{{ $company->nombre }}</small></td>
                         <td>{{ $employee?->departamento?->nombre ?? 'Sin departamento' }}</td>
                         <td>{{ $record->fecha?->format('d/m/Y') ?? '—' }}</td>
                         <td>{{ $record->llegada?->format('H:i') ?? '—' }}</td>

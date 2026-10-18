@@ -15,7 +15,7 @@ class PaymentMethodController extends Controller
     public function index(Request $request, StripeCardService $stripe)
     {
         $this->authorizeProfile($request);
-        $empresas = $request->user()->empresas()->orderBy('razon_social')->get();
+        $empresas = $request->user()->empresas()->orderBy('nombre')->get();
         $empresaId = $request->integer('empresa_id');
         $empresa = $empresas->firstWhere('id', $empresaId) ?? ($empresas->count() === 1 ? $empresas->first() : null);
         $cards = [];

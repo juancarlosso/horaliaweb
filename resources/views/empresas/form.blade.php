@@ -66,17 +66,12 @@
                 </div>
 
                 <div class="row g-3">
-                    <div class="col-lg-4 col-md-6 company-form-field">
-                        <label class="form-label-hr" for="rfc">RFC <span class="text-danger" aria-hidden="true">*</span></label>
-                        <input class="hr-input @error('rfc') company-form-input-error @enderror" id="rfc" name="rfc" type="text" value="{{ old('rfc', $empresa->rfc) }}" minlength="12" maxlength="13" required autocomplete="off">
-                        @error('rfc') <span class="company-form-error">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="col-lg-8 col-md-6 company-form-field">
-                        <label class="form-label-hr" for="razon_social">Razón social <span class="text-danger" aria-hidden="true">*</span></label>
-                        <input class="hr-input @error('razon_social') company-form-input-error @enderror" id="razon_social" name="razon_social" type="text" value="{{ old('razon_social', $empresa->razon_social) }}" maxlength="255" required autocomplete="organization">
-                        @error('razon_social') <span class="company-form-error">{{ $message }}</span> @enderror
-                    </div>
                     <div class="col-lg-6 col-md-12 company-form-field">
+                        <label class="form-label-hr" for="nombre">Nombre de empresa <span class="text-danger" aria-hidden="true">*</span></label>
+                        <input class="hr-input @error('nombre') company-form-input-error @enderror" id="nombre" name="nombre" type="text" value="{{ old('nombre', $empresa->nombre ?? $empresa->razon_social) }}" maxlength="255" required autocomplete="organization">
+                        @error('nombre') <span class="company-form-error">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="col-lg-4 col-md-6 company-form-field">
                         <label class="form-label-hr" for="telefono">Teléfono</label>
                         <input class="hr-input @error('telefono') company-form-input-error @enderror" id="telefono" name="telefono" type="tel" value="{{ old('telefono', $empresa->telefono) }}" maxlength="100" autocomplete="tel">
                         @error('telefono') <span class="company-form-error">{{ $message }}</span> @enderror
@@ -94,9 +89,20 @@
                 </div>
 
                 <section class="company-form-section" aria-labelledby="fiscal-details-heading">
-                    <h3 id="fiscal-details-heading">Domicilio fiscal</h3>
-                    <p>Completa tus datos fiscales para facilitar la emisión de facturas por tus pagos de Horalia</p>
+                    <h3 id="fiscal-details-heading">Datos de facturación</h3>
+                    <p>Captura estos datos cuando necesites solicitar una factura. La razón social y el nombre de empresa pueden ser distintos.</p>
                     <div class="row g-3">
+                        <div class="col-md-6 company-form-field">
+                            <label class="form-label-hr" for="razon_social">Razón social</label>
+                            <input class="hr-input @error('razon_social') company-form-input-error @enderror" id="razon_social" name="razon_social" type="text" value="{{ old('razon_social', $empresa->razon_social) }}" maxlength="255" autocomplete="organization">
+                            @error('razon_social') <span class="company-form-error">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="col-md-6 company-form-field">
+                            <label class="form-label-hr" for="rfc">RFC</label>
+                            <input class="hr-input @error('rfc') company-form-input-error @enderror" id="rfc" name="rfc" type="text" value="{{ old('rfc', $empresa->rfc) }}" minlength="12" maxlength="13" autocomplete="off">
+                            @if(str_starts_with((string) $empresa->rfc, 'FAL'))<small class="form-text text-muted">RFC provisional del sistema; reemplázalo por el RFC fiscal antes de solicitar factura.</small>@endif
+                            @error('rfc') <span class="company-form-error">{{ $message }}</span> @enderror
+                        </div>
                         @php
                             $fiscalFields = [
                                 'domicilio_calle' => ['Calle', 'text', 255, 'address-line1', 'col-md-8'],

@@ -21,7 +21,8 @@ class RegisterCompanyService
             try {
                 [$empresa, $usuario, $personal] = DB::transaction(function () use ($data) {
                     $empresa = Empresa::create([
-                        'razon_social' => $data['razon_social'],
+                        'nombre' => $data['nombre'],
+                        'razon_social' => null,
                         'rfc' => $data['rfc'] ?: $this->generateUniquePlaceholderRfc(),
                         'activa' => true,
                     ]);
@@ -70,7 +71,7 @@ class RegisterCompanyService
             Mail::to($personal->email, $personal->nombre)->queue(new ChecadorPinMail(
                 recipientName: (string) $personal->nombre,
                 pin: (string) $personal->pin,
-                companyName: (string) $empresa->razon_social,
+                companyName: (string) $empresa->nombre,
             ));
         } catch (\Throwable $exception) {
             report($exception);

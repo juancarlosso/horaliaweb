@@ -27,7 +27,7 @@
                         <label class="form-label-hr" for="empresa_id">Empresa <span class="text-danger" aria-hidden="true">*</span></label>
                         <select class="hr-input select2 @error('empresa_id') catalog-input-error @enderror" id="empresa_id" name="empresa_id" required>
                             <option value="">Selecciona una empresa</option>
-                            @foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) old('empresa_id', $departamento->empresa_id ?? $selectedCompanyId ?? request('empresa_id')) === (string) $company->id)>{{ $company->razon_social }}</option>@endforeach
+                            @foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) old('empresa_id', $departamento->empresa_id ?? $selectedCompanyId ?? request('empresa_id')) === (string) $company->id)>{{ $company->nombre }}</option>@endforeach
                         </select>
                         @error('empresa_id')<span class="catalog-field-error">{{ $message }}</span>@enderror
                     </div>

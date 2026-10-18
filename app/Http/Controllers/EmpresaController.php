@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use Throwable;
 
 class EmpresaController extends Controller
@@ -23,7 +24,7 @@ class EmpresaController extends Controller
         if (!$isAdmin) {
             $query->whereHas('usuarios', fn ($users) => $users->where('users.id', $user->id));
         }
-        $empresas = $query->orderBy('razon_social')->paginate(config('constantes.itemsPorPagina'));
+        $empresas = $query->orderBy('nombre')->paginate(config('constantes.itemsPorPagina'));
         $manageableIds = $isAdmin
             ? []
             : $user->empresas()->wherePivot('control_total', true)->pluck('empresas.id')->map(fn ($id) => (int) $id)->all();
@@ -240,11 +241,12 @@ class EmpresaController extends Controller
         $regimenes = config('constantes.regimenes_fiscales');
 
         $data = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
             'rfc' => [
-                'required', 'string', 'min:12', 'max:13',
+                'nullable', 'string', 'min:12', 'max:13',
                 $uniqueRfc,
             ],
-            'razon_social' => ['required', 'string', 'max:255'],
+            'razon_social' => ['nullable', 'string', 'max:255'],
             'domicilio_calle' => ['nullable', 'string', 'max:255'],
             'domicilio_numero_exterior' => ['nullable', 'string', 'max:30'],
             'domicilio_numero_interior' => ['nullable', 'string', 'max:30'],
@@ -260,10 +262,9 @@ class EmpresaController extends Controller
             'metros_distancia_entrada' => ['required', 'integer', 'min:1'],
             'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ], [
-            'rfc.required' => 'Escribe el RFC de la empresa.',
+            'nombre.required' => 'Escribe el nombre de la empresa.',
             'rfc.min' => 'El RFC debe tener entre 12 y 13 caracteres.',
             'rfc.max' => 'El RFC debe tener entre 12 y 13 caracteres.',
-            'razon_social.required' => 'Escribe la razón social.',
             'rfc.unique' => 'Ya existe una empresa con ese RFC.',
             'razon_social.max' => 'La razón social no puede exceder 255 caracteres.',
             'domicilio_calle.max' => 'La calle no puede exceder 255 caracteres.',
@@ -289,8 +290,12 @@ class EmpresaController extends Controller
             'logo.max' => 'El logotipo no puede pesar más de 5 MB.',
         ]);
 
-        $data['rfc'] = mb_strtoupper(trim($data['rfc']));
-        $data['razon_social'] = trim($data['razon_social']);
+        $data['nombre'] = trim($data['nombre']);
+        $data['rfc'] = isset($data['rfc']) && trim($data['rfc']) !== '' ? mb_strtoupper(trim($data['rfc'])) : null;
+        if (!$data['rfc']) {
+            $data['rfc'] = $empresa?->rfc ?: $this->generatePlaceholderRfc();
+        }
+        $data['razon_social'] = isset($data['razon_social']) && trim($data['razon_social']) !== '' ? trim($data['razon_social']) : null;
         foreach (['domicilio_calle', 'domicilio_numero_exterior', 'domicilio_numero_interior', 'domicilio_colonia', 'domicilio_codigo_postal', 'domicilio_municipio', 'domicilio_ciudad', 'domicilio_estado', 'regimen_fiscal', 'correo_facturacion'] as $field) {
             if (isset($data[$field]) && is_string($data[$field])) {
                 $data[$field] = trim($data[$field]) === '' ? null : trim($data[$field]);
@@ -299,6 +304,15 @@ class EmpresaController extends Controller
         unset($data['logo']);
 
         return $data;
+    }
+
+    private function generatePlaceholderRfc(): string
+    {
+        do {
+            $rfc = 'FAL' . now()->format('ymd') . Str::upper(Str::random(3));
+        } while (Empresa::query()->where('rfc', $rfc)->exists());
+
+        return $rfc;
     }
 
     private function authorizeCompanyCreation(Request $request): void

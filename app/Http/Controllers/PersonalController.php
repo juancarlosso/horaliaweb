@@ -144,7 +144,7 @@ class PersonalController extends Controller
             Mail::to($empleado->email, $empleado->nombre)->queue(new ChecadorPinMail(
                 recipientName: (string) $empleado->nombre,
                 pin: (string) $empleado->pin,
-                companyName: (string) ($empleado->empresa?->razon_social ?? config('app.name', 'Horalia')),
+                companyName: (string) ($empleado->empresa?->nombre ?? config('app.name', 'Horalia')),
             ));
         } catch (Throwable $exception) {
             report($exception);
@@ -342,7 +342,7 @@ class PersonalController extends Controller
             Mail::to($empleado->email, $empleado->nombre)->queue(new ChecadorPinMail(
                 recipientName: (string) $empleado->nombre,
                 pin: (string) $empleado->pin,
-                companyName: (string) ($empleado->empresa?->razon_social ?? config('app.name', 'Horalia')),
+                companyName: (string) ($empleado->empresa?->nombre ?? config('app.name', 'Horalia')),
             ));
         } catch (Throwable $exception) {
             report($exception);

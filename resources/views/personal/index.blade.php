@@ -39,7 +39,7 @@
             <label for="empresa_id">Empresa</label>
             <select class="hr-input select2" id="empresa_id" name="empresa_id">
                 @if($companies->count() !== 1)<option value="0" @selected(!$selectedCompanyId)>Todas las empresas</option>@endif
-                @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->razon_social }}</option>@endforeach
+                @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
             </select>
         </div>
         @if($canCreate)<a class="btn-hr btn-primary-hr personal-toolbar-action" href="{{ route('personal.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="fa-light fa-plus" aria-hidden="true"></i> Agregar personal</a>@endif
@@ -59,7 +59,7 @@
                     <tr>
                         <td><div class="personal-person-cell"><div class="personal-avatar"><span>{{ $initial }}</span>@if($photoUrl)<img src="{{ $photoUrl }}" alt="" loading="lazy" onerror="this.remove()">@endif</div><div><div class="personal-name">{{ $empleado->nombre }} @unless($empleado->activo)<span class="company-rfc"> · Dado de baja</span>@endunless</div><div class="personal-code">{{ $empleado->codigo ?: 'Sin código' }}@if($empleado->fecha_baja) · Baja {{ $empleado->fecha_baja->format('d/m/Y H:i') }}@endif</div></div></div></td>
                         <td>{{ $empleado->email ?: '—' }}</td>
-                        <td>{{ $empleado->empresa?->razon_social ?? '—' }}</td>
+                        <td>{{ $empleado->empresa?->nombre ?? '—' }}</td>
                         <td>{{ $empleado->centro?->nombre ?? '—' }}</td>
                         <td>{{ $empleado->sexo ? ucfirst($empleado->sexo) : '—' }}</td>
                         <td><div class="personal-actions">

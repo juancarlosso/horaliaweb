@@ -15,7 +15,7 @@ class SubscriptionController extends Controller
         $user = $request->user();
         abort_unless((int) $user->profile === 2, 403);
 
-        $companies = $user->empresas()->orderBy('empresas.razon_social')->get();
+        $companies = $user->empresas()->orderBy('empresas.nombre')->get();
         $data = $request->validate([
             'empresa_id' => ['nullable', 'integer', Rule::in($companies->modelKeys())],
         ]);

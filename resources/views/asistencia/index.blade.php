@@ -120,7 +120,7 @@
             <div class="attendance-filter"><label for="empresa_id">Empresa</label>
                 <select class="hr-input select2" id="empresa_id" name="empresa_id">
                     @if($companies->count() !== 1)<option value="0" @selected(!$selectedCompanyId)>Todas las empresas</option>@endif
-                    @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->razon_social }}</option>@endforeach
+                    @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
                 </select>
             </div>
         @endif
@@ -143,7 +143,7 @@
                         $initial = mb_strtoupper(mb_substr(trim($employee?->nombre ?? ''), 0, 1)) ?: 'P';
                     @endphp
                     <tr>
-                        <td><div class="attendance-user"><div class="attendance-avatar"><span>{{ $initial }}</span>@if($photoUrl)<img src="{{ $photoUrl }}" alt="" loading="lazy" onerror="this.remove()">@endif</div><div><div class="attendance-user-name">{{ $employee?->nombre ?? 'No disponible' }}</div><div class="attendance-user-company">{{ $employee?->empresa?->razon_social ?? '—' }}</div></div></div></td>
+                        <td><div class="attendance-user"><div class="attendance-avatar"><span>{{ $initial }}</span>@if($photoUrl)<img src="{{ $photoUrl }}" alt="" loading="lazy" onerror="this.remove()">@endif</div><div><div class="attendance-user-name">{{ $employee?->nombre ?? 'No disponible' }}</div><div class="attendance-user-company">{{ $employee?->empresa?->nombre ?? '—' }}</div></div></div></td>
                         <td>{{ $record->fecha?->format('d/m/Y') ?? '—' }}</td>
                         <td><div class="attendance-time-cell"><span>{{ $record->llegada?->format('H:i') ?? '—' }}</span>
                             @if($entryEvidenceUrl)<a class="attendance-icon-action" href="{{ $entryEvidenceUrl }}" target="_blank" rel="noopener" title="Ver foto de entrada" aria-label="Ver foto de entrada de {{ $employee?->nombre }}"><i class="fa-light fa-camera" aria-hidden="true"></i></a>@endif

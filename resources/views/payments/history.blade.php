@@ -31,7 +31,7 @@
     <div class="card-hr">
         <form class="payment-filters" method="GET" action="{{ route('payment-history.index') }}">
             <label>Empresa
-                <select class="hr-input select2" id="empresa_id" name="empresa_id" aria-label="Empresa"><option value="">Todas las empresas</option>@foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) ($filters['empresa_id'] ?? '') === (string) $company->id)>{{ $company->razon_social ?: 'Empresa #' . $company->id }}</option>@endforeach</select>
+                <select class="hr-input select2" id="empresa_id" name="empresa_id" aria-label="Empresa"><option value="">Todas las empresas</option>@foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) ($filters['empresa_id'] ?? '') === (string) $company->id)>{{ $company->nombre ?: 'Empresa #' . $company->id }}</option>@endforeach</select>
             </label>
             <label>Estado
                 <select class="hr-input select2" id="estado" name="estado" aria-label="Estado"><option value="">Todos</option><option value="exitosos" @selected(($filters['estado'] ?? '') === 'exitosos')>Exitosos</option><option value="fallidos" @selected(($filters['estado'] ?? '') === 'fallidos')>Fallidos</option></select>
@@ -50,7 +50,7 @@
                     <tr>
                         <td>{{ $payment->resultado === 'exitoso' ? ($payment->folio ?: '—') : '—' }}</td>
                         <td>{{ $payment->intentado_en?->format('d/m/Y H:i') ?? '—' }}</td>
-                        <td>{{ $payment->empresa?->razon_social ?: 'Empresa #' . $payment->empresa_id }}</td>
+                        <td>{{ $payment->empresa?->nombre ?: 'Empresa #' . $payment->empresa_id }}</td>
                         <td>{{ $payment->concepto }}</td>
                         <td>${{ number_format((float) $payment->cantidad, 2) }} {{ strtoupper($payment->moneda) }}</td>
                         <td><span class="payment-status {{ $statusClass }}">{{ $statusLabel }}</span></td>

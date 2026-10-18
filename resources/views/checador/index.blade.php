@@ -29,7 +29,7 @@
         <div class="card-bd">
             <form method="POST" action="{{ route('checador.store') }}" class="d-grid gap-3">
                 @csrf
-                <div><label class="form-label-hr" for="empresa_id">Empresa</label><select class="hr-input select2" id="empresa_id" name="empresa_id" required><option value="">Selecciona una empresa</option>@foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) old('empresa_id', $selectedCompanyId) === (string) $company->id)>{{ $company->razon_social }}</option>@endforeach</select></div>
+                <div><label class="form-label-hr" for="empresa_id">Empresa</label><select class="hr-input select2" id="empresa_id" name="empresa_id" required><option value="">Selecciona una empresa</option>@foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) old('empresa_id', $selectedCompanyId) === (string) $company->id)>{{ $company->nombre }}</option>@endforeach</select></div>
                 <div><label class="form-label-hr" for="duracion_dias">Vigencia de la sesión</label><select class="hr-input select2" id="duracion_dias" name="duracion_dias" required>@for($days = 1; $days <= 7; $days++)<option value="{{ $days }}" @selected((int) old('duracion_dias', 1) === $days)>{{ $days }} {{ $days === 1 ? 'día' : 'días' }}</option>@endfor</select></div>
                 <p class="kiosk-note">Abre el enlace generado en la tablet de la empresa. El enlace puede activarse una sola vez durante los siguientes 15 minutos; después, la sesión durará el periodo seleccionado.</p>
                 <div><button class="btn-hr btn-primary-hr" type="submit"><i class="fa-light fa-link" aria-hidden="true"></i> Generar enlace del checador</button></div>
@@ -39,13 +39,13 @@
                     @php($activationUrl = $activationSession->activation_url)
                     @php($activationInputId = 'activation-url-' . $activationSession->id)
                     <div class="kiosk-link-result">
-                        <label for="{{ $activationInputId }}">{{ $activationSession->empresa->razon_social }}</label>
+                        <label for="{{ $activationInputId }}">{{ $activationSession->empresa->nombre }}</label>
                         <p class="kiosk-link-status">{{ $activationSession->link_status }}</p>
                         <div class="d-flex gap-2 flex-wrap">
                             <input class="hr-input flex-grow-1" id="{{ $activationInputId }}" type="url" readonly value="{{ $activationUrl }}">
                             <button class="btn-hr btn-outline-hr" type="button" data-copy-activation-url data-target="{{ $activationInputId }}">Copiar enlace</button>
                             <a class="btn-hr btn-primary-hr" href="{{ $activationUrl }}" target="_blank" rel="noopener">Abrir</a>
-                            <button class="btn-hr btn-outline-hr" type="button" data-open-kiosk-email data-email-url="{{ route('checador.email', $activationSession->id) }}" data-company="{{ $activationSession->empresa->razon_social }}"><i class="fa-light fa-envelope" aria-hidden="true"></i> Enviar por correo</button>
+                            <button class="btn-hr btn-outline-hr" type="button" data-open-kiosk-email data-email-url="{{ route('checador.email', $activationSession->id) }}" data-company="{{ $activationSession->empresa->nombre }}"><i class="fa-light fa-envelope" aria-hidden="true"></i> Enviar por correo</button>
                         </div>
                     </div>
                 @empty

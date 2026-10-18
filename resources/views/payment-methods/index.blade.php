@@ -52,7 +52,7 @@
                     <select class="hr-input select2" id="empresa_id" name="empresa_id" onchange="this.form.submit()" required>
                         <option value="" disabled @selected(!$empresa)>Selecciona una empresa</option>
                         @foreach($empresas as $item)
-                            <option value="{{ $item->id }}" @selected($empresa?->id === $item->id)>{{ $item->razon_social ?: 'Empresa #' . $item->id }}</option>
+                            <option value="{{ $item->id }}" @selected($empresa?->id === $item->id)>{{ $item->nombre ?: 'Empresa #' . $item->id }}</option>
                         @endforeach
                     </select>
                 </form>

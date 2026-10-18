@@ -1,6 +1,6 @@
 Hola,
 
-Adjuntamos el XML timbrado y el PDF de tu pago de membresía de {{ $empresa?->razon_social ?: $appName }}.
+Adjuntamos el XML timbrado y el PDF de tu pago de membresía de {{ $empresa?->nombre ?: $appName }}.
 
 Serie y folio: {{ $factura->serie }}-{{ $factura->folio }}
 UUID: {{ $factura->uuid }}

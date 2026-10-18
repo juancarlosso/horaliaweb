@@ -109,7 +109,7 @@ class AsistenciaReporteExport
         $xml->endElement();
         $xml->startElement('sheetData');
 
-        $companyName = $company->razon_social;
+        $companyName = $company->nombre;
         $headerOffset = $hasLogo ? 3 : 0;
         $fiscalLines = $this->fiscalDetailLines($company);
         $headerRows = [1 => ['REPORTE DE ASISTENCIA', 1], 2 => [$companyName, 2]];

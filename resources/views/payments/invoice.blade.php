@@ -71,7 +71,7 @@
         <div class="invoice-summary-meta">
             <div><span>Folio del pago</span><strong>{{ $payment->folio ?: '—' }}</strong></div>
             <div><span>Fecha y hora</span><strong>{{ $payment->intentado_en?->format('d/m/Y H:i') ?? '—' }}</strong></div>
-            <div><span>Empresa</span><strong>{{ $payment->empresa?->razon_social ?: 'Empresa #' . $payment->empresa_id }}</strong></div>
+            <div><span>Empresa</span><strong>{{ $payment->empresa?->nombre ?: 'Empresa #' . $payment->empresa_id }}</strong></div>
         </div>
         <div class="table-wrap">
             <table class="invoice-summary-table">

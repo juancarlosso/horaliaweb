@@ -136,7 +136,7 @@ class ChecadorController extends Controller
 
         try {
             Mail::to($recipients)->queue(new ChecadorActivationLinkMail(
-                companyName: (string) $activationSession->empresa->razon_social,
+                companyName: (string) $activationSession->empresa->nombre,
                 activationUrl: $activationUrl,
                 durationDays: (int) $activationSession->duracion_dias,
                 expiresAt: $activationSession->activated_at

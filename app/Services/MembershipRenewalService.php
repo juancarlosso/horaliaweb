@@ -454,7 +454,7 @@ class MembershipRenewalService
                 Mail::to($administrator->email, $administrator->name)->queue(new MembershipRenewalMail(
                     type: $type,
                     recipientName: (string) $administrator->name,
-                    companyName: (string) ($empresa->razon_social ?: 'tu empresa'),
+                    companyName: (string) ($empresa->nombre ?: 'tu empresa'),
                     amount: number_format((float) $amount, 2),
                     renewalDate: $renewalDate,
                 ));

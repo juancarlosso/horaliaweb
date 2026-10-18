@@ -10,13 +10,14 @@ use App\Models\Personal;
 use App\Services\AttendanceLocationService;
 use App\Services\AttendancePhotoService;
 use App\Services\RegistroAsistenciaService;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Mail;
+use App\Support\HoraliaTimezones;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
@@ -63,8 +64,8 @@ class ChecadorController extends Controller
                     ['session' => $session->id],
                 );
                 $session->link_status = $session->activated_at
-                    ? 'Sesión activa hasta ' . $session->expires_at?->timezone(config('app.timezone'))->format('d/m/Y H:i')
-                    : 'Pendiente de activar · duración: ' . $session->duracion_dias . ' ' . ($session->duracion_dias === 1 ? 'día' : 'días');
+                    ? 'Sesión activa hasta '.$session->expires_at?->timezone(config('app.timezone'))->format('d/m/Y H:i')
+                    : 'Pendiente de activar · duración: '.$session->duracion_dias.' '.($session->duracion_dias === 1 ? 'día' : 'días');
 
                 return $session;
             });
@@ -97,6 +98,7 @@ class ChecadorController extends Controller
             'token_hash' => hash('sha256', $token),
             'duracion_dias' => $data['duracion_dias'],
         ]);
+
         return redirect()->route('checador.index');
     }
 
@@ -118,7 +120,7 @@ class ChecadorController extends Controller
             ->whereHas('empresa', fn ($query) => $query->where('activa', true))
             ->findOrFail($session);
 
-        $isPending = !$activationSession->activated_at
+        $isPending = ! $activationSession->activated_at
             && $activationSession->created_at?->gte(now()->subMinutes(15));
         $isActive = $activationSession->activated_at
             && $activationSession->expires_at?->isFuture();
@@ -156,7 +158,7 @@ class ChecadorController extends Controller
     public function activate(Request $request, int $session)
     {
         $session = ChecadorSesion::query()->with(['empresa', 'centro'])->findOrFail($session);
-        abort_unless($session->empresa?->activa && (!$session->centro_id || $session->centro?->activo), 403, 'La empresa o el centro de trabajo no está disponible.');
+        abort_unless($session->empresa?->activa && (! $session->centro_id || $session->centro?->activo), 403, 'La empresa o el centro de trabajo no está disponible.');
         if ($session->activated_at) {
             abort_unless($session->expires_at?->isFuture(), 410, 'Esta sesión de checador expiró.');
         } else {
@@ -187,12 +189,12 @@ class ChecadorController extends Controller
         $session = $request->attributes->get('checadorSesion');
         $personal = $this->personalForSession($session, $data['pin']);
 
-        if (!$personal) {
+        if (! $personal) {
             throw ValidationException::withMessages(['pin' => 'PIN no reconocido.']);
         }
 
         try {
-            if (!$locations->parseCoordinates($personal->centro?->geolocalizacion)) {
+            if (! $locations->parseCoordinates($personal->centro?->geolocalizacion)) {
                 throw ValidationException::withMessages(['pin' => 'El centro de trabajo no tiene geolocalización configurada. Contacta a tu administrador.']);
             }
             $scope = $this->expectedScope($session);
@@ -206,6 +208,7 @@ class ChecadorController extends Controller
             ], now()->addMinutes(2));
         } catch (ValidationException $exception) {
             $message = $exception->errors()['pin'][0] ?? 'No se pudo registrar la asistencia.';
+
             return response()->json(['message' => $message], 422);
         }
 
@@ -229,17 +232,17 @@ class ChecadorController extends Controller
         /** @var ChecadorSesion $session */
         $session = $request->attributes->get('checadorSesion');
         $verification = Cache::pull($this->verificationCacheKey($data['proof']));
-        if (!is_array($verification)
+        if (! is_array($verification)
             || (int) ($verification['session_id'] ?? 0) !== (int) $session->id
-            || !hash_equals((string) ($verification['pin_hash'] ?? ''), hash('sha256', $data['pin']))) {
+            || ! hash_equals((string) ($verification['pin_hash'] ?? ''), hash('sha256', $data['pin']))) {
             return response()->json(['message' => 'La validación del PIN venció. Inténtalo de nuevo.'], 422);
         }
 
         $personal = $this->personalForSession($session, $data['pin']);
-        if (!$personal || (int) $personal->id !== (int) ($verification['personal_id'] ?? 0)) {
+        if (! $personal || (int) $personal->id !== (int) ($verification['personal_id'] ?? 0)) {
             return response()->json(['message' => 'PIN no reconocido.'], 422);
         }
-        if (!$locations->parseCoordinates($personal->centro?->geolocalizacion)) {
+        if (! $locations->parseCoordinates($personal->centro?->geolocalizacion)) {
             return response()->json(['message' => 'El centro de trabajo no tiene geolocalización configurada. Contacta a tu administrador.'], 422);
         }
 
@@ -280,7 +283,7 @@ class ChecadorController extends Controller
             'message' => $kind === 'entrada' ? 'Entrada registrada' : 'Salida registrada',
             'kind' => $kind,
             'employee' => $personal->nombre,
-            'time' => now()->format('H:i'),
+            'time' => now()->setTimezone(HoraliaTimezones::forCenter($personal->centro?->timezone))->format('H:i'),
         ]);
     }
 
@@ -306,6 +309,6 @@ class ChecadorController extends Controller
 
     private function verificationCacheKey(string $proof): string
     {
-        return 'checador:pin-proof:' . hash('sha256', $proof);
+        return 'checador:pin-proof:'.hash('sha256', $proof);
     }
 }

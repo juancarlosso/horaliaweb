@@ -55,7 +55,20 @@
                         </div>
                         @error('geolocalizacion')<span class="catalog-field-error">{{ $message }}</span>@enderror
                     </div>
+                    <div class="col-lg-6 col-md-8">
+                        <label class="form-label-hr" for="timezone">Zona horaria <span class="text-danger" aria-hidden="true">*</span></label>
+                        <select class="hr-input select2 @error('timezone') catalog-input-error @enderror" id="timezone" name="timezone" required>
+                            @foreach($timezones as $identifier => $label)
+                                <option value="{{ $identifier }}" @selected(old('timezone', $centro->timezone ?: \App\Support\HoraliaTimezones::DEFAULT) === $identifier)>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        @error('timezone')<span class="catalog-field-error">{{ $message }}</span>@enderror
+                        <p class="catalog-help">La hora oficial de asistencia se calcula con esta zona horaria.</p>
+                    </div>
                 </div>
+                @if($isEdit)
+                    <div class="alert alert-info mt-3 mb-0" role="note"><strong>Importante:</strong> La zona horaria seleccionada se aplicará únicamente a los nuevos movimientos de asistencia. Los registros anteriores conservarán sus fechas y horas originales.</div>
+                @endif
                 <div class="catalog-form-actions">
                     <button class="btn-hr btn-primary-hr" type="submit"><i class="fa-light fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar centro' }}</button>
                     <a class="btn-hr btn-outline-hr" href="{{ route('centros.index', $centro->empresa_id ? ['empresa_id' => $centro->empresa_id] : []) }}">Cancelar</a>

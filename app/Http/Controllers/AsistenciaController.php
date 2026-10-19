@@ -59,8 +59,11 @@ class AsistenciaController extends Controller
             ->withQueryString();
 
         $canMarkAttendance = $personal && $personal->empresa?->activa && in_array($personal->empresa_id, $companyIds, true);
+        $attendanceTimezone = $canMarkAttendance
+            ? HoraliaTimezones::forCenter($personal->centro?->timezone)
+            : config('app.timezone');
         $localNow = $canMarkAttendance
-            ? now('UTC')->setTimezone(HoraliaTimezones::forCenter($personal->centro?->timezone))
+            ? now('UTC')->setTimezone($attendanceTimezone)
             : null;
         $todayAttendance = $canMarkAttendance
             ? Asistencia::query()->where('personal_id', $personal->id)->whereDate('fecha', $localNow->toDateString())->first()
@@ -87,6 +90,7 @@ class AsistenciaController extends Controller
             'periodLabel' => $periodLabel,
             'attendance' => $attendance,
             'personal' => $personal,
+            'attendanceTimezone' => $attendanceTimezone,
             'todayAttendance' => $todayAttendance,
             'todaySchedule' => $todaySchedule,
             'overnightAttendance' => $overnightAttendance,

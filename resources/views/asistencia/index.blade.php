@@ -99,8 +99,8 @@
         <article class="card-hr attendance-today">
             <div class="card-hd"><h2 class="card-title-hr">{{ $overnightAttendance && !$todayAttendance ? 'Mi jornada pendiente' : 'Mi asistencia de hoy' }}</h2></div>
             <div class="attendance-today-body">
-                <div class="attendance-live-clock" id="attendance-live-clock" data-now="{{ now()->toIso8601String() }}" data-timezone="{{ config('app.timezone') }}">{{ now()->format('h:i:s A') }}</div>
-                <div class="attendance-live-date" id="attendance-live-date">{{ now()->locale('es_MX')->translatedFormat('l, d \\d\\e F \\d\\e Y') }}</div>
+                <div class="attendance-live-clock" id="attendance-live-clock" data-now="{{ now('UTC')->toIso8601String() }}" data-timezone="{{ $attendanceTimezone }}" style="visibility:hidden"></div>
+                <div class="attendance-live-date" id="attendance-live-date" style="visibility:hidden"></div>
                 <div class="attendance-check-actions">
                     <button class="attendance-check-button is-entry" type="button" @if($canMarkEntry) data-open-attendance data-kind="entrada" data-url="{{ route('asistencia.entrada') }}" @else disabled title="{{ $entryUnavailableReason }}" @endif><i class="fa-light fa-right-to-bracket" aria-hidden="true"></i> Registrar entrada</button>
                     <button class="attendance-check-button is-exit" type="button" @if($canMarkExit) data-open-attendance data-kind="salida" data-url="{{ route('asistencia.salida') }}" @else disabled title="{{ $exitUnavailableReason }}" @endif><i class="fa-light fa-right-from-bracket" aria-hidden="true"></i> Registrar salida</button>
@@ -204,6 +204,8 @@ document.addEventListener('DOMContentLoaded', function () {
             liveDate.textContent = new Intl.DateTimeFormat('es-MX', {
                 weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: timezone
             }).format(currentTime);
+            liveClock.style.visibility = 'visible';
+            liveDate.style.visibility = 'visible';
             if (workedTime && workedTime.dataset.start) {
                 const seconds = Math.max(0, Math.floor(currentTime.getTime() / 1000) - Number(workedTime.dataset.start));
                 const hours = Math.floor(seconds / 3600);

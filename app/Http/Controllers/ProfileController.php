@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\Wasabi;
 use App\Models\Personal;
+use App\Support\HoraliaTimezones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -12,12 +13,33 @@ use Throwable;
 
 class ProfileController extends Controller
 {
+    private const WORK_DAYS = [
+        1 => 'Lunes',
+        2 => 'Martes',
+        3 => 'Miércoles',
+        4 => 'Jueves',
+        5 => 'Viernes',
+        6 => 'Sábado',
+        7 => 'Domingo',
+    ];
+
     public function edit(Request $request)
     {
-        $user = $request->user()->load('personal');
+        $user = $request->user()->load([
+            'personal.empresa',
+            'personal.centro',
+            'personal.departamento',
+            'personal.puesto',
+            'personal.horarios.horarioEmpresa',
+        ]);
+        $personal = $user->personal;
 
         return view('profile.edit', [
             'user' => $user,
+            'personal' => $personal,
+            'workDays' => self::WORK_DAYS,
+            'timezoneLabels' => HoraliaTimezones::mexicoOptions(),
+            'isEmployeeProfile' => (int) $user->profile === 3,
             'avatarUrl' => $user->avatarUrl(),
             'navigation' => DashboardController::navigation(),
             'activeSection' => null,
@@ -26,6 +48,8 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
+        abort_unless((int) $request->user()->profile !== 3, 403);
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],

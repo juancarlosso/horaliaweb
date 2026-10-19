@@ -1,6 +1,7 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Centros de Trabajo', 'activeSection' => 'centros-de-trabajo'])
 
 @section('content')
+@php($timezoneLabels = \App\Support\HoraliaTimezones::mexicoOptions())
 <style>
     .page-inner { max-width:none; }
     .catalog-page { width:100%; }
@@ -55,13 +56,13 @@
         <div class="card-hd"><div><h2 class="card-title-hr">Listado de centros de trabajo</h2><p class="card-subtitle-hr">{{ $centros->total() }} {{ $centros->total() === 1 ? 'centro registrado' : 'centros registrados' }}</p></div></div>
         @if($centros->count())
             <div class="table-wrap"><table class="bs-table hover">
-                <thead><tr><th>Empresa</th><th>Centro de trabajo</th><th>Geolocalización</th><th>Estatus</th><th class="text-end">Acciones</th></tr></thead>
+                <thead><tr><th>Empresa</th><th>Centro de trabajo</th><th>Zona horaria</th><th>Estatus</th><th class="text-end">Acciones</th></tr></thead>
                 <tbody>
                 @foreach($centros as $centro)
                     <tr>
                         <td>{{ $centro->empresa?->nombre ?? '—' }}</td>
                         <td class="fw-bold">{{ $centro->nombre }}</td>
-                        <td>{{ $centro->geolocalizacion ?: '—' }}</td>
+                        <td>{{ $timezoneLabels[$centro->timezone] ?? ($centro->timezone ?: '—') }}</td>
                         <td><span class="catalog-state {{ $centro->activo ? 'catalog-state-active' : 'catalog-state-inactive' }}">{{ $centro->activo ? 'Activo' : 'Inactivo' }}</span></td>
                         <td><div class="catalog-actions">
                             @if(in_array($centro->empresa_id, $manageableIds, true))

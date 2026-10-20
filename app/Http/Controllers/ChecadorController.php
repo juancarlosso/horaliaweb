@@ -174,7 +174,6 @@ class ChecadorController extends Controller
         return view('checador.kiosk', [
             'session' => $session,
             'token' => Crypt::decryptString($session->getRawOriginal('token')),
-            'serverTime' => now()->toIso8601String(),
         ]);
     }
 

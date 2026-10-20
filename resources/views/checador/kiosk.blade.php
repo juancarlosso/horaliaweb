@@ -45,7 +45,7 @@
     </style>
 </head>
 <body>
-    <main class="kiosk" id="kiosk" data-token="{{ $token }}" data-now="{{ $serverTime }}" data-timezone="{{ config('app.timezone') }}" data-post-url="{{ route('checador.mark') }}" data-verify-url="{{ route('checador.verify-pin') }}" data-clock-url="{{ route('checador.clock') }}" data-pause-verify-url="{{ route('checador.pauses.verify-pin') }}" data-pause-start-url="{{ route('checador.pauses.start') }}" data-pause-finish-url="{{ route('checador.pauses.finish') }}">
+    <main class="kiosk" id="kiosk" data-token="{{ $token }}" data-post-url="{{ route('checador.mark') }}" data-verify-url="{{ route('checador.verify-pin') }}" data-pause-verify-url="{{ route('checador.pauses.verify-pin') }}" data-pause-start-url="{{ route('checador.pauses.start') }}" data-pause-finish-url="{{ route('checador.pauses.finish') }}">
         <div class="kiosk-mode-header" id="kiosk-mode-header" hidden><span aria-hidden="true">☕</span> MODO PAUSAS</div>
         <header class="kiosk-head"><p class="kiosk-brand" id="kiosk-brand">Horalia</p><p class="kiosk-company">{{ $session->empresa->nombre }}</p><div class="kiosk-clock" id="kiosk-clock">--:--:--</div><p class="kiosk-date" id="kiosk-date"></p><p class="kiosk-prompt" id="kiosk-prompt" hidden>Ingresa tu PIN de 5 dígitos</p></header>
         <section class="kiosk-permissions" id="kiosk-permissions">
@@ -78,15 +78,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const pauseEmployee = document.getElementById('kiosk-pause-employee'), pauseTypes = document.getElementById('kiosk-pause-types');
     const activePausePanel = document.getElementById('kiosk-active-pause'), pauseConfirmation = document.getElementById('kiosk-pause-confirmation');
     const video = document.getElementById('kiosk-camera'), canvas = document.getElementById('kiosk-canvas');
-    let pin = '', pausePin = '', busy = false, permissionsReady = false, cameraStream = null, kioskMode = 'attendance', pauseProof = null, pauseType = null, activePauseType = null, idleTimer = null, clockBase = new Date(root.dataset.now).getTime(), clockStarted = Date.now();
+    let pin = '', pausePin = '', busy = false, permissionsReady = false, cameraStream = null, kioskMode = 'attendance', pauseProof = null, pauseType = null, activePauseType = null, idleTimer = null;
     const draw = () => dots.forEach((dot, index) => dot.classList.toggle('is-filled', index < pin.length));
     const renderClock = () => {
-        const date = new Date(clockBase + Date.now() - clockStarted), zone = root.dataset.timezone;
-        document.getElementById('kiosk-clock').textContent = new Intl.DateTimeFormat('es-MX', {hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true,timeZone:zone}).format(date);
-        document.getElementById('kiosk-date').textContent = new Intl.DateTimeFormat('es-MX', {weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:zone}).format(date);
+        const date = new Date();
+        document.getElementById('kiosk-clock').textContent = new Intl.DateTimeFormat('es-MX', {hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).format(date);
+        document.getElementById('kiosk-date').textContent = new Intl.DateTimeFormat('es-MX', {weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(date);
     };
     renderClock(); setInterval(renderClock,1000);
-    fetch(root.dataset.clockUrl).then(r=>r.json()).then(data=>{clockBase=new Date(data.now).getTime();clockStarted=Date.now();renderClock();}).catch(()=>{});
     const requestLocation = () => new Promise((resolve, reject) => {
         if (!navigator.geolocation) return reject(new Error('Este dispositivo no permite obtener la ubicación.'));
         navigator.geolocation.getCurrentPosition(resolve, error => {

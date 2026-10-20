@@ -9,6 +9,7 @@ use App\Models\Empresa;
 use App\Models\Personal;
 use App\Services\AttendanceLocationService;
 use App\Services\AttendancePhotoService;
+use App\Services\AsistenciaPausaService;
 use App\Services\RegistroAsistenciaService;
 use App\Support\HoraliaTimezones;
 use Illuminate\Http\JsonResponse;
@@ -182,6 +183,93 @@ class ChecadorController extends Controller
         return response()->json(['now' => now()->toIso8601String()]);
     }
 
+    public function verifyPausePin(Request $request, AsistenciaPausaService $pauses): JsonResponse
+    {
+        $data = $request->validate(['pin' => ['required', 'regex:/^\d{5}$/']]);
+        /** @var ChecadorSesion $session */
+        $session = $request->attributes->get('checadorSesion');
+        $personal = $this->personalForSession($session, $data['pin']);
+        if (! $personal) {
+            return response()->json(['message' => 'PIN no reconocido.'], 422);
+        }
+
+        $attendance = $pauses->currentAttendance($personal);
+        if (! $attendance || ! $attendance->llegada || $attendance->salida) {
+            return response()->json(['message' => 'Necesitas registrar tu entrada antes de iniciar o finalizar una pausa.'], 422);
+        }
+
+        $activePause = $attendance->pausas()->whereNull('fin')->latest('inicio')->first();
+        $proof = Str::random(64);
+        Cache::put($this->pauseVerificationCacheKey($proof), [
+            'session_id' => $session->id,
+            'personal_id' => $personal->id,
+            'pin_hash' => hash('sha256', $data['pin']),
+        ], now()->addMinutes(2));
+
+        return response()->json([
+            'employee' => $personal->nombre,
+            'employee_id' => $personal->codigo ?: str_pad((string) $personal->id, 3, '0', STR_PAD_LEFT),
+            'proof' => $proof,
+            'active_pause' => $activePause ? [
+                'tipo' => config('constantes.tiposPausa.'.$activePause->tipo.'.nombre'),
+                'inicio' => $activePause->inicio->format('H:i'),
+            ] : null,
+            'types' => config('constantes.tiposPausa'),
+            'time' => now()->setTimezone(HoraliaTimezones::forCenter($personal->centro?->timezone))->format('H:i'),
+        ]);
+    }
+
+    public function startPause(Request $request, AsistenciaPausaService $pauses): JsonResponse
+    {
+        return $this->handlePauseAction($request, $pauses, 'start');
+    }
+
+    public function finishPause(Request $request, AsistenciaPausaService $pauses): JsonResponse
+    {
+        return $this->handlePauseAction($request, $pauses, 'finish');
+    }
+
+    private function handlePauseAction(Request $request, AsistenciaPausaService $pauses, string $action): JsonResponse
+    {
+        $rules = ['pin' => ['required', 'regex:/^\d{5}$/'], 'proof' => ['required', 'string', 'size:64']];
+        if ($action === 'start') {
+            $rules['tipo'] = ['required', 'string', 'in:'.implode(',', array_keys(config('constantes.tiposPausa', [])))];
+        }
+        $data = $request->validate($rules);
+        /** @var ChecadorSesion $session */
+        $session = $request->attributes->get('checadorSesion');
+        $verification = Cache::pull($this->pauseVerificationCacheKey($data['proof']));
+        if (! is_array($verification)
+            || (int) ($verification['session_id'] ?? 0) !== (int) $session->id
+            || ! hash_equals((string) ($verification['pin_hash'] ?? ''), hash('sha256', $data['pin']))) {
+            return response()->json(['message' => 'La validación del PIN venció. Inténtalo de nuevo.'], 422);
+        }
+
+        $personal = $this->personalForSession($session, $data['pin']);
+        if (! $personal || (int) $personal->id !== (int) ($verification['personal_id'] ?? 0)) {
+            return response()->json(['message' => 'PIN no reconocido.'], 422);
+        }
+
+        try {
+            $scope = $this->expectedScope($session);
+            $pause = $action === 'start'
+                ? $pauses->start($personal, $data['tipo'], $scope)
+                : $pauses->finish($personal, $scope);
+        } catch (ValidationException $exception) {
+            return response()->json(['message' => $exception->errors()['pausa'][0] ?? 'No se pudo registrar la pausa.'], 422);
+        } catch (Throwable $exception) {
+            report($exception);
+            return response()->json(['message' => 'No se pudo registrar la pausa. Inténtalo de nuevo.'], 500);
+        }
+
+        $type = config('constantes.tiposPausa.'.$pause->tipo.'.nombre', strtoupper($pause->tipo));
+        return response()->json([
+            'message' => 'Pausa de '.$type.($action === 'start' ? ' iniciada' : ' finalizada').' correctamente.',
+            'type' => $type,
+            'time' => now()->setTimezone(HoraliaTimezones::forCenter($personal->centro?->timezone))->format('H:i'),
+        ]);
+    }
+
     public function verifyPin(Request $request, RegistroAsistenciaService $registration, AttendanceLocationService $locations): JsonResponse
     {
         $data = $request->validate(['pin' => ['required', 'regex:/^\d{5}$/']]);
@@ -310,5 +398,10 @@ class ChecadorController extends Controller
     private function verificationCacheKey(string $proof): string
     {
         return 'checador:pin-proof:'.hash('sha256', $proof);
+    }
+
+    private function pauseVerificationCacheKey(string $proof): string
+    {
+        return 'checador:pause-proof:'.hash('sha256', $proof);
     }
 }

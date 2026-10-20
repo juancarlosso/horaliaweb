@@ -14,7 +14,7 @@ class AsistenciaReporteExport
     private const HEADINGS = [
         'Empresa', 'Personal', 'Fecha', 'Hr. entrada', 'Entrada', 'Retardo (min)', 'Rango entrada',
         'Hr. salida', 'Salida', 'Salida temprana (min)', 'Rango salida', 'Latitud entrada',
-        'Longitud entrada', 'Latitud salida', 'Longitud salida',
+        'Longitud entrada', 'Latitud salida', 'Longitud salida', 'Tiempo de pausas', 'Tiempo productivo',
     ];
 
     public function generate(Builder $query, Empresa $company, string $startDate, string $endDate): string
@@ -25,6 +25,7 @@ class AsistenciaReporteExport
 
         $xlsxPath = tempnam(sys_get_temp_dir(), 'horalia-asistencia-');
         $sheetPath = tempnam(sys_get_temp_dir(), 'horalia-sheet-');
+        $pauseSheetPath = tempnam(sys_get_temp_dir(), 'horalia-pausas-');
         $logoTempPath = null;
         if ($xlsxPath === false || $sheetPath === false) {
             throw new RuntimeException('No se pudo preparar el archivo de Excel.');
@@ -39,6 +40,7 @@ class AsistenciaReporteExport
                 }
             }
             $this->writeSheet($query, $company, $startDate, $endDate, $sheetPath, $logo !== null);
+            $this->writePauseSheet($query, $pauseSheetPath);
             $zip = new ZipArchive();
             if ($zip->open($xlsxPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
                 throw new RuntimeException('No se pudo crear el archivo de Excel.');
@@ -50,6 +52,7 @@ class AsistenciaReporteExport
             $zip->addFromString('xl/_rels/workbook.xml.rels', $this->workbookRelationshipsXml());
             $zip->addFromString('xl/styles.xml', $this->stylesXml());
             $zip->addFile($sheetPath, 'xl/worksheets/sheet1.xml');
+            $zip->addFile($pauseSheetPath, 'xl/worksheets/sheet2.xml');
             if ($logoTempPath !== null && $logo !== null) {
                 $zip->addFile($logoTempPath, 'xl/media/image1.' . $logo['extension']);
                 $zip->addFromString('xl/worksheets/_rels/sheet1.xml.rels', $this->drawingRelationshipsXml());
@@ -64,6 +67,7 @@ class AsistenciaReporteExport
             throw $exception;
         } finally {
             @unlink($sheetPath);
+            @unlink($pauseSheetPath);
             if ($logoTempPath) @unlink($logoTempPath);
         }
     }
@@ -81,7 +85,7 @@ class AsistenciaReporteExport
         $xml->writeAttribute('xmlns:xdr', 'http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing');
         $lastDataRow = max(7, (clone $query)->count() + 7);
         $xml->startElement('dimension');
-        $xml->writeAttribute('ref', 'A1:O' . $lastDataRow);
+        $xml->writeAttribute('ref', 'A1:Q' . $lastDataRow);
         $xml->endElement();
         $xml->startElement('sheetViews');
         $xml->startElement('sheetView');
@@ -98,7 +102,7 @@ class AsistenciaReporteExport
         $xml->writeAttribute('defaultRowHeight', '18');
         $xml->endElement();
         $xml->startElement('cols');
-        foreach ([28, 30, 14, 12, 12, 16, 18, 12, 12, 22, 18, 18, 18, 18, 18] as $index => $width) {
+        foreach ([28, 30, 14, 12, 12, 16, 18, 12, 12, 22, 18, 18, 18, 18, 18, 20, 20] as $index => $width) {
             $xml->startElement('col');
             $xml->writeAttribute('min', (string) ($index + 1));
             $xml->writeAttribute('max', (string) ($index + 1));
@@ -166,6 +170,8 @@ class AsistenciaReporteExport
                     $record->longitud,
                     $record->latitud_salida,
                     $record->longitud_salida,
+                    \App\Models\Asistencia::formatoDuracion($record->tiempoPausasMinutos()),
+                    \App\Models\Asistencia::formatoDuracion($record->tiempoProductivoMinutos()),
                 ];
                 $this->writeRow($xml, $rowNumber++, array_map(fn ($value) => [$value, 0], $values));
             }
@@ -174,13 +180,13 @@ class AsistenciaReporteExport
 
         $xml->endElement();
         $xml->startElement('autoFilter');
-        $xml->writeAttribute('ref', 'A7:O' . max(7, $rowNumber - 1));
+        $xml->writeAttribute('ref', 'A7:Q' . max(7, $rowNumber - 1));
         $xml->endElement();
         $xml->startElement('mergeCells');
         $xml->writeAttribute('count', (string) count($headerRows));
         $startColumn = $hasLogo ? 'D' : 'A';
         foreach (array_keys($headerRows) as $row) {
-            $range = $startColumn . $row . ':O' . $row;
+            $range = $startColumn . $row . ':Q' . $row;
             $xml->startElement('mergeCell');
             $xml->writeAttribute('ref', $range);
             $xml->endElement();
@@ -220,6 +226,59 @@ class AsistenciaReporteExport
             $xml->endElement();
         }
         $xml->endElement();
+    }
+
+    private function writePauseSheet(Builder $query, string $path): void
+    {
+        $xml = new XMLWriter();
+        if (! $xml->openUri($path)) {
+            throw new RuntimeException('No se pudo escribir el detalle de pausas.');
+        }
+        $xml->startDocument('1.0', 'UTF-8');
+        $xml->startElement('worksheet');
+        $xml->writeAttribute('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
+        $xml->startElement('sheetViews');
+        $xml->startElement('sheetView');
+        $xml->writeAttribute('workbookViewId', '0');
+        $xml->startElement('pane');
+        $xml->writeAttribute('ySplit', '1');
+        $xml->writeAttribute('topLeftCell', 'A2');
+        $xml->writeAttribute('activePane', 'bottomLeft');
+        $xml->writeAttribute('state', 'frozen');
+        $xml->endElement();
+        $xml->endElement();
+        $xml->endElement();
+        $xml->startElement('sheetData');
+        $headings = ['Personal', 'Fecha / jornada', 'Tipo', 'Inicio', 'Fin', 'Duración', 'Estado'];
+        $this->writeRow($xml, 1, array_map(fn ($heading) => [$heading, 3], $headings));
+        $rowNumber = 2;
+        $chunkQuery = clone $query;
+        $chunkQuery->reorder()->with(['personal', 'pausas'])->orderBy('asistencias.id');
+        $chunkQuery->chunkById(300, function ($records) use ($xml, &$rowNumber): void {
+            foreach ($records as $record) {
+                foreach ($record->pausas->sortByDesc('inicio')->sortByDesc('id') as $pause) {
+                    $type = config('constantes.tiposPausa.'.$pause->tipo);
+                    $minutes = $pause->fin_utc && $pause->inicio_utc ? $pause->inicio_utc->diffInMinutes($pause->fin_utc) : null;
+                    $values = [
+                        $record->personal?->nombre ?? '',
+                        $record->fecha?->format('d/m/Y') ?? '',
+                        $type['nombre'] ?? strtoupper($pause->tipo),
+                        $pause->inicio?->format('d/m/Y H:i') ?? '',
+                        $pause->fin?->format('d/m/Y H:i') ?? '',
+                        $pause->fin ? \App\Models\Asistencia::formatoDuracion($minutes) : '',
+                        $pause->fin ? 'Finalizada' : 'En curso',
+                    ];
+                    $this->writeRow($xml, $rowNumber++, array_map(fn ($value) => [$value, 0], $values));
+                }
+            }
+        }, 'asistencias.id', 'id');
+        $xml->endElement();
+        $xml->startElement('autoFilter');
+        $xml->writeAttribute('ref', 'A1:G'.max(1, $rowNumber - 1));
+        $xml->endElement();
+        $xml->endElement();
+        $xml->endDocument();
+        $xml->flush();
     }
 
     private function columnName(int $number): string
@@ -302,7 +361,7 @@ class AsistenciaReporteExport
         $imageType = $imageExtension ? '<Default Extension="' . $imageExtension . '" ContentType="image/' . ($imageExtension === 'jpeg' ? 'jpeg' : 'png') . '"/>' : '';
         $drawing = $imageExtension ? '<Override PartName="/xl/drawings/drawing1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/>' : '';
 
-        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>' . $imageType . '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' . $drawing . '</Types>';
+        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>' . $imageType . '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' . $drawing . '</Types>';
     }
 
     private function drawingRelationshipsXml(): string
@@ -335,12 +394,12 @@ class AsistenciaReporteExport
 
     private function workbookXml(): string
     {
-        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets><sheet name="Asistencias" sheetId="1" r:id="rId1"/></sheets></workbook>';
+        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets><sheet name="Asistencias" sheetId="1" r:id="rId1"/><sheet name="Pausas" sheetId="2" r:id="rId2"/></sheets></workbook>';
     }
 
     private function workbookRelationshipsXml(): string
     {
-        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
+        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
     }
 
     private function stylesXml(): string

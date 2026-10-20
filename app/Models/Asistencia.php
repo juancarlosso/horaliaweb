@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helper\Wasabi;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Asistencia extends Model
 {
@@ -31,6 +32,54 @@ class Asistencia extends Model
     public function personal()
     {
         return $this->belongsTo(Personal::class, 'personal_id');
+    }
+
+    public function pausas()
+    {
+        return $this->hasMany(AsistenciaPausa::class, 'asistencia_id');
+    }
+
+    public function tiempoPausasMinutos(): ?int
+    {
+        $pausas = $this->relationLoaded('pausas') ? $this->pausas : $this->pausas()->get();
+        if ($pausas->contains(fn ($pausa) => $pausa->fin === null)) {
+            return null;
+        }
+
+        $seconds = (int) $pausas->sum(fn ($pausa) => $pausa->inicio_utc && $pausa->fin_utc
+            ? $pausa->inicio_utc->diffInSeconds($pausa->fin_utc)
+            : 0);
+
+        return intdiv($seconds, 60);
+    }
+
+    public function tiempoProductivoMinutos(): ?int
+    {
+        $pauseMinutes = $this->tiempoPausasMinutos();
+        if ($pauseMinutes === null || ! $this->salida) {
+            return null;
+        }
+        $hasUtcPair = $this->llegada_utc && $this->salida_utc;
+        $start = $hasUtcPair ? Carbon::parse($this->llegada_utc, 'UTC') : $this->llegada;
+        $end = $hasUtcPair ? Carbon::parse($this->salida_utc, 'UTC') : $this->salida;
+        if (! $start || ! $end) {
+            return null;
+        }
+
+        $pauseSeconds = (int) $this->pausas->sum(fn ($pause) => $pause->inicio_utc && $pause->fin_utc
+            ? $pause->inicio_utc->diffInSeconds($pause->fin_utc)
+            : 0);
+
+        return max(0, intdiv(max(0, (int) $start->diffInSeconds($end) - $pauseSeconds), 60));
+    }
+
+    public static function formatoDuracion(?int $minutes): string
+    {
+        if ($minutes === null) {
+            return 'Indeterminado';
+        }
+
+        return sprintf('%02d:%02d', intdiv($minutes, 60), $minutes % 60);
     }
 
     public function fotoEntradaUrl(): ?string

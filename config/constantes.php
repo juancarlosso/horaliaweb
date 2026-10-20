@@ -6,6 +6,12 @@ return [
     'tasa_iva' => 16,
     'video_como_funciona_youtube' => 'https://youtu.be/TdkJnSW34to',
     'aniosAsistencia' => [2026, 2027],
+    'tiposPausa' => [
+        'comida' => ['nombre' => 'COMIDA', 'descripcion' => 'Registra tu tiempo de comida durante la jornada.', 'icono' => 'utensils', 'color' => 'orange'],
+        'sanitario' => ['nombre' => 'SANITARIO', 'descripcion' => 'Registra salidas breves al sanitario.', 'icono' => 'restroom', 'color' => 'green'],
+        'descanso' => ['nombre' => 'DESCANSO', 'descripcion' => 'Registra tus periodos de descanso.', 'icono' => 'mug-hot', 'color' => 'purple'],
+        'permiso' => ['nombre' => 'PERMISO', 'descripcion' => 'Registra salidas por asuntos personales o permisos.', 'icono' => 'user', 'color' => 'blue'],
+    ],
     'emisor' => [
         'rfc' => 'SAOJ750515T19',
         'razon_social' => 'JUAN CARLOS SALINAS OJEDA',

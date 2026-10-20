@@ -11,6 +11,7 @@
     'card' => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18m-14 5h4"/>',
     'logout' => '<path d="M10 17l5-5-5-5m5 5H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/>',
     'clock' => '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    'coffee' => '<path d="M10 2v2m4-2v2M5 7h14l-1 10H6L5 7Zm14 2h1a2 2 0 0 1 0 4h-1M8 21h8m-4-4v4"/>',
     'tablet' => '<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M11 18h2"/>',
     'chart' => '<path d="M3 3v18h18M8 16v-4m5 4V7m5 9v-7"/>',
     'info' => '<circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/>',

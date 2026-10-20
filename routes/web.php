@@ -17,6 +17,7 @@ use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\HorarioEmpresaController;
 use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\AsistenciaController;
+use App\Http\Controllers\AsistenciaPausaController;
 use App\Http\Controllers\ChecadorController;
 use App\Http\Middleware\ValidateChecadorToken;
 use App\Http\Middleware\EnsureActiveLinkedPersonal;
@@ -118,11 +119,15 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::get('/home/asistencias', [AsistenciaController::class, 'index'])->name('asistencia.index');
     Route::post('/home/asistencias/entrada', [AsistenciaController::class, 'markEntry'])->name('asistencia.entrada');
     Route::post('/home/asistencias/salida', [AsistenciaController::class, 'markExit'])->name('asistencia.salida');
+    Route::get('/home/pausas', [AsistenciaPausaController::class, 'index'])->name('pausas.index');
+    Route::post('/home/pausas/iniciar', [AsistenciaPausaController::class, 'start'])->name('pausas.start');
+    Route::post('/home/pausas/finalizar', [AsistenciaPausaController::class, 'finish'])->name('pausas.finish');
     Route::get('/home/reportes/general', [ReporteAsistenciaController::class, 'index'])->name('reportes.general');
     Route::get('/home/reportes/asistencia', fn () => redirect()->route('reportes.general'))->name('reportes.asistencia');
     Route::get('/home/reportes/departamento', [ReporteAsistenciaController::class, 'byDepartment'])->name('reportes.departamento');
     Route::get('/home/reportes/departamento/detalle', [ReporteAsistenciaController::class, 'departmentDetail'])->name('reportes.departamento.detalle');
     Route::get('/home/reportes/asistencia/exportar', [ReporteAsistenciaController::class, 'export'])->name('reportes.asistencia.exportar');
+    Route::get('/home/reportes/asistencias/{asistencia}/pausas', [ReporteAsistenciaController::class, 'pauseDetail'])->whereNumber('asistencia')->name('reportes.asistencia.pausas');
     Route::get('/home/{section}', [DashboardController::class, 'module'])
         ->where('section', 'empresas|centros-de-trabajo|departamentos|puestos|horarios|personal|asistencia|reportes')
         ->name('dashboard.module');
@@ -135,6 +140,12 @@ Route::post('/checador/validar-pin', [ChecadorController::class, 'verifyPin'])
     ->middleware([ValidateChecadorToken::class, 'throttle:checador-pin'])->name('checador.verify-pin');
 Route::post('/checador/marcar', [ChecadorController::class, 'mark'])
     ->middleware([ValidateChecadorToken::class, 'throttle:12,1'])->name('checador.mark');
+Route::post('/checador/pausas/validar-pin', [ChecadorController::class, 'verifyPausePin'])
+    ->middleware([ValidateChecadorToken::class, 'throttle:checador-pin'])->name('checador.pauses.verify-pin');
+Route::post('/checador/pausas/iniciar', [ChecadorController::class, 'startPause'])
+    ->middleware([ValidateChecadorToken::class, 'throttle:12,1'])->name('checador.pauses.start');
+Route::post('/checador/pausas/finalizar', [ChecadorController::class, 'finishPause'])
+    ->middleware([ValidateChecadorToken::class, 'throttle:12,1'])->name('checador.pauses.finish');
 
 $showLegalDocument = static function (string $filename, string $title) {
     return static function () use ($filename, $title) {

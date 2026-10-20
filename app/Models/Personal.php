@@ -69,6 +69,11 @@ class Personal extends Model
         return $this->hasMany(Asistencia::class, 'personal_id');
     }
 
+    public function pausas()
+    {
+        return $this->hasManyThrough(AsistenciaPausa::class, Asistencia::class, 'personal_id', 'asistencia_id');
+    }
+
     public function fotoUrl(): ?string
     {
         if (!$this->foto) {

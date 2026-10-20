@@ -26,6 +26,7 @@ class RegistroAsistenciaService
             ->first();
 
         if ($attendance?->llegada && ! $attendance->salida) {
+            $this->assertNoOpenPause($attendance);
             return 'salida';
         }
 
@@ -33,10 +34,10 @@ class RegistroAsistenciaService
             throw ValidationException::withMessages(['pin' => 'La asistencia de hoy ya está completa.']);
         }
 
-        if ($this->pendingOvernightShift($personal, $localToday)) {
-            return 'salida';
-        }
-        if ($this->pendingCrossTimezoneShift($personal, $localToday, $timezone)) {
+        $overnight = $this->pendingOvernightShift($personal, $localToday)
+            ?? $this->pendingCrossTimezoneShift($personal, $localToday, $timezone);
+        if ($overnight) {
+            $this->assertNoOpenPause($overnight[0]);
             return 'salida';
         }
 
@@ -71,6 +72,7 @@ class RegistroAsistenciaService
                     }
 
                     [$attendance, $schedule] = $overnightShift;
+                    $this->assertNoOpenPause($attendance);
                     $scheduledExit = $this->scheduledExitForAttendance($schedule, $attendance, $timezone);
                     $earlyMinutes = $now->lessThan($scheduledExit) ? (int) $now->diffInMinutes($scheduledExit) : 0;
                     $attendance->update([
@@ -116,6 +118,7 @@ class RegistroAsistenciaService
             }
 
             $schedule = $this->scheduleForDate($personal, $attendance->fecha);
+            $this->assertNoOpenPause($attendance);
             $scheduledExit = $this->scheduledExitForAttendance($schedule, $attendance, $timezone);
             $earlyMinutes = $now->lessThan($scheduledExit) ? (int) $now->diffInMinutes($scheduledExit) : 0;
             $attendance->update([
@@ -129,6 +132,13 @@ class RegistroAsistenciaService
 
             return 'salida';
         });
+    }
+
+    private function assertNoOpenPause(Asistencia $attendance): void
+    {
+        if ($attendance->pausas()->whereNull('fin')->exists()) {
+            throw ValidationException::withMessages(['pin' => 'Finaliza tu pausa en curso antes de registrar la salida.']);
+        }
     }
 
     private function assertEligible(Personal $personal, ?array $expectedScope): void

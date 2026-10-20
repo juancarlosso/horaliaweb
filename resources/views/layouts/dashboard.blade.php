@@ -115,9 +115,9 @@
             @if(!$isRegularProfile || $group === 'Operación')
                 <div class="sidebar-section">{{ $group }}</div>
                 @foreach($navigation as $slug => $item)
-                    @if($item['group'] === $group && (!$isRegularProfile || $slug === 'asistencia') && ($slug !== 'reloj-checador' || $canManageChecador))
+                    @if($item['group'] === $group && (!$isRegularProfile || in_array($slug, ['asistencia', 'pausas'], true)) && ($slug !== 'reloj-checador' || $canManageChecador))
                         <div class="nav-li">
-                            <a href="{{ $slug === 'empresas' ? route('empresas.index') : ($slug === 'reloj-checador' ? route('checador.index') : ($slug === 'reportes-general' ? route('reportes.general') : ($slug === 'reportes-departamento' ? route('reportes.departamento') : route('dashboard.module', ['section' => $slug])))) }}" class="nav-lnk {{ $activeSection === $slug ? 'active' : '' }}" @if($activeSection === $slug) aria-current="page" @endif data-sidebar-tooltip="{{ $item['label'] }}">
+                            <a href="{{ $slug === 'empresas' ? route('empresas.index') : ($slug === 'pausas' ? route('pausas.index') : ($slug === 'reloj-checador' ? route('checador.index') : ($slug === 'reportes-general' ? route('reportes.general') : ($slug === 'reportes-departamento' ? route('reportes.departamento') : route('dashboard.module', ['section' => $slug]))))) }}" class="nav-lnk {{ $activeSection === $slug ? 'active' : '' }}" @if($activeSection === $slug) aria-current="page" @endif data-sidebar-tooltip="{{ $item['label'] }}">
                                 <span class="nav-icon">@include('dashboard.partials.icon', ['name' => $item['icon']])</span><span class="nav-text">{{ $item['label'] }}</span>
                             </a>
                         </div>

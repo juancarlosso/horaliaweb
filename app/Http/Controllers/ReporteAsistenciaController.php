@@ -249,10 +249,40 @@ class ReporteAsistenciaController extends Controller
         ])->deleteFileAfterSend(true);
     }
 
+    public function pauseDetail(Request $request, Asistencia $asistencia)
+    {
+        $filters = $request->validate([
+            'empresa_id' => ['required', 'integer', 'min:1'],
+            'desde' => ['required', 'date'],
+            'hasta' => ['required', 'date', 'after_or_equal:desde'],
+        ]);
+        $allowedCompanyIds = $this->companyIdsFor($request);
+        $companyId = (int) $filters['empresa_id'];
+        abort_unless(in_array($companyId, $allowedCompanyIds, true), 403);
+        abort_unless((int) $asistencia->personal()->value('empresa_id') === $companyId, 404);
+        $attendanceDate = $asistencia->fecha->toDateString();
+        abort_unless($attendanceDate >= $filters['desde'] && $attendanceDate <= $filters['hasta'], 404);
+
+        $rows = $asistencia->pausas()->orderByDesc('inicio')->orderByDesc('id')->get()->map(function ($pause) {
+            $type = config('constantes.tiposPausa.'.$pause->tipo);
+            $minutes = $pause->fin_utc && $pause->inicio_utc ? $pause->inicio_utc->diffInMinutes($pause->fin_utc) : null;
+
+            return [
+                'tipo' => $type['nombre'] ?? strtoupper($pause->tipo),
+                'inicio' => $pause->inicio?->format('d/m/Y H:i'),
+                'fin' => $pause->fin?->format('d/m/Y H:i') ?? '—',
+                'duracion' => $pause->fin ? Asistencia::formatoDuracion($minutes) : '—',
+                'estado' => $pause->fin ? 'Finalizada' : 'En curso',
+            ];
+        });
+
+        return response()->json(['pausas' => $rows]);
+    }
+
     private function attendanceQuery(int $companyId, string $startDate, string $endDate)
     {
         return Asistencia::query()
-            ->with(['personal.empresa', 'personal.horarios'])
+            ->with(['personal.empresa', 'personal.horarios', 'pausas'])
             ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
             ->select('asistencias.*')
             ->where('personal.empresa_id', $companyId)

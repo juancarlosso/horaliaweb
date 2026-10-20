@@ -22,6 +22,7 @@ class DashboardController extends Controller
         'horarios' => ['label' => 'Horarios', 'icon' => 'calendar', 'group' => 'Operación'],
         'personal' => ['label' => 'Personal', 'icon' => 'people', 'group' => 'Operación'],
         'asistencia' => ['label' => 'Asistencia', 'icon' => 'clock', 'group' => 'Operación'],
+        'pausas' => ['label' => 'Pausas', 'icon' => 'coffee', 'group' => 'Operación'],
         'reloj-checador' => ['label' => 'Reloj Checador', 'icon' => 'tablet', 'group' => 'Operación'],
         'reportes-general' => ['label' => 'General', 'icon' => 'chart', 'group' => 'REPORTES'],
         'reportes-departamento' => ['label' => 'Por Departamento', 'icon' => 'chart', 'group' => 'REPORTES'],
@@ -29,13 +30,19 @@ class DashboardController extends Controller
 
     public static function navigation(): array
     {
-        return self::SECTIONS;
+        $sections = self::SECTIONS;
+        $user = auth()->user();
+        if (! $user || ! in_array((int) $user->profile, [2, 3], true) || ! $user->personal) {
+            unset($sections['pausas']);
+        }
+
+        return $sections;
     }
 
     public function index(Request $request, StripeCardService $stripe, RegistroAsistenciaService $registration)
     {
         $data = [
-            'navigation' => self::SECTIONS,
+            'navigation' => self::navigation(),
             'activeSection' => 'home',
         ];
 
@@ -189,7 +196,7 @@ class DashboardController extends Controller
         }
 
         return view('dashboard.module', [
-            'navigation' => self::SECTIONS,
+            'navigation' => self::navigation(),
             'activeSection' => $section,
             'section' => self::SECTIONS[$section],
         ]);

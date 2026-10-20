@@ -38,7 +38,7 @@ class AsistenciaPausaController extends Controller
         try {
             $pauses->start($request->user()->personal, $data['tipo']);
         } catch (ValidationException $exception) {
-            return back()->withErrors($exception->errors())->withInput();
+            return back()->with('error', collect($exception->errors())->flatten()->first());
         }
 
         return redirect()->route('pausas.index')->with('status', 'La pausa inició correctamente.');
@@ -51,7 +51,7 @@ class AsistenciaPausaController extends Controller
         try {
             $pauses->finish($request->user()->personal);
         } catch (ValidationException $exception) {
-            return back()->withErrors($exception->errors());
+            return back()->with('error', collect($exception->errors())->flatten()->first());
         }
 
         return redirect()->route('pausas.index')->with('status', 'La pausa finalizó correctamente.');

@@ -140,9 +140,39 @@ class AppAuthenticationController extends Controller
         return [
             'id' => $company->getKey(),
             'nombre' => $company->nombre ?: $company->razon_social,
-            'direccion' => $company->direccion,
+            'direccion' => $this->companyAddress($company),
             'telefono' => $company->telefono,
         ];
+    }
+
+    private function companyAddress(Empresa $company): ?string
+    {
+        $legacyAddress = trim((string) $company->direccion);
+        if ($legacyAddress !== '') {
+            return $legacyAddress;
+        }
+
+        $exterior = trim((string) $company->domicilio_numero_exterior);
+        $interior = trim((string) $company->domicilio_numero_interior);
+
+        $street = array_values(array_filter([
+            trim((string) $company->domicilio_calle),
+            $exterior !== '' ? 'No. ext. '.$exterior : null,
+            $interior !== '' ? 'Int. '.$interior : null,
+        ], fn ($part) => $part !== null && $part !== ''));
+
+        $parts = array_values(array_filter([
+            $street ? implode(' ', $street) : null,
+            trim((string) $company->domicilio_colonia),
+            trim((string) $company->domicilio_municipio),
+            trim((string) $company->domicilio_ciudad),
+            trim((string) $company->domicilio_estado),
+            $company->domicilio_codigo_postal
+                ? 'C.P. '.trim((string) $company->domicilio_codigo_postal)
+                : null,
+        ], fn ($part) => $part !== null && $part !== ''));
+
+        return $parts ? implode(', ', $parts) : null;
     }
 
     private function error(string $message, int $status): JsonResponse

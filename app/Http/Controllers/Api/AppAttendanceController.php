@@ -156,9 +156,9 @@ class AppAttendanceController extends Controller
         $data = $request->validate([
             'pin' => ['required', 'regex:/^\\d{5}$/'],
             'proof' => ['required', 'string', 'size:64'],
-            'latitud' => ['required', 'numeric', 'between:-90,90'],
-            'longitud' => ['required', 'numeric', 'between:-180,180'],
-            'foto' => ['required', 'string', 'max:4200000'],
+            'latitud' => ['sometimes', 'required_with:longitud', 'nullable', 'numeric', 'between:-90,90'],
+            'longitud' => ['sometimes', 'required_with:latitud', 'nullable', 'numeric', 'between:-180,180'],
+            'foto' => ['sometimes', 'nullable', 'string', 'max:4200000'],
         ]);
         [$user, $companyId] = $this->authorizedCompany($request);
         $token = $user->currentAccessToken();
@@ -181,19 +181,22 @@ class AppAttendanceController extends Controller
             || (int) $personal->centro_id !== (int) ($verification['center_id'] ?? 0)) {
             return response()->json(['success' => false, 'message' => 'PIN no reconocido.'], 422);
         }
-        if (! $locations->parseCoordinates($personal->centro?->geolocalizacion)) {
-            return response()->json(['success' => false, 'message' => 'El centro de trabajo del colaborador no tiene geolocalización configurada. Contacta a tu administrador.'], 422);
-        }
-
         $kind = ($verification['kind'] ?? null) === 'salida' ? 'salida' : 'entrada';
-        $coordinates = $kind === 'entrada'
-            ? ['latitud' => $data['latitud'], 'longitud' => $data['longitud']]
-            : ['latitud_salida' => $data['latitud'], 'longitud_salida' => $data['longitud']];
+        $hasCoordinates = isset($data['latitud'], $data['longitud']);
+        $coordinates = $hasCoordinates
+            ? ($kind === 'entrada'
+                ? ['latitud' => $data['latitud'], 'longitud' => $data['longitud']]
+                : ['latitud_salida' => $data['latitud'], 'longitud_salida' => $data['longitud']])
+            : null;
         $photoPath = null;
 
         try {
-            $photoPath = $photos->uploadBase64Jpeg($data['foto'], $companyId, $kind);
-            $range = $locations->rangeFor($personal, (float) $data['latitud'], (float) $data['longitud']);
+            if (! empty($data['foto'])) {
+                $photoPath = $photos->uploadBase64Jpeg($data['foto'], $companyId, $kind);
+            }
+            $range = $hasCoordinates
+                ? $locations->rangeFor($personal, (float) $data['latitud'], (float) $data['longitud'])
+                : null;
             $registration->register(
                 $personal,
                 $request->ip(),

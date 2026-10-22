@@ -42,6 +42,15 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
+        RateLimiter::for('app-attendance-pin', function (Request $request) {
+            $tokenId = (string) ($request->user()?->currentAccessToken()?->getKey() ?? 'unauthenticated');
+
+            return [
+                Limit::perMinute(8)->by('app-attendance-minute:' . $tokenId),
+                Limit::perHour(30)->by('app-attendance-hour:' . $tokenId),
+            ];
+        });
+
         ResetPassword::toMailUsing(function ($notifiable, string $token) {
             $resetUrl = route('password.reset', [
                 'token' => $token,

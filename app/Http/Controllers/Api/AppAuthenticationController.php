@@ -39,13 +39,12 @@ class AppAuthenticationController extends Controller
 
         $company = $this->manageableActiveCompany($user);
         if (!$company) {
-            return $this->error('Esta cuenta no tiene autorización para usar la aplicación.', 403);
+            return $this->error('Esta cuenta no tiene autorización para usar la aplicación, solo los administradores de la empresa pueden accesar', 403);
         }
 
         $token = $user->createToken(
             'horalia-mobile',
-            ['horalia-app', 'empresa:' . $company->getKey()],
-            now()->addMinutes((int) config('sanctum.expiration', 43200))
+            ['horalia-app', 'empresa:' . $company->getKey()]
         );
 
         return response()->json([
@@ -140,7 +139,7 @@ class AppAuthenticationController extends Controller
     {
         return [
             'id' => $company->getKey(),
-            'nombre' => $company->nombre,
+            'nombre' => $company->nombre ?: $company->razon_social,
             'direccion' => $company->direccion,
             'telefono' => $company->telefono,
         ];

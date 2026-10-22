@@ -143,6 +143,23 @@ class AppAuthenticationTest extends TestCase
         $this->withToken($expiredToken)->getJson('/api/app/me')->assertUnauthorized();
     }
 
+    public function test_mobile_session_survives_inactivity_and_still_ends_on_explicit_logout(): void
+    {
+        [$user] = $this->administrator();
+        $token = $this->postJson('/api/app/login', [
+            'email' => $user->email,
+            'password' => 'correct-password',
+        ])->assertOk()->json('data.token');
+
+        $this->assertNull($user->tokens()->latest('id')->firstOrFail()->expires_at);
+        $this->travel(45)->days();
+
+        $this->withToken($token)->getJson('/api/app/me')->assertOk();
+        $this->withToken($token)->postJson('/api/app/logout')->assertOk();
+        Auth::forgetGuards();
+        $this->withToken($token)->getJson('/api/app/me')->assertUnauthorized();
+    }
+
     public function test_login_is_rate_limited_for_repeated_attempts(): void
     {
         [$user] = $this->administrator();

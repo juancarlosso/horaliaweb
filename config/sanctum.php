@@ -50,7 +50,9 @@ return [
     |
     */
 
-    'expiration' => (int) env('SANCTUM_EXPIRATION', 43200),
+    // The Horalia tablet session is explicitly persistent. Individual tokens
+    // may still set expires_at; app tokens are revoked on logout or loss of access.
+    'expiration' => null,
 
     /*
     |--------------------------------------------------------------------------

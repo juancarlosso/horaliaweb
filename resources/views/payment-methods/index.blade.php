@@ -23,6 +23,7 @@
     .pm-consent { display:flex; align-items:flex-start; gap:.6rem; color:var(--body-text-muted); font-size:.84rem; line-height:1.55; }
     .pm-consent input { margin-top:.2rem; }
     .pm-empty { padding:1.25rem; border:1px dashed var(--body-border); border-radius:.75rem; color:var(--body-text-muted); text-align:center; }
+    .pm-stripe-logo { display:block; width:120px; max-width:32vw; height:auto; flex:none; }
     .pm-loading { position:fixed; inset:0; z-index:10000; display:grid; place-items:center; padding:1rem; background:rgba(15,19,38,.58); backdrop-filter:blur(3px); }
     .pm-loading[hidden] { display:none; }
     .pm-loading-card { display:flex; align-items:center; gap:1rem; width:min(100%,420px); padding:1.25rem; border:1px solid var(--body-border); border-radius:.9rem; color:var(--body-text); background:var(--card-bg); box-shadow:0 18px 55px rgba(10,15,35,.24); }
@@ -42,7 +43,7 @@
     @if($errors->has('stripe')) <div class="pm-feedback" role="alert">{{ $errors->first('stripe') }}</div> @endif
 
     <div class="card-hr mb-1rem">
-        <div class="card-hd"><div><h2 class="card-title-hr">Tarjetas por empresa</h2><p class="card-subtitle-hr">Cada empresa mantiene sus propias tarjetas en Stripe.</p></div></div>
+        <div class="card-hd"><div><h2 class="card-title-hr">Tarjetas por empresa</h2><p class="card-subtitle-hr">Cada empresa mantiene sus propias tarjetas en Stripe.</p></div><img class="pm-stripe-logo" src="{{ asset('assets/images/stripe.svg') }}" alt="Powered by Stripe"></div>
         <div class="card-bd">
             @if($empresas->isEmpty())
                 <div class="pm-empty">Tu usuario todavía no tiene empresas asignadas.</div>

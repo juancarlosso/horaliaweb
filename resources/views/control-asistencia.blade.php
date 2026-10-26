@@ -97,7 +97,7 @@
         </section>
 
         <section class="attendance-tracking section-shell" id="seguimiento" aria-labelledby="tracking-title">
-            <div class="attendance-tracking-copy"><span class="eyebrow">Después, da seguimiento</span><h2 id="tracking-title">Conoce lo que sucede durante cada jornada</h2><p>Consulta los registros de entrada y salida de tu personal, identifica retardos y salidas anticipadas, y lleva un seguimiento de las pausas registradas durante la jornada.</p><p class="attendance-text-link"><a href="{{ route('inicio') }}#checador">Conoce nuestro reloj checador en línea <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></p></div>
+            <div class="attendance-tracking-copy"><span class="eyebrow">Después, da seguimiento</span><h2 id="tracking-title">Conoce lo que sucede durante cada jornada</h2><p>Consulta los registros de entrada y salida de tu personal, identifica retardos y salidas anticipadas, y lleva un seguimiento de las pausas registradas durante la jornada.</p><p class="attendance-text-link"><a href="{{ route('inicio') }}#checador">Conoce nuestro reloj checador en línea <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></p><p class="attendance-text-link"><a href="{{ route('reloj-checador.tablet') }}">Conoce cómo usar una tablet como reloj checador <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></p></div>
             <div class="attendance-tracking-list" aria-label="Datos disponibles para dar seguimiento a la asistencia">
                 <div><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i><span>Entradas y salidas</span></div>
                 <div><i class="fa-regular fa-clock" aria-hidden="true"></i><span>Retardos</span></div>

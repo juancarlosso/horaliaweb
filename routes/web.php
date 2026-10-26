@@ -168,6 +168,10 @@ Route::get('/control-de-asistencia-empleados', function () {
     return view('control-asistencia');
 })->name('control-asistencia.empleados');
 
+Route::get('/reloj-checador-tablet', function () {
+    return view('reloj-checador-tablet');
+})->name('reloj-checador.tablet');
+
 Route::get('/terminos-y-condiciones', $showLegalDocument('terminos-y-condiciones.md', 'Términos y Condiciones'))
     ->name('legal.terms');
 

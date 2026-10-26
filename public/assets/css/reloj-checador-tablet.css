@@ -1,0 +1,106 @@
+.tablet-page .nav-content { gap: 22px; }
+.tablet-page .nav-links { gap: 18px; }
+.tablet-page .nav-links a { white-space: nowrap; }
+.tablet-page h2 { margin: 12px 0 20px; color: var(--hor-dark); font-size: clamp(29px, 3.1vw, 40px); line-height: 1.15; letter-spacing: -.04em; }
+.tablet-page h3 { color: var(--hor-dark); }
+.tablet-page p { line-height: 1.65; }
+.tablet-page .tablet-note { color: #626985; font-size: 13px; line-height: 1.65; }
+.tablet-page .tablet-text-link { margin: 22px 0 0; font-size: 14px; font-weight: 700; }
+.tablet-text-link a { color: var(--hor-primary) !important; }
+.tablet-text-link a:hover { text-decoration: underline !important; }
+.tablet-text-link i { margin-left: 6px; }
+.tablet-hero { background: radial-gradient(ellipse at 85% 45%, #e6eaff, transparent 47%), linear-gradient(145deg, #fbfcff, #f5f6ff); }
+.tablet-hero-inner { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .85fr); gap: clamp(36px, 6vw, 90px); align-items: center; padding-block: 64px 58px; }
+.tablet-hero-copy .eyebrow { display: inline-flex; align-items: center; gap: 7px; }
+.tablet-hero-copy h1 { margin: 17px 0 22px; color: var(--hor-dark); font-size: clamp(42px, 4.5vw, 62px); line-height: 1.08; letter-spacing: -.05em; }
+.tablet-hero-copy h1 span { color: var(--hor-primary); }
+.tablet-lede { margin: 0 0 18px; color: #555d7f; font-size: 17px; }
+.tablet-device-benefit { margin: 0 0 26px; color: #303a64; font-size: 16px; font-weight: 600; }
+.tablet-hero-copy .hero-trial-note { display: flex; width: fit-content; margin-top: 17px; }
+.tablet-unlimited { display: flex; align-items: flex-start; gap: 8px; max-width: 430px; margin: 24px 0 0; color: #3d4a87; font-size: 13px; font-weight: 700; }
+.tablet-unlimited i { margin-top: 5px; color: var(--hor-primary); }
+.tablet-product { width: 100%; max-width: 390px; margin: 0 auto; }
+.tablet-product-frame { padding: 12px; border: 1px solid #252c49; border-radius: 34px; background: #252c49; box-shadow: 0 26px 55px #34468a26; }
+.tablet-product img { display: block; width: 100%; height: auto; border-radius: 23px; }
+.tablet-product figcaption { margin-top: 16px; color: #626985; font-size: 11px; line-height: 1.5; text-align: center; }
+.tablet-alternative { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 80px; padding-block: 74px; }
+.tablet-alternative h2 { max-width: 430px; }
+.tablet-alternative p { margin: 0 0 16px; color: #555d7f; }
+.tablet-process { padding-block: 64px; background: #f7f8fd; }
+.tablet-section-heading { max-width: 700px; }
+.tablet-process-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; margin: 34px 0 28px; padding: 0; list-style: none; }
+.tablet-process-list li { padding-top: 20px; border-top: 2px solid #dce3fb; }
+.tablet-step-number { display: block; margin-bottom: 16px; color: var(--hor-primary); font-size: 27px; font-weight: 700; letter-spacing: -.04em; }
+.tablet-process-list h3 { margin: 0 0 10px; font-size: 17px; line-height: 1.4; }
+.tablet-process-list p { margin: 0; color: #626985; font-size: 14px; }
+.tablet-marks { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: center; gap: 72px; padding-block: 76px; }
+.tablet-marks-copy > p { color: #555d7f; }
+.tablet-marks-panel { padding: 28px; border: 1px solid #e1e5f5; border-radius: 22px; background: #fff; box-shadow: var(--hor-shadow); }
+.tablet-mark-row { display: flex; align-items: center; gap: 16px; padding-block: 18px; }
+.tablet-mark-row + .tablet-mark-row { border-top: 1px solid #ebedf6; }
+.tablet-mark-icon { display: grid; place-items: center; flex: none; width: 48px; height: 48px; border-radius: 14px; background: #eef1ff; color: var(--hor-primary); font-size: 21px; }
+.tablet-mark-row h3 { margin: 0 0 5px; font-size: 16px; }
+.tablet-mark-row p { margin: 0; color: #626985; font-size: 13px; }
+.tablet-pause-types { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
+.tablet-pause-types li { padding: 7px 11px; border-radius: 8px; color: #4b5682; background: #f3f5fb; font-size: 12px; }
+.tablet-requirements { padding-block: 64px; background: #f7f8fd; }
+.tablet-requirement-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 42px; margin: 28px 0 20px; padding: 0; list-style: none; }
+.tablet-requirement-list li { display: flex; align-items: flex-start; gap: 15px; padding-block: 21px; border-top: 1px solid #e0e5f3; color: #4f587a; font-size: 14px; line-height: 1.65; }
+.tablet-requirement-list i { flex: none; width: 24px; margin-top: 4px; color: var(--hor-primary); font-size: 19px; text-align: center; }
+.tablet-requirements .tablet-note { max-width: 820px; margin-bottom: 0; }
+.tablet-pricing { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 80px; padding-block: 78px; }
+.tablet-pricing-copy > p { color: #555d7f; }
+.tablet-price-card { padding: 34px; border: 1px solid #dfe4fa; border-radius: 24px; background: #fbfcff; }
+.tablet-price-card .tablet-price { margin: 0; color: var(--hor-primary); font-size: 52px; font-weight: 800; line-height: 1.2; letter-spacing: -.04em; }
+.tablet-price span { font-size: 19px; font-weight: 600; letter-spacing: -.02em; }
+.tablet-price-detail { margin: 12px 0 24px; color: #505a7e; font-size: 14px; font-weight: 600; }
+.tablet-price-card .check-list { gap: 17px; margin: 0 0 28px; }
+.tablet-price-card .check-list li { color: #555d7f; font-size: 14px; line-height: 1.6; }
+.tablet-page .tablet-faq { padding-block: 8px 72px; }
+.tablet-page .tablet-faq h2 { max-width: 700px; margin-bottom: 28px; }
+.tablet-page .faq-list summary { min-height: 24px; align-items: center; }
+.tablet-page .faq-list details p { font-size: 14px; }
+.tablet-final { padding-block: 64px; background: linear-gradient(120deg, #edf1ff, #f5f2ff); text-align: center; }
+.tablet-final h2 { max-width: 730px; margin-inline: auto; }
+.tablet-final .section-shell > p:not(.hero-trial-note) { max-width: 680px; margin: 0 auto 26px; color: #555d7f; }
+.tablet-final .hero-trial-note { display: flex; width: fit-content; margin: 18px auto 0; }
+.tablet-page a:focus-visible, .tablet-page button:focus-visible, .tablet-page summary:focus-visible { outline: 3px solid var(--hor-primary); outline-offset: 4px; }
+
+@media (max-width: 1050px) {
+    .tablet-page .nav-content { gap: 18px; }
+    .tablet-page .nav-links { gap: 14px; }
+    .tablet-hero-inner { gap: 32px; }
+    .tablet-alternative, .tablet-marks, .tablet-pricing { gap: 40px; }
+    .tablet-process-list { gap: 22px; }
+}
+
+@media (max-width: 820px) {
+    .tablet-hero-inner { grid-template-columns: 1fr; gap: 38px; padding-block: 42px; }
+    .tablet-hero-copy h1 { font-size: clamp(39px, 7.5vw, 52px); }
+    .tablet-lede { font-size: 16px; }
+    .tablet-device-benefit { font-size: 15px; }
+    .tablet-product { max-width: 350px; }
+    .tablet-product-frame { padding: 10px; border-radius: 30px; }
+    .tablet-product img { border-radius: 20px; }
+    .tablet-alternative, .tablet-marks, .tablet-pricing { grid-template-columns: 1fr; gap: 22px; padding-block: 46px; }
+    .tablet-alternative h2 { max-width: none; margin-bottom: 0; }
+    .tablet-process, .tablet-requirements, .tablet-final { padding-block: 44px; }
+    .tablet-process-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 24px; }
+    .tablet-marks-panel, .tablet-price-card { padding: 24px; }
+    .tablet-requirement-list { grid-template-columns: 1fr; }
+    .tablet-page .tablet-faq { padding-block: 0 46px; }
+}
+
+@media (max-width: 480px) {
+    .tablet-hero-copy h1 { font-size: 41px; }
+    .tablet-unlimited { max-width: 320px; }
+    .tablet-process-list { grid-template-columns: 1fr; gap: 22px; }
+    .tablet-process-list li { display: grid; grid-template-columns: 39px minmax(0, 1fr); gap: 4px 14px; padding-top: 18px; }
+    .tablet-step-number { grid-row: 1 / span 2; font-size: 24px; }
+    .tablet-process-list h3 { margin: 0 0 6px; }
+    .tablet-process-list p { grid-column: 2; }
+    .tablet-page h2 { font-size: 30px; }
+    .tablet-price-card { padding: 24px 20px; }
+    .tablet-price-card .tablet-price { font-size: 48px; }
+    .tablet-price span { font-size: 19px; }
+}

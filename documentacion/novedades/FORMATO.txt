@@ -1,0 +1,10 @@
+Los nombres de las novedades indican cuándo se publicaron:
+
+- AAMMDD.md: se considera publicada al inicio de ese día.
+- AAMMDDHHMM.md: incluye la hora local de publicación (formato de 24 horas).
+- Se puede añadir un sufijo, por ejemplo 2610261430-mejoras.md.
+
+Para novedades nuevas se recomienda incluir la hora. Así, si una persona se
+registra el mismo día, solo recibirá la novedad si se publicó después de su
+alta. Los archivos antiguos que solo tienen fecha no se envían a personas
+registradas durante ese mismo día porque no consta la hora de publicación.

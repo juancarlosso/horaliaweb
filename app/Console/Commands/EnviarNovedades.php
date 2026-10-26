@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Mail\NovedadesSistemaMail;
 use App\Models\User;
+use DateTimeImmutable;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -12,7 +13,7 @@ use Throwable;
 class EnviarNovedades extends Command
 {
     protected $signature = 'novedades:enviar
-                            {archivo? : Identificador de la novedad; si se omite, procesa las novedades pendientes}
+                            {archivo? : Identificador fechado de la novedad (AAMMDD o AAMMDDHHMM); si se omite, procesa las novedades pendientes}
                             {--dry-run : Muestra archivos y destinatarios sin enviar correos}';
 
     protected $description = 'Envía por correo las novedades pendientes de documentacion/novedades';
@@ -45,17 +46,21 @@ class EnviarNovedades extends Command
 
         $destinatarios = $this->obtenerDestinatarios();
         if ($this->option('dry-run')) {
-            $this->line('Destinatarios: '.($destinatarios === [] ? '(ninguno)' : implode(', ', $destinatarios)));
             foreach ($archivos as $archivo) {
                 $identificador = pathinfo($archivo, PATHINFO_FILENAME);
-                $pendientes = array_values(array_filter($destinatarios, fn (string $email) =>
+                $elegibles = $this->destinatariosParaNovedad($archivo, $destinatarios);
+                if ($elegibles === null) {
+                    return self::FAILURE;
+                }
+                $pendientes = array_values(array_filter($elegibles, fn (array $destinatario) =>
                     ! DB::table('novedades_enviadas')
                         ->where('identificador', $identificador)
-                        ->where('email_hash', hash('sha256', mb_strtolower($email)))
+                        ->where('email_hash', hash('sha256', mb_strtolower($destinatario['email'])))
                         ->exists()
                 ));
 
                 $this->line("{$archivo}: ".count($pendientes).' destinatario(s) pendiente(s).');
+                $this->line('Destinatarios: '.($pendientes === [] ? '(ninguno)' : implode(', ', array_column($pendientes, 'email'))));
                 if ($pendientes !== []) {
                     $this->line((string) file_get_contents(base_path("documentacion/novedades/{$archivo}")));
                 }
@@ -73,6 +78,11 @@ class EnviarNovedades extends Command
         $fallos = 0;
         foreach ($archivos as $archivo) {
             $identificador = pathinfo($archivo, PATHINFO_FILENAME);
+            $elegibles = $this->destinatariosParaNovedad($archivo, $destinatarios);
+            if ($elegibles === null) {
+                $fallos++;
+                continue;
+            }
             $ruta = base_path("documentacion/novedades/{$archivo}");
             $contenido = is_readable($ruta) ? file_get_contents($ruta) : false;
 
@@ -84,7 +94,8 @@ class EnviarNovedades extends Command
 
             $enviados = 0;
             $pendientes = 0;
-            foreach ($destinatarios as $email) {
+            foreach ($elegibles as $destinatario) {
+                $email = $destinatario['email'];
                 $emailHash = hash('sha256', mb_strtolower($email));
                 $yaEnviado = DB::table('novedades_enviadas')
                     ->where('identificador', $identificador)
@@ -149,20 +160,43 @@ class EnviarNovedades extends Command
         return $nombre.'.md';
     }
 
-    /** @return array<int, string> */
+    /** @return array<int, array{email: string, created_at: string}> */
     private function obtenerDestinatarios(): array
     {
-        $correos = User::query()
+        return User::query()
             ->where('profile', 2)
             ->whereHas('empresas')
             ->whereNotNull('email')
-            ->pluck('email');
-
-        return $correos
-            ->map(fn ($email) => trim((string) $email))
-            ->filter(fn (string $email) => $email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL))
-            ->unique(fn (string $email) => mb_strtolower($email))
+            ->whereNotNull('created_at')
+            ->get(['email', 'created_at'])
+            ->map(fn (User $user) => ['email' => trim((string) $user->email), 'created_at' => $user->created_at->format('Y-m-d H:i:s')])
+            ->filter(fn (array $destinatario) => $destinatario['email'] !== '' && filter_var($destinatario['email'], FILTER_VALIDATE_EMAIL))
+            ->unique(fn (array $destinatario) => mb_strtolower($destinatario['email']))
             ->values()
             ->all();
+    }
+
+    /**
+     * AAMMDD representa el inicio del día; AAMMDDHHMM permite distinguir altas del mismo día.
+     *
+     * @param array<int, array{email: string, created_at: string}> $destinatarios
+     * @return array<int, array{email: string, created_at: string}>|null
+     */
+    private function destinatariosParaNovedad(string $archivo, array $destinatarios): ?array
+    {
+        $identificador = pathinfo($archivo, PATHINFO_FILENAME);
+        $valido = preg_match('/^(\d{10}|\d{6})(?:[-_].*)?$/', $identificador, $matches);
+        $formato = $valido && strlen($matches[1]) === 10 ? '!ymdHi' : '!ymd';
+        $fecha = $valido ? DateTimeImmutable::createFromFormat($formato, $matches[1]) : false;
+
+        if ($fecha === false || $fecha->format(strlen($matches[1] ?? '') === 10 ? 'ymdHi' : 'ymd') !== ($matches[1] ?? null)) {
+            $this->error("La novedad {$archivo} necesita un identificador que comience con una fecha válida AAMMDD o AAMMDDHHMM.");
+
+            return null;
+        }
+
+        $publicadaEl = $fecha->format('Y-m-d H:i:s');
+
+        return array_values(array_filter($destinatarios, fn (array $destinatario) => $destinatario['created_at'] < $publicadaEl));
     }
 }

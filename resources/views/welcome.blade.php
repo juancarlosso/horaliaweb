@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Controla entradas y salidas de tu equipo con Horalia. Reloj checador en línea, registro desde computadora o tablet con PIN y fotografía, reportes por periodo y exportación a Excel.">
+    <meta name="description" content="Horalia es un reloj checador en línea para empresas. Registra entradas, salidas y pausas, consulta reportes y prueba gratis tu primer mes.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://horalia.mx/">
     <title>Horalia | Reloj checador y control de asistencia en línea</title>
@@ -60,7 +60,7 @@
             <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
             <div class="nav-content" id="main-nav">
                 <div class="nav-links"><a href="#inicio">Inicio</a><a href="#caracteristicas">Características</a><a href="#como-funciona">Cómo funciona</a><a href="#registro-electronico">Marco Legal</a><a href="#precios">Precios</a><a href="#preguntas">Preguntas</a></div>
-                <div class="nav-actions"><a class="button button-outline" href="{{ route('login') }}">Iniciar sesión</a><a class="button button-primary" href="{{ route('registro.create') }}">Comenzar ahora</a></div>
+                <div class="nav-actions"><a class="button button-outline" href="{{ route('login') }}">Iniciar sesión</a><a class="button button-primary" href="{{ route('registro.create') }}">Crear mi cuenta</a></div>
             </div>
         </nav>
     </header>
@@ -72,14 +72,15 @@
         <section class="hero section-shell" id="inicio">
             <div class="hero-copy">
                 <a class="labor-reform-badge" href="#registro-electronico"><span aria-hidden="true">🇲🇽</span> Prepárate para el registro electrónico de la jornada laboral</a>
-                <h1>Reloj checador.<br><span>En línea.</span></h1>
-                <p class="hero-lede">Controla entradas, salidas y asistencia de tu equipo de forma sencilla, desde cualquier lugar.</p>
+                <h1>Reloj checador en línea<br><span>para tu empresa</span></h1>
+                <p class="hero-lede">Registra entradas, salidas y pausas de tu personal desde una tablet o computadora. Consulta la asistencia y genera reportes desde un solo lugar.</p>
                 <div class="hero-points">
                     <div><i class="fa-regular fa-clock" aria-hidden="true"></i><span><b>Reloj checador</b><small>fácil de usar</small></span></div>
                     <div><i class="fa-solid fa-chart-column" aria-hidden="true"></i><span><b>Reportes</b><small>en tiempo real</small></span></div>
-                    <div><i class="fa-solid fa-users" aria-hidden="true"></i><span><b>Multiempresa</b><small>varias empresas, una cuenta</small></span></div>
+                    <div><i class="fa-solid fa-building" aria-hidden="true"></i><span><b>Centros de trabajo</b><small>organiza tus sucursales</small></span></div>
                 </div>
-                <div class="hero-actions"><a class="button button-primary button-large" href="{{ route('registro.create') }}">Comenzar ahora <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a><button class="button button-video" type="button" data-video-open><i class="fa-regular fa-circle-play" aria-hidden="true"></i> Ver cómo funciona</button></div>
+                <div class="hero-actions"><a class="button button-primary button-large" href="{{ route('registro.create') }}">Crear mi cuenta <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a><button class="button button-video" type="button" data-video-open><i class="fa-regular fa-circle-play" aria-hidden="true"></i> Ver cómo funciona</button></div>
+                <p class="hero-trial-note"><i class="fa-solid fa-gift" aria-hidden="true"></i><span>¡Tu primer mes es gratis!</span></p>
             </div>
             <div class="hero-visual" aria-label="Vista previa del panel de asistencia {{ config('app.name') }}">
                 <div class="hero-orb"></div>
@@ -94,7 +95,7 @@
             <div class="section-heading"><h2>¿Cómo funciona?</h2><p>En tres simples pasos tu equipo estará registrando su asistencia.</p></div>
             <div class="steps-grid section-shell">
                 <article class="step-card"><span class="step-number">1</span><span class="icon-tile"><i class="fa-solid fa-user-plus"></i></span><div><h3>Registra</h3><p>Crea tu empresa, agrega tus empleados y define sus horarios.</p></div></article><span class="step-arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                <article class="step-card"><span class="step-number">2</span><span class="icon-tile"><i class="fa-regular fa-clock"></i></span><div><h3>Controla</h3><p>Tu equipo marca entrada y salida desde su dispositivo.</p></div></article><span class="step-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                <article class="step-card"><span class="step-number">2</span><span class="icon-tile"><i class="fa-regular fa-clock"></i></span><div><h3>Controla</h3><p>Tu personal registra entradas, salidas y pausas con el reloj checador.</p></div></article><span class="step-arrow"><i class="fa-solid fa-arrow-right"></i></span>
                 <article class="step-card"><span class="step-number">3</span><span class="icon-tile"><i class="fa-solid fa-chart-column"></i></span><div><h3>Consulta</h3><p>Revisa asistencias, retardos, faltas e incidencias.</p></div></article>
             </div>
         </section>
@@ -109,14 +110,15 @@
                 <article class="feature-card"><span class="icon-tile"><i class="fa-solid fa-users"></i></span><div><h3>Gestión de empleados</h3><p>Registra tu equipo, asigna horarios y departamentos.</p></div></article>
                 <article class="feature-card"><span class="icon-tile"><i class="fa-solid fa-calendar-days"></i></span><div><h3>Horarios flexibles</h3><p>Configura turnos, días de descanso y horas laborales.</p></div></article>
                 <article class="feature-card"><span class="icon-tile"><i class="fa-solid fa-clipboard-check"></i></span><div><h3>Asistencias en tiempo real</h3><p>Consulta entradas, salidas, retardos y faltas al instante.</p></div></article>
-                <article class="feature-card"><span class="icon-tile"><i class="fa-solid fa-file-lines"></i></span><div><h3>Incidencias y justificaciones</h3><p>Registra permisos, vacaciones y faltas de forma sencilla.</p></div></article>
+                <article class="feature-card"><span class="icon-tile"><i class="fa-solid fa-file-lines"></i></span><div><h3>Pausas e incidencias</h3><p>Registra los periodos de pausa del personal y gestiona sus incidencias.</p></div></article>
                 <article class="feature-card"><span class="icon-tile"><i class="fa-solid fa-chart-column"></i></span><div><h3>Reportes</h3><p>Obtén información clara y exporta a Excel.</p></div></article>
-                <article class="feature-card"><span class="icon-tile"><i class="fa-solid fa-building"></i></span><div><h3>Multiempresa</h3><p>Administra varias empresas desde una sola cuenta. Cada empresa mantiene su propia suscripción.</p></div></article>
+                <article class="feature-card"><span class="icon-tile"><i class="fa-solid fa-building"></i></span><div><h3>Centros de trabajo</h3><p>Organiza la asistencia por centros de trabajo o sucursales.</p></div></article>
             </div>
+            <p class="feature-deep-link"><a href="{{ route('control-asistencia.empleados') }}">Conoce cómo organizar el control de asistencia de tus empleados <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></p>
         </section>
 
         <section class="reports-story section-shell" id="reportes"><div class="report-window"><img class="screen-placeholder report-placeholder" src="{{ asset('assets/images/reportes.jpg') }}" alt="Reporte de asistencia por periodo en Horalia" width="1712" height="919" loading="lazy"></div>
-            <div class="story-copy"><span class="eyebrow">Decisiones basadas en información</span><h2>Reportes claros y siempre disponibles</h2><p>Consulta la asistencia de tu equipo por periodo, revisa entradas, salidas, retardos y evidencias, y exporta la información a Excel cuando la necesites.</p><ul class="check-list"><li>Consulta por empresa y periodo</li><li>Detalle de entradas, salidas y retardos</li><li>Evidencias de asistencia</li><li>Exportación a Excel</li></ul></div></section>
+            <div class="story-copy"><span class="eyebrow">Decisiones basadas en información</span><h2>Reportes claros y siempre disponibles</h2><p>Consulta en un mismo lugar entradas, salidas, retardos y evidencias, y exporta tus reportes a Excel cuando los necesites.</p><ul class="check-list"><li>Consulta por empresa y periodo</li><li>Detalle de entradas, salidas y retardos</li><li>Evidencias de asistencia</li><li>Exportación a Excel</li></ul></div></section>
 
         <section class="labor-reform-section" id="registro-electronico" aria-labelledby="labor-reform-title">
             <div class="labor-reform-inner section-shell">
@@ -139,13 +141,13 @@
             </div>
         </section>
 
-        <section class="pricing-section" id="precios"><div class="pricing-inner section-shell"><div class="pricing-copy"><span class="eyebrow">Un precio. Sin complicaciones.</span><h2>Todo esto por solo</h2><p class="price">${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} <span>MXN / mes</span></p><p class="price-unit">por empresa</p><small class="pricing-limit">Hasta 200 empleados</small><p>Acceso completo a las funcionalidades.<br>Sin costos ocultos ni planes complicados.</p><p>¿Necesitas más capacidad? Cada bloque adicional de hasta 200 empleados cuesta ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} MXN mensuales.</p><a class="button button-primary button-large" href="{{ route('registro.create') }}">Comenzar ahora <i class="fa-solid fa-arrow-right"></i></a></div><div class="pricing-card"><ul class="check-list"><li>Reloj checador para todos tus empleados</li><li>Gestión de horarios e incidencias</li><li>Reportes y exportación a Excel</li><li>Multiempresa: administra varias empresas, cada una con su suscripción</li><li>Soporte por correo</li><li>Actualizaciones incluidas</li></ul></div></div></section>
+        <section class="pricing-section" id="precios"><div class="pricing-inner section-shell"><div class="pricing-copy"><span class="eyebrow">Un precio. Sin complicaciones.</span><h2>Todo esto por solo</h2><p class="price">${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} <span>MXN / mes</span></p><p class="price-unit">por empresa · IVA incluido</p><small class="pricing-limit">Incluye hasta 200 empleados</small><p class="pricing-trial">¡Tu primer mes es gratis!</p><p>Acceso completo a las funcionalidades.</p><p>¿Necesitas más capacidad? Cada bloque adicional de hasta 200 empleados cuesta ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} MXN mensuales, IVA incluido.</p><a class="button button-primary button-large" href="{{ route('registro.create') }}">Crear mi cuenta <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div><div class="pricing-card"><ul class="check-list"><li>Reloj checador para todos tus empleados</li><li>Gestión de horarios e incidencias</li><li>Reportes y exportación a Excel</li><li>Multiempresa: administra varias empresas, cada una con su suscripción</li><li>Soporte por correo</li><li>Actualizaciones incluidas</li></ul></div></div></section>
 
         <section class="business-section section-shell"><h2>Ideal para todo tipo de negocios</h2><div class="business-grid"><div><i class="fa-regular fa-building"></i><span>Oficinas</span></div><div><i class="fa-solid fa-shop"></i><span>Comercios</span></div><div><i class="fa-solid fa-utensils"></i><span>Restaurantes</span></div><div><i class="fa-solid fa-screwdriver-wrench"></i><span>Talleres</span></div><div><i class="fa-solid fa-hospital"></i><span>Clínicas</span></div><div><i class="fa-solid fa-school"></i><span>Escuelas</span></div><div><i class="fa-solid fa-building"></i><span>Sucursales</span></div><div><i class="fa-solid fa-shapes"></i><span>Más...</span></div></div></section>
 
-        <section class="faq-section section-shell" id="preguntas"><h2 class="faq-title">Preguntas frecuentes</h2><div class="faq-list"><details><summary>¿Qué incluye la mensualidad de ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }}?</summary><p>Incluye el reloj checador, gestión de empleados, horarios, asistencias, incidencias, reportes, soporte y actualizaciones para una empresa.</p></details><details><summary>¿Puedo administrar varias empresas?</summary><p>Sí. Puedes administrar varias empresas desde una misma cuenta. La suscripción es de ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} MXN al mes por cada empresa.</p></details><details><summary>¿Mi equipo necesita un dispositivo especial?</summary><p>No. Puede registrar su asistencia desde una computadora, tablet o celular.</p></details><details><summary>¿Es obligatorio registrar la ubicación?</summary><p>No. La ubicación puede registrarse cuando aplique; el equipo también puede usar el reloj checador sin ella.</p></details><details><summary>¿Horalia me ayuda a prepararme para las disposiciones sobre registro electrónico de asistencia?</summary><p>Sí. Horalia permite registrar electrónicamente entradas y salidas, consultar el historial de asistencias y exportar reportes. Estas herramientas ayudan a digitalizar el control de asistencia. El cumplimiento legal específico depende de la normativa aplicable y de cómo cada empresa implemente sus procesos.</p></details></div></section>
+        <section class="faq-section section-shell" id="preguntas"><h2 class="faq-title">Preguntas frecuentes</h2><div class="faq-list"><details><summary>¿Horalia tiene un periodo de prueba?</summary><p>Sí. Puedes utilizar Horalia gratis durante tu primer mes.</p></details><details><summary>¿Necesito registrar una tarjeta para comenzar?</summary><p>No. Puedes crear tu cuenta y comenzar a utilizar Horalia sin registrar una tarjeta.</p></details><details><summary>¿Cuánto cuesta Horalia?</summary><p>Horalia cuesta ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} MXN mensuales por empresa, IVA incluido, e incluye hasta 200 empleados. Cada bloque adicional de hasta 200 empleados cuesta ${{ number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} MXN mensuales, IVA incluido.</p></details><details><summary>¿Qué sucede cuando termina mi primer mes gratis?</summary><p>Al finalizar el primer mes gratis, podrás continuar utilizando Horalia mediante la renovación de tu suscripción correspondiente.</p></details><details><summary>¿Qué incluye la mensualidad?</summary><p>Incluye el reloj checador, gestión de empleados, horarios, asistencias, incidencias, reportes, soporte y actualizaciones para una empresa.</p></details><details><summary>¿Puedo administrar varias empresas?</summary><p>Sí. Puedes administrar varias empresas desde una misma cuenta. Cada empresa mantiene su propia suscripción.</p></details><details><summary>¿Mi equipo necesita un dispositivo especial?</summary><p>No. Puede registrar su asistencia desde una computadora, tablet o celular.</p></details><details><summary>¿Es obligatorio registrar la ubicación?</summary><p>No. La ubicación puede registrarse cuando aplique; el equipo también puede usar el reloj checador sin ella.</p></details><details><summary>¿Horalia me ayuda a prepararme para las disposiciones sobre registro electrónico de asistencia?</summary><p>Sí. Horalia permite registrar electrónicamente entradas y salidas, consultar el historial de asistencias y exportar reportes. Estas herramientas ayudan a digitalizar el control de asistencia. El cumplimiento legal específico depende de la normativa aplicable y de cómo cada empresa implemente sus procesos.</p></details></div></section>
 
-        <section class="final-cta" id="contacto"><div class="final-cta-inner section-shell"><div><h2>Empieza a controlar<br>la asistencia de tu equipo hoy.</h2><p>{{ config('app.name') }} es la forma más sencilla y accesible de mantener a tu equipo a tiempo.</p></div><a class="button button-primary button-large" href="{{ route('registro.create') }}">Comenzar ahora <i class="fa-solid fa-arrow-right"></i></a></div></section>
+        <section class="final-cta" id="contacto"><div class="final-cta-inner section-shell"><div><h2>Empieza a controlar<br>la asistencia de tu equipo hoy.</h2><p>{{ config('app.name') }} es la forma más sencilla y accesible de mantener a tu equipo a tiempo.</p></div><a class="button button-primary button-large" href="{{ route('registro.create') }}">Crear mi cuenta <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></section>
     </main>
     <div class="video-modal" data-video-modal data-video-url="{{ config('constantes.video_como_funciona_youtube') }}" aria-hidden="true">
         <div class="video-modal-backdrop" data-video-close></div>
@@ -182,7 +184,7 @@
                     <i class="fa-solid fa-envelope" aria-hidden="true"></i><span>Correo</span>
                 </a>
             </div>
-            <small>© {{ date('Y') }} <a href="https://solventia.com.mx">Solventia Software</a>. Todos los derechos reservados.</small>
+            <small>Horalia es un servicio de <a href="https://solventia.com.mx">Solventia Software</a>. © {{ date('Y') }} Todos los derechos reservados.</small>
         </div>
     </footer>
 </body>

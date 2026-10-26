@@ -164,6 +164,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('inicio');
 
+Route::get('/control-de-asistencia-empleados', function () {
+    return view('control-asistencia');
+})->name('control-asistencia.empleados');
+
 Route::get('/terminos-y-condiciones', $showLegalDocument('terminos-y-condiciones.md', 'Términos y Condiciones'))
     ->name('legal.terms');
 

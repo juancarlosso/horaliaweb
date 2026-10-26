@@ -6,6 +6,20 @@
     .kiosk-admin-heading { display:flex; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
     .kiosk-admin-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; }
     .kiosk-admin-heading p,.kiosk-note { margin:0; color:var(--body-text-muted); font-size:.875rem; }
+    .kiosk-app-card { margin-bottom:1.75rem; border-color:rgba(83,109,245,.3); }
+    .kiosk-app-card .card-bd { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1.5rem; }
+    .kiosk-app-copy { flex:1 1 320px; max-width:640px; color:var(--body-text-muted); }
+    .kiosk-app-copy p { margin:0; }
+    .kiosk-store-links { display:flex; flex-wrap:wrap; align-items:flex-start; gap:.75rem; }
+    .kiosk-store-ios { display:flex; flex-direction:column; align-items:center; }
+    .kiosk-store-ios span { color:var(--body-text-muted); font-size:.75rem; font-weight:700; }
+    .kiosk-store-link { display:inline-flex; align-items:center; justify-content:center; flex:none; width:170px; height:60px; padding:0; overflow:hidden; border:1px solid #000; border-radius:.5rem; background:#000; cursor:pointer; }
+    .kiosk-store-link:focus-visible { outline:3px solid var(--color-primary); outline-offset:3px; }
+    .kiosk-store-link img { display:block; width:170px; height:auto; max-width:none; }
+    .kiosk-store-link-google img { width:220px; flex:none; }
+    .kiosk-browser-heading { margin:0 0 .85rem; }
+    .kiosk-browser-heading h2 { margin:0 0 .35rem; color:var(--body-text); font-size:1.2rem; font-weight:800; }
+    .kiosk-browser-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
     .kiosk-link-result { margin-top:1rem; padding:1rem; border:1px solid rgba(16,185,129,.25); border-radius:.75rem; background:rgba(16,185,129,.07); }
     .kiosk-link-status { margin:.15rem 0 .7rem; color:var(--body-text-muted); font-size:.8rem; }
     .personal-error { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(239,68,68,.2); border-radius:.625rem; color:#b42318; background:rgba(239,68,68,.07); font-size:.845rem; }
@@ -22,8 +36,20 @@
     @media(max-width:600px) { .kiosk-admin-heading { align-items:stretch; flex-direction:column; } }
 </style>
 <section class="kiosk-admin">
-    <header class="kiosk-admin-heading"><div><h1>Reloj Checador</h1><p>Selecciona la empresa y la vigencia de la sesión para generar un enlace que permita registrar la asistencia de su personal, sin importar el centro de trabajo.</p></div><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index') }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
+    <header class="kiosk-admin-heading"><div><h1>Reloj Checador</h1><p>Usa la aplicación de Horalia en tu tablet o genera un enlace para usar el reloj checador desde un navegador.</p></div><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index') }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
     @if($errors->any())<div class="personal-error" role="alert">{{ $errors->first() }}</div>@endif
+    <article class="card-hr kiosk-app-card" aria-labelledby="kiosk-app-title">
+        <div class="card-hd"><div><h2 class="card-title-hr" id="kiosk-app-title">Convierte tu tablet en un reloj checador</h2></div></div>
+        <div class="card-bd">
+            <div class="kiosk-app-copy"><p>Registra entradas, salidas y pausas de tu personal con la aplicación de Horalia. Instálala en tu tablet e inicia sesión con tu cuenta de administrador de empresa; no necesitas generar enlaces temporales.</p></div>
+            <div class="kiosk-store-links" aria-label="Tiendas de aplicaciones">
+                <a class="kiosk-store-link kiosk-store-link-google" href="https://play.google.com/store/apps/details?id=mx.com.solventia.horaliarch" target="_blank" rel="noopener noreferrer" aria-label="Descargar Horalia en Google Play (abre en una pestaña nueva)"><img src="{{ asset('assets/tiendas/googleplay.svg') }}" alt="Disponible en Google Play"></a>
+                <div class="kiosk-store-ios"><button class="kiosk-store-link" type="button" data-ios-coming-soon aria-label="App Store: ¡Muy pronto!"><img src="{{ asset('assets/tiendas/appstore.png') }}" alt="Disponible en App Store próximamente"></button><span>Próximamente en iOS</span></div>
+            </div>
+        </div>
+    </article>
+    <section aria-labelledby="kiosk-browser-title">
+    <div class="kiosk-browser-heading"><h2 id="kiosk-browser-title">Reloj checador desde navegador</h2><p>¿Prefieres usar el reloj checador desde un navegador? Genera un enlace para tu tablet y elige su vigencia.</p></div>
     <article class="card-hr">
         <div class="card-hd"><div><h2 class="card-title-hr">Nueva sesión de checador</h2><p class="card-subtitle-hr">La tablet quedará vinculada a una empresa.</p></div></div>
         <div class="card-bd">
@@ -54,6 +80,7 @@
             </div>
         </div>
     </article>
+    </section>
 </section>
 <div class="kiosk-email-modal" id="kiosk-email-modal" role="dialog" aria-modal="true" aria-labelledby="kiosk-email-modal-title" @if(!$errors->has('email') && !$errors->has('email_secondary')) hidden @endif>
     <div class="kiosk-email-modal-card">
@@ -72,6 +99,17 @@
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('[data-ios-coming-soon]').addEventListener('click', function () {
+        if (!window.Swal) { window.alert('¡Muy pronto! La aplicación de Horalia para iOS estará disponible próximamente.'); return; }
+        Swal.fire({
+            icon: 'info',
+            title: '¡Muy pronto!',
+            text: 'La aplicación de Horalia para iOS estará disponible próximamente.',
+            confirmButtonText: 'Entendido',
+            buttonsStyling: false,
+            customClass: { confirmButton: 'btn-hr btn-primary-hr' }
+        });
+    });
     document.querySelectorAll('[data-copy-activation-url]').forEach(function (button) {
         button.addEventListener('click', async function () {
             const input = document.getElementById(button.dataset.target);

@@ -43,6 +43,7 @@
         .horalia-brand { display:flex; align-items:center; justify-content:center; min-height:68px; }
         .horalia-brand img { display:block; width:166px; height:auto; }
         .sidebar-nav { padding-bottom:1rem; }
+        .sidebar-utility-links { margin-top:.5rem; padding-top:.5rem; border-top:1px solid var(--body-border); }
         .sidebar-section { margin-top:.5rem; }
         [data-sidebar-mobile-toggle] { display:none; }
         .nav-lnk .nav-icon svg { width:18px; height:18px; display:block; stroke:currentColor; }
@@ -92,7 +93,7 @@
         .module-placeholder h2 { margin:0 0 .55rem; color:var(--body-text); font-size:1.35rem; font-weight:800; }
         .module-placeholder p { margin:0; color:var(--body-text-muted); font-size:.9rem; line-height:1.65; }
         @media(max-width:900px) { .dashboard-start { grid-template-columns:1fr; } .start-item { min-height:auto; } }
-        @media(max-width:767px) { [data-sidebar-toggle] { display:none; } [data-sidebar-mobile-toggle] { display:flex; } }
+        @media(max-width:767px) { [data-sidebar-toggle] { display:none; } [data-sidebar-mobile-toggle] { display:flex; } .topbar-manual-link,.topbar-news-link { display:none; } }
         @media(max-width:575px) { .dashboard-welcome { padding:1.4rem; } .topbar-user-copy { display:none; } .page-inner { padding-left:1rem; padding-right:1rem; } }
     </style>
     @stack('styles')
@@ -138,6 +139,18 @@
             <a href="{{ route('profile.password.edit') }}" class="nav-lnk {{ request()->routeIs('profile.password.*') ? 'active' : '' }}" @if(request()->routeIs('profile.password.*')) aria-current="page" @endif data-sidebar-tooltip="Cambiar Contraseña">
                 <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'lock'])</span><span class="nav-text">Cambiar Contraseña</span>
             </a>
+        </div>
+        <div class="sidebar-utility-links">
+            <div class="nav-li">
+                <a href="{{ route('manual.index') }}" class="nav-lnk {{ request()->routeIs('manual.*') ? 'active' : '' }}" @if(request()->routeIs('manual.*')) aria-current="page" @endif data-sidebar-tooltip="Manual de usuario">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.2 1.8c-1.1 1-1.8 1.4-1.8 2.7m0 3h.01"/></svg></span><span class="nav-text">Manual</span>
+                </a>
+            </div>
+            <div class="nav-li">
+                <a href="{{ route('novedades.index') }}" class="nav-lnk {{ request()->routeIs('novedades.*') ? 'active' : '' }}" @if(request()->routeIs('novedades.*')) aria-current="page" @endif data-sidebar-tooltip="Novedades de Horalia">
+                    <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4.5h13a2 2 0 0 1 2 2v13H6a2 2 0 0 1-2-2z"/><path d="M4 17.5a2 2 0 0 1 2-2h13M8 8h7M8 11h7"/></svg></span><span class="nav-text">Novedades</span>
+                </a>
+            </div>
         </div>
         @if($isCompanyAdmin)
             <div class="nav-li">

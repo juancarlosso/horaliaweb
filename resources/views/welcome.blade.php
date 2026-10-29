@@ -117,6 +117,21 @@
             <p class="feature-deep-link"><a href="{{ route('control-asistencia.empleados') }}">Conoce cómo organizar el control de asistencia de tus empleados <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></p>
         </section>
 
+        <section class="implementation-section section-shell" id="implementacion-sin-resistencia" aria-labelledby="implementation-title">
+            <div class="implementation-copy">
+                <span class="eyebrow"><i class="fa-solid fa-users" aria-hidden="true"></i> IMPLEMENTACIÓN SIN COMPLICACIONES</span>
+                <h2 id="implementation-title">Un cambio positivo para todos, no solo para tu empresa.</h2>
+                <p>Implementar un reloj checador no tiene por qué generar conflictos. Cuando tu equipo comprende sus beneficios, el registro de asistencia puede convertirse en una herramienta de organización, transparencia y confianza.</p>
+                <div class="implementation-benefits">
+                    <article><span class="icon-tile"><i class="fa-solid fa-users" aria-hidden="true"></i></span><div><h3>Genera confianza</h3><p>El registro de asistencia ofrece información clara tanto para la empresa como para sus colaboradores.</p></div></article>
+                    <article><span class="icon-tile"><i class="fa-regular fa-clock" aria-hidden="true"></i></span><div><h3>Respeta el tiempo de todos</h3><p>Documenta horarios, entradas, salidas y pausas para reducir confusiones sobre las jornadas laborales.</p></div></article>
+                    <article><span class="icon-tile"><i class="fa-solid fa-chart-line" aria-hidden="true"></i></span><div><h3>Facilita la adaptación</h3><p>Comunica los beneficios, escucha las inquietudes y permite que tu equipo se familiarice gradualmente con el sistema.</p></div></article>
+                </div>
+                <a class="button button-primary button-large implementation-cta" href="/blog/como-implementar-reloj-checador-empleados">Descubre cómo implementar Horalia sin resistencia <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+            <div class="implementation-visual"><img src="{{ asset('assets/images/todos.jpg') }}" alt="Equipo de trabajo colaborando alrededor de una computadora" width="1536" height="1024" loading="lazy"></div>
+        </section>
+
         <section class="reports-story section-shell" id="reportes"><div class="report-window"><img class="screen-placeholder report-placeholder" src="{{ asset('assets/images/reportes.jpg') }}" alt="Reporte de asistencia por periodo en Horalia" width="1712" height="919" loading="lazy"></div>
             <div class="story-copy"><span class="eyebrow">Decisiones basadas en información</span><h2>Reportes claros y siempre disponibles</h2><p>Consulta en un mismo lugar entradas, salidas, retardos y evidencias, y exporta tus reportes a Excel cuando los necesites.</p><ul class="check-list"><li>Consulta por empresa y periodo</li><li>Detalle de entradas, salidas y retardos</li><li>Evidencias de asistencia</li><li>Exportación a Excel</li></ul></div></section>
 

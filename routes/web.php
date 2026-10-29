@@ -172,6 +172,9 @@ Route::get('/reloj-checador-tablet', function () {
     return view('reloj-checador-tablet');
 })->name('reloj-checador.tablet');
 
+Route::view('/blog/como-implementar-reloj-checador-empleados', 'blog.implementacion-reloj-checador')
+    ->name('blog.implementacion-reloj-checador');
+
 Route::get('/terminos-y-condiciones', $showLegalDocument('terminos-y-condiciones.md', 'Términos y Condiciones'))
     ->name('legal.terms');
 

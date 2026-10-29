@@ -50,6 +50,9 @@
         .topbar-manual-link { width:auto; gap:.4rem; padding:0 .65rem; color:var(--body-text-muted); font-size:.78rem; font-weight:700; text-decoration:none; }
         .topbar-manual-link:hover { color:var(--color-primary); text-decoration:none; }
         .topbar-manual-link svg { flex:none; stroke:currentColor; }
+        .topbar-news-link { width:auto; gap:.4rem; padding:0 .65rem; color:var(--body-text-muted); font-size:.78rem; font-weight:700; text-decoration:none; }
+        .topbar-news-link:hover { color:var(--color-primary); text-decoration:none; }
+        .topbar-news-link svg { flex:none; stroke:currentColor; }
         .topbar-user { display:flex; align-items:center; gap:.65rem; padding:0 .5rem; }
         .topbar-user-copy { display:flex; flex-direction:column; min-width:0; }
         .topbar-user-name { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.82rem; font-weight:700; color:var(--body-text); }
@@ -175,6 +178,10 @@
             <a class="btn-icon-top topbar-manual-link" href="{{ route('manual.index') }}" aria-label="Abrir Manual de usuario" title="Manual">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.2 1.8c-1.1 1-1.8 1.4-1.8 2.7m0 3h.01"/></svg>
                 <span>Manual</span>
+            </a>
+            <a class="btn-icon-top topbar-news-link" href="{{ route('novedades.index') }}" aria-label="Novedades de Horalia" title="Novedades de Horalia">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4.5h13a2 2 0 0 1 2 2v13H6a2 2 0 0 1-2-2z"/><path d="M4 17.5a2 2 0 0 1 2-2h13M8 8h7M8 11h7"/></svg>
+                <span>Novedades</span>
             </a>
             <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Cambiar entre tema claro y oscuro" title="Cambiar tema">
                 <svg class="theme-icon-light" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>

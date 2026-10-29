@@ -49,6 +49,10 @@ Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth'
 Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
     Route::get('/home/manual', [\App\Http\Controllers\ManualController::class, 'index'])->name('manual.index');
+    Route::get('/home/novedades', [\App\Http\Controllers\NovedadesController::class, 'index'])->name('novedades.index');
+    Route::get('/home/novedades/{identificador}', [\App\Http\Controllers\NovedadesController::class, 'show'])
+        ->where('identificador', '\\d{6}(?:\\d{4})?(?:[-_][A-Za-z0-9_-]+)?')
+        ->name('novedades.show');
     Route::post('/home/empresas/{empresa}/membresia/pagar', [MembershipPaymentController::class, 'pay'])->whereNumber('empresa')->name('membership.pay');
     Route::post('/home/empresas/{empresa}/membresia/confirmar', [MembershipPaymentController::class, 'confirm'])->whereNumber('empresa')->name('membership.confirm');
     Route::get('/mi-perfil', [ProfileController::class, 'edit'])->name('profile.edit');

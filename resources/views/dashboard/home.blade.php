@@ -217,6 +217,13 @@
         </div>
     </header>
 
+    <div class="alert alert-info" role="note">
+        Si requieres soporte, por favor envíanos un correo a
+        <a href="mailto:contacto@solventia.com.mx"><i class="fa-solid fa-envelope" aria-hidden="true"></i> contacto@solventia.com.mx</a>
+        o si lo prefieres, escríbenos por WhatsApp al
+        <a href="https://wa.me/525513447932" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> 5513447932</a>.
+    </div>
+
     <section class="manager-metrics" aria-label="Resumen de asistencia de hoy">
         <article class="manager-metric">
             <div class="manager-metric-icon" style="background:rgba(79,110,247,.12);color:#4f6ef7"><i class="fa-light fa-users" aria-hidden="true"></i></div>

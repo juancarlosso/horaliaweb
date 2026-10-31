@@ -125,7 +125,7 @@ class PersonalController extends Controller
                     'empresa_id' => $personalData['empresa_id'],
                     'control_total' => (int) $data['profile'] === $this->administratorProfileId(),
                 ]);
-                $this->syncWorkSchedules($empleado, $data['laborados'], $data['horarios'], (int) $data['empresa_id']);
+                $this->syncWorkSchedules($empleado, $data['laborados'], $data['horarios'], $data['modalidades'] ?? [], (int) $data['empresa_id']);
 
                 return $empleado;
             });
@@ -264,7 +264,7 @@ class PersonalController extends Controller
                     $personalData['empresa_id'] => ['control_total' => (int) $data['profile'] === $this->administratorProfileId()],
                 ]);
                 $empleado->horarios()->delete();
-                $this->syncWorkSchedules($empleado, $data['laborados'], $data['horarios'], (int) $data['empresa_id']);
+                $this->syncWorkSchedules($empleado, $data['laborados'], $data['horarios'], $data['modalidades'] ?? [], (int) $data['empresa_id']);
             });
         } catch (Throwable $exception) {
             $this->deletePhoto($newPhotoPath);
@@ -321,6 +321,34 @@ class PersonalController extends Controller
         }
 
         return back()->with('status', 'Enviamos al correo del usuario un enlace para que genere nuevamente su contraseña.');
+    }
+
+    public function assignPassword(Request $request, int $personal)
+    {
+        $empleado = Personal::query()
+            ->with('usuario')
+            ->whereIn('empresa_id', $this->companyIdsFor($request, true))
+            ->findOrFail($personal);
+
+        if (!$empleado->activo) {
+            return back()->withErrors(['password' => 'El colaborador está dado de baja y no puede actualizar su contraseña.']);
+        }
+
+        if (!$empleado->usuario) {
+            return back()->withErrors(['password' => 'Este registro de personal no tiene un usuario asociado.']);
+        }
+
+        $validated = $request->validate([
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        $empleado->usuario->forceFill([
+            'password' => $validated['password'],
+            'remember_token' => Str::random(60),
+        ])->save();
+
+        return redirect()->route('personal.index', ['empresa_id' => $empleado->empresa_id])
+            ->with('status', 'La contraseña de ' . $empleado->nombre . ' se actualizó correctamente.');
     }
 
     public function resendPin(Request $request, int $personal)
@@ -427,6 +455,7 @@ class PersonalController extends Controller
             'laborados' => ['required', 'array', 'min:1'],
             'laborados.*' => ['required', Rule::in(array_keys(self::DAYS))],
             'horarios' => ['required', 'array'],
+            'modalidades' => ['sometimes', 'array'],
         ];
         $messages = [
             'empresa_id.required' => 'Selecciona una empresa.',
@@ -455,6 +484,7 @@ class PersonalController extends Controller
                 'nullable',
                 Rule::exists('horarios_empresas', 'id')->where('empresa_id', $companyId),
             ];
+            $rules['modalidades.' . $day] = ['nullable', Rule::in(['PRESENCIAL', 'HOME_OFFICE'])];
             $messages['horarios.' . $day . '.required'] = "Selecciona un horario para {$label}.";
             $messages['horarios.' . $day . '.exists'] = "El horario seleccionado para {$label} no corresponde a la empresa.";
         }
@@ -496,7 +526,7 @@ class PersonalController extends Controller
             && (str_contains($message, 'personal_pin_unique') || str_contains($message, 'personal.pin'));
     }
 
-    private function syncWorkSchedules(Personal $empleado, array $selectedDays, array $selectedSchedules, int $companyId): void
+    private function syncWorkSchedules(Personal $empleado, array $selectedDays, array $selectedSchedules, array $modalities, int $companyId): void
     {
         foreach (array_keys(self::DAYS) as $index => $day) {
             if (!in_array($day, $selectedDays, true)) {
@@ -513,6 +543,7 @@ class PersonalController extends Controller
                 'entrada' => $horarioEmpresa->hora_entrada,
                 'salida' => $horarioEmpresa->hora_salida,
                 'horario_id' => $horarioEmpresa->id,
+                'modalidad' => ($modalities[$day] ?? 'PRESENCIAL') === 'HOME_OFFICE' ? 'HOME_OFFICE' : 'PRESENCIAL',
             ]);
         }
     }

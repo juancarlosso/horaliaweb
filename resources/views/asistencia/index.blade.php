@@ -132,7 +132,7 @@
         <div class="card-hd"><div><h2 class="card-title-hr">Registro de asistencias</h2><p class="card-subtitle-hr">{{ $attendance->total() }} {{ $attendance->total() === 1 ? 'registro' : 'registros' }} · {{ $periodLabel }}</p></div></div>
         @if($attendance->count())
             <div class="table-wrap"><table class="bs-table hover">
-                <thead><tr><th>Colaborador</th><th>Fecha</th><th>Entrada</th><th>Salida</th><th>Retardo</th><th>Salida temprana</th><th>Rango</th></tr></thead>
+                <thead><tr><th>Colaborador</th><th>Fecha</th><th>Modalidad</th><th>Entrada</th><th>Salida</th><th>Retardo</th><th>Salida temprana</th><th>Rango</th></tr></thead>
                 <tbody>
                 @foreach($attendance as $record)
                     @php
@@ -145,6 +145,7 @@
                     <tr>
                         <td><div class="attendance-user"><div class="attendance-avatar"><span>{{ $initial }}</span>@if($photoUrl)<img src="{{ $photoUrl }}" alt="" loading="lazy" onerror="this.remove()">@endif</div><div><div class="attendance-user-name">{{ $employee?->nombre ?? 'No disponible' }}</div><div class="attendance-user-company">{{ $employee?->empresa?->nombre ?? '—' }}</div></div></div></td>
                         <td>{{ $record->fecha?->format('d/m/Y') ?? '—' }}</td>
+                        <td>{{ ($record->modalidad ?? 'PRESENCIAL') === 'HOME_OFFICE' ? 'Home Office' : 'Presencial' }}</td>
                         <td><div class="attendance-time-cell"><span>{{ $record->llegada?->format('H:i') ?? '—' }}</span>
                             @if($entryEvidenceUrl)<a class="attendance-icon-action" href="{{ $entryEvidenceUrl }}" target="_blank" rel="noopener" title="Ver foto de entrada" aria-label="Ver foto de entrada de {{ $employee?->nombre }}"><i class="fa-light fa-camera" aria-hidden="true"></i></a>@endif
                             @if($record->latitud !== null && $record->longitud !== null)<a class="attendance-icon-action" href="https://www.google.com/maps?q={{ $record->latitud }},{{ $record->longitud }}" target="_blank" rel="noopener" title="Ver ubicación de entrada" aria-label="Ver ubicación de entrada de {{ $employee?->nombre }}"><i class="fa-light fa-location-dot" aria-hidden="true"></i></a>@endif

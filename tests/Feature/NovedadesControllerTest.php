@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Empresa;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -36,10 +37,11 @@ class NovedadesControllerTest extends TestCase
                 ->assertOk()
                 ->assertSee('Novedades de Horalia')
                 ->assertSee('Continuar leyendo')
-                ->assertDontSee('target="_blank"', false)
+                ->assertSee('target="_blank" rel="noopener noreferrer"', false)
                 ->assertSee('Nuevo artículo: Cómo implementar un reloj checador sin generar resistencia')
                 ->assertDontSee('Novedad futura');
             $this->assertSame(5, substr_count($response->getContent(), 'class="news-card"'));
+            $this->assertDoesNotMatchRegularExpression('/<a class="news-read"[^>]*target="_blank"/', $response->getContent());
         } finally {
             unlink($futurePath);
         }
@@ -110,6 +112,56 @@ class NovedadesControllerTest extends TestCase
             $this->get(route('novedades.show', '261028-sin-correo'))->assertOk();
         } finally {
             unlink($path);
+        }
+    }
+
+    public function test_dashboard_footer_renders_one_random_promotion_with_safe_links(): void
+    {
+        $user = $this->account('footer@example.test', '2026-10-01 10:00:00');
+        $headlines = array_column(config('constantes.promociones_footer'), 'headline');
+        $seen = [];
+
+        foreach (range(1, 40) as $_) {
+            $content = $this->actingAs($user)->get(route('novedades.index'))->assertOk()->getContent();
+            $matches = array_values(array_filter($headlines, fn (string $headline) => str_contains($content, $headline)));
+
+            $this->assertCount(1, $matches);
+            $this->assertSame(1, substr_count($content, 'class="app-footer-cta"'));
+            $this->assertSame(2, substr_count($content, 'target="_blank" rel="noopener noreferrer"'));
+            $this->assertStringContainsString('href="https://wa.me/525513447932?text=Quiero%20hablar%20de%20mi%20proyecto"', $content);
+            $this->assertStringNotContainsString('Horalia es un producto de', $content);
+            $seen[$matches[0]] = true;
+        }
+
+        $this->assertCount(5, $seen);
+    }
+
+    public function test_checador_administration_page_does_not_render_the_promotional_footer(): void
+    {
+        $user = $this->account('checador-footer@example.test', '2026-10-01 10:00:00');
+        $company = Empresa::query()->create([
+            'rfc' => 'FTR010101AAA',
+            'razon_social' => 'Empresa para validar footer',
+            'activa' => true,
+        ]);
+        $user->empresas()->attach($company->id, ['control_total' => true]);
+
+        $this->actingAs($user)
+            ->get(route('checador.index'))
+            ->assertOk()
+            ->assertDontSee('class="app-footer"', false)
+            ->assertDontSee('Horalia es un producto de');
+    }
+
+    public function test_promotional_footer_is_hidden_from_non_company_admin_profiles(): void
+    {
+        foreach ([1, 3] as $profile) {
+            $user = $this->account("profile-{$profile}-footer@example.test", '2026-10-01 10:00:00', $profile);
+
+            $this->actingAs($user)
+                ->get(route('novedades.index'))
+                ->assertOk()
+                ->assertDontSee('class="app-footer"', false);
         }
     }
 

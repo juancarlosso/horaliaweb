@@ -34,6 +34,7 @@
 <section class="personal-page">
     <header class="personal-heading"><div><h1>Personal</h1><p>Administra los colaboradores y sus horarios laborales.</p></div></header>
     @if($errors->has('personal'))<div class="personal-error" role="alert">{{ $errors->first('personal') }}</div>@endif
+    @if($errors->has('password') && !old('personal_id'))<div class="personal-error" role="alert">{{ $errors->first('password') }}</div>@endif
     <div class="personal-toolbar">
         <div class="personal-filter">
             <label for="empresa_id">Empresa</label>
@@ -64,8 +65,11 @@
                         <td>{{ $empleado->sexo ? ucfirst($empleado->sexo) : '—' }}</td>
                         <td><div class="personal-actions">
                             @if(in_array($empleado->empresa_id, $manageableIds, true))
-                                <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('personal.edit', $empleado) }}" title="Editar" aria-label="Editar {{ $empleado->nombre }}"><i class="fa-light fa-pen-to-square" aria-hidden="true"></i> Editar</a>
-                                @if($empleado->activo)<form method="POST" action="{{ route('personal.destroy', $empleado) }}" data-confirm-termination data-record-name="{{ $empleado->nombre }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" title="Dar de baja" aria-label="Dar de baja a {{ $empleado->nombre }}"><i class="fa-light fa-user-minus" aria-hidden="true"></i> Dar de baja</button></form>@endif
+                                <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('personal.edit', $empleado) }}" title="Editar" aria-label="Editar {{ $empleado->nombre }}"><i class="fa-light fa-pen-to-square" aria-hidden="true"></i></a>
+                                @if($empleado->activo)
+                                    <button class="btn-hr btn-outline-hr btn-sm-hr" type="button" data-bs-toggle="modal" data-bs-target="#assign-password-modal" data-password-url="{{ route('personal.password.assign', $empleado) }}" data-employee-id="{{ $empleado->id }}" data-employee-name="{{ $empleado->nombre }}" title="Asignar nueva contraseña" aria-label="Asignar nueva contraseña a {{ $empleado->nombre }}"><i class="fa-light fa-lock" aria-hidden="true"></i></button>
+                                    <form method="POST" action="{{ route('personal.destroy', $empleado) }}" data-confirm-termination data-record-name="{{ $empleado->nombre }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" title="Dar de baja" aria-label="Dar de baja a {{ $empleado->nombre }}"><i class="fa-light fa-user-minus" aria-hidden="true"></i> Dar de baja</button></form>
+                                @endif
                             @else<span class="company-rfc">Solo lectura</span>@endif
                         </div></td>
                     </tr>
@@ -78,6 +82,23 @@
         @endif
     </div>
 </section>
+<div class="modal fade" id="assign-password-modal" tabindex="-1" aria-labelledby="assign-password-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+        <form method="POST" id="assign-password-form" action="" novalidate>
+            @csrf
+            <input type="hidden" name="personal_id" id="assign-password-personal-id" value="{{ old('personal_id') }}">
+            <div class="modal-header"><h2 class="modal-title fs-5" id="assign-password-title">Asignar nueva contraseña</h2><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Cerrar"></button></div>
+            <div class="modal-body">
+                <div class="alert alert-warning" role="alert">Estás por cambiar la contraseña de <strong id="assign-password-employee-name"></strong>. Ingresa y confirma la nueva contraseña para guardar el cambio.<br>Una vez actualizada, asegúrate de compartirla con el empleado a través de un medio seguro.</div>
+                @if($errors->has('password'))<div class="personal-error" role="alert">{{ $errors->first('password') }}</div>@endif
+                <div class="alert alert-danger" id="assign-password-client-error" role="alert" aria-live="assertive" hidden></div>
+                <div class="mb-3"><label class="form-label" for="assign-password-input">Nueva contraseña</label><input class="form-control" id="assign-password-input" name="password" type="password" minlength="6" required autocomplete="new-password"><div class="form-text">Mínimo 6 caracteres.</div></div>
+                <div><label class="form-label" for="assign-password-confirmation">Confirmar contraseña</label><input class="form-control" id="assign-password-confirmation" name="password_confirmation" type="password" minlength="6" required autocomplete="new-password"></div>
+            </div>
+            <div class="modal-footer"><button class="btn-hr btn-outline-hr" type="button" data-bs-dismiss="modal">Cancelar</button><button class="btn-hr btn-primary-hr" type="submit">Guardar contraseña</button></div>
+        </form>
+    </div></div>
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.jQuery('#empresa_id').on('change', function () {
@@ -86,6 +107,56 @@
             window.location.assign(url);
         });
     });
+    const assignPasswordModal = document.getElementById('assign-password-modal');
+    const assignPasswordForm = document.getElementById('assign-password-form');
+    const assignPasswordName = document.getElementById('assign-password-employee-name');
+    const assignPasswordId = document.getElementById('assign-password-personal-id');
+    const assignPasswordInput = document.getElementById('assign-password-input');
+    const assignPasswordConfirmation = document.getElementById('assign-password-confirmation');
+    const assignPasswordClientError = document.getElementById('assign-password-client-error');
+    const clearAssignPasswordError = function () {
+        assignPasswordClientError.textContent = '';
+        assignPasswordClientError.hidden = true;
+    };
+    assignPasswordModal.addEventListener('show.bs.modal', function (event) {
+        const trigger = event.relatedTarget;
+        if (!trigger) return;
+        assignPasswordForm.action = trigger.dataset.passwordUrl;
+        assignPasswordId.value = trigger.dataset.employeeId;
+        assignPasswordName.textContent = trigger.dataset.employeeName;
+        assignPasswordInput.value = '';
+        assignPasswordConfirmation.value = '';
+        clearAssignPasswordError();
+    });
+    [assignPasswordInput, assignPasswordConfirmation].forEach(function (input) {
+        input.addEventListener('input', clearAssignPasswordError);
+    });
+    assignPasswordForm.addEventListener('submit', function (event) {
+        clearAssignPasswordError();
+        if (assignPasswordInput.value.length < 6) {
+            event.preventDefault();
+            assignPasswordClientError.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+            assignPasswordClientError.hidden = false;
+            assignPasswordInput.focus();
+            return;
+        }
+        if (assignPasswordInput.value !== assignPasswordConfirmation.value) {
+            event.preventDefault();
+            assignPasswordClientError.textContent = 'La confirmación no coincide con la contraseña.';
+            assignPasswordClientError.hidden = false;
+            assignPasswordConfirmation.focus();
+        }
+    });
+    @if($errors->has('password') && old('personal_id'))
+        const invalidPasswordTrigger = Array.from(document.querySelectorAll('[data-employee-id]')).find(function (trigger) {
+            return trigger.dataset.employeeId === @json((string) old('personal_id'));
+        });
+        if (invalidPasswordTrigger) {
+            assignPasswordForm.action = invalidPasswordTrigger.dataset.passwordUrl;
+            assignPasswordName.textContent = invalidPasswordTrigger.dataset.employeeName;
+            new bootstrap.Modal(assignPasswordModal).show();
+        }
+    @endif
     document.querySelectorAll('[data-confirm-termination]').forEach(function (form) {
         form.addEventListener('submit', function (event) {
             event.preventDefault();

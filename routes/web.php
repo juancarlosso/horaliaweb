@@ -113,6 +113,7 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::post('/home/personal', [PersonalController::class, 'store'])->name('personal.store');
     Route::get('/home/personal/{personal}/edit', [PersonalController::class, 'edit'])->whereNumber('personal')->name('personal.edit');
     Route::put('/home/personal/{personal}', [PersonalController::class, 'update'])->whereNumber('personal')->name('personal.update');
+    Route::post('/home/personal/{personal}/asignar-contrasena', [PersonalController::class, 'assignPassword'])->whereNumber('personal')->name('personal.password.assign');
     Route::post('/home/personal/{personal}/regenerar-contrasena', [PersonalController::class, 'regeneratePassword'])->whereNumber('personal')->name('personal.password.regenerate');
     Route::post('/home/personal/{personal}/reenviar-pin', [PersonalController::class, 'resendPin'])->whereNumber('personal')->middleware('throttle:5,1')->name('personal.pin.resend');
     Route::delete('/home/personal/{personal}', [PersonalController::class, 'destroy'])->whereNumber('personal')->name('personal.destroy');

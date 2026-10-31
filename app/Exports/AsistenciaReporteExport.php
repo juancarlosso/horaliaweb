@@ -12,8 +12,8 @@ use XMLWriter;
 class AsistenciaReporteExport
 {
     private const HEADINGS = [
-        'Empresa', 'Personal', 'Fecha', 'Hr. entrada', 'Entrada', 'Retardo (min)', 'Rango entrada',
-        'Hr. salida', 'Salida', 'Salida temprana (min)', 'Rango salida', 'Latitud entrada',
+        'Empresa', 'Personal', 'Fecha', 'Modalidad', 'Hr. entrada', 'Entrada', 'Retardo (min)', 'Rango entrada', 'Distancia entrada (m)',
+        'Hr. salida', 'Salida', 'Salida temprana (min)', 'Rango salida', 'Distancia salida (m)', 'Latitud entrada',
         'Longitud entrada', 'Latitud salida', 'Longitud salida', 'Tiempo de pausas', 'Tiempo productivo',
     ];
 
@@ -85,7 +85,7 @@ class AsistenciaReporteExport
         $xml->writeAttribute('xmlns:xdr', 'http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing');
         $lastDataRow = max(7, (clone $query)->count() + 7);
         $xml->startElement('dimension');
-        $xml->writeAttribute('ref', 'A1:Q' . $lastDataRow);
+        $xml->writeAttribute('ref', 'A1:T' . $lastDataRow);
         $xml->endElement();
         $xml->startElement('sheetViews');
         $xml->startElement('sheetView');
@@ -102,7 +102,7 @@ class AsistenciaReporteExport
         $xml->writeAttribute('defaultRowHeight', '18');
         $xml->endElement();
         $xml->startElement('cols');
-        foreach ([28, 30, 14, 12, 12, 16, 18, 12, 12, 22, 18, 18, 18, 18, 18, 20, 20] as $index => $width) {
+        foreach ([28, 30, 14, 16, 12, 12, 16, 18, 20, 12, 12, 22, 18, 20, 18, 18, 18, 18, 20, 20] as $index => $width) {
             $xml->startElement('col');
             $xml->writeAttribute('min', (string) ($index + 1));
             $xml->writeAttribute('max', (string) ($index + 1));
@@ -158,14 +158,17 @@ class AsistenciaReporteExport
                     $companyName,
                     $record->personal?->nombre ?? '',
                     $record->fecha?->format('d/m/Y') ?? '',
+                    ($record->modalidad ?? 'PRESENCIAL') === 'HOME_OFFICE' ? 'Home Office' : 'Presencial',
                     $schedule?->entrada ? substr($schedule->entrada, 0, 5) : '',
                     $record->llegada?->format('H:i') ?? '',
                     (int) ($record->minutos_tarde ?? 0),
                     $record->rango_entrada ?? '',
+                    $record->distancia_entrada_metros,
                     $schedule?->salida ? substr($schedule->salida, 0, 5) : '',
                     $record->salida?->format('H:i') ?? '',
                     (int) ($record->minutos_salida_temprano ?? 0),
                     $record->rango_salida ?? '',
+                    $record->distancia_salida_metros,
                     $record->latitud,
                     $record->longitud,
                     $record->latitud_salida,
@@ -180,13 +183,13 @@ class AsistenciaReporteExport
 
         $xml->endElement();
         $xml->startElement('autoFilter');
-        $xml->writeAttribute('ref', 'A7:Q' . max(7, $rowNumber - 1));
+        $xml->writeAttribute('ref', 'A7:T' . max(7, $rowNumber - 1));
         $xml->endElement();
         $xml->startElement('mergeCells');
         $xml->writeAttribute('count', (string) count($headerRows));
         $startColumn = $hasLogo ? 'D' : 'A';
         foreach (array_keys($headerRows) as $row) {
-            $range = $startColumn . $row . ':Q' . $row;
+            $range = $startColumn . $row . ':T' . $row;
             $xml->startElement('mergeCell');
             $xml->writeAttribute('ref', $range);
             $xml->endElement();

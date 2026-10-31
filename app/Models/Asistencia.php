@@ -16,6 +16,7 @@ class Asistencia extends Model
         'rango_entrada', 'rango_salida', 'foto_entrada', 'foto_salida',
         'centro_trabajo_entrada_id', 'centro_trabajo_salida_id', 'timezone_entrada', 'timezone_salida',
         'llegada_utc', 'salida_utc',
+        'modalidad', 'distancia_entrada_metros', 'distancia_salida_metros',
     ];
 
     protected function casts(): array

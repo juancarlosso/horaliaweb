@@ -35,6 +35,16 @@ class AttendanceLocationService
         return $distance <= $tolerance ? 'En rango' : 'Fuera de rango';
     }
 
+    public function distanceFor(Personal $personal, float $latitude, float $longitude): ?float
+    {
+        $centerCoordinates = $this->parseCoordinates($personal->centro?->geolocalizacion);
+        if (!$centerCoordinates) {
+            return null;
+        }
+
+        return $this->distanceInMeters($latitude, $longitude, $centerCoordinates[0], $centerCoordinates[1]);
+    }
+
     private function distanceInMeters(float $lat1, float $lon1, float $lat2, float $lon2): float
     {
         $earthRadius = 6371000;

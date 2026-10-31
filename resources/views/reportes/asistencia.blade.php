@@ -82,7 +82,7 @@
             <div class="card-hd report-card-heading"><div><h2 class="card-title-hr">Detalle de asistencias</h2><p>Periodo del {{ \Carbon\Carbon::parse($startDate)->format('d/m/Y') }} al {{ \Carbon\Carbon::parse($endDate)->format('d/m/Y') }}</p></div><button type="submit" form="attendance-report-form" formaction="{{ route('reportes.asistencia.exportar') }}" class="btn-hr btn-outline-hr report-export-btn" @disabled($attendance->total() === 0)><i class="fa-light fa-file-excel" aria-hidden="true"></i> Exportar a Excel</button></div>
             @if($attendance->count())
                 <div class="table-wrap"><table class="bs-table hover report-table">
-                    <thead><tr><th>Personal</th><th>Fecha</th><th>Entrada</th><th>Rango entrada</th><th>Tarde</th><th>Salida</th><th>Rango salida</th><th>Salida temprana</th><th>Tiempo de pausas</th><th>Tiempo productivo</th><th>Detalle de pausas</th><th>Evidencia entrada</th><th>Evidencia salida</th></tr></thead>
+                    <thead><tr><th>Personal</th><th>Fecha</th><th>Modalidad</th><th>Entrada</th><th>Rango entrada</th><th>Distancia entrada</th><th>Tarde</th><th>Salida</th><th>Rango salida</th><th>Distancia salida</th><th>Salida temprana</th><th>Tiempo de pausas</th><th>Tiempo productivo</th><th>Detalle de pausas</th><th>Evidencia entrada</th><th>Evidencia salida</th></tr></thead>
                     <tbody>
                     @foreach($attendance as $record)
                         @php
@@ -93,11 +93,14 @@
                         <tr>
                             <td><div class="report-employee"><strong>{{ $employee?->nombre ?? '—' }}</strong><small>{{ $employee?->empresa?->nombre ?? '—' }}</small></div></td>
                             <td>{{ $record->fecha?->format('d/m/Y') ?? '—' }}</td>
+                            <td>{{ ($record->modalidad ?? 'PRESENCIAL') === 'HOME_OFFICE' ? 'Home Office' : 'Presencial' }}</td>
                             <td>{{ $record->llegada?->format('H:i') ?? '—' }}</td>
                             <td><span class="report-status {{ $record->rango_entrada === 'En rango' ? 'is-ok' : ($record->rango_entrada === 'Fuera de rango' ? 'is-bad' : '') }}">{{ $record->rango_entrada ?? '—' }}</span></td>
+                            <td>{{ $record->distancia_entrada_metros !== null ? number_format((float) $record->distancia_entrada_metros, 0) . ' m' : '—' }}</td>
                             <td class="report-minute">{{ $record->minutos_tarde ? $record->minutos_tarde . ' min' : '0 min' }}</td>
                             <td>{{ $record->salida?->format('H:i') ?? '—' }}</td>
                             <td><span class="report-status {{ $record->rango_salida === 'En rango' ? 'is-ok' : ($record->rango_salida === 'Fuera de rango' ? 'is-bad' : '') }}">{{ $record->rango_salida ?? '—' }}</span></td>
+                            <td>{{ $record->distancia_salida_metros !== null ? number_format((float) $record->distancia_salida_metros, 0) . ' m' : '—' }}</td>
                             <td class="report-minute">{{ $record->minutos_salida_temprano ? $record->minutos_salida_temprano . ' min' : '0 min' }}</td>
                             <td>{{ \App\Models\Asistencia::formatoDuracion($record->tiempoPausasMinutos()) }}</td>
                             <td>{{ \App\Models\Asistencia::formatoDuracion($record->tiempoProductivoMinutos()) }}</td>

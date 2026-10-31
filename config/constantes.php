@@ -5,6 +5,13 @@ return [
     'precio_mensual_por_empresa_mxn' => 150,
     'tasa_iva' => 16,
     'video_como_funciona_youtube' => 'https://youtu.be/TdkJnSW34to',
+    'promociones_footer' => [
+        ['headline' => '💻 ¿Necesitas software a tu medida?', 'copy' => 'Creamos sistemas y aplicaciones para tu negocio.', 'cta' => '¡Hablemos! →'],
+        ['headline' => '📱 ¿Tienes una idea para una aplicación?', 'copy' => 'La convertimos en realidad con soluciones para Android y iOS.', 'cta' => '¡Cuéntanos tu idea! →'],
+        ['headline' => '🤖 Tu empresa puede trabajar de forma más inteligente.', 'copy' => 'Automatizamos procesos e integramos inteligencia artificial para mejorar tu productividad.', 'cta' => '¡Descubre lo que podemos hacer! →'],
+        ['headline' => '🌐 ¿Todavía administras tu negocio con hojas de Excel?', 'copy' => 'Transformamos tus procesos en soluciones digitales modernas y fáciles de utilizar.', 'cta' => '¡Moderniza tu empresa! →'],
+        ['headline' => '🚀 Impulsa tu negocio con tecnología.', 'copy' => 'En SOLVENTIA SOFTWARE tenemos la solución que necesitas.', 'cta' => '¡Conócenos! →'],
+    ],
     'aniosAsistencia' => [2026, 2027],
     'tiposPausa' => [
         'comida' => ['nombre' => 'COMIDA', 'descripcion' => 'Registra tu tiempo de comida durante la jornada.', 'icono' => 'utensils', 'color' => 'orange'],

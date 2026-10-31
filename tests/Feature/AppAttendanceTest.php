@@ -57,8 +57,8 @@ class AppAttendanceTest extends TestCase
         $this->withToken($token)->postJson('/api/app/attendance/mark', [
             'pin' => '12345',
             'proof' => $verified->json('data.proof'),
-            'latitud' => 19.4326,
-            'longitud' => -99.1332,
+            'latitud' => 40.7128,
+            'longitud' => -74.0060,
             'foto' => 'data:image/jpeg;base64,ZmFrZQ==',
         ])->assertOk()
             ->assertJsonPath('success', true)
@@ -68,8 +68,11 @@ class AppAttendanceTest extends TestCase
         $attendance = Asistencia::query()->where('personal_id', $personal->id)->firstOrFail();
         $this->assertSame($center->id, $attendance->centro_trabajo_entrada_id);
         $this->assertSame('asistencias/test/entrada.jpg', $attendance->foto_entrada);
-        $this->assertEqualsWithDelta(19.4326, (float) $attendance->latitud, 0.00001);
-        $this->assertEqualsWithDelta(-99.1332, (float) $attendance->longitud, 0.00001);
+        $this->assertEqualsWithDelta(40.7128, (float) $attendance->latitud, 0.00001);
+        $this->assertEqualsWithDelta(-74.0060, (float) $attendance->longitud, 0.00001);
+        $this->assertSame('PRESENCIAL', $attendance->modalidad);
+        $this->assertSame('Fuera de rango', $attendance->rango_entrada);
+        $this->assertGreaterThan(100000, (float) $attendance->distancia_entrada_metros);
 
         Auth::forgetGuards();
         $this->withToken($token)->postJson('/api/app/attendance/mark', [
@@ -77,6 +80,52 @@ class AppAttendanceTest extends TestCase
             'latitud' => 19.4326, 'longitud' => -99.1332,
             'foto' => 'data:image/jpeg;base64,ZmFrZQ==',
         ])->assertUnprocessable();
+    }
+
+    public function test_home_office_keeps_real_gps_and_historical_modality_even_if_schedule_changes(): void
+    {
+        [$user, $company] = $this->administrator();
+        $center = Centro::query()->create([
+            'empresa_id' => $company->id, 'nombre' => 'Centro Home Office', 'activo' => true,
+            'geolocalizacion' => '19.4326,-99.1332', 'timezone' => 'America/Mexico_City',
+        ]);
+        $weekday = Carbon::now('America/Mexico_City')->dayOfWeekIso;
+        $personal = Personal::query()->create([
+            'empresa_id' => $company->id, 'centro_id' => $center->id, 'nombre' => 'Colaborador remoto',
+            'pin' => '22222', 'activo' => true, 'laborados' => (string) $weekday,
+        ]);
+        $schedule = $personal->horarios()->create([
+            'dia' => $weekday, 'entrada' => '08:00:00', 'salida' => '17:00:00', 'modalidad' => 'HOME_OFFICE',
+        ]);
+        $this->travelTo(Carbon::now('America/Mexico_City')->setTime(9, 0));
+        $token = $this->login($user);
+        $verified = $this->withToken($token)->postJson('/api/app/attendance/verify-pin', ['pin' => '22222'])->assertOk();
+        $this->mock(AttendancePhotoService::class)->shouldReceive('uploadBase64Jpeg')->once()->andReturn('asistencias/test/home-office.jpg');
+
+        $this->withToken($token)->postJson('/api/app/attendance/mark', [
+            'pin' => '22222', 'proof' => $verified->json('data.proof'), 'latitud' => 40.7128,
+            'longitud' => -74.0060, 'foto' => 'data:image/jpeg;base64,ZmFrZQ==', 'modalidad' => 'PRESENCIAL',
+        ])->assertOk();
+
+        $attendance = Asistencia::query()->where('personal_id', $personal->id)->firstOrFail();
+        $this->assertSame('HOME_OFFICE', $attendance->modalidad);
+        $this->assertSame('En rango', $attendance->rango_entrada);
+        $this->assertGreaterThan(100000, (float) $attendance->distancia_entrada_metros);
+        $this->assertEqualsWithDelta(40.7128, (float) $attendance->latitud, 0.00001);
+        $schedule->update(['modalidad' => 'PRESENCIAL']);
+
+        Carbon::setTestNow(Carbon::now('America/Mexico_City')->setTime(18, 0));
+        Auth::forgetGuards();
+        $exitVerification = $this->withToken($token)->postJson('/api/app/attendance/verify-pin', ['pin' => '22222'])->assertOk();
+        $this->withToken($token)->postJson('/api/app/attendance/mark', [
+            'pin' => '22222', 'proof' => $exitVerification->json('data.proof'), 'latitud' => 40.7128,
+            'longitud' => -74.0060,
+        ])->assertOk();
+
+        $attendance->refresh();
+        $this->assertSame('HOME_OFFICE', $attendance->modalidad);
+        $this->assertSame('En rango', $attendance->rango_salida);
+        $this->assertGreaterThan(100000, (float) $attendance->distancia_salida_metros);
     }
 
     public function test_mobile_attendance_rejects_unknown_pin_and_personnel_without_a_valid_center(): void

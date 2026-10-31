@@ -28,6 +28,10 @@
     .personal-error { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(239,68,68,.2); border-radius:.625rem; color:#b42318; background:rgba(239,68,68,.07); font-size:.845rem; }
     .personal-field-error { display:block; margin-top:.35rem; color:#dc2626; font-size:.775rem; }
     .personal-input-error { border-color:#ef4444; }
+    .personal-field-label { display:flex; align-items:center; gap:.4rem; }
+    .personal-info-button { display:inline-grid; place-items:center; width:1.25rem; height:1.25rem; padding:0; border:0; border-radius:50%; color:var(--body-text-muted); background:transparent; cursor:pointer; }
+    .personal-info-button:hover,.personal-info-button:focus-visible { color:var(--color-primary); }
+    .personal-info-button:focus-visible { outline:2px solid var(--color-primary); outline-offset:2px; }
     .personal-pin-input { position:relative; }
     .personal-pin-input .hr-input { padding-right:2.8rem; }
     .personal-pin-toggle { position:absolute; top:50%; right:.35rem; display:grid; place-items:center; width:2.1rem; height:2.1rem; padding:0; transform:translateY(-50%); border:0; border-radius:.45rem; color:var(--body-text-muted); background:transparent; cursor:pointer; }
@@ -108,12 +112,12 @@
 
                 <div class="row g-3">
                     <div class="col-lg-2 col-md-3">
-                        <label class="form-label-hr" for="codigo">Código</label>
+                        <div class="form-label-hr personal-field-label"><label class="mb-0" for="codigo">Código</label><button class="personal-info-button" type="button" aria-label="Información sobre Código" data-personal-popover data-bs-placement="top" data-bs-title="Código" data-bs-content="Es el código con el que se identifica al empleado, algunas empresas lo llaman &quot;Número de Empleado&quot;, &quot;ID del empleado&quot;, etc..."><i class="fa-light fa-circle-info" aria-hidden="true"></i></button></div>
                         <input class="hr-input @error('codigo') personal-input-error @enderror" id="codigo" name="codigo" type="text" value="{{ old('codigo', $empleado->codigo) }}" maxlength="100">
                         @error('codigo')<span class="personal-field-error">{{ $message }}</span>@enderror
                     </div>
                     <div class="col-lg-2 col-md-3">
-                        <label class="form-label-hr" for="pin">PIN del checador</label>
+                        <div class="form-label-hr personal-field-label"><label class="mb-0" for="pin">PIN del checador</label><button class="personal-info-button" type="button" aria-label="Información sobre PIN del checador" data-personal-popover data-bs-placement="top" data-bs-title="PIN del Checador" data-bs-content="Es el PIN con el que el empleado podrá marcar sus entradas, salidas y pausas en el reloj checador. Se puede capturar manualmente o dejar en blanco para que el sistema lo asigne automáticamente."><i class="fa-light fa-circle-info" aria-hidden="true"></i></button></div>
                         <div class="personal-pin-input">
                             <input class="hr-input @error('pin') personal-input-error @enderror" id="pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" value="{{ old('pin', $empleado->pin) }}" autocomplete="off">
                             <button class="personal-pin-toggle" id="pin-visibility-toggle" type="button" aria-label="Mostrar PIN" aria-pressed="false" aria-controls="pin"><i class="fa-light fa-eye" aria-hidden="true"></i></button>
@@ -197,6 +201,11 @@
                                         @endforeach
                                     </select>
                                     @error('horarios.' . $day)<span class="personal-field-error">{{ $message }}</span>@enderror
+                                    <label class="form-label-hr mt-2" for="modalidad_{{ $day }}">Modalidad de trabajo</label>
+                                    <select class="hr-input select2 modality-select" id="modalidad_{{ $day }}" name="modalidades[{{ $day }}]" @unless($isChecked) disabled @endunless>
+                                        <option value="PRESENCIAL" @selected(old('modalidades.' . $day, $selectedSchedule?->modalidad ?? 'PRESENCIAL') === 'PRESENCIAL')>Presencial</option>
+                                        <option value="HOME_OFFICE" @selected(old('modalidades.' . $day, $selectedSchedule?->modalidad ?? 'PRESENCIAL') === 'HOME_OFFICE')>Home Office</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -213,6 +222,23 @@
 </section>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[data-personal-popover]').forEach(function (element) {
+            if (!window.bootstrap?.Popover) return;
+            const popover = new window.bootstrap.Popover(element, { trigger: 'manual', container: 'body' });
+            element.addEventListener('mouseenter', function () {
+                document.querySelectorAll('[data-personal-popover]').forEach(function (otherElement) {
+                    if (otherElement !== element) window.bootstrap.Popover.getInstance(otherElement)?.hide();
+                });
+                popover.show();
+            });
+            element.addEventListener('mouseleave', function () { popover.hide(); });
+            element.addEventListener('focus', function () { popover.show(); });
+            element.addEventListener('blur', function () { popover.hide(); });
+            element.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') popover.hide();
+            });
+        });
+
         const pinInput = document.getElementById('pin');
         const pinToggle = document.getElementById('pin-visibility-toggle');
         pinToggle?.addEventListener('click', function () {
@@ -298,10 +324,12 @@
             const $card = window.jQuery(this).closest('[data-day-card]');
             const $schedule = $card.find('.personal-day-schedule');
             const $select = $card.find('.schedule-select');
+            const $modality = $card.find('[name^="modalidades["]');
             const selected = this.checked;
             $card.toggleClass('is-selected', selected);
             $schedule.prop('hidden', !selected);
             $select.prop('required', selected);
+            $modality.prop('disabled', !selected);
             if (!selected) $select.val('').trigger('change.select2');
         });
 

@@ -47,6 +47,16 @@
         [data-sidebar-mobile-toggle] { display:none; }
         .nav-lnk .nav-icon svg { width:18px; height:18px; display:block; stroke:currentColor; }
         .main-content { min-height:100vh; }
+        .app-footer { padding:.7rem 1.5rem .55rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); text-align:center; }
+        .app-footer-promotion { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:.2rem .45rem; max-width:1050px; margin:0 auto; font-size:.78rem; line-height:1.5; }
+        .app-footer-promotion strong { color:var(--body-text); font-weight:700; }
+        .app-footer-promotion-copy { color:var(--body-text-muted); }
+        .app-footer-cta { color:var(--color-primary); font-weight:700; text-decoration:none; white-space:nowrap; }
+        .app-footer-cta:hover { text-decoration:underline; }
+        .app-footer-whatsapp { display:inline-grid; place-items:center; width:1.7rem; height:1.7rem; margin-left:.15rem; border-radius:50%; color:#fff; background:#25d366; font-size:1rem; line-height:1; text-decoration:none; }
+        .app-footer-whatsapp:hover { color:#fff; background:#1eae54; }
+        .app-footer-whatsapp:focus-visible { outline:2px solid var(--color-primary); outline-offset:2px; }
+        @media(max-width:575px) { .app-footer { padding:.65rem 1rem .55rem; } .app-footer-promotion { gap:.15rem .35rem; font-size:.74rem; } }
         .topbar-manual-link { width:auto; gap:.4rem; padding:0 .65rem; color:var(--body-text-muted); font-size:.78rem; font-weight:700; text-decoration:none; }
         .topbar-manual-link:hover { color:var(--color-primary); text-decoration:none; }
         .topbar-manual-link svg { flex:none; stroke:currentColor; }
@@ -238,6 +248,20 @@
             @yield('content')
         </div>
     </main>
+    @php($showAppFooter = $isCompanyAdmin && $activeSection !== 'reloj-checador')
+    @php($footerPromotions = config('constantes.promociones_footer'))
+    @php($footerPromotion = $showAppFooter ? $footerPromotions[array_rand($footerPromotions)] : null)
+    @php($solventiaUrl = 'https://solventia.com.mx/')
+    @if($showAppFooter)
+        <footer class="app-footer">
+            <div class="app-footer-promotion">
+                <strong>{{ $footerPromotion['headline'] }}</strong>
+                <span class="app-footer-promotion-copy">{{ $footerPromotion['copy'] }}</span>
+                <a class="app-footer-cta" href="{{ $solventiaUrl }}" target="_blank" rel="noopener noreferrer">{{ $footerPromotion['cta'] }}</a>
+                <a class="app-footer-whatsapp" href="https://wa.me/525513447932?text={{ rawurlencode('Quiero hablar de mi proyecto') }}" target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp: Quiero hablar de mi proyecto" title="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+            </div>
+        </footer>
+    @endif
 </div>
 <script defer src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
 <script defer src="{{ asset('assets/vendor/select2/js/select2.min.js') }}"></script>

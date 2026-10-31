@@ -13,6 +13,8 @@ use Illuminate\Validation\ValidationException;
 
 class RegistroAsistenciaService
 {
+    public function __construct(private AttendanceLocationService $locations) {}
+
     public function preview(Personal $personal, ?array $expectedScope = null): string
     {
         $personal = Personal::query()->with(['empresa', 'centro'])->findOrFail($personal->id);
@@ -72,6 +74,8 @@ class RegistroAsistenciaService
                     }
 
                     [$attendance, $schedule] = $overnightShift;
+                    $modality = $attendance->modalidad ?: 'PRESENCIAL';
+                    $range = $this->rangeForModality($personal, $coordinates, $range, $modality);
                     $this->assertNoOpenPause($attendance);
                     $scheduledExit = $this->scheduledExitForAttendance($schedule, $attendance, $timezone);
                     $earlyMinutes = $now->lessThan($scheduledExit) ? (int) $now->diffInMinutes($scheduledExit) : 0;
@@ -80,6 +84,7 @@ class RegistroAsistenciaService
                         'longitud_salida' => $coordinates['longitud_salida'] ?? null, 'ip_salida' => $ip,
                         'minutos_salida_temprano' => $earlyMinutes,
                         'rango_salida' => $range ?? ($coordinates ? null : 'Checador PIN'), 'foto_salida' => $photoPath,
+                        'distancia_salida_metros' => $this->distanceForCoordinates($personal, $coordinates, 'latitud_salida', 'longitud_salida'),
                         'salida_utc' => $utcNow->format('Y-m-d H:i:s'),
                         'centro_trabajo_salida_id' => $center->id, 'timezone_salida' => $timezone,
                     ]);
@@ -92,6 +97,8 @@ class RegistroAsistenciaService
                 }
 
                 $schedule = $this->scheduleForDate($personal, Carbon::parse($today, $timezone));
+                $modality = $schedule->modalidad ?: 'PRESENCIAL';
+                $range = $this->rangeForModality($personal, $coordinates, $range, $modality);
                 $scheduledEntry = Carbon::parse($today.' '.$schedule->entrada, $timezone);
                 $cutoff = $scheduledEntry->copy()->addMinutes((int) ($personal->empresa->minutos_tolerancia_entrada ?? 0));
                 $lateMinutes = $now->greaterThan($cutoff) ? (int) $cutoff->diffInMinutes($now) : 0;
@@ -102,6 +109,8 @@ class RegistroAsistenciaService
                     'latitud' => $coordinates['latitud'] ?? null, 'longitud' => $coordinates['longitud'] ?? null,
                     'ip' => $ip, 'minutos_tarde' => $lateMinutes,
                     'rango_entrada' => $range ?? ($coordinates ? null : 'Checador PIN'), 'foto_entrada' => $photoPath,
+                    'modalidad' => $modality,
+                    'distancia_entrada_metros' => $this->distanceForCoordinates($personal, $coordinates, 'latitud', 'longitud'),
                 ]);
 
                 return 'entrada';
@@ -117,7 +126,9 @@ class RegistroAsistenciaService
                 throw ValidationException::withMessages(['pin' => 'La entrada de hoy ya está registrada.']);
             }
 
-            $schedule = $this->scheduleForDate($personal, $attendance->fecha);
+            $schedule = $this->scheduleForDate($personal, $attendance->fecha, false);
+            $modality = $attendance->modalidad ?: ($schedule?->modalidad ?: 'PRESENCIAL');
+            $range = $this->rangeForModality($personal, $coordinates, $range, $modality);
             $this->assertNoOpenPause($attendance);
             $scheduledExit = $this->scheduledExitForAttendance($schedule, $attendance, $timezone);
             $earlyMinutes = $now->lessThan($scheduledExit) ? (int) $now->diffInMinutes($scheduledExit) : 0;
@@ -126,12 +137,38 @@ class RegistroAsistenciaService
                 'longitud_salida' => $coordinates['longitud_salida'] ?? null, 'ip_salida' => $ip,
                 'minutos_salida_temprano' => $earlyMinutes,
                 'rango_salida' => $range ?? ($coordinates ? null : 'Checador PIN'), 'foto_salida' => $photoPath,
+                'distancia_salida_metros' => $this->distanceForCoordinates($personal, $coordinates, 'latitud_salida', 'longitud_salida'),
                 'salida_utc' => $utcNow->format('Y-m-d H:i:s'),
                 'centro_trabajo_salida_id' => $center->id, 'timezone_salida' => $timezone,
             ]);
 
             return 'salida';
         });
+    }
+
+    private function rangeForModality(Personal $personal, ?array $coordinates, ?string $range, string $modality): ?string
+    {
+        if ($modality === 'HOME_OFFICE') {
+            return 'En rango';
+        }
+
+        if ($coordinates && isset($coordinates['latitud'], $coordinates['longitud'])) {
+            return $this->locations->rangeFor($personal, (float) $coordinates['latitud'], (float) $coordinates['longitud']);
+        }
+        if ($coordinates && isset($coordinates['latitud_salida'], $coordinates['longitud_salida'])) {
+            return $this->locations->rangeFor($personal, (float) $coordinates['latitud_salida'], (float) $coordinates['longitud_salida']);
+        }
+
+        return $range;
+    }
+
+    private function distanceForCoordinates(Personal $personal, ?array $coordinates, string $latitudeKey, string $longitudeKey): ?float
+    {
+        if (!isset($coordinates[$latitudeKey], $coordinates[$longitudeKey])) {
+            return null;
+        }
+
+        return $this->locations->distanceFor($personal, (float) $coordinates[$latitudeKey], (float) $coordinates[$longitudeKey]);
     }
 
     private function assertNoOpenPause(Asistencia $attendance): void

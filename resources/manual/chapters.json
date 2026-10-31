@@ -501,6 +501,42 @@
       },
       {
         "type": "heading",
+        "text": "¿Cómo asignar una nueva contraseña a un colaborador?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Un administrador puede asignar una contraseña directamente o enviar al colaborador un enlace para que él mismo la genere. La contraseña de acceso a Horalia es distinta del PIN, que se usa únicamente en el reloj checador."
+      },
+      {
+        "type": "step",
+        "number": 1,
+        "text": "En Operación → Personal, localiza al colaborador y pulsa el botón con el candado, “Asignar nueva contraseña”."
+      },
+      {
+        "type": "step",
+        "number": 2,
+        "text": "Escribe la contraseña nueva y confírmala. Debe tener al menos 6 caracteres."
+      },
+      {
+        "type": "step",
+        "number": 3,
+        "text": "Pulsa Guardar contraseña. Comparte la clave con el colaborador por un medio seguro."
+      },
+      {
+        "type": "image",
+        "src": "contrasena-computadora.png",
+        "alt": "Listado de personal abierto en una computadora con el botón de asignación de contraseña visible; se muestran datos de prueba."
+      },
+      {
+        "type": "heading",
+        "text": "Enviar un enlace para que el colaborador la cambie"
+      },
+      {
+        "type": "paragraph",
+        "text": "Si prefieres que el colaborador cree su propia contraseña, abre su ficha para editarla y pulsa Regenerar contraseña. Confirma el envío: Horalia enviará un enlace al correo electrónico registrado para que pueda establecer una nueva clave."
+      },
+      {
+        "type": "heading",
         "text": "Perfiles de usuario"
       },
       {
@@ -553,18 +589,31 @@
       },
       {
         "type": "step",
-        "text": "Para cada día seleccionado, elige el horario laboral correspondiente.",
+        "text": "Para cada día seleccionado, elige el horario laboral correspondiente y define su Modalidad de trabajo: Presencial o Home Office.",
         "number": 5
       },
       {
         "type": "step",
-        "text": "Repite el procedimiento hasta completar su semana de trabajo.",
-        "number": 6
+        "number": 6,
+        "text": "Repite el procedimiento para cada día laboral. Puedes combinar días Presenciales y Home Office en la misma semana."
       },
       {
         "type": "step",
-        "text": "Haz clic en Guardar personal para conservar los cambios.",
-        "number": 7
+        "number": 7,
+        "text": "Haz clic en Guardar personal para conservar los horarios y modalidades elegidos."
+      },
+      {
+        "type": "image",
+        "src": "modalidad-computadora.png",
+        "alt": "Ficha de personal en computadora con el horario y la modalidad de trabajo por día."
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo se asigna la modalidad de trabajo?"
+      },
+      {
+        "type": "paragraph",
+        "text": "La modalidad se configura de forma independiente en cada día laboral marcado, junto con su horario. Si dejas la opción inicial sin cambios, la modalidad será Presencial. Los días que no marques no tendrán horario ni modalidad asignados."
       },
       {
         "type": "image",
@@ -720,6 +769,49 @@
         "type": "image",
         "src": "image6.png",
         "alt": "Pantalla de asistencia e historial de registros"
+      },
+      {
+        "type": "heading",
+        "text": "¿Cómo registrar una pausa?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Desde Operación → Pausas puedes registrar el inicio y el final de los descansos de tu jornada. Elige el tipo que corresponda: comida, sanitario, descanso o permiso."
+      },
+      {
+        "type": "step",
+        "number": 1,
+        "text": "Registra tu entrada en Operación → Asistencia. Debes tener una jornada abierta, sin salida registrada."
+      },
+      {
+        "type": "step",
+        "number": 2,
+        "text": "En el menú lateral, abre Operación → Pausas."
+      },
+      {
+        "type": "step",
+        "number": 3,
+        "text": "En la tarjeta del tipo de pausa, haz clic en Iniciar. Horalia registra la hora automáticamente."
+      },
+      {
+        "type": "step",
+        "number": 4,
+        "text": "Al regresar, haz clic en Finalizar en la tarjeta que está en curso. Solo puedes tener una pausa activa a la vez."
+      },
+      {
+        "type": "step",
+        "number": 5,
+        "text": "Consulta el historial del turno para revisar el tipo de pausa, la hora de inicio y fin, su duración y estado."
+      },
+      {
+        "type": "image",
+        "src": "pausas-computadora.png",
+        "alt": "Pantalla de Pausas abierta desde una computadora. Los controles se habilitan al tener una entrada vigente."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "Necesitas una entrada vigente sin salida para iniciar una pausa. Si aparece “Sin entrada vigente”, primero registra tu entrada. Finaliza cualquier pausa activa antes de registrar tu salida."
       },
       {
         "type": "heading",

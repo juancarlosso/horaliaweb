@@ -11,8 +11,6 @@
     .kiosk-app-copy { flex:1 1 320px; max-width:640px; color:var(--body-text-muted); }
     .kiosk-app-copy p { margin:0; }
     .kiosk-store-links { display:flex; flex-wrap:wrap; align-items:flex-start; gap:.75rem; }
-    .kiosk-store-ios { display:flex; flex-direction:column; align-items:center; }
-    .kiosk-store-ios span { color:var(--body-text-muted); font-size:.75rem; font-weight:700; }
     .kiosk-store-link { display:inline-flex; align-items:center; justify-content:center; flex:none; width:170px; height:60px; padding:0; overflow:hidden; border:1px solid #000; border-radius:.5rem; background:#000; cursor:pointer; }
     .kiosk-store-link:focus-visible { outline:3px solid var(--color-primary); outline-offset:3px; }
     .kiosk-store-link img { display:block; width:170px; height:auto; max-width:none; }
@@ -44,7 +42,7 @@
             <div class="kiosk-app-copy"><p>Registra entradas, salidas y pausas de tu personal con la aplicación de Horalia. Instálala en tu tablet e inicia sesión con tu cuenta de administrador de empresa; no necesitas generar enlaces temporales.</p></div>
             <div class="kiosk-store-links" aria-label="Tiendas de aplicaciones">
                 <a class="kiosk-store-link kiosk-store-link-google" href="https://play.google.com/store/apps/details?id=mx.com.solventia.horaliarch" target="_blank" rel="noopener noreferrer" aria-label="Descargar Horalia en Google Play (abre en una pestaña nueva)"><img src="{{ asset('assets/tiendas/googleplay.svg') }}" alt="Disponible en Google Play"></a>
-                <div class="kiosk-store-ios"><button class="kiosk-store-link" type="button" data-ios-coming-soon aria-label="App Store: ¡Muy pronto!"><img src="{{ asset('assets/tiendas/appstore.png') }}" alt="Disponible en App Store próximamente"></button><span>Próximamente en iOS</span></div>
+                <a class="kiosk-store-link" href="https://apps.apple.com/us/app/horalia/id6826493747" target="_blank" rel="noopener noreferrer" aria-label="Descargar Horalia en App Store (abre en una pestaña nueva)"><img src="{{ asset('assets/tiendas/appstore.png') }}" alt="Descargar en App Store"></a>
             </div>
         </div>
     </article>
@@ -99,17 +97,6 @@
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('[data-ios-coming-soon]').addEventListener('click', function () {
-        if (!window.Swal) { window.alert('¡Muy pronto! La aplicación de Horalia para iOS estará disponible próximamente.'); return; }
-        Swal.fire({
-            icon: 'info',
-            title: '¡Muy pronto!',
-            text: 'La aplicación de Horalia para iOS estará disponible próximamente.',
-            confirmButtonText: 'Entendido',
-            buttonsStyling: false,
-            customClass: { confirmButton: 'btn-hr btn-primary-hr' }
-        });
-    });
     document.querySelectorAll('[data-copy-activation-url]').forEach(function (button) {
         button.addEventListener('click', async function () {
             const input = document.getElementById(button.dataset.target);

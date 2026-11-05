@@ -1,7 +1,71 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Home'])
 
 @section('content')
-@if((int) auth()->user()->profile === 3)
+@if(!empty($isSystemAdminDashboard))
+<style>
+    .page-inner { max-width:none; }
+    .system-admin-dashboard { width:100%; }
+    .admin-dashboard-heading { margin:0 0 1rem; color:var(--body-text); font-size:1.5rem; font-weight:800; }
+    .admin-dashboard-subtitle { margin:-.55rem 0 1.25rem; color:var(--body-text-muted); font-size:.875rem; }
+    .admin-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.875rem; margin-bottom:1.25rem; }
+    .admin-metric { display:flex; align-items:center; gap:.85rem; min-width:0; padding:1rem 1.05rem; border:1px solid var(--card-border); border-radius:.95rem; background:var(--card-bg); }
+    .admin-metric-icon { display:grid; place-items:center; width:44px; height:44px; flex:none; border-radius:.8rem; color:#536df5; background:rgba(83,109,245,.1); font-size:1.1rem; }
+    .admin-metric-value { color:var(--body-text); font-size:1.4rem; font-weight:850; line-height:1.15; }
+    .admin-metric-label { margin-top:.3rem; color:var(--body-text-muted); font-size:.7rem; font-weight:750; letter-spacing:.045em; text-transform:uppercase; }
+    .admin-chart-card { overflow:hidden; border:1px solid var(--card-border); border-radius:.95rem; background:var(--card-bg); }
+    .admin-chart-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; padding:1.1rem 1.25rem; border-bottom:1px solid var(--body-border); }
+    .admin-chart-heading h2 { margin:0 0 .25rem; color:var(--body-text); font-size:1rem; font-weight:800; }
+    .admin-chart-heading p { margin:0; color:var(--body-text-muted); font-size:.82rem; }
+    .admin-chart-filters { display:flex; flex-wrap:wrap; gap:.7rem; padding:1rem 1.25rem .25rem; }
+    .admin-chart-filter { display:grid; gap:.3rem; min-width:140px; }
+    .admin-chart-filter label { color:var(--body-text-muted); font-size:.72rem; font-weight:700; }
+    .admin-chart-filter select { min-height:40px; }
+    .admin-chart-wrap { overflow-x:auto; padding:.65rem 1rem 1rem; }
+    .admin-chart { display:block; width:100%; min-width:620px; height:auto; overflow:visible; }
+    .admin-chart-grid { stroke:var(--body-border); stroke-width:1; }
+    .admin-chart-grid-label,.admin-chart-day-label { fill:var(--body-text-muted); font:11px sans-serif; }
+    .admin-chart-line { fill:none; stroke:#536df5; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+    .admin-chart-point { fill:var(--card-bg); stroke:#536df5; stroke-width:2; }
+    .admin-chart-legend { display:flex; align-items:center; gap:.5rem; padding:0 1.25rem 1rem; color:var(--body-text-muted); font-size:.8rem; }
+    .admin-chart-legend span { width:18px; height:3px; border-radius:2px; background:#536df5; }
+    @media(max-width:900px) { .admin-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:575px) { .admin-metrics { grid-template-columns:1fr 1fr; gap:.6rem; } .admin-metric { align-items:flex-start; flex-direction:column; padding:.85rem; } .admin-metric-value { font-size:1.2rem; } .admin-chart-heading { flex-direction:column; } .admin-chart-filters { display:grid; grid-template-columns:1fr 1fr; } .admin-chart-filter:first-child { grid-column:1/-1; } }
+</style>
+<section class="system-admin-dashboard">
+    <h1 class="admin-dashboard-heading">Panel de administración</h1>
+    <p class="admin-dashboard-subtitle">Resumen global de Horalia.</p>
+
+    <section class="admin-metrics" aria-label="Resumen general">
+        <article class="admin-metric"><div class="admin-metric-icon"><i class="fa-light fa-building" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['companies']) }}</div><div class="admin-metric-label">Empresas</div></div></article>
+        <article class="admin-metric"><div class="admin-metric-icon"><i class="fa-light fa-calendar" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['schedules']) }}</div><div class="admin-metric-label">Horarios</div></div></article>
+        <article class="admin-metric"><div class="admin-metric-icon"><i class="fa-light fa-people-group" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['employees']) }}</div><div class="admin-metric-label">Personal</div></div></article>
+        <article class="admin-metric"><div class="admin-metric-icon"><i class="fa-light fa-clock" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['attendance']) }}</div><div class="admin-metric-label">Registros de asistencia</div></div></article>
+    </section>
+
+    <section class="admin-chart-card" aria-labelledby="admin-chart-title">
+        <header class="admin-chart-heading"><div><h2 id="admin-chart-title">{{ $chartLabel }} por día</h2><p>{{ $chartMonthName }} {{ $chartYear }} · {{ number_format($chartMonthlyTotal) }} registros en el periodo</p></div></header>
+        <form method="GET" action="{{ route('home') }}" class="admin-chart-filters">
+            <div class="admin-chart-filter"><label for="chart-metric">Información</label><select class="hr-input select2" id="chart-metric" name="metric" onchange="this.form.submit()"><option value="empresas" @selected($chartMetric === 'empresas')>Empresas registradas</option><option value="asistencias" @selected($chartMetric === 'asistencias')>Registros de asistencia</option></select></div>
+            <div class="admin-chart-filter"><label for="chart-month">Mes</label><select class="hr-input select2" id="chart-month" name="month" onchange="this.form.submit()">@foreach(range(1, 12) as $monthOption)<option value="{{ $monthOption }}" @selected($chartMonth === $monthOption)>{{ ucfirst(today()->setDate(2024, $monthOption, 1)->locale('es')->translatedFormat('F')) }}</option>@endforeach</select></div>
+            <div class="admin-chart-filter"><label for="chart-year">Año</label><select class="hr-input select2" id="chart-year" name="year" onchange="this.form.submit()">@foreach($chartYears as $yearOption)<option value="{{ $yearOption }}" @selected($chartYear === $yearOption)>{{ $yearOption }}</option>@endforeach</select></div>
+        </form>
+        <div class="admin-chart-wrap">
+            <svg class="admin-chart" viewBox="0 0 960 285" role="img" aria-label="{{ $chartLabel }} por día durante {{ $chartMonthName }} de {{ $chartYear }}">
+                @foreach($chartGrid as $gridLine)
+                    <line class="admin-chart-grid" x1="56" y1="{{ $gridLine['y'] }}" x2="926" y2="{{ $gridLine['y'] }}" />
+                    <text class="admin-chart-grid-label" x="46" y="{{ $gridLine['y'] + 4 }}" text-anchor="end">{{ $gridLine['value'] }}</text>
+                @endforeach
+                @if($chartMonthlyTotal > 0)<polyline class="admin-chart-line" points="{{ $chartPolyline }}" />@endif
+                @foreach($chartPoints as $point)
+                    @if($chartMonthlyTotal > 0)<circle class="admin-chart-point" cx="{{ $point['x'] }}" cy="{{ $point['y'] }}" r="3.5"><title>Día {{ $point['day'] }}: {{ $point['value'] }}</title></circle>@endif
+                    @if($point['day'] === 1 || $point['day'] % 5 === 0 || $point['day'] === $chartDaysInMonth)<text class="admin-chart-day-label" x="{{ $point['x'] }}" y="264" text-anchor="middle">{{ $point['day'] }}</text>@endif
+                @endforeach
+            </svg>
+        </div>
+        <div class="admin-chart-legend"><span aria-hidden="true"></span>{{ $chartLabel }}</div>
+    </section>
+</section>
+@elseif((int) auth()->user()->profile === 3)
 <style>
     .page-inner { max-width:none; }
     .employee-dashboard { width:100%; }

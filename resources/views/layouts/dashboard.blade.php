@@ -124,6 +124,13 @@
                 <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'home'])</span><span class="nav-text">Home</span>
             </a>
         </div>
+        @if((int) auth()->user()->profile === 1)
+            <div class="nav-li">
+                <a href="{{ route('admin.summary') }}" class="nav-lnk {{ $activeSection === 'summary' ? 'active' : '' }}" @if($activeSection === 'summary') aria-current="page" @endif data-sidebar-tooltip="Resumen">
+                    <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'chart'])</span><span class="nav-text">Resumen</span>
+                </a>
+            </div>
+        @endif
         @foreach(['Organización', 'Operación', 'REPORTES'] as $group)
             @if(!$isRegularProfile || $group === 'Operación')
                 <div class="sidebar-section">{{ $group }}</div>
@@ -150,7 +157,7 @@
             </a>
         </div>
         <div class="sidebar-section">SUSCRIPCIÓN</div>
-        @if($isCompanyAdmin)
+        @if($isCompanyAdmin || (int) auth()->user()->profile === 1)
             <div class="nav-li">
                 <a href="{{ route('subscription.index') }}" class="nav-lnk {{ request()->routeIs('subscription.*') ? 'active' : '' }}" @if(request()->routeIs('subscription.*')) aria-current="page" @endif data-sidebar-tooltip="Suscripción">
                     <span class="nav-icon"><i class="fa-light fa-crown" aria-hidden="true"></i></span><span class="nav-text">Suscripción</span>

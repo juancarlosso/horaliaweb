@@ -12,8 +12,10 @@ class MembershipPaymentController extends Controller
 {
     public function pay(Request $request, int $empresa, StripeCardService $stripe, MembershipRenewalService $renewals)
     {
-        abort_unless((int) $request->user()->profile === 2, 403);
-        $company = $request->user()->empresas()->whereKey($empresa)->firstOrFail();
+        abort_unless(in_array((int) $request->user()->profile, [1, 2], true), 403);
+        $company = (int) $request->user()->profile === 1
+            ? \App\Models\Empresa::query()->findOrFail($empresa)
+            : $request->user()->empresas()->whereKey($empresa)->firstOrFail();
         abort_unless($stripe->ready(), 503, 'El proveedor de pagos no está disponible.');
 
         $data = $request->validate([
@@ -56,8 +58,10 @@ class MembershipPaymentController extends Controller
 
     public function confirm(Request $request, int $empresa, MembershipRenewalService $renewals)
     {
-        abort_unless((int) $request->user()->profile === 2, 403);
-        $company = $request->user()->empresas()->whereKey($empresa)->firstOrFail();
+        abort_unless(in_array((int) $request->user()->profile, [1, 2], true), 403);
+        $company = (int) $request->user()->profile === 1
+            ? \App\Models\Empresa::query()->findOrFail($empresa)
+            : $request->user()->empresas()->whereKey($empresa)->firstOrFail();
         $data = $request->validate([
             'payment_intent_id' => ['required', 'string', 'regex:/^pi_[A-Za-z0-9]+$/'],
         ]);

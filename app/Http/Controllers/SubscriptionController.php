@@ -13,9 +13,11 @@ class SubscriptionController extends Controller
     public function index(Request $request, EmployeeSubscriptionPricing $pricing, PaymentInvoiceAmounts $invoiceAmounts)
     {
         $user = $request->user();
-        abort_unless((int) $user->profile === 2, 403);
+        abort_unless(in_array((int) $user->profile, [1, 2], true), 403);
 
-        $companies = $user->empresas()->orderBy('empresas.nombre')->get();
+        $companies = (int) $user->profile === 1
+            ? Empresa::query()->orderBy('nombre')->get()
+            : $user->empresas()->orderBy('empresas.nombre')->get();
         $data = $request->validate([
             'empresa_id' => ['nullable', 'integer', Rule::in($companies->modelKeys())],
         ]);
@@ -62,8 +64,10 @@ class SubscriptionController extends Controller
 
     private function authorizedCompany(Request $request, int $empresa): Empresa
     {
-        abort_unless((int) $request->user()->profile === 2, 403);
+        abort_unless(in_array((int) $request->user()->profile, [1, 2], true), 403);
 
-        return $request->user()->empresas()->whereKey($empresa)->firstOrFail();
+        return (int) $request->user()->profile === 1
+            ? Empresa::query()->findOrFail($empresa)
+            : $request->user()->empresas()->whereKey($empresa)->firstOrFail();
     }
 }

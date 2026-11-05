@@ -15,7 +15,9 @@ class PaymentMethodController extends Controller
     public function index(Request $request, StripeCardService $stripe)
     {
         $this->authorizeProfile($request);
-        $empresas = $request->user()->empresas()->orderBy('nombre')->get();
+        $empresas = (int) $request->user()->profile === 1
+            ? Empresa::query()->orderBy('nombre')->get()
+            : $request->user()->empresas()->orderBy('nombre')->get();
         $empresaId = $request->integer('empresa_id');
         $empresa = $empresas->firstWhere('id', $empresaId) ?? ($empresas->count() === 1 ? $empresas->first() : null);
         $cards = [];
@@ -158,12 +160,14 @@ class PaymentMethodController extends Controller
         $empresaId = $request->integer('empresa_id');
         abort_unless($empresaId > 0, 422, 'Selecciona una empresa.');
 
-        return $request->user()->empresas()->whereKey($empresaId)->firstOrFail();
+        return (int) $request->user()->profile === 1
+            ? Empresa::query()->findOrFail($empresaId)
+            : $request->user()->empresas()->whereKey($empresaId)->firstOrFail();
     }
 
     private function authorizeProfile(Request $request): void
     {
-        abort_unless((int) $request->user()->profile === 2, 403);
+        abort_unless(in_array((int) $request->user()->profile, [1, 2], true), 403);
     }
 
     private function logStripeFailure(string $message, Empresa $empresa, Throwable $exception): void

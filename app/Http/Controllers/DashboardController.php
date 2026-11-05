@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
 use App\Models\Empresa;
+use App\Models\HorarioEmpresa;
 use App\Models\IntentoPago;
 use App\Models\Personal;
 use App\Services\RegistroAsistenciaService;
 use App\Services\StripeCardService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -45,6 +49,12 @@ class DashboardController extends Controller
             'navigation' => self::navigation(),
             'activeSection' => 'home',
         ];
+
+        if ((int) $request->user()->profile === 1) {
+            $data += $this->adminDashboardData($request);
+
+            return view('dashboard.home', $data);
+        }
 
         if ((int) $request->user()->profile === 3) {
             $personal = $request->user()->personal;
@@ -91,7 +101,9 @@ class DashboardController extends Controller
                     : collect(),
             ];
         } elseif ((int) $request->user()->profile === 2) {
-            $companies = $request->user()->empresas;
+            $companies = (int) $request->user()->profile === 1
+                ? Empresa::query()->get()
+                : $request->user()->empresas;
             $companyIds = $companies->modelKeys();
             $renewalCompanies = $companies
                 ->filter(fn (Empresa $company) => $company->fecha_renovacion && $company->fecha_renovacion->toDateString() <= today()->toDateString())
@@ -164,6 +176,134 @@ class DashboardController extends Controller
         }
 
         return view('dashboard.home', $data);
+    }
+
+    public function summary(Request $request, StripeCardService $stripe)
+    {
+        abort_unless((int) $request->user()->profile === 1, 403);
+
+        $companies = Empresa::query()->orderBy('nombre')->get();
+        $localPaymentMethodCounts = DB::table('payment_method_consents')
+            ->select('empresa_id', DB::raw('COUNT(*) as total'))
+            ->groupBy('empresa_id')
+            ->pluck('total', 'empresa_id');
+
+        $companies->loadCount(['centros', 'horarios', 'personal']);
+        $attendanceCounts = DB::table('asistencias')
+            ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
+            ->select('personal.empresa_id', DB::raw('COUNT(asistencias.id) as total'))
+            ->groupBy('personal.empresa_id')
+            ->pluck('total', 'personal.empresa_id');
+
+        $companies->each(function (Empresa $company) use ($attendanceCounts, $localPaymentMethodCounts, $stripe): void {
+            $company->setAttribute('asistencias_count', (int) ($attendanceCounts[$company->id] ?? 0));
+            $fallbackCount = (int) ($localPaymentMethodCounts[$company->id] ?? 0);
+            $paymentMethodCount = Cache::remember(
+                'admin-summary-payment-method-count-' . $company->id,
+                now()->addMinutes(10),
+                function () use ($company, $stripe, $fallbackCount): int {
+                    if (! $stripe->ready() || ! $company->stripe_customer_id) {
+                        return $fallbackCount;
+                    }
+
+                    try {
+                        return count($stripe->cards($company));
+                    } catch (Throwable $exception) {
+                        Log::warning('No se pudieron contar los métodos de pago de la empresa para el resumen.', [
+                            'empresa_id' => $company->id,
+                            'exception' => get_class($exception),
+                        ]);
+
+                        return $fallbackCount;
+                    }
+                }
+            );
+            $company->setAttribute('metodos_pago_count', $paymentMethodCount);
+        });
+
+        return view('dashboard.summary', [
+            'companies' => $companies,
+            'navigation' => self::navigation(),
+            'activeSection' => 'summary',
+        ]);
+    }
+
+    private function adminDashboardData(Request $request): array
+    {
+        $firstRecordedYear = collect([
+            Empresa::query()->min('created_at'),
+            Asistencia::query()->min('fecha'),
+        ])->filter()->map(fn ($date) => (int) date('Y', strtotime((string) $date)))->min();
+        $currentYear = (int) today()->format('Y');
+        $firstYear = min($firstRecordedYear ?: $currentYear, $currentYear);
+
+        $filters = $request->validate([
+            'metric' => ['nullable', Rule::in(['empresas', 'asistencias'])],
+            'month' => ['nullable', 'integer', 'between:1,12'],
+            'year' => ['nullable', 'integer', "between:{$firstYear},{$currentYear}"],
+        ]);
+
+        $month = (int) ($filters['month'] ?? today()->month);
+        $year = (int) ($filters['year'] ?? $currentYear);
+        $metric = $filters['metric'] ?? 'empresas';
+        $start = today()->setDate($year, $month, 1)->startOfDay();
+        $end = $start->copy()->endOfMonth();
+        $daysInMonth = $start->daysInMonth;
+        $dailyCounts = array_fill(1, $daysInMonth, 0);
+
+        $dailyRecords = $metric === 'empresas'
+            ? Empresa::query()
+                ->whereBetween('created_at', [$start, $end->copy()->endOfDay()])
+                ->selectRaw('DATE(created_at) as chart_date, COUNT(*) as total')
+                ->groupBy('chart_date')
+                ->get()
+            : Asistencia::query()
+                ->whereBetween('fecha', [$start->toDateString(), $end->toDateString()])
+                ->selectRaw('DATE(fecha) as chart_date, COUNT(*) as total')
+                ->groupBy('chart_date')
+                ->get();
+
+        foreach ($dailyRecords as $record) {
+            $dailyCounts[(int) date('j', strtotime((string) $record->chart_date))] = (int) $record->total;
+        }
+
+        $maxValue = max(1, ...array_values($dailyCounts));
+        $plot = ['left' => 56, 'top' => 20, 'width' => 870, 'height' => 220];
+        $chartPoints = [];
+        foreach ($dailyCounts as $day => $value) {
+            $chartPoints[] = [
+                'day' => $day,
+                'value' => $value,
+                'x' => round($plot['left'] + (($day - 1) / max(1, $daysInMonth - 1)) * $plot['width'], 2),
+                'y' => round($plot['top'] + $plot['height'] - ($value / $maxValue) * $plot['height'], 2),
+            ];
+        }
+
+        $attendanceCount = Asistencia::query()->count();
+
+        return [
+            'isSystemAdminDashboard' => true,
+            'adminTotals' => [
+                'companies' => Empresa::query()->count(),
+                'schedules' => HorarioEmpresa::query()->count(),
+                'employees' => Personal::query()->count(),
+                'attendance' => $attendanceCount,
+            ],
+            'chartMetric' => $metric,
+            'chartMonth' => $month,
+            'chartYear' => $year,
+            'chartYears' => range($currentYear, $firstYear),
+            'chartDaysInMonth' => $daysInMonth,
+            'chartPoints' => $chartPoints,
+            'chartPolyline' => collect($chartPoints)->map(fn ($point) => $point['x'] . ',' . $point['y'])->implode(' '),
+            'chartGrid' => collect(range(0, 4))->map(fn ($step) => [
+                'y' => round($plot['top'] + ($step / 4) * $plot['height'], 2),
+                'value' => (int) round($maxValue * (4 - $step) / 4),
+            ]),
+            'chartLabel' => $metric === 'empresas' ? 'Empresas registradas' : 'Registros de asistencia',
+            'chartMonthlyTotal' => array_sum($dailyCounts),
+            'chartMonthName' => ucfirst($start->locale('es')->translatedFormat('F')),
+        ];
     }
 
     public function module(string $section)

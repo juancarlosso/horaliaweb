@@ -14,9 +14,11 @@ class PaymentHistoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        abort_unless((int) $user->profile === 2, 403);
+        abort_unless(in_array((int) $user->profile, [1, 2], true), 403);
 
-        $companies = $user->empresas()->orderBy('empresas.nombre')->get(['empresas.id', 'empresas.nombre']);
+        $companies = (int) $user->profile === 1
+            ? Empresa::query()->orderBy('nombre')->get(['id', 'nombre'])
+            : $user->empresas()->orderBy('empresas.nombre')->get(['empresas.id', 'empresas.nombre']);
         $companyIds = $companies->modelKeys();
         $filters = $request->validate([
             'estado' => ['nullable', 'in:exitosos,fallidos'],
@@ -52,9 +54,9 @@ class PaymentHistoryController extends Controller
     public function show(Request $request, int $payment)
     {
         $user = $request->user();
-        abort_unless((int) $user->profile === 2, 403);
+        abort_unless(in_array((int) $user->profile, [1, 2], true), 403);
 
-        $companyIds = $user->empresas()->pluck('empresas.id');
+        $companyIds = $this->companyIdsFor($user);
         $record = IntentoPago::query()
             ->with('empresa:id,nombre')
             ->whereIn('empresa_id', $companyIds)
@@ -86,9 +88,9 @@ class PaymentHistoryController extends Controller
         abort_unless(in_array($format, ['pdf', 'xml'], true), 404);
 
         $user = $request->user();
-        abort_unless((int) $user->profile === 2, 403);
+        abort_unless(in_array((int) $user->profile, [1, 2], true), 403);
 
-        $companyIds = $user->empresas()->pluck('empresas.id');
+        $companyIds = $this->companyIdsFor($user);
         $record = IntentoPago::query()
             ->with('facturaEmitida')
             ->whereIn('empresa_id', $companyIds)
@@ -140,7 +142,7 @@ class PaymentHistoryController extends Controller
         $empresa = $record->empresa;
         $invoiceValidationErrors = $this->invoiceCompanyValidationErrors($empresa);
 
-        $canEditCompany = $user->empresas()
+        $canEditCompany = (int) $user->profile === 1 || $user->empresas()
             ->wherePivot('control_total', true)
             ->where('empresas.id', $record->empresa_id)
             ->exists();
@@ -210,9 +212,9 @@ class PaymentHistoryController extends Controller
     private function eligibleInvoicePayment(Request $request, int $payment): IntentoPago
     {
         $user = $request->user();
-        abort_unless((int) $user->profile === 2, 403);
+        abort_unless(in_array((int) $user->profile, [1, 2], true), 403);
 
-        $companyIds = $user->empresas()->pluck('empresas.id');
+        $companyIds = $this->companyIdsFor($user);
         $record = IntentoPago::query()
             ->with('empresa')
             ->whereIn('empresa_id', $companyIds)
@@ -262,5 +264,12 @@ class PaymentHistoryController extends Controller
             'no_saved_cards' => 'No había tarjetas disponibles para procesar el cobro.',
             default => 'El proveedor no pudo completar el cobro. Revisa el método de pago o contacta a tu banco.',
         };
+    }
+
+    private function companyIdsFor($user)
+    {
+        return (int) $user->profile === 1
+            ? Empresa::query()->pluck('id')
+            : $user->empresas()->pluck('empresas.id');
     }
 }

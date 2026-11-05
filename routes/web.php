@@ -48,6 +48,7 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
+    Route::get('/home/resumen', [DashboardController::class, 'summary'])->name('admin.summary');
     Route::get('/home/manual', [\App\Http\Controllers\ManualController::class, 'index'])->name('manual.index');
     Route::get('/home/novedades', [\App\Http\Controllers\NovedadesController::class, 'index'])->name('novedades.index');
     Route::get('/home/novedades/{identificador}', [\App\Http\Controllers\NovedadesController::class, 'show'])

@@ -268,14 +268,22 @@ class DashboardController extends Controller
         }
 
         $maxValue = max(1, ...array_values($dailyCounts));
+        $axisStep = $maxValue <= 10 ? 1 : $this->chartAxisStep($maxValue);
+        $axisMax = (int) (ceil($maxValue / $axisStep) * $axisStep);
         $plot = ['left' => 56, 'top' => 20, 'width' => 870, 'height' => 220];
+        $barWidth = round(($plot['width'] / $daysInMonth) * 0.62, 2);
         $chartPoints = [];
         foreach ($dailyCounts as $day => $value) {
+            $x = round($plot['left'] + (($day - 0.5) / $daysInMonth) * $plot['width'], 2);
+            $y = round($plot['top'] + $plot['height'] - ($value / $axisMax) * $plot['height'], 2);
             $chartPoints[] = [
                 'day' => $day,
                 'value' => $value,
-                'x' => round($plot['left'] + (($day - 1) / max(1, $daysInMonth - 1)) * $plot['width'], 2),
-                'y' => round($plot['top'] + $plot['height'] - ($value / $maxValue) * $plot['height'], 2),
+                'x' => $x,
+                'barX' => round($x - ($barWidth / 2), 2),
+                'barWidth' => $barWidth,
+                'y' => $y,
+                'height' => round($plot['top'] + $plot['height'] - $y, 2),
             ];
         }
 
@@ -295,15 +303,27 @@ class DashboardController extends Controller
             'chartYears' => range($currentYear, $firstYear),
             'chartDaysInMonth' => $daysInMonth,
             'chartPoints' => $chartPoints,
-            'chartPolyline' => collect($chartPoints)->map(fn ($point) => $point['x'] . ',' . $point['y'])->implode(' '),
-            'chartGrid' => collect(range(0, 4))->map(fn ($step) => [
-                'y' => round($plot['top'] + ($step / 4) * $plot['height'], 2),
-                'value' => (int) round($maxValue * (4 - $step) / 4),
-            ]),
+            'chartGrid' => collect(range(0, (int) ($axisMax / $axisStep)))->map(function (int $step) use ($plot, $axisMax, $axisStep): array {
+                $value = $axisMax - ($step * $axisStep);
+
+                return [
+                    'y' => round($plot['top'] + ($step * $axisStep / $axisMax) * $plot['height'], 2),
+                    'value' => (int) $value,
+                ];
+            }),
             'chartLabel' => $metric === 'empresas' ? 'Empresas registradas' : 'Registros de asistencia',
             'chartMonthlyTotal' => array_sum($dailyCounts),
             'chartMonthName' => ucfirst($start->locale('es')->translatedFormat('F')),
         ];
+    }
+
+    private function chartAxisStep(int $maxValue): int
+    {
+        $rawStep = $maxValue / 4;
+        $magnitude = 10 ** (int) floor(log10($rawStep));
+        $normalized = $rawStep / $magnitude;
+
+        return (int) (ceil($normalized) * $magnitude);
     }
 
     public function module(string $section)

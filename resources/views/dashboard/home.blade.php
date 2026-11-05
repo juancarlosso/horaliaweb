@@ -24,8 +24,8 @@
     .admin-chart { display:block; width:100%; min-width:620px; height:auto; overflow:visible; }
     .admin-chart-grid { stroke:var(--body-border); stroke-width:1; }
     .admin-chart-grid-label,.admin-chart-day-label { fill:var(--body-text-muted); font:11px sans-serif; }
-    .admin-chart-line { fill:none; stroke:#536df5; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
-    .admin-chart-point { fill:var(--card-bg); stroke:#536df5; stroke-width:2; }
+    .admin-chart-bar { fill:#536df5; rx:3; }
+    .admin-chart-bar:hover { fill:#3f57d2; }
     .admin-chart-legend { display:flex; align-items:center; gap:.5rem; padding:0 1.25rem 1rem; color:var(--body-text-muted); font-size:.8rem; }
     .admin-chart-legend span { width:18px; height:3px; border-radius:2px; background:#536df5; }
     @media(max-width:900px) { .admin-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } }
@@ -55,9 +55,8 @@
                     <line class="admin-chart-grid" x1="56" y1="{{ $gridLine['y'] }}" x2="926" y2="{{ $gridLine['y'] }}" />
                     <text class="admin-chart-grid-label" x="46" y="{{ $gridLine['y'] + 4 }}" text-anchor="end">{{ $gridLine['value'] }}</text>
                 @endforeach
-                @if($chartMonthlyTotal > 0)<polyline class="admin-chart-line" points="{{ $chartPolyline }}" />@endif
                 @foreach($chartPoints as $point)
-                    @if($chartMonthlyTotal > 0)<circle class="admin-chart-point" cx="{{ $point['x'] }}" cy="{{ $point['y'] }}" r="3.5"><title>Día {{ $point['day'] }}: {{ $point['value'] }}</title></circle>@endif
+                    @if($point['value'] > 0)<rect class="admin-chart-bar" x="{{ $point['barX'] }}" y="{{ $point['y'] }}" width="{{ $point['barWidth'] }}" height="{{ $point['height'] }}"><title>Día {{ $point['day'] }}: {{ $point['value'] }}</title></rect>@endif
                     @if($point['day'] === 1 || $point['day'] % 5 === 0 || $point['day'] === $chartDaysInMonth)<text class="admin-chart-day-label" x="{{ $point['x'] }}" y="264" text-anchor="middle">{{ $point['day'] }}</text>@endif
                 @endforeach
             </svg>

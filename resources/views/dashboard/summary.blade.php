@@ -9,6 +9,9 @@
     .admin-summary-count { color:var(--body-text-muted); font-size:.8rem; }
     .admin-summary-table { min-width:700px; }
     .admin-summary-table th:not(:first-child),.admin-summary-table td:not(:first-child) { text-align:center; }
+    .bs-table.hover.admin-summary-table tbody tr td { transition:background-color .15s ease,box-shadow .15s ease; }
+    .bs-table.hover.admin-summary-table tbody tr:hover td { background:rgba(83,109,245,.1); cursor:default; }
+    .bs-table.hover.admin-summary-table tbody tr:hover td:first-child { box-shadow:inset 3px 0 var(--color-primary); }
     .admin-sort-button { display:inline-flex; align-items:center; justify-content:center; gap:.35rem; padding:.2rem .1rem; border:0; color:inherit; background:transparent; font:inherit; font-weight:750; cursor:pointer; }
     .admin-sort-button:hover,.admin-sort-button:focus-visible { color:var(--color-primary); }
     .admin-sort-indicator { width:.8rem; color:var(--body-text-muted); font-size:.72rem; }

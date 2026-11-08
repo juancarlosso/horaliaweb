@@ -125,7 +125,7 @@ class PersonalController extends Controller
                     'empresa_id' => $personalData['empresa_id'],
                     'control_total' => (int) $data['profile'] === $this->administratorProfileId(),
                 ]);
-                $this->syncWorkSchedules($empleado, $data['laborados'], $data['horarios'], $data['modalidades'] ?? [], (int) $data['empresa_id']);
+                $this->syncWorkSchedules($empleado, $data['laborados'], $data['horarios'], $data['modalidades'] ?? [], $data['trabaja_festivos'] ?? [], (int) $data['empresa_id']);
 
                 return $empleado;
             });
@@ -184,6 +184,8 @@ class PersonalController extends Controller
             'horariosSeleccionados' => $empleado->horarios->keyBy('dia'),
             'isEdit' => true,
             'days' => self::DAYS,
+            'documentos' => \App\Models\PersonalDocumento::query()->where('empresa_id', $empleado->empresa_id)->where('personal_id', $empleado->id)->latest()->get(),
+            'documentCatalog' => \App\Http\Controllers\PersonalDocumentoController::catalog(),
         ]);
     }
 
@@ -264,7 +266,7 @@ class PersonalController extends Controller
                     $personalData['empresa_id'] => ['control_total' => (int) $data['profile'] === $this->administratorProfileId()],
                 ]);
                 $empleado->horarios()->delete();
-                $this->syncWorkSchedules($empleado, $data['laborados'], $data['horarios'], $data['modalidades'] ?? [], (int) $data['empresa_id']);
+                $this->syncWorkSchedules($empleado, $data['laborados'], $data['horarios'], $data['modalidades'] ?? [], $data['trabaja_festivos'] ?? [], (int) $data['empresa_id']);
             });
         } catch (Throwable $exception) {
             $this->deletePhoto($newPhotoPath);
@@ -456,6 +458,7 @@ class PersonalController extends Controller
             'laborados.*' => ['required', Rule::in(array_keys(self::DAYS))],
             'horarios' => ['required', 'array'],
             'modalidades' => ['sometimes', 'array'],
+            'trabaja_festivos' => ['sometimes', 'array'],
         ];
         $messages = [
             'empresa_id.required' => 'Selecciona una empresa.',
@@ -485,6 +488,7 @@ class PersonalController extends Controller
                 Rule::exists('horarios_empresas', 'id')->where('empresa_id', $companyId),
             ];
             $rules['modalidades.' . $day] = ['nullable', Rule::in(['PRESENCIAL', 'HOME_OFFICE'])];
+            $rules['trabaja_festivos.' . $day] = ['sometimes', 'boolean'];
             $messages['horarios.' . $day . '.required'] = "Selecciona un horario para {$label}.";
             $messages['horarios.' . $day . '.exists'] = "El horario seleccionado para {$label} no corresponde a la empresa.";
         }
@@ -526,7 +530,7 @@ class PersonalController extends Controller
             && (str_contains($message, 'personal_pin_unique') || str_contains($message, 'personal.pin'));
     }
 
-    private function syncWorkSchedules(Personal $empleado, array $selectedDays, array $selectedSchedules, array $modalities, int $companyId): void
+    private function syncWorkSchedules(Personal $empleado, array $selectedDays, array $selectedSchedules, array $modalities, array $worksOnHolidays, int $companyId): void
     {
         foreach (array_keys(self::DAYS) as $index => $day) {
             if (!in_array($day, $selectedDays, true)) {
@@ -544,6 +548,7 @@ class PersonalController extends Controller
                 'salida' => $horarioEmpresa->hora_salida,
                 'horario_id' => $horarioEmpresa->id,
                 'modalidad' => ($modalities[$day] ?? 'PRESENCIAL') === 'HOME_OFFICE' ? 'HOME_OFFICE' : 'PRESENCIAL',
+                'trabaja_festivos' => (bool) ($worksOnHolidays[$day] ?? false),
             ]);
         }
     }

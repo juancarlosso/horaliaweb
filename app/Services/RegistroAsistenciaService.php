@@ -4,10 +4,14 @@ namespace App\Services;
 
 use App\Models\Asistencia;
 use App\Models\Centro;
+use App\Models\FestivoEmpresa;
+use App\Models\FestivoOficial;
 use App\Models\Personal;
 use App\Support\HoraliaTimezones;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -43,7 +47,8 @@ class RegistroAsistenciaService
             return 'salida';
         }
 
-        $this->scheduleForDate($personal, Carbon::parse($localToday));
+        $schedule = $this->scheduleForDate($personal, Carbon::parse($localToday));
+        $this->assertHolidayWorkEnabled($personal, $schedule, $localToday);
 
         return 'entrada';
     }
@@ -97,6 +102,7 @@ class RegistroAsistenciaService
                 }
 
                 $schedule = $this->scheduleForDate($personal, Carbon::parse($today, $timezone));
+                $this->assertHolidayWorkEnabled($personal, $schedule, $today);
                 $modality = $schedule->modalidad ?: 'PRESENCIAL';
                 $range = $this->rangeForModality($personal, $coordinates, $range, $modality);
                 $scheduledEntry = Carbon::parse($today.' '.$schedule->entrada, $timezone);
@@ -175,6 +181,28 @@ class RegistroAsistenciaService
     {
         if ($attendance->pausas()->whereNull('fin')->exists()) {
             throw ValidationException::withMessages(['pin' => 'Finaliza tu pausa en curso antes de registrar la salida.']);
+        }
+    }
+
+    public function holidayCommemorations(Personal $personal, CarbonInterface|string $date): Collection
+    {
+        $date = $date instanceof CarbonInterface ? $date->toDateString() : Carbon::parse($date)->toDateString();
+        $official = FestivoOficial::query()->whereDate('fecha', $date)->pluck('conmemoracion');
+        $company = FestivoEmpresa::query()
+            ->where('empresa_id', $personal->empresa_id)
+            ->whereDate('fecha', $date)
+            ->pluck('conmemoracion');
+
+        return $official->concat($company)->map(fn ($name) => trim((string) $name))
+            ->filter()->unique()->values();
+    }
+
+    private function assertHolidayWorkEnabled(Personal $personal, $schedule, string $date): void
+    {
+        if ($this->holidayCommemorations($personal, $date)->isNotEmpty() && ! $schedule->trabaja_festivos) {
+            throw ValidationException::withMessages([
+                'pin' => 'Hoy es día festivo y no tienes habilitado trabajar en días festivos.',
+            ]);
         }
     }
 

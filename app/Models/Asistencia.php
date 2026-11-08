@@ -56,8 +56,7 @@ class Asistencia extends Model
 
     public function tiempoProductivoMinutos(): ?int
     {
-        $pauseMinutes = $this->tiempoPausasMinutos();
-        if ($pauseMinutes === null || ! $this->salida) {
+        if (! $this->salida) {
             return null;
         }
         $hasUtcPair = $this->llegada_utc && $this->salida_utc;
@@ -67,11 +66,20 @@ class Asistencia extends Model
             return null;
         }
 
+        $totalSeconds = max(0, (int) $start->diffInSeconds($end));
+        if ($this->personal?->empresa?->incluir_pausas_tiempo_trabajado) {
+            return intdiv($totalSeconds, 60);
+        }
+
+        if ($this->tiempoPausasMinutos() === null) {
+            return null;
+        }
+
         $pauseSeconds = (int) $this->pausas->sum(fn ($pause) => $pause->inicio_utc && $pause->fin_utc
             ? $pause->inicio_utc->diffInSeconds($pause->fin_utc)
             : 0);
 
-        return max(0, intdiv(max(0, (int) $start->diffInSeconds($end) - $pauseSeconds), 60));
+        return max(0, intdiv(max(0, $totalSeconds - $pauseSeconds), 60));
     }
 
     public static function formatoDuracion(?int $minutes): string

@@ -48,7 +48,7 @@
     @include('layouts.fontawsome')
 </head>
 <body class="landing-page article-page">
-    <header class="site-header"><nav class="nav-wrap" aria-label="Navegación principal"><a class="brand" href="/" aria-label="Horalia, inicio"><img src="{{ asset('assets/logos/logoLN.png') }}" alt="Horalia"></a><div class="nav-actions"><a class="button button-outline" href="/#implementacion-sin-resistencia"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Regresar</a><a class="button button-outline" href="/control-de-asistencia-empleados">Control de asistencia</a><a class="button button-primary" href="{{ route('registro.create') }}">Crear mi cuenta</a></div></nav></header>
+    <header class="site-header"><nav class="nav-wrap" aria-label="Navegación principal"><a class="brand" href="/" aria-label="Horalia, inicio"><img src="{{ asset('assets/logos/logoLN.png') }}" alt="Horalia"></a><div class="nav-actions"><a class="button button-outline" href="/#implementacion-sin-resistencia"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a><a class="button button-outline" href="/control-de-asistencia-empleados">Control de asistencia</a><a class="button button-primary" href="{{ route('registro.create') }}">Crear mi cuenta</a></div></nav></header>
     <main class="article-main">
         <article class="article-content">
             <nav class="article-breadcrumb" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><span>Implementación</span></nav>
@@ -94,7 +94,7 @@
                 <h3>¿Cómo atiendo las dudas de privacidad?</h3>
                 <p>Explica de forma concreta qué información recopila la modalidad elegida y para qué la utiliza la empresa. Limita el acceso a quienes lo necesitan para su trabajo y remite las dudas que requieran una revisión formal a la persona responsable de privacidad o asesoría de la organización.</p>
 
-                <section class="article-final-cta" aria-labelledby="article-cta-title"><h2 id="article-cta-title">El cambio no tiene que ser complicado</h2><p>Con reglas claras y acompañamiento, tu equipo puede incorporar el registro de asistencia paso a paso.</p><a class="button button-primary button-large" href="{{ route('registro.create') }}">Prueba Horalia gratis durante 30 días <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></section>
+                <section class="article-final-cta" aria-labelledby="article-cta-title"><h2 id="article-cta-title">El cambio no tiene que ser complicado</h2><p>Con reglas claras y acompañamiento, tu equipo puede incorporar el registro de asistencia paso a paso.</p><a class="button button-primary button-large" href="{{ route('registro.create') }}">Prueba Horalia gratis durante 30 días <i class="{{ config('constantes.tipo_iconos') }} fa-arrow-right" aria-hidden="true"></i></a></section>
             </div>
         </article>
     </main>

@@ -47,6 +47,7 @@ class EmpresaController extends Controller
             'empresa' => new Empresa([
                 'minutos_tolerancia_entrada' => 10,
                 'metros_distancia_entrada' => 20,
+                'incluir_pausas_tiempo_trabajado' => false,
             ]),
             'isEdit' => false,
             'entidadesFederativas' => config('constantes.entidades_federativas'),
@@ -260,6 +261,7 @@ class EmpresaController extends Controller
             'telefono' => ['nullable', 'string', 'max:100'],
             'minutos_tolerancia_entrada' => ['required', 'integer', 'min:1'],
             'metros_distancia_entrada' => ['required', 'integer', 'min:1'],
+            'incluir_pausas_tiempo_trabajado' => ['required', 'boolean'],
             'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ], [
             'nombre.required' => 'Escribe el nombre de la empresa.',

@@ -19,7 +19,7 @@
 <section class="profile-page">
     <header class="profile-heading">
         <div><h1>Cambiar mi contraseña</h1><p>Actualiza tu contraseña para mantener segura tu cuenta.</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
     </header>
 
     <div class="card-hr mb-1rem">

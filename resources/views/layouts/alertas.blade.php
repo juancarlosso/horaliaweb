@@ -50,7 +50,7 @@
 @foreach($alerts as $alert)
     @php($style = $alertStyles[$alert['type']] ?? $alertStyles['info'])
     <div class="{{ $style['container'] }}" role="alert">
-        <i class="fa-light {{ $style['icon'] }} {{ $style['iconClass'] }}" aria-hidden="true"></i>
+        <i class="{{ config('constantes.tipo_iconos') }} {{ $style['icon'] }} {{ $style['iconClass'] }}" aria-hidden="true"></i>
         <div class="fl1">
             <div class="{{ $style['title'] }}">{{ $alert['type'] === 'success' ? '¡ Muy bien !' : ucfirst($alert['type']) }}</div>
             <div class="fs845-c-body-lh-16">{{ $alert['message'] }}</div>

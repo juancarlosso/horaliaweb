@@ -20,16 +20,19 @@ class DashboardController extends Controller
 {
     private const SECTIONS = [
         'empresas' => ['label' => 'Empresas', 'icon' => 'building', 'group' => 'Organización'],
-        'centros-de-trabajo' => ['label' => 'Centros de Trabajo', 'icon' => 'pin', 'group' => 'Organización'],
-        'departamentos' => ['label' => 'Departamentos', 'icon' => 'hierarchy', 'group' => 'Organización'],
+        'centros-de-trabajo' => ['label' => 'Centros de Trabajo', 'icon' => 'location-dot', 'group' => 'Organización'],
+        'departamentos' => ['label' => 'Departamentos', 'icon' => 'sitemap', 'group' => 'Organización'],
         'puestos' => ['label' => 'Puestos', 'icon' => 'briefcase', 'group' => 'Organización'],
-        'horarios' => ['label' => 'Horarios', 'icon' => 'calendar', 'group' => 'Operación'],
-        'personal' => ['label' => 'Personal', 'icon' => 'people', 'group' => 'Operación'],
+        'festivos' => ['label' => 'Festivos', 'icon' => 'calendar-days', 'group' => 'Organización'],
+        'horarios' => ['label' => 'Horarios', 'icon' => 'calendar-clock', 'group' => 'Operación'],
+        'personal' => ['label' => 'Personal', 'icon' => 'users', 'group' => 'Operación'],
         'asistencia' => ['label' => 'Asistencia', 'icon' => 'clock', 'group' => 'Operación'],
-        'pausas' => ['label' => 'Pausas', 'icon' => 'coffee', 'group' => 'Operación'],
-        'reloj-checador' => ['label' => 'Reloj Checador', 'icon' => 'tablet', 'group' => 'Operación'],
-        'reportes-general' => ['label' => 'General', 'icon' => 'chart', 'group' => 'REPORTES'],
-        'reportes-departamento' => ['label' => 'Por Departamento', 'icon' => 'chart', 'group' => 'REPORTES'],
+        'pausas' => ['label' => 'Pausas', 'icon' => 'mug-hot', 'group' => 'Operación'],
+        'reloj-checador' => ['label' => 'Reloj Checador', 'icon' => 'tablet-screen-button', 'group' => 'Operación'],
+        'vacaciones' => ['label' => 'Vacaciones', 'icon' => 'umbrella-beach', 'group' => 'Operación'],
+        'reportes-general' => ['label' => 'General', 'icon' => 'chart-line', 'group' => 'REPORTES'],
+        'reportes-incidencias' => ['label' => 'Incidencias', 'icon' => 'triangle-exclamation', 'group' => 'REPORTES'],
+        'reportes-departamento' => ['label' => 'Por Departamento', 'icon' => 'chart-pie', 'group' => 'REPORTES'],
     ];
 
     public static function navigation(): array

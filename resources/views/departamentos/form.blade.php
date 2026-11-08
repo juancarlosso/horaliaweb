@@ -15,7 +15,7 @@
 </style>
 
 <section class="catalog-form-page">
-    <header class="catalog-form-heading"><div><h1>{{ $isEdit ? 'Editar departamento' : 'Agregar departamento' }}</h1><p>{{ $isEdit ? 'Actualiza los datos del departamento.' : 'Registra un departamento para organizar tu empresa.' }}</p></div><a class="btn-hr btn-outline-hr" href="{{ route('departamentos.index', $departamento->empresa_id ? ['empresa_id' => $departamento->empresa_id] : []) }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
+    <header class="catalog-form-heading"><div><h1>{{ $isEdit ? 'Editar departamento' : 'Agregar departamento' }}</h1><p>{{ $isEdit ? 'Actualiza los datos del departamento.' : 'Registra un departamento para organizar tu empresa.' }}</p></div><a class="btn-hr btn-outline-hr" href="{{ route('departamentos.index', $departamento->empresa_id ? ['empresa_id' => $departamento->empresa_id] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
 
     <div class="card-hr">
         <div class="card-hd"><div><h2 class="card-title-hr">Información del departamento</h2><p class="card-subtitle-hr">Los campos marcados con * son obligatorios.</p></div></div>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="catalog-form-actions">
-                    <button class="btn-hr btn-primary-hr" type="submit"><i class="fa-light fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar departamento' }}</button>
+                    <button class="btn-hr btn-primary-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar departamento' }}</button>
                     <a class="btn-hr btn-outline-hr" href="{{ route('departamentos.index', $departamento->empresa_id ? ['empresa_id' => $departamento->empresa_id] : []) }}">Cancelar</a>
                 </div>
             </form>

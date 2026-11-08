@@ -37,7 +37,7 @@
                 @if($department)<span>Departamento: <strong>{{ $department->nombre }}</strong></span>@elseif($withoutDepartment)<span><strong>Sin departamento</strong></span>@endif
             </div>
         </div>
-        <a class="btn-hr btn-outline-hr department-detail-back" href="{{ route('reportes.departamento', ['empresa_id' => $filters['empresa_id'], 'desde' => $filters['desde'], 'hasta' => $filters['hasta']]) }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Volver al reporte</a>
+        <a class="btn-hr btn-outline-hr department-detail-back" href="{{ route('reportes.departamento', ['empresa_id' => $filters['empresa_id'], 'desde' => $filters['desde'], 'hasta' => $filters['hasta']]) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Volver al reporte</a>
     </header>
 
     <div class="card-hr">

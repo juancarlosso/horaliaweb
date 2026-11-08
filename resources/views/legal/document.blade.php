@@ -17,14 +17,14 @@
     <header class="legal-header">
         <div class="section-shell legal-header-inner">
             <a class="brand" href="{{ url('/') }}" aria-label="{{ config('app.name') }}, volver al inicio"><img src="{{ asset('assets/logos/logoLN.png') }}" alt="{{ config('app.name') }}, tu equipo a tiempo"></a>
-            <a class="legal-return" href="{{ url('/') }}"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Regresar a {{ config('app.name') }}</a>
+            <a class="legal-return" href="{{ url('/') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar a {{ config('app.name') }}</a>
         </div>
     </header>
 
     <main class="section-shell legal-main">
         <div class="legal-kicker"><span class="eyebrow">{{ config('app.name') }} · Información legal</span></div>
         <article class="legal-document">{!! $content !!}</article>
-        <div class="legal-bottom"><a class="button button-primary" href="{{ url('/') }}"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Volver a {{ config('app.name') }}</a></div>
+        <div class="legal-bottom"><a class="button button-primary" href="{{ url('/') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Volver a {{ config('app.name') }}</a></div>
     </main>
 
     <footer class="legal-footer"><div class="section-shell">© {{ date('Y') }} <a href="https://solventia.com.mx">Solventia Software</a>. Todos los derechos reservados.</div></footer>

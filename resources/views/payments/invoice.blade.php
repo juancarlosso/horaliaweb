@@ -42,18 +42,18 @@
 <section class="invoice-page">
     <header class="invoice-page-header">
         <div><h1>Facturar pago</h1><p class="subtitle">Revisa los datos de facturación de la empresa.</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('payment-history.index', request()->query()) }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+        <a class="btn-hr btn-outline-hr" href="{{ route('payment-history.index', request()->query()) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
     </header>
 
     <div class="card-hr">
         <div class="card-hd" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
             <h2 class="card-title-hr">Datos de la empresa</h2>
             @if($canEditCompany)
-                <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('empresas.edit', $payment->empresa_id) }}"><i class="fa-light fa-pen-to-square" aria-hidden="true"></i> Editar datos de la empresa</a>
+                <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('empresas.edit', $payment->empresa_id) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-pen-to-square" aria-hidden="true"></i> Editar datos de la empresa</a>
             @endif
         </div>
         <div class="invoice-fiscal-notice" role="note">
-            <i class="fa-light fa-circle-info" aria-hidden="true"></i>
+            <i class="{{ config('constantes.tipo_iconos') }} fa-circle-info" aria-hidden="true"></i>
             <div><strong>Verifica tus datos fiscales</strong>La razón social, RFC, régimen fiscal y código postal deben coincidir exactamente con los registrados en tu Constancia de Situación Fiscal del SAT. Los datos incorrectos pueden impedir la generación de tu factura.</div>
         </div>
         <div class="invoice-company-grid">

@@ -40,7 +40,7 @@
 <section class="profile-page">
     <header class="profile-heading">
         <div><h1>Mi Perfil</h1><p>{{ $isEmployeeProfile ? 'Consulta los datos de tu ficha de personal y tu horario laboral.' : 'Actualiza tu nombre y la foto que aparece en tu cuenta.' }}</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
     </header>
 
     @if($isEmployeeProfile)

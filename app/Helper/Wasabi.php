@@ -55,6 +55,30 @@ class Wasabi
 
 
    /**
+    * Sube el archivo conservando su nombre original y aislándolo en una carpeta UUID.
+    * La carpeta única evita colisiones entre cargas del mismo nombre.
+    */
+   public static function uploadWithOriginalName($carpeta, $archivo, ?string $nombreOriginal = null)
+   {
+       if (!$archivo) {
+           return null;
+       }
+
+       $prefijo = env('WASABI_PREFIJO') ?? 'UPLODIA';
+       $nombre = $nombreOriginal ?? basename(str_replace('\\', '/', $archivo->getClientOriginalName()));
+       $nombre = preg_replace('/[\\x00-\\x1F\\x7F]/u', '', $nombre);
+
+       if (!$nombre || $nombre === '.' || $nombre === '..') {
+           throw new \InvalidArgumentException('El nombre original del archivo no es válido.');
+       }
+
+       $carpetaUnica = rtrim($carpeta, '/') . '/' . (string) Str::uuid();
+
+       return $archivo->storeAs($prefijo . '/' . $carpetaUnica, $nombre, 'wasabi');
+   }
+
+
+   /**
     * Obtiene una URL firmada de descarga de corta duración.
     * La disponibilidad de la transferencia se valida antes de llamar este método;
     * la URL no se cachea para no prolongar el acceso accidentalmente.

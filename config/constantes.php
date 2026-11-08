@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'itemsPorPagina' => 10,
+    'itemsPorPagina' => 50,
+    'tipo_iconos' => 'fa-solid',
     'precio_mensual_por_empresa_mxn' => 150,
     'tasa_iva' => 16,
     'video_como_funciona_youtube' => 'https://youtu.be/TdkJnSW34to',

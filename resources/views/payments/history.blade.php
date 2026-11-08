@@ -56,7 +56,7 @@
                         <td><span class="payment-status {{ $statusClass }}">{{ $statusLabel }}</span></td>
                         <td style="white-space:nowrap">
                             <div class="payment-actions">
-                            <a class="btn-hr btn-outline-hr btn-sm-hr payment-detail" href="{{ route('payment-history.show', array_merge(['payment' => $payment->id], request()->query())) }}" aria-label="Ver detalle" title="Ver detalle"><i class="fa-light fa-circle-info" aria-hidden="true"></i></a>
+                            <a class="btn-hr btn-outline-hr btn-sm-hr payment-detail" href="{{ route('payment-history.show', array_merge(['payment' => $payment->id], request()->query())) }}" aria-label="Ver detalle" title="Ver detalle"><i class="{{ config('constantes.tipo_iconos') }} fa-circle-info" aria-hidden="true"></i></a>
                             @if((int) $payment->factura === 1 && $payment->facturaEmitida?->uuid)
                                 @foreach(['pdf' => 'PDF', 'xml' => 'XML'] as $format => $label)
                                     @php($documentPath = $format === 'pdf' ? $payment->facturaEmitida->pdf_path : $payment->facturaEmitida->xml_path)

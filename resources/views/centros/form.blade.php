@@ -18,7 +18,7 @@
 </style>
 
 <section class="catalog-form-page">
-    <header class="catalog-form-heading"><div><h1>{{ $isEdit ? 'Editar centro de trabajo' : 'Agregar centro de trabajo' }}</h1><p>{{ $isEdit ? 'Actualiza la información y ubicación del centro.' : 'Registra una ubicación para la empresa.' }}</p></div><a class="btn-hr btn-outline-hr" href="{{ route('centros.index', $centro->empresa_id ? ['empresa_id' => $centro->empresa_id] : []) }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
+    <header class="catalog-form-heading"><div><h1>{{ $isEdit ? 'Editar centro de trabajo' : 'Agregar centro de trabajo' }}</h1><p>{{ $isEdit ? 'Actualiza la información y ubicación del centro.' : 'Registra una ubicación para la empresa.' }}</p></div><a class="btn-hr btn-outline-hr" href="{{ route('centros.index', $centro->empresa_id ? ['empresa_id' => $centro->empresa_id] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
 
     <div class="card-hr">
         <div class="card-hd"><div><h2 class="card-title-hr">Información del centro</h2><p class="card-subtitle-hr">Los campos marcados con * son obligatorios.</p></div></div>
@@ -51,7 +51,7 @@
                         <label class="form-label-hr" for="geolocalizacion">Geolocalización <span class="text-danger" aria-hidden="true">*</span></label>
                         <div class="catalog-map-row">
                             <input class="hr-input @error('geolocalizacion') catalog-input-error @enderror" id="geolocalizacion" name="geolocalizacion" type="text" value="{{ old('geolocalizacion', $centro->geolocalizacion) }}" maxlength="255" required placeholder="latitud, longitud, ejemplo: 19.42698287419, -99.1676693843">
-                            <button class="btn-hr btn-outline-hr catalog-map-button" type="button" id="open-map"><i class="fa-light fa-map-location-dot" aria-hidden="true"></i> Ver en Maps</button>
+                            <button class="btn-hr btn-outline-hr catalog-map-button" type="button" id="open-map"><i class="{{ config('constantes.tipo_iconos') }} fa-map-location-dot" aria-hidden="true"></i> Ver en Maps</button>
                         </div>
                         @error('geolocalizacion')<span class="catalog-field-error">{{ $message }}</span>@enderror
                     </div>
@@ -70,7 +70,7 @@
                     <div class="alert alert-info mt-3 mb-0" role="note"><strong>Importante:</strong> La zona horaria seleccionada se aplicará únicamente a los nuevos movimientos de asistencia. Los registros anteriores conservarán sus fechas y horas originales.</div>
                 @endif
                 <div class="catalog-form-actions">
-                    <button class="btn-hr btn-primary-hr" type="submit"><i class="fa-light fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar centro' }}</button>
+                    <button class="btn-hr btn-primary-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar centro' }}</button>
                     <a class="btn-hr btn-outline-hr" href="{{ route('centros.index', $centro->empresa_id ? ['empresa_id' => $centro->empresa_id] : []) }}">Cancelar</a>
                 </div>
             </form>

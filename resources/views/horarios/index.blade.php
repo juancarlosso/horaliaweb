@@ -36,7 +36,7 @@
                 @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
             </select>
         </div>
-        @if($canCreate)<a class="btn-hr btn-primary-hr schedule-toolbar-action" href="{{ route('horarios.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="fa-light fa-plus" aria-hidden="true"></i> Agregar horario</a>@endif
+        @if($canCreate)<a class="btn-hr btn-primary-hr schedule-toolbar-action" href="{{ route('horarios.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-plus" aria-hidden="true"></i> Agregar horario</a>@endif
     </div>
 
     <div class="card-hr">
@@ -53,8 +53,8 @@
                         <td>{{ substr($horario->hora_salida, 0, 5) }}@if(substr((string) $horario->hora_salida, 0, 8) <= substr((string) $horario->hora_entrada, 0, 8)) <small class="d-block text-muted">Día siguiente</small>@endif</td>
                         <td><div class="schedule-actions">
                             @if(in_array($horario->empresa_id, $manageableIds, true))
-                                <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('horarios.edit', $horario) }}" title="Editar" aria-label="Editar {{ $horario->nombre_horario }}"><i class="fa-light fa-pen-to-square" aria-hidden="true"></i> Editar</a>
-                                <form method="POST" action="{{ route('horarios.destroy', $horario) }}" data-confirm-delete data-record-name="{{ $horario->nombre_horario }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" title="Eliminar" aria-label="Eliminar {{ $horario->nombre_horario }}"><i class="fa-light fa-trash-can" aria-hidden="true"></i> Eliminar</button></form>
+                                <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('horarios.edit', $horario) }}" title="Editar" aria-label="Editar {{ $horario->nombre_horario }}"><i class="{{ config('constantes.tipo_iconos') }} fa-pen-to-square" aria-hidden="true"></i> Editar</a>
+                                <form method="POST" action="{{ route('horarios.destroy', $horario) }}" data-confirm-delete data-record-name="{{ $horario->nombre_horario }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" title="Eliminar" aria-label="Eliminar {{ $horario->nombre_horario }}"><i class="{{ config('constantes.tipo_iconos') }} fa-trash-can" aria-hidden="true"></i> Eliminar</button></form>
                             @else<span class="company-rfc">Solo lectura</span>@endif
                         </div></td>
                     </tr>

@@ -40,6 +40,7 @@ class Empresa extends Model
         'telefono',
         'minutos_tolerancia_entrada',
         'metros_distancia_entrada',
+        'incluir_pausas_tiempo_trabajado',
         'logo',
         'activa',
         'stripe_customer_id',
@@ -53,6 +54,7 @@ class Empresa extends Model
         return [
             'minutos_tolerancia_entrada' => 'integer',
             'metros_distancia_entrada' => 'integer',
+            'incluir_pausas_tiempo_trabajado' => 'boolean',
             'activa' => 'boolean',
             'precio' => 'decimal:2',
             'fecha_inicio' => 'date',

@@ -40,7 +40,7 @@
                 @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
             </select>
         </div>
-        @if($canCreate)<a class="btn-hr btn-primary-hr catalog-toolbar-action" href="{{ route('puestos.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="fa-light fa-plus" aria-hidden="true"></i> Agregar puesto</a>@endif
+        @if($canCreate)<a class="btn-hr btn-primary-hr catalog-toolbar-action" href="{{ route('puestos.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-plus" aria-hidden="true"></i> Agregar puesto</a>@endif
     </div>
 
     <div class="card-hr">
@@ -56,8 +56,8 @@
                         <td><span class="catalog-state {{ $puesto->activo ? 'catalog-state-active' : 'catalog-state-inactive' }}">{{ $puesto->activo ? 'Activo' : 'Inactivo' }}</span></td>
                         <td><div class="catalog-actions">
                             @if(in_array($puesto->empresa_id, $manageableIds, true))
-                                <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('puestos.edit', $puesto) }}" title="Editar" aria-label="Editar {{ $puesto->nombre }}"><i class="fa-light fa-pen-to-square" aria-hidden="true"></i> Editar</a>
-                                <form method="POST" action="{{ route('puestos.destroy', $puesto) }}" data-confirm-delete data-record-name="{{ $puesto->nombre }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" title="Eliminar" aria-label="Eliminar {{ $puesto->nombre }}"><i class="fa-light fa-trash-can" aria-hidden="true"></i> Eliminar</button></form>
+                                <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('puestos.edit', $puesto) }}" title="Editar" aria-label="Editar {{ $puesto->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-pen-to-square" aria-hidden="true"></i> Editar</a>
+                                <form method="POST" action="{{ route('puestos.destroy', $puesto) }}" data-confirm-delete data-record-name="{{ $puesto->nombre }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" title="Eliminar" aria-label="Eliminar {{ $puesto->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-trash-can" aria-hidden="true"></i> Eliminar</button></form>
                             @else<span class="company-rfc">Solo lectura</span>@endif
                         </div></td>
                     </tr>

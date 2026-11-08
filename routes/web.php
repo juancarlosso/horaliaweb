@@ -1,30 +1,37 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
-use App\Http\Controllers\CompanyRegistrationController;
-use App\Http\Controllers\CentroController;
-use App\Http\Controllers\DepartamentoController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EmpresaController;
-use App\Http\Controllers\PaymentAttemptController;
-use App\Http\Controllers\PaymentHistoryController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PaymentMethodController;
-use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\MembershipPaymentController;
-use App\Http\Controllers\PuestoController;
-use App\Http\Controllers\HorarioEmpresaController;
-use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\AsistenciaPausaController;
-use App\Http\Controllers\ChecadorController;
-use App\Http\Middleware\ValidateChecadorToken;
-use App\Http\Middleware\EnsureActiveLinkedPersonal;
-use App\Http\Controllers\ReporteAsistenciaController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\CentroController;
+use App\Http\Controllers\ChecadorController;
+use App\Http\Controllers\CompanyRegistrationController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartamentoController;
+use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\FestivoEmpresaController;
+use App\Http\Controllers\FestivoOficialController;
+use App\Http\Controllers\HorarioEmpresaController;
+use App\Http\Controllers\ManualController;
+use App\Http\Controllers\MembershipPaymentController;
+use App\Http\Controllers\NovedadesController;
+use App\Http\Controllers\PaymentAttemptController;
+use App\Http\Controllers\PaymentHistoryController;
+use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\PersonalController;
+use App\Http\Controllers\PersonalDocumentoController;
+use App\Http\Controllers\VacacionesController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PuestoController;
+use App\Http\Controllers\ReporteAsistenciaController;
+use App\Http\Controllers\ReporteIncidenciasController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Middleware\EnsureActiveLinkedPersonal;
+use App\Http\Middleware\ValidateChecadorToken;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 Route::middleware('guest')->group(function () {
     Route::get('/registro', [CompanyRegistrationController::class, 'create'])->name('registro.create');
@@ -49,9 +56,21 @@ Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth'
 Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
     Route::get('/home/resumen', [DashboardController::class, 'summary'])->name('admin.summary');
-    Route::get('/home/manual', [\App\Http\Controllers\ManualController::class, 'index'])->name('manual.index');
-    Route::get('/home/novedades', [\App\Http\Controllers\NovedadesController::class, 'index'])->name('novedades.index');
-    Route::get('/home/novedades/{identificador}', [\App\Http\Controllers\NovedadesController::class, 'show'])
+    Route::get('/home/festivos', [FestivoEmpresaController::class, 'index'])->name('festivos.index');
+    Route::get('/home/festivos/create', [FestivoEmpresaController::class, 'create'])->name('festivos.create');
+    Route::post('/home/festivos', [FestivoEmpresaController::class, 'store'])->name('festivos.store');
+    Route::get('/home/festivos/{festivo}/edit', [FestivoEmpresaController::class, 'edit'])->whereNumber('festivo')->name('festivos.edit');
+    Route::put('/home/festivos/{festivo}', [FestivoEmpresaController::class, 'update'])->whereNumber('festivo')->name('festivos.update');
+    Route::delete('/home/festivos/{festivo}', [FestivoEmpresaController::class, 'destroy'])->whereNumber('festivo')->name('festivos.destroy');
+    Route::get('/home/festivos-oficiales', [FestivoOficialController::class, 'index'])->name('festivos-oficiales.index');
+    Route::get('/home/festivos-oficiales/create', [FestivoOficialController::class, 'create'])->name('festivos-oficiales.create');
+    Route::post('/home/festivos-oficiales', [FestivoOficialController::class, 'store'])->name('festivos-oficiales.store');
+    Route::get('/home/festivos-oficiales/{festivo}/edit', [FestivoOficialController::class, 'edit'])->whereNumber('festivo')->name('festivos-oficiales.edit');
+    Route::put('/home/festivos-oficiales/{festivo}', [FestivoOficialController::class, 'update'])->whereNumber('festivo')->name('festivos-oficiales.update');
+    Route::delete('/home/festivos-oficiales/{festivo}', [FestivoOficialController::class, 'destroy'])->whereNumber('festivo')->name('festivos-oficiales.destroy');
+    Route::get('/home/manual', [ManualController::class, 'index'])->name('manual.index');
+    Route::get('/home/novedades', [NovedadesController::class, 'index'])->name('novedades.index');
+    Route::get('/home/novedades/{identificador}', [NovedadesController::class, 'show'])
         ->where('identificador', '\\d{6}(?:\\d{4})?(?:[-_][A-Za-z0-9_-]+)?')
         ->name('novedades.show');
     Route::post('/home/empresas/{empresa}/membresia/pagar', [MembershipPaymentController::class, 'pay'])->whereNumber('empresa')->name('membership.pay');
@@ -110,10 +129,19 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::put('/home/horarios/{horario}', [HorarioEmpresaController::class, 'update'])->whereNumber('horario')->name('horarios.update');
     Route::delete('/home/horarios/{horario}', [HorarioEmpresaController::class, 'destroy'])->whereNumber('horario')->name('horarios.destroy');
     Route::get('/home/personal', [PersonalController::class, 'index'])->name('personal.index');
+    Route::get('/home/vacaciones', [VacacionesController::class, 'index'])->name('vacaciones.index');
+    Route::get('/home/vacaciones/create', [VacacionesController::class, 'create'])->name('vacaciones.create');
+    Route::post('/home/vacaciones/preview', [VacacionesController::class, 'preview'])->name('vacaciones.preview');
+    Route::post('/home/vacaciones', [VacacionesController::class, 'store'])->name('vacaciones.store');
+    Route::delete('/home/vacaciones/{vacacion}', [VacacionesController::class, 'cancel'])->whereNumber('vacacion')->name('vacaciones.cancel');
     Route::get('/home/personal/create', [PersonalController::class, 'create'])->name('personal.create');
     Route::post('/home/personal', [PersonalController::class, 'store'])->name('personal.store');
     Route::get('/home/personal/{personal}/edit', [PersonalController::class, 'edit'])->whereNumber('personal')->name('personal.edit');
     Route::put('/home/personal/{personal}', [PersonalController::class, 'update'])->whereNumber('personal')->name('personal.update');
+    Route::post('/home/personal/{personal}/documentos', [PersonalDocumentoController::class, 'store'])->whereNumber('personal')->middleware('throttle:20,1')->name('personal.documentos.store');
+    Route::get('/home/personal/{personal}/documentos/{documento}', [PersonalDocumentoController::class, 'show'])->whereNumber('personal')->whereNumber('documento')->name('personal.documentos.show');
+    Route::get('/home/personal/{personal}/documentos/{documento}/descargar', [PersonalDocumentoController::class, 'download'])->whereNumber('personal')->whereNumber('documento')->name('personal.documentos.download');
+    Route::delete('/home/personal/{personal}/documentos/{documento}', [PersonalDocumentoController::class, 'destroy'])->whereNumber('personal')->whereNumber('documento')->name('personal.documentos.destroy');
     Route::post('/home/personal/{personal}/asignar-contrasena', [PersonalController::class, 'assignPassword'])->whereNumber('personal')->name('personal.password.assign');
     Route::post('/home/personal/{personal}/regenerar-contrasena', [PersonalController::class, 'regeneratePassword'])->whereNumber('personal')->name('personal.password.regenerate');
     Route::post('/home/personal/{personal}/reenviar-pin', [PersonalController::class, 'resendPin'])->whereNumber('personal')->middleware('throttle:5,1')->name('personal.pin.resend');
@@ -129,13 +157,15 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::post('/home/pausas/iniciar', [AsistenciaPausaController::class, 'start'])->name('pausas.start');
     Route::post('/home/pausas/finalizar', [AsistenciaPausaController::class, 'finish'])->name('pausas.finish');
     Route::get('/home/reportes/general', [ReporteAsistenciaController::class, 'index'])->name('reportes.general');
+    Route::get('/home/reportes/incidencias', [ReporteIncidenciasController::class, 'index'])->name('reportes.incidencias');
+    Route::get('/home/reportes/incidencias/exportar', [ReporteIncidenciasController::class, 'export'])->name('reportes.incidencias.exportar');
     Route::get('/home/reportes/asistencia', fn () => redirect()->route('reportes.general'))->name('reportes.asistencia');
     Route::get('/home/reportes/departamento', [ReporteAsistenciaController::class, 'byDepartment'])->name('reportes.departamento');
     Route::get('/home/reportes/departamento/detalle', [ReporteAsistenciaController::class, 'departmentDetail'])->name('reportes.departamento.detalle');
     Route::get('/home/reportes/asistencia/exportar', [ReporteAsistenciaController::class, 'export'])->name('reportes.asistencia.exportar');
     Route::get('/home/reportes/asistencias/{asistencia}/pausas', [ReporteAsistenciaController::class, 'pauseDetail'])->whereNumber('asistencia')->name('reportes.asistencia.pausas');
     Route::get('/home/{section}', [DashboardController::class, 'module'])
-        ->where('section', 'empresas|centros-de-trabajo|departamentos|puestos|horarios|personal|asistencia|reportes')
+        ->where('section', 'empresas|centros-de-trabajo|departamentos|puestos|horarios|personal|vacaciones|asistencia|reportes')
         ->name('dashboard.module');
 });
 
@@ -155,7 +185,7 @@ Route::post('/checador/pausas/finalizar', [ChecadorController::class, 'finishPau
 
 $showLegalDocument = static function (string $filename, string $title) {
     return static function () use ($filename, $title) {
-        $markdown = file_get_contents(resource_path('legal/' . $filename));
+        $markdown = file_get_contents(resource_path('legal/'.$filename));
 
         abort_if($markdown === false, 404);
 

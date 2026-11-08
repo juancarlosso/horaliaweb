@@ -17,7 +17,7 @@
 <section class="catalog-form-page">
     <header class="catalog-form-heading">
         <div><h1>{{ $isEdit ? 'Editar puesto' : 'Agregar puesto' }}</h1><p>{{ $isEdit ? 'Actualiza los datos del puesto.' : 'Registra un puesto para tu empresa.' }}</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('puestos.index', $puesto->empresa_id ? ['empresa_id' => $puesto->empresa_id] : []) }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+        <a class="btn-hr btn-outline-hr" href="{{ route('puestos.index', $puesto->empresa_id ? ['empresa_id' => $puesto->empresa_id] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
     </header>
 
     <div class="card-hr">
@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <div class="catalog-form-actions">
-                    <button class="btn-hr btn-primary-hr" type="submit"><i class="fa-light fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar puesto' }}</button>
+                    <button class="btn-hr btn-primary-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar puesto' }}</button>
                     <a class="btn-hr btn-outline-hr" href="{{ route('puestos.index', $puesto->empresa_id ? ['empresa_id' => $puesto->empresa_id] : []) }}">Cancelar</a>
                 </div>
             </form>

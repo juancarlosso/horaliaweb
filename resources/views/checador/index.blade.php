@@ -34,7 +34,7 @@
     @media(max-width:600px) { .kiosk-admin-heading { align-items:stretch; flex-direction:column; } }
 </style>
 <section class="kiosk-admin">
-    <header class="kiosk-admin-heading"><div><h1>Reloj Checador</h1><p>Usa la aplicación de Horalia en tu tablet o genera un enlace para usar el reloj checador desde un navegador.</p></div><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index') }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
+    <header class="kiosk-admin-heading"><div><h1>Reloj Checador</h1><p>Usa la aplicación de Horalia en tu tablet o genera un enlace para usar el reloj checador desde un navegador.</p></div><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
     @if($errors->any())<div class="personal-error" role="alert">{{ $errors->first() }}</div>@endif
     <article class="card-hr kiosk-app-card" aria-labelledby="kiosk-app-title">
         <div class="card-hd"><div><h2 class="card-title-hr" id="kiosk-app-title">Convierte tu tablet en un reloj checador</h2></div></div>
@@ -56,7 +56,7 @@
                 <div><label class="form-label-hr" for="empresa_id">Empresa</label><select class="hr-input select2" id="empresa_id" name="empresa_id" required><option value="">Selecciona una empresa</option>@foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) old('empresa_id', $selectedCompanyId) === (string) $company->id)>{{ $company->nombre }}</option>@endforeach</select></div>
                 <div><label class="form-label-hr" for="duracion_dias">Vigencia de la sesión</label><select class="hr-input select2" id="duracion_dias" name="duracion_dias" required>@for($days = 1; $days <= 7; $days++)<option value="{{ $days }}" @selected((int) old('duracion_dias', 1) === $days)>{{ $days }} {{ $days === 1 ? 'día' : 'días' }}</option>@endfor</select></div>
                 <p class="kiosk-note">Abre el enlace generado en la tablet de la empresa. El enlace puede activarse una sola vez durante los siguientes 15 minutos; después, la sesión durará el periodo seleccionado.</p>
-                <div><button class="btn-hr btn-primary-hr" type="submit"><i class="fa-light fa-link" aria-hidden="true"></i> Generar enlace del checador</button></div>
+                <div><button class="btn-hr btn-primary-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-link" aria-hidden="true"></i> Generar enlace del checador</button></div>
             </form>
             <div class="kiosk-link-list">
                 @forelse($activationSessions as $activationSession)
@@ -69,7 +69,7 @@
                             <input class="hr-input flex-grow-1" id="{{ $activationInputId }}" type="url" readonly value="{{ $activationUrl }}">
                             <button class="btn-hr btn-outline-hr" type="button" data-copy-activation-url data-target="{{ $activationInputId }}">Copiar enlace</button>
                             <a class="btn-hr btn-primary-hr" href="{{ $activationUrl }}" target="_blank" rel="noopener">Abrir</a>
-                            <button class="btn-hr btn-outline-hr" type="button" data-open-kiosk-email data-email-url="{{ route('checador.email', $activationSession->id) }}" data-company="{{ $activationSession->empresa->nombre }}"><i class="fa-light fa-envelope" aria-hidden="true"></i> Enviar por correo</button>
+                            <button class="btn-hr btn-outline-hr" type="button" data-open-kiosk-email data-email-url="{{ route('checador.email', $activationSession->id) }}" data-company="{{ $activationSession->empresa->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-envelope" aria-hidden="true"></i> Enviar por correo</button>
                         </div>
                     </div>
                 @empty

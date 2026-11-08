@@ -38,7 +38,7 @@ class PaymentHistoryAccessTest extends TestCase
             ->get('/home/pagos')
             ->assertOk()
             ->assertSee('class="hr-input select2"', false)
-            ->assertSee('fa-light fa-clock-rotate-left', false)
+            ->assertSee(config('constantes.tipo_iconos') . ' fa-clock-rotate-left', false)
             ->assertSee('HRL-A04782')
             ->assertSee('Empresa propia')
             ->assertDontSee('HRL-B83921')

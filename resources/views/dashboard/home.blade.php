@@ -36,10 +36,10 @@
     <p class="admin-dashboard-subtitle">Resumen global de Horalia.</p>
 
     <section class="admin-metrics" aria-label="Resumen general">
-        <article class="admin-metric"><div class="admin-metric-icon"><i class="fa-light fa-building" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['companies']) }}</div><div class="admin-metric-label">Empresas</div></div></article>
-        <article class="admin-metric"><div class="admin-metric-icon"><i class="fa-light fa-calendar" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['schedules']) }}</div><div class="admin-metric-label">Horarios</div></div></article>
-        <article class="admin-metric"><div class="admin-metric-icon"><i class="fa-light fa-people-group" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['employees']) }}</div><div class="admin-metric-label">Personal</div></div></article>
-        <article class="admin-metric"><div class="admin-metric-icon"><i class="fa-light fa-clock" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['attendance']) }}</div><div class="admin-metric-label">Registros de asistencia</div></div></article>
+        <article class="admin-metric"><div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-building" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['companies']) }}</div><div class="admin-metric-label">Empresas</div></div></article>
+        <article class="admin-metric"><div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-calendar" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['schedules']) }}</div><div class="admin-metric-label">Horarios</div></div></article>
+        <article class="admin-metric"><div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-people-group" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['employees']) }}</div><div class="admin-metric-label">Personal</div></div></article>
+        <article class="admin-metric"><div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-clock" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['attendance']) }}</div><div class="admin-metric-label">Registros de asistencia</div></div></article>
     </section>
 
     <section class="admin-chart-card" aria-labelledby="admin-chart-title">
@@ -129,25 +129,25 @@
                 </div>
             </div>
             @if($canMarkEntry || $canMarkExit)
-                <div class="wb-actions"><a class="wb-btn {{ $canMarkEntry ? 'wb-btn-outline' : 'wb-btn-primary' }}" href="{{ route('asistencia.index') }}"><i class="fa-light {{ $canMarkEntry ? 'fa-right-to-bracket' : 'fa-right-from-bracket' }}" aria-hidden="true"></i>{{ $canMarkEntry ? 'Registrar entrada' : 'Registrar salida' }}</a></div>
+                <div class="wb-actions"><a class="wb-btn {{ $canMarkEntry ? 'wb-btn-outline' : 'wb-btn-primary' }}" href="{{ route('asistencia.index') }}"><i class="{{ config('constantes.tipo_iconos') }} {{ $canMarkEntry ? 'fa-right-to-bracket' : 'fa-right-from-bracket' }}" aria-hidden="true"></i>{{ $canMarkEntry ? 'Registrar entrada' : 'Registrar salida' }}</a></div>
             @endif
         </section>
 
         <section class="metrics-row" aria-label="Resumen de asistencia del mes">
             <article class="metric-tile" style="--mt-color:#4f6ef7">
-                <div class="mt-icon" style="background:rgba(79,110,247,.12);color:#4f6ef7"><i class="fa-light fa-calendar-check" aria-hidden="true"></i></div>
+                <div class="mt-icon" style="background:rgba(79,110,247,.12);color:#4f6ef7"><i class="{{ config('constantes.tipo_iconos') }} fa-calendar-check" aria-hidden="true"></i></div>
                 <div><div class="mt-val">{{ $monthAttendanceCount }}<span style="font-size:.78rem;color:var(--body-text-muted)">/{{ $monthScheduledDays }}</span></div><div class="mt-label">Asistencia este mes</div><div class="mt-trend" style="color:#4f6ef7">Jornadas registradas</div></div>
             </article>
             <article class="metric-tile" style="--mt-color:#f59e0b">
-                <div class="mt-icon" style="background:rgba(245,158,11,.13);color:#d97706"><i class="fa-light fa-clock" aria-hidden="true"></i></div>
+                <div class="mt-icon" style="background:rgba(245,158,11,.13);color:#d97706"><i class="{{ config('constantes.tipo_iconos') }} fa-clock" aria-hidden="true"></i></div>
                 <div><div class="mt-val">{{ $monthLateCount }}</div><div class="mt-label">Días con retardo</div><div class="mt-trend" style="color:#d97706">Este mes</div></div>
             </article>
             <article class="metric-tile" style="--mt-color:#06b6d4">
-                <div class="mt-icon" style="background:rgba(6,182,212,.12);color:#0891b2"><i class="fa-light fa-hourglass-half" aria-hidden="true"></i></div>
+                <div class="mt-icon" style="background:rgba(6,182,212,.12);color:#0891b2"><i class="{{ config('constantes.tipo_iconos') }} fa-hourglass-half" aria-hidden="true"></i></div>
                 <div><div class="mt-val">{{ $monthLateMinutes }}</div><div class="mt-label">Minutos de retardo</div><div class="mt-trend" style="color:#0891b2">Acumulados este mes</div></div>
             </article>
             <article class="metric-tile" style="--mt-color:#10b981">
-                <div class="mt-icon" style="background:rgba(16,185,129,.12);color:#059669"><i class="fa-light fa-right-from-bracket" aria-hidden="true"></i></div>
+                <div class="mt-icon" style="background:rgba(16,185,129,.12);color:#059669"><i class="{{ config('constantes.tipo_iconos') }} fa-right-from-bracket" aria-hidden="true"></i></div>
                 <div><div class="mt-val">{{ $monthEarlyExitMinutes }}</div><div class="mt-label">Minutos de salida temprana</div><div class="mt-trend" style="color:#059669">Acumulados este mes</div></div>
             </article>
         </section>
@@ -282,26 +282,26 @@
 
     <div class="alert alert-info" role="note">
         Si requieres soporte, por favor envíanos un correo a
-        <a href="mailto:contacto@solventia.com.mx"><i class="fa-solid fa-envelope" aria-hidden="true"></i> contacto@solventia.com.mx</a>
+        <a href="mailto:contacto@solventia.com.mx"><i class="{{ config('constantes.tipo_iconos') }} fa-envelope" aria-hidden="true"></i> contacto@solventia.com.mx</a>
         o si lo prefieres, escríbenos por WhatsApp al
         <a href="https://wa.me/525513447932" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> 5513447932</a>.
     </div>
 
     <section class="manager-metrics" aria-label="Resumen de asistencia de hoy">
         <article class="manager-metric">
-            <div class="manager-metric-icon" style="background:rgba(79,110,247,.12);color:#4f6ef7"><i class="fa-light fa-users" aria-hidden="true"></i></div>
+            <div class="manager-metric-icon" style="background:rgba(79,110,247,.12);color:#4f6ef7"><i class="{{ config('constantes.tipo_iconos') }} fa-users" aria-hidden="true"></i></div>
             <div><div class="manager-metric-value">{{ $activeEmployeeCount }}</div><div class="manager-metric-label">Personal activo</div><div class="manager-metric-note" style="color:#4f6ef7">En tus empresas</div></div>
         </article>
         <article class="manager-metric">
-            <div class="manager-metric-icon" style="background:rgba(16,185,129,.12);color:#059669"><i class="fa-light fa-calendar-check" aria-hidden="true"></i></div>
+            <div class="manager-metric-icon" style="background:rgba(16,185,129,.12);color:#059669"><i class="{{ config('constantes.tipo_iconos') }} fa-calendar-check" aria-hidden="true"></i></div>
             <div><div class="manager-metric-value">{{ $presentTodayCount }}<span style="font-size:.78rem;color:var(--body-text-muted)">/{{ $scheduledEmployeeCount }}</span></div><div class="manager-metric-label">Entradas registradas</div><div class="manager-metric-note" style="color:#059669">De las jornadas de hoy</div></div>
         </article>
         <article class="manager-metric">
-            <div class="manager-metric-icon" style="background:rgba(245,158,11,.13);color:#d97706"><i class="fa-light fa-clock" aria-hidden="true"></i></div>
+            <div class="manager-metric-icon" style="background:rgba(245,158,11,.13);color:#d97706"><i class="{{ config('constantes.tipo_iconos') }} fa-clock" aria-hidden="true"></i></div>
             <div><div class="manager-metric-value">{{ $lateTodayCount }}</div><div class="manager-metric-label">Retardos de hoy</div><div class="manager-metric-note" style="color:#d97706">Con entrada registrada</div></div>
         </article>
         <article class="manager-metric">
-            <div class="manager-metric-icon" style="background:rgba(239,68,68,.1);color:#dc3545"><i class="fa-light fa-bell" aria-hidden="true"></i></div>
+            <div class="manager-metric-icon" style="background:rgba(239,68,68,.1);color:#dc3545"><i class="{{ config('constantes.tipo_iconos') }} fa-bell" aria-hidden="true"></i></div>
             <div><div class="manager-metric-value">{{ $pendingEntryCount }}</div><div class="manager-metric-label">Entradas pendientes</div><div class="manager-metric-note" style="color:#b42318">{{ $pendingExitCount }} {{ $pendingExitCount === 1 ? 'salida pendiente' : 'salidas pendientes' }}</div></div>
         </article>
     </section>

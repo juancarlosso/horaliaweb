@@ -45,7 +45,7 @@
         .sidebar-nav { padding-bottom:1rem; }
         .sidebar-section { margin-top:.5rem; }
         [data-sidebar-mobile-toggle] { display:none; }
-        .nav-lnk .nav-icon svg { width:18px; height:18px; display:block; stroke:currentColor; }
+        .nav-lnk .nav-icon svg,.nav-lnk .nav-icon i { width:18px; height:18px; display:grid; place-items:center; font-size:16px; }
         .main-content { min-height:100vh; }
         .app-footer { padding:.7rem 1.5rem .55rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); text-align:center; }
         .app-footer-promotion { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:.2rem .45rem; max-width:1050px; margin:0 auto; font-size:.78rem; line-height:1.5; }
@@ -59,10 +59,10 @@
         @media(max-width:575px) { .app-footer { padding:.65rem 1rem .55rem; } .app-footer-promotion { gap:.15rem .35rem; font-size:.74rem; } }
         .topbar-manual-link { width:auto; gap:.4rem; padding:0 .65rem; color:var(--body-text-muted); font-size:.78rem; font-weight:700; text-decoration:none; }
         .topbar-manual-link:hover { color:var(--color-primary); text-decoration:none; }
-        .topbar-manual-link svg { flex:none; stroke:currentColor; }
+        .topbar-manual-link svg,.topbar-manual-link i { flex:none; }
         .topbar-news-link { width:auto; gap:.4rem; padding:0 .65rem; color:var(--body-text-muted); font-size:.78rem; font-weight:700; text-decoration:none; }
         .topbar-news-link:hover { color:var(--color-primary); text-decoration:none; }
-        .topbar-news-link svg { flex:none; stroke:currentColor; }
+        .topbar-news-link svg,.topbar-news-link i { flex:none; }
         .topbar-user { display:flex; align-items:center; gap:.65rem; padding:0 .5rem; }
         .topbar-user-copy { display:flex; flex-direction:column; min-width:0; }
         .topbar-user-name { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.82rem; font-weight:700; color:var(--body-text); }
@@ -78,7 +78,7 @@
         .account-menu .account-menu-email { overflow:hidden; color:var(--body-text-muted); font-size:.775rem; text-overflow:ellipsis; white-space:nowrap; }
         .account-menu .account-menu-link { display:flex; align-items:center; gap:.625rem; padding:.5rem .25rem; color:var(--body-text); font-size:.845rem; font-weight:500; text-decoration:none; transition:background .13s ease,color .13s ease; }
         .account-menu .account-menu-link:hover { color:var(--primary,#4f6ef7); background:var(--body-bg); }
-        .account-menu .account-menu-link svg { width:16px; height:16px; flex:none; color:#4f6ef7; stroke:currentColor; stroke-width:2; }
+        .account-menu .account-menu-link svg,.account-menu .account-menu-link i { width:16px; height:16px; flex:none; color:#4f6ef7; }
         .account-menu form { margin:0; padding:0; }
         .account-menu .account-menu-logout { display:flex; align-items:center; justify-content:center; gap:.5rem; }
         .account-menu .account-menu-logout svg { width:16px; height:16px; stroke:currentColor; stroke-width:2; }
@@ -121,13 +121,20 @@
         <div class="sidebar-section">Principal</div>
         <div class="nav-li">
             <a href="{{ route('home') }}" class="nav-lnk {{ $activeSection === 'home' ? 'active' : '' }}" @if($activeSection === 'home') aria-current="page" @endif data-sidebar-tooltip="Home">
-                <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'home'])</span><span class="nav-text">Home</span>
+                <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-house" aria-hidden="true"></i></span><span class="nav-text">Home</span>
             </a>
         </div>
         @if((int) auth()->user()->profile === 1)
             <div class="nav-li">
+                <a href="{{ route('festivos-oficiales.index') }}" class="nav-lnk {{ $activeSection === 'festivos-oficiales' ? 'active' : '' }}" @if($activeSection === 'festivos-oficiales') aria-current="page" @endif data-sidebar-tooltip="Festivos Oficiales">
+                    <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-calendar-days" aria-hidden="true"></i></span><span class="nav-text">Festivos Oficiales</span>
+                </a>
+            </div>
+        @endif
+        @if((int) auth()->user()->profile === 1)
+            <div class="nav-li">
                 <a href="{{ route('admin.summary') }}" class="nav-lnk {{ $activeSection === 'summary' ? 'active' : '' }}" @if($activeSection === 'summary') aria-current="page" @endif data-sidebar-tooltip="Resumen">
-                    <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'chart'])</span><span class="nav-text">Resumen</span>
+                    <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-chart-line" aria-hidden="true"></i></span><span class="nav-text">Resumen</span>
                 </a>
             </div>
         @endif
@@ -137,8 +144,8 @@
                 @foreach($navigation as $slug => $item)
                     @if($item['group'] === $group && (!$isRegularProfile || in_array($slug, ['asistencia', 'pausas'], true)) && ($slug !== 'reloj-checador' || $canManageChecador))
                         <div class="nav-li">
-                            <a href="{{ $slug === 'empresas' ? route('empresas.index') : ($slug === 'pausas' ? route('pausas.index') : ($slug === 'reloj-checador' ? route('checador.index') : ($slug === 'reportes-general' ? route('reportes.general') : ($slug === 'reportes-departamento' ? route('reportes.departamento') : route('dashboard.module', ['section' => $slug]))))) }}" class="nav-lnk {{ $activeSection === $slug ? 'active' : '' }}" @if($activeSection === $slug) aria-current="page" @endif data-sidebar-tooltip="{{ $item['label'] }}">
-                                <span class="nav-icon">@include('dashboard.partials.icon', ['name' => $item['icon']])</span><span class="nav-text">{{ $item['label'] }}</span>
+                            <a href="{{ $slug === 'empresas' ? route('empresas.index') : ($slug === 'festivos' ? route('festivos.index') : ($slug === 'vacaciones' ? route('vacaciones.index') : ($slug === 'pausas' ? route('pausas.index') : ($slug === 'reloj-checador' ? route('checador.index') : ($slug === 'reportes-general' ? route('reportes.general') : ($slug === 'reportes-incidencias' ? route('reportes.incidencias') : ($slug === 'reportes-departamento' ? route('reportes.departamento') : route('dashboard.module', ['section' => $slug])))))))) }}" class="nav-lnk {{ $activeSection === $slug ? 'active' : '' }}" @if($activeSection === $slug) aria-current="page" @endif data-sidebar-tooltip="{{ $item['label'] }}">
+                                <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-{{ $item['icon'] }}" aria-hidden="true"></i></span><span class="nav-text">{{ $item['label'] }}</span>
                             </a>
                         </div>
                     @endif
@@ -148,41 +155,41 @@
         <div class="sidebar-section">Mis Datos</div>
         <div class="nav-li">
             <a href="{{ route('profile.edit') }}" class="nav-lnk {{ request()->routeIs('profile.edit', 'profile.update') ? 'active' : '' }}" @if(request()->routeIs('profile.edit', 'profile.update')) aria-current="page" @endif data-sidebar-tooltip="Mi Perfil">
-                <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'user'])</span><span class="nav-text">Mi Perfil</span>
+                <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-user" aria-hidden="true"></i></span><span class="nav-text">Mi Perfil</span>
             </a>
         </div>
         <div class="nav-li">
             <a href="{{ route('profile.password.edit') }}" class="nav-lnk {{ request()->routeIs('profile.password.*') ? 'active' : '' }}" @if(request()->routeIs('profile.password.*')) aria-current="page" @endif data-sidebar-tooltip="Cambiar Contraseña">
-                <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'lock'])</span><span class="nav-text">Cambiar Contraseña</span>
+                <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-lock" aria-hidden="true"></i></span><span class="nav-text">Cambiar Contraseña</span>
             </a>
         </div>
         <div class="sidebar-section">SUSCRIPCIÓN</div>
         @if($isCompanyAdmin || (int) auth()->user()->profile === 1)
             <div class="nav-li">
                 <a href="{{ route('subscription.index') }}" class="nav-lnk {{ request()->routeIs('subscription.*') ? 'active' : '' }}" @if(request()->routeIs('subscription.*')) aria-current="page" @endif data-sidebar-tooltip="Suscripción">
-                    <span class="nav-icon"><i class="fa-light fa-crown" aria-hidden="true"></i></span><span class="nav-text">Suscripción</span>
+                    <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-crown" aria-hidden="true"></i></span><span class="nav-text">Suscripción</span>
                 </a>
             </div>
             <div class="nav-li">
                 <a href="{{ route('payment-methods.index') }}" class="nav-lnk {{ request()->routeIs('payment-methods.*') ? 'active' : '' }}" @if(request()->routeIs('payment-methods.*')) aria-current="page" @endif data-sidebar-tooltip="Métodos de Pago">
-                    <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'card'])</span><span class="nav-text">Métodos de Pago</span>
+                    <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-credit-card" aria-hidden="true"></i></span><span class="nav-text">Métodos de Pago</span>
                 </a>
             </div>
             <div class="nav-li">
                 <a href="{{ route('payment-history.index') }}" class="nav-lnk {{ request()->routeIs('payment-history.*') ? 'active' : '' }}" @if(request()->routeIs('payment-history.*')) aria-current="page" @endif data-sidebar-tooltip="Historial de pagos">
-                    <span class="nav-icon"><i class="fa-light fa-clock-rotate-left" aria-hidden="true"></i></span><span class="nav-text">Historial de pagos</span>
+                    <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-clock-rotate-left" aria-hidden="true"></i></span><span class="nav-text">Historial de pagos</span>
                 </a>
             </div>
         @endif
         <div class="sidebar-section">AYUDA</div>
         <div class="nav-li">
             <a href="{{ route('manual.index') }}" class="nav-lnk {{ request()->routeIs('manual.*') ? 'active' : '' }}" @if(request()->routeIs('manual.*')) aria-current="page" @endif data-sidebar-tooltip="Manual de usuario">
-                <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.2 1.8c-1.1 1-1.8 1.4-1.8 2.7m0 3h.01"/></svg></span><span class="nav-text">Manual</span>
+                <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-circle-question" aria-hidden="true"></i></span><span class="nav-text">Manual</span>
             </a>
         </div>
         <div class="nav-li">
             <a href="{{ route('novedades.index') }}" class="nav-lnk {{ request()->routeIs('novedades.*') ? 'active' : '' }}" @if(request()->routeIs('novedades.*')) aria-current="page" @endif data-sidebar-tooltip="Novedades de Horalia">
-                <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4.5h13a2 2 0 0 1 2 2v13H6a2 2 0 0 1-2-2z"/><path d="M4 17.5a2 2 0 0 1 2-2h13M8 8h7M8 11h7"/></svg></span><span class="nav-text">Novedades</span>
+                <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-newspaper" aria-hidden="true"></i></span><span class="nav-text">Novedades</span>
             </a>
         </div>
         <div class="sidebar-section">SESIÓN</div>
@@ -190,7 +197,7 @@
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="nav-lnk w100pct-tdn" data-sidebar-tooltip="Finalizar Sesión">
-                    <span class="nav-icon">@include('dashboard.partials.icon', ['name' => 'logout'])</span><span class="nav-text">Finalizar Sesión</span>
+                    <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-right-from-bracket" aria-hidden="true"></i></span><span class="nav-text">Finalizar Sesión</span>
                 </button>
             </form>
         </div>
@@ -199,22 +206,22 @@
 <div class="main-content" id="mainContent">
     <header class="topbar" role="banner">
         <div class="topbar-left">
-            <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Contraer o expandir el menú"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
-            <button type="button" class="btn-icon-top" data-sidebar-mobile-toggle aria-label="Abrir menú"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+            <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Contraer o expandir el menú"><i class="{{ config('constantes.tipo_iconos') }} fa-bars" aria-hidden="true"></i></button>
+            <button type="button" class="btn-icon-top" data-sidebar-mobile-toggle aria-label="Abrir menú"><i class="{{ config('constantes.tipo_iconos') }} fa-bars" aria-hidden="true"></i></button>
             <nav class="breadcrumb-bar" aria-label="Ruta de navegación"><span>{{ config('app.name') }}</span><span class="bc-sep">/</span><span class="bc-current">{{ $pageTitle }}</span></nav>
         </div>
         <div class="topbar-right pos-rel">
             <a class="btn-icon-top topbar-manual-link" href="{{ route('manual.index') }}" aria-label="Abrir Manual de usuario" title="Manual">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.2 1.8c-1.1 1-1.8 1.4-1.8 2.7m0 3h.01"/></svg>
+                <i class="{{ config('constantes.tipo_iconos') }} fa-circle-question" aria-hidden="true"></i>
                 <span>Manual</span>
             </a>
             <a class="btn-icon-top topbar-news-link" href="{{ route('novedades.index') }}" aria-label="Novedades de Horalia" title="Novedades de Horalia">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4.5h13a2 2 0 0 1 2 2v13H6a2 2 0 0 1-2-2z"/><path d="M4 17.5a2 2 0 0 1 2-2h13M8 8h7M8 11h7"/></svg>
+                <i class="{{ config('constantes.tipo_iconos') }} fa-newspaper" aria-hidden="true"></i>
                 <span>Novedades</span>
             </a>
             <button type="button" class="btn-icon-top" data-theme-toggle aria-label="Cambiar entre tema claro y oscuro" title="Cambiar tema">
-                <svg class="theme-icon-light" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
-                <svg class="theme-icon-dark" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.9 13A8.5 8.5 0 0 1 11 3.1 8.5 8.5 0 1 0 20.9 13Z"/></svg>
+                <i class="theme-icon-light {{ config('constantes.tipo_iconos') }} fa-sun" aria-hidden="true"></i>
+                <i class="theme-icon-dark {{ config('constantes.tipo_iconos') }} fa-moon" aria-hidden="true"></i>
             </button>
             <button type="button" class="topbar-user btn-hr btn-ghost-hr" data-panel-toggle="account-panel" aria-label="Cuenta de {{ auth()->user()->name }}" aria-expanded="false">
                 <div class="topbar-user-copy"><span class="topbar-user-name">{{ auth()->user()->name }}</span><span class="topbar-user-email">{{ auth()->user()->email }}</span></div>
@@ -235,15 +242,15 @@
                         </div>
                     </div>
                     <div class="divider-hr m-2-0"></div>
-                    <a class="account-menu-link" href="{{ route('profile.edit') }}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20c.4-3.5 2.6-5.3 6.5-5.3s6.1 1.8 6.5 5.3"/></svg><span>Mi Perfil</span></a>
-                    <a class="account-menu-link" href="{{ route('profile.password.edit') }}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></svg><span>Cambiar mi contraseña</span></a>
+                    <a class="account-menu-link" href="{{ route('profile.edit') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-user" aria-hidden="true"></i><span>Mi Perfil</span></a>
+                    <a class="account-menu-link" href="{{ route('profile.password.edit') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-lock" aria-hidden="true"></i><span>Cambiar mi contraseña</span></a>
                     @if($isCompanyAdmin)
-                        <a class="account-menu-link" href="{{ route('payment-methods.index') }}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18m-14 5h4"/></svg><span>Métodos de Pago</span></a>
+                        <a class="account-menu-link" href="{{ route('payment-methods.index') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-credit-card" aria-hidden="true"></i><span>Métodos de Pago</span></a>
                     @endif
                     <div class="divider-hr m-2-0"></div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button class="btn-hr btn-danger-hr w100pct-mt1 account-menu-logout" type="submit"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 17l5-5-5-5m5 5H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg><span>Finalizar Sesión</span></button>
+                        <button class="btn-hr btn-danger-hr w100pct-mt1 account-menu-logout" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-right-from-bracket" aria-hidden="true"></i><span>Finalizar Sesión</span></button>
                     </form>
                 </div>
             </div>

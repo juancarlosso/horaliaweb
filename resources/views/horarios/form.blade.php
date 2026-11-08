@@ -17,7 +17,7 @@
 <section class="schedule-form-page">
     <header class="schedule-form-heading">
         <div><h1>{{ $isEdit ? 'Editar horario' : 'Agregar horario' }}</h1><p>{{ $isEdit ? 'Actualiza la información del horario.' : 'Registra un horario para una empresa.' }}</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('horarios.index', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+        <a class="btn-hr btn-outline-hr" href="{{ route('horarios.index', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
     </header>
 
     <div class="card-hr">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="schedule-form-actions">
-                    <button class="btn-hr btn-primary-hr" type="submit"><i class="fa-light fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar horario' }}</button>
+                    <button class="btn-hr btn-primary-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar horario' }}</button>
                     <a class="btn-hr btn-outline-hr" href="{{ route('horarios.index', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}">Cancelar</a>
                 </div>
             </form>

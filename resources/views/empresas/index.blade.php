@@ -91,7 +91,7 @@
                                     <div class="company-actions">
                                         @if($isAdmin || in_array($empresa->id, $manageableIds, true))
                                             <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('empresas.edit', $empresa) }}" aria-label="Editar {{ $empresa->nombre }}" title="Editar">
-                                                <i class="fa-light fa-pen-to-square" aria-hidden="true"></i>
+                                                <i class="{{ config('constantes.tipo_iconos') }} fa-pen-to-square" aria-hidden="true"></i>
                                                 Editar
                                             </a>
                                             @if($empresa->personal_count === 0)
@@ -99,13 +99,13 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" aria-label="Eliminar {{ $empresa->nombre }}" title="Eliminar">
-                                                        <i class="fa-light fa-trash-can" aria-hidden="true"></i>
+                                                        <i class="{{ config('constantes.tipo_iconos') }} fa-trash-can" aria-hidden="true"></i>
                                                         Eliminar
                                                     </button>
                                                 </form>
                                             @else
                                                 <button class="btn-hr btn-danger-hr btn-sm-hr" type="button" data-company-history-modal aria-haspopup="dialog" aria-controls="company-history-modal" aria-label="Eliminar {{ $empresa->nombre }}" title="Eliminar">
-                                                    <i class="fa-light fa-trash-can" aria-hidden="true"></i>
+                                                    <i class="{{ config('constantes.tipo_iconos') }} fa-trash-can" aria-hidden="true"></i>
                                                     Eliminar
                                                 </button>
                                             @endif
@@ -179,7 +179,7 @@
         var button = form.querySelector('button[type="submit"]');
         if (button) {
             button.disabled = true;
-            button.innerHTML = '<i class="fa-light fa-spinner fa-spin" aria-hidden="true"></i> Eliminando…';
+            button.innerHTML = '<i class="{{ config('constantes.tipo_iconos') }} fa-spinner fa-spin" aria-hidden="true"></i> Eliminando…';
         }
 
         form.dataset.confirmed = 'true';

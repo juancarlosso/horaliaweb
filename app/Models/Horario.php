@@ -8,7 +8,12 @@ class Horario extends Model
 {
     protected $table = 'horarios';
 
-    protected $fillable = ['dia', 'entrada', 'salida', 'personal_id', 'horario_id', 'modalidad'];
+    protected $fillable = ['dia', 'entrada', 'salida', 'personal_id', 'horario_id', 'modalidad', 'trabaja_festivos'];
+
+    protected function casts(): array
+    {
+        return ['trabaja_festivos' => 'boolean'];
+    }
 
     public function personal()
     {

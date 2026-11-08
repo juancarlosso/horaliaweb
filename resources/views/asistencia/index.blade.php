@@ -79,6 +79,12 @@
 
 <section class="attendance-page">
     <header class="attendance-heading"><div><h1>Asistencias</h1><p>Consulta y registra las entradas y salidas del personal.</p></div></header>
+    @if(isset($holidayCommemorations) && $holidayCommemorations->isNotEmpty())
+        <div class="alert alert-warning d-flex align-items-start gap-2" role="alert">
+            <i class="{{ config('constantes.tipo_iconos') }} fa-triangle-exclamation mt-1" aria-hidden="true"></i>
+            <div><strong>Hoy es día festivo.</strong> {{ $holidayCommemorations->join(' · ') }}@if($todaySchedule && !$todaySchedule->trabaja_festivos) No tienes habilitado registrar asistencia en días festivos.@endif</div>
+        </div>
+    @endif
     @if($canMarkAttendance)
         @php
             $displayAttendance = $todayAttendance ?? $overnightAttendance;
@@ -91,7 +97,9 @@
                 ? 'Registra primero la salida de tu jornada anterior.'
                 : ($todayAttendance?->llegada
                 ? 'La entrada ya está registrada.'
-                : ($todaySchedule ? 'No disponible por el momento.' : 'No tienes un horario laboral configurado para hoy.'));
+                : ($holidayCommemorations->isNotEmpty() && $todaySchedule && !$todaySchedule->trabaja_festivos
+                    ? 'Hoy es festivo y no tienes habilitado trabajar en días festivos.'
+                    : ($todaySchedule ? 'No disponible por el momento.' : 'No tienes un horario laboral configurado para hoy.')));
             $exitUnavailableReason = $todayAttendance?->salida
                 ? 'La salida ya está registrada.'
                 : (!$todayAttendance?->llegada && !$overnightAttendance ? 'Registra primero tu entrada.' : 'No disponible por el momento.');
@@ -102,8 +110,8 @@
                 <div class="attendance-live-clock" id="attendance-live-clock" data-now="{{ now('UTC')->toIso8601String() }}" data-timezone="{{ $attendanceTimezone }}" style="visibility:hidden"></div>
                 <div class="attendance-live-date" id="attendance-live-date" style="visibility:hidden"></div>
                 <div class="attendance-check-actions">
-                    <button class="attendance-check-button is-entry" type="button" @if($canMarkEntry) data-open-attendance data-kind="entrada" data-url="{{ route('asistencia.entrada') }}" @else disabled title="{{ $entryUnavailableReason }}" @endif><i class="fa-light fa-right-to-bracket" aria-hidden="true"></i> Registrar entrada</button>
-                    <button class="attendance-check-button is-exit" type="button" @if($canMarkExit) data-open-attendance data-kind="salida" data-url="{{ route('asistencia.salida') }}" @else disabled title="{{ $exitUnavailableReason }}" @endif><i class="fa-light fa-right-from-bracket" aria-hidden="true"></i> Registrar salida</button>
+                    <button class="attendance-check-button is-entry" type="button" @if($canMarkEntry) data-open-attendance data-kind="entrada" data-url="{{ route('asistencia.entrada') }}" @else disabled title="{{ $entryUnavailableReason }}" @endif><i class="{{ config('constantes.tipo_iconos') }} fa-right-to-bracket" aria-hidden="true"></i> Registrar entrada</button>
+                    <button class="attendance-check-button is-exit" type="button" @if($canMarkExit) data-open-attendance data-kind="salida" data-url="{{ route('asistencia.salida') }}" @else disabled title="{{ $exitUnavailableReason }}" @endif><i class="{{ config('constantes.tipo_iconos') }} fa-right-from-bracket" aria-hidden="true"></i> Registrar salida</button>
                 </div>
                 <div class="attendance-today-log">
                     <div class="attendance-today-log-title">{{ $overnightAttendance && !$todayAttendance ? 'Jornada iniciada el ' . $overnightAttendance->fecha->format('d/m/Y') : 'Registro de hoy' }}</div>
@@ -125,7 +133,7 @@
             </div>
         @endif
         <div class="attendance-filter-period"><label for="mes">Mes y año</label><div class="attendance-period-selects"><select class="hr-input select2" id="mes" name="mes" aria-label="Mes">@foreach($monthNames as $monthNumber => $monthName)<option value="{{ $monthNumber }}" @selected($selectedMonth === $monthNumber)>{{ $monthName }}</option>@endforeach</select><select class="hr-input select2" id="anio" name="anio" aria-label="Año">@foreach($availableYears as $year)<option value="{{ $year }}" @selected($selectedYear === $year)>{{ $year }}</option>@endforeach</select></div></div>
-        <div class="attendance-actions"><button class="btn-hr btn-primary-hr" type="submit"><i class="fa-light fa-magnifying-glass" aria-hidden="true"></i> Buscar</button><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="fa-light fa-arrow-rotate-left" aria-hidden="true"></i> Limpiar</a></div>
+        <div class="attendance-actions"><button class="btn-hr btn-primary-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-magnifying-glass" aria-hidden="true"></i> Buscar</button><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-rotate-left" aria-hidden="true"></i> Limpiar</a></div>
     </form>
 
     <div class="card-hr">
@@ -147,12 +155,12 @@
                         <td>{{ $record->fecha?->format('d/m/Y') ?? '—' }}</td>
                         <td>{{ ($record->modalidad ?? 'PRESENCIAL') === 'HOME_OFFICE' ? 'Home Office' : 'Presencial' }}</td>
                         <td><div class="attendance-time-cell"><span>{{ $record->llegada?->format('H:i') ?? '—' }}</span>
-                            @if($entryEvidenceUrl)<a class="attendance-icon-action" href="{{ $entryEvidenceUrl }}" target="_blank" rel="noopener" title="Ver foto de entrada" aria-label="Ver foto de entrada de {{ $employee?->nombre }}"><i class="fa-light fa-camera" aria-hidden="true"></i></a>@endif
-                            @if($record->latitud !== null && $record->longitud !== null)<a class="attendance-icon-action" href="https://www.google.com/maps?q={{ $record->latitud }},{{ $record->longitud }}" target="_blank" rel="noopener" title="Ver ubicación de entrada" aria-label="Ver ubicación de entrada de {{ $employee?->nombre }}"><i class="fa-light fa-location-dot" aria-hidden="true"></i></a>@endif
+                            @if($entryEvidenceUrl)<a class="attendance-icon-action" href="{{ $entryEvidenceUrl }}" target="_blank" rel="noopener" title="Ver foto de entrada" aria-label="Ver foto de entrada de {{ $employee?->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-camera" aria-hidden="true"></i></a>@endif
+                            @if($record->latitud !== null && $record->longitud !== null)<a class="attendance-icon-action" href="https://www.google.com/maps?q={{ $record->latitud }},{{ $record->longitud }}" target="_blank" rel="noopener" title="Ver ubicación de entrada" aria-label="Ver ubicación de entrada de {{ $employee?->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i></a>@endif
                         </div></td>
                         <td><div class="attendance-time-cell"><span>{{ $record->salida?->format('H:i') ?? '—' }}</span>
-                            @if($exitEvidenceUrl)<a class="attendance-icon-action" href="{{ $exitEvidenceUrl }}" target="_blank" rel="noopener" title="Ver foto de salida" aria-label="Ver foto de salida de {{ $employee?->nombre }}"><i class="fa-light fa-camera" aria-hidden="true"></i></a>@endif
-                            @if($record->latitud_salida !== null && $record->longitud_salida !== null)<a class="attendance-icon-action" href="https://www.google.com/maps?q={{ $record->latitud_salida }},{{ $record->longitud_salida }}" target="_blank" rel="noopener" title="Ver ubicación de salida" aria-label="Ver ubicación de salida de {{ $employee?->nombre }}"><i class="fa-light fa-location-dot" aria-hidden="true"></i></a>@endif
+                            @if($exitEvidenceUrl)<a class="attendance-icon-action" href="{{ $exitEvidenceUrl }}" target="_blank" rel="noopener" title="Ver foto de salida" aria-label="Ver foto de salida de {{ $employee?->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-camera" aria-hidden="true"></i></a>@endif
+                            @if($record->latitud_salida !== null && $record->longitud_salida !== null)<a class="attendance-icon-action" href="https://www.google.com/maps?q={{ $record->latitud_salida }},{{ $record->longitud_salida }}" target="_blank" rel="noopener" title="Ver ubicación de salida" aria-label="Ver ubicación de salida de {{ $employee?->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i></a>@endif
                         </div></td>
                         <td>{{ $record->minutos_tarde ? $record->minutos_tarde . ' min' : '—' }}</td>
                         <td>{{ $record->minutos_salida_temprano ? $record->minutos_salida_temprano . ' min' : '—' }}</td>
@@ -240,6 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let cameraStream = null;
     let currentKind = null;
     let cameraRequestId = 0;
+    let cameraUnavailable = false;
 
     function showLoading(message) {
         loadingText.textContent = message;
@@ -256,12 +265,13 @@ document.addEventListener('DOMContentLoaded', function () {
         video.srcObject = null;
     }
     function setBusy(busy) {
-        submitButton.disabled = busy || !cameraStream;
+        submitButton.disabled = busy || (!cameraStream && !cameraUnavailable);
         cancelButton.disabled = busy;
         cameraModalElement.querySelector('.btn-close').disabled = busy;
     }
     function startCamera() {
         const requestId = ++cameraRequestId;
+        cameraUnavailable = false;
         errorMessage.hidden = true;
         showLoading('Activando la cámara…');
         submitButton.disabled = true;
@@ -270,7 +280,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             hideLoading();
-            showCameraError('Este navegador no permite usar la cámara.');
+            cameraUnavailable = true;
+            showCameraError('No se pudo activar la cámara. Puedes continuar sin foto.');
             setBusy(false);
             return;
         }
@@ -290,7 +301,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }).catch(function () {
             if (requestId !== cameraRequestId) return;
             hideLoading();
-            showCameraError('No fue posible acceder a la cámara. Revisa el permiso del navegador e inténtalo de nuevo.');
+            cameraUnavailable = true;
+            showCameraError('No fue posible acceder a la cámara. Puedes continuar sin foto.');
             setBusy(false);
         });
     }
@@ -328,58 +340,70 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     submitButton.addEventListener('click', function () {
-        if (!cameraStream || !video.videoWidth || !video.videoHeight) {
-            showCameraError('Espera a que la cámara esté lista para tomar la foto.');
+        if (!cameraStream && !cameraUnavailable) {
+            showCameraError('Espera a que la cámara esté lista.');
             return;
         }
-
         setBusy(true);
         errorMessage.hidden = true;
-        showLoading('Procesando la fotografía…');
-        const scale = Math.min(1, 1280 / video.videoWidth);
-        canvas.width = Math.round(video.videoWidth * scale);
-        canvas.height = Math.round(video.videoHeight * scale);
-        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob(function (blob) {
-            if (!blob) {
-                hideLoading();
-                showCameraError('No se pudo tomar la foto. Inténtalo nuevamente.');
-                setBusy(false);
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onerror = function () {
-                hideLoading();
-                showCameraError('No se pudo procesar la foto. Inténtalo nuevamente.');
-                setBusy(false);
-            };
-            reader.onloadend = function () {
-                if (reader.error) return;
-                document.getElementById('attendance-camera-photo').value = reader.result;
-                if (!navigator.geolocation) {
+        const savePhotoAndLocate = function (photoData) {
+            document.getElementById('attendance-camera-photo').value = photoData || '';
+            const submitAttendance = function (hasLocation) {
+                const missing = [];
+                if (cameraUnavailable || !photoData) missing.push('cámara');
+                if (!hasLocation) missing.push('geolocalización');
+                const send = function () {
                     hideLoading();
-                    showCameraError('Este navegador no permite obtener tu ubicación.');
-                    setBusy(false);
-                    return;
-                }
-
-                showLoading('Obteniendo ubicación…');
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    const isEntry = currentKind === 'entrada';
-                    document.getElementById('attendance-camera-latitude').value = position.coords.latitude;
-                    document.getElementById('attendance-camera-longitude').value = position.coords.longitude;
-                    showLoading('Guardando asistencia…');
                     stopCamera();
                     cameraForm.submit();
-                }, function () {
-                    hideLoading();
-                    showCameraError('Activa el permiso de ubicación para registrar tu asistencia.');
-                    setBusy(false);
-                }, {enableHighAccuracy:true,timeout:15000,maximumAge:0});
+                };
+                if (!missing.length) return send();
+                hideLoading();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Permisos no activados',
+                    text: 'No tienes activados los permisos de ' + missing.join(' y ') + ', se enviará tu asistencia sin esos datos. ¿Deseas continuar?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, continuar',
+                    cancelButtonText: 'Cancelar',
+                    buttonsStyling: false,
+                    reverseButtons: true,
+                    customClass: { confirmButton: 'btn-hr btn-primary-hr', cancelButton: 'btn-hr btn-outline-hr' }
+                }).then(function (result) {
+                    if (result.isConfirmed) send();
+                    else setBusy(false);
+                });
             };
-            reader.readAsDataURL(blob);
-        }, 'image/jpeg', .82);
+            if (!navigator.geolocation) return submitAttendance(false);
+            showLoading('Obteniendo ubicación…');
+            navigator.geolocation.getCurrentPosition(function (position) {
+                document.getElementById('attendance-camera-latitude').value = position.coords.latitude;
+                document.getElementById('attendance-camera-longitude').value = position.coords.longitude;
+                submitAttendance(true);
+            }, function () { submitAttendance(false); }, {enableHighAccuracy:true,timeout:15000,maximumAge:0});
+        };
+
+        if (cameraStream && video.videoWidth && video.videoHeight) {
+            showLoading('Procesando la fotografía…');
+            const scale = Math.min(1, 1280 / video.videoWidth);
+            canvas.width = Math.round(video.videoWidth * scale);
+            canvas.height = Math.round(video.videoHeight * scale);
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(function (blob) {
+                if (!blob) {
+                    cameraUnavailable = true;
+                    return savePhotoAndLocate(null);
+                }
+                const reader = new FileReader();
+                reader.onerror = function () { cameraUnavailable = true; savePhotoAndLocate(null); };
+                reader.onloadend = function () {
+                    if (!reader.error) savePhotoAndLocate(reader.result);
+                };
+                reader.readAsDataURL(blob);
+            }, 'image/jpeg', .82);
+        } else {
+            savePhotoAndLocate(null);
+        }
     });
 });
 </script>

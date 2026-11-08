@@ -25,13 +25,18 @@
     .company-form-section { padding-top:1.25rem; margin-top:1.25rem; border-top:1px solid var(--body-border); }
     .company-form-section h3 { margin:0 0 .35rem; color:var(--body-text); font-size:1rem; font-weight:750; }
     .company-form-section p { margin:0 0 1rem; color:var(--body-text-muted); font-size:.825rem; }
+    .company-form-panel[hidden] { display:none !important; }
     @media(max-width:575px) { .company-form-heading { align-items:stretch; flex-direction:column; } .company-logo-row { align-items:flex-start; } .company-logo-preview { width:68px; height:68px; } }
 </style>
 
-<section class="company-form-page">
+@php
+    $billingFields = ['razon_social', 'rfc', 'domicilio_calle', 'domicilio_numero_exterior', 'domicilio_numero_interior', 'domicilio_colonia', 'domicilio_municipio', 'domicilio_ciudad', 'domicilio_codigo_postal', 'domicilio_estado', 'regimen_fiscal', 'correo_facturacion'];
+    $defaultTab = collect($billingFields)->contains(fn ($field) => $errors->has($field)) ? 'facturacion' : 'general';
+@endphp
+<section class="company-form-page" data-default-tab="{{ $defaultTab }}">
     <header class="company-form-heading">
         <div><h1>{{ $isEdit ? 'Editar empresa' : 'Agregar empresa' }}</h1><p>{{ $isEdit ? 'Actualiza la información de la empresa.' : 'Registra los datos de una empresa.' }}</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('empresas.index') }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+        <a class="btn-hr btn-outline-hr" href="{{ route('empresas.index') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
     </header>
 
     <div class="card-hr">
@@ -45,6 +50,13 @@
             <form method="POST" action="{{ $isEdit ? route('empresas.update', $empresa) : route('empresas.store') }}" enctype="multipart/form-data">
                 @csrf
                 @if($isEdit) @method('PUT') @endif
+
+                <div class="tab-bar mb-1rem" role="tablist" aria-label="Datos de la empresa">
+                    <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-company-tab="general">Datos Generales</button>
+                    <button class="tab-btn" type="button" role="tab" aria-selected="false" data-company-tab="facturacion">Datos de Facturación</button>
+                </div>
+
+                <div class="company-form-panel" data-company-panel="general">
 
                 <div class="company-logo-row">
                     <div class="company-logo-preview" id="logo-preview">
@@ -76,18 +88,44 @@
                         <input class="hr-input @error('telefono') company-form-input-error @enderror" id="telefono" name="telefono" type="tel" value="{{ old('telefono', $empresa->telefono) }}" maxlength="100" autocomplete="tel">
                         @error('telefono') <span class="company-form-error">{{ $message }}</span> @enderror
                     </div>
-                    <div class="col-lg-3 col-md-6 company-form-field">
-                        <label class="form-label-hr" for="minutos_tolerancia_entrada">Minutos de tolerancia <span class="text-danger" aria-hidden="true">*</span></label>
-                        <input class="hr-input @error('minutos_tolerancia_entrada') company-form-input-error @enderror" id="minutos_tolerancia_entrada" name="minutos_tolerancia_entrada" type="number" min="1" step="1" value="{{ old('minutos_tolerancia_entrada', $empresa->minutos_tolerancia_entrada) }}" required>
-                        @error('minutos_tolerancia_entrada') <span class="company-form-error">{{ $message }}</span> @enderror
+                    <div class="col-12 company-form-field">
+                        <div class="row g-3 align-items-start">
+                            <div class="col-md-6">
+                                <label class="form-label-hr" for="minutos_tolerancia_entrada">Minutos de tolerancia <span class="text-danger" aria-hidden="true">*</span></label>
+                                <input class="hr-input @error('minutos_tolerancia_entrada') company-form-input-error @enderror" id="minutos_tolerancia_entrada" name="minutos_tolerancia_entrada" type="number" min="1" step="1" value="{{ old('minutos_tolerancia_entrada', $empresa->minutos_tolerancia_entrada) }}" required aria-describedby="minutos-tolerancia-ayuda">
+                                @error('minutos_tolerancia_entrada') <span class="company-form-error">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-6"><p class="form-text mt-md-4" id="minutos-tolerancia-ayuda">Tiempo máximo, en minutos, después de la hora de entrada programada que se permite registrar la asistencia sin considerarla tardía.</p></div>
+                        </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 company-form-field">
-                        <label class="form-label-hr" for="metros_distancia_entrada">Metros de tolerancia <span class="text-danger" aria-hidden="true">*</span></label>
-                        <input class="hr-input @error('metros_distancia_entrada') company-form-input-error @enderror" id="metros_distancia_entrada" name="metros_distancia_entrada" type="number" min="1" step="1" value="{{ old('metros_distancia_entrada', $empresa->metros_distancia_entrada) }}" required>
-                        @error('metros_distancia_entrada') <span class="company-form-error">{{ $message }}</span> @enderror
+                    <div class="col-12 company-form-field">
+                        <div class="row g-3 align-items-start">
+                            <div class="col-md-6">
+                                <label class="form-label-hr" for="metros_distancia_entrada">Metros de tolerancia <span class="text-danger" aria-hidden="true">*</span></label>
+                                <input class="hr-input @error('metros_distancia_entrada') company-form-input-error @enderror" id="metros_distancia_entrada" name="metros_distancia_entrada" type="number" min="1" step="1" value="{{ old('metros_distancia_entrada', $empresa->metros_distancia_entrada) }}" required aria-describedby="metros-tolerancia-ayuda">
+                                @error('metros_distancia_entrada') <span class="company-form-error">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-6"><p class="form-text mt-md-4" id="metros-tolerancia-ayuda">Distancia máxima, en metros, entre la ubicación registrada y el centro de trabajo para considerar válida la asistencia.</p></div>
+                        </div>
+                    </div>
+                    <div class="col-12 company-form-field">
+                        <div class="row g-3 align-items-start">
+                            <div class="col-md-6">
+                                <label class="form-label-hr" for="incluir_pausas_tiempo_trabajado">Incluir Pausas en tiempo trabajado <span class="text-danger" aria-hidden="true">*</span></label>
+                                <select class="hr-input @error('incluir_pausas_tiempo_trabajado') company-form-input-error @enderror" id="incluir_pausas_tiempo_trabajado" name="incluir_pausas_tiempo_trabajado" required aria-describedby="incluir-pausas-ayuda">
+                                    <option value="0" @selected((string) old('incluir_pausas_tiempo_trabajado', (int) $empresa->incluir_pausas_tiempo_trabajado) === '0')>NO</option>
+                                    <option value="1" @selected((string) old('incluir_pausas_tiempo_trabajado', (int) $empresa->incluir_pausas_tiempo_trabajado) === '1')>SI</option>
+                                </select>
+                                @error('incluir_pausas_tiempo_trabajado') <span class="company-form-error">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-6"><p class="form-text mt-md-4" id="incluir-pausas-ayuda">Define si las pausas registradas se consideran parte del tiempo trabajado en los reportes. Al elegir NO, se descuentan del total.</p></div>
+                        </div>
                     </div>
                 </div>
 
+                </div>
+
+                <div class="company-form-panel" data-company-panel="facturacion" hidden>
                 <section class="company-form-section" aria-labelledby="fiscal-details-heading">
                     <h3 id="fiscal-details-heading">Datos de facturación</h3>
                     <p>Captura estos datos cuando necesites solicitar una factura. La razón social y el nombre de empresa pueden ser distintos.</p>
@@ -153,6 +191,7 @@
                         </div>
                     </div>
                 </section>
+                </div>
 
                 <div class="company-form-actions">
                     <button class="btn-hr btn-primary-hr" type="submit">
@@ -183,5 +222,26 @@
         }
         image.src = URL.createObjectURL(file);
     });
+</script>
+<script>
+    (() => {
+        const page = document.querySelector('.company-form-page');
+        const tabs = [...document.querySelectorAll('[data-company-tab]')];
+        const panels = [...document.querySelectorAll('[data-company-panel]')];
+        const activate = name => {
+            panels.forEach(panel => panel.hidden = panel.dataset.companyPanel !== name);
+            tabs.forEach(tab => {
+                const active = tab.dataset.companyTab === name;
+                tab.classList.toggle('active', active);
+                tab.setAttribute('aria-selected', String(active));
+            });
+        };
+        activate(page?.dataset.defaultTab || 'general');
+        tabs.forEach(tab => tab.addEventListener('click', () => activate(tab.dataset.companyTab)));
+        document.querySelector('.company-form-page form')?.addEventListener('invalid', event => {
+            const panel = event.target.closest('[data-company-panel]');
+            if (panel) activate(panel.dataset.companyPanel);
+        }, true);
+    })();
 </script>
 @endsection

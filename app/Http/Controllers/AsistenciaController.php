@@ -71,10 +71,14 @@ class AsistenciaController extends Controller
         $todaySchedule = $canMarkAttendance
             ? $personal->horarios()->where('dia', $localNow->dayOfWeekIso)->first()
             : null;
+        $holidayCommemorations = $canMarkAttendance
+            ? $registration->holidayCommemorations($personal, $localNow->toDateString())
+            : collect();
         $overnightAttendance = $canMarkAttendance
             ? $registration->pendingOvernightAttendance($personal)
             : null;
-        $canMarkEntry = $canMarkAttendance && ! $todayAttendance && ! $overnightAttendance && $todaySchedule !== null;
+        $canMarkEntry = $canMarkAttendance && ! $todayAttendance && ! $overnightAttendance && $todaySchedule !== null
+            && ($holidayCommemorations->isEmpty() || (bool) $todaySchedule->trabaja_festivos);
         $canMarkExit = $canMarkAttendance
             && (($todayAttendance?->llegada && ! $todayAttendance?->salida) || (! $todayAttendance && $overnightAttendance));
 
@@ -93,6 +97,7 @@ class AsistenciaController extends Controller
             'attendanceTimezone' => $attendanceTimezone,
             'todayAttendance' => $todayAttendance,
             'todaySchedule' => $todaySchedule,
+            'holidayCommemorations' => $holidayCommemorations,
             'overnightAttendance' => $overnightAttendance,
             'canMarkAttendance' => $canMarkAttendance,
             'canMarkEntry' => $canMarkEntry,
@@ -102,14 +107,17 @@ class AsistenciaController extends Controller
 
     public function markEntry(Request $request, RegistroAsistenciaService $registration, AttendancePhotoService $photos, AttendanceLocationService $locations)
     {
-        [$personal] = $this->currentPersonalAndSchedule($request, $locations);
+        [$personal] = $this->currentPersonalAndSchedule($request);
         $coordinates = $this->validatedCoordinates($request, 'latitud', 'longitud');
         $photoPath = $this->uploadAttendancePhoto($request, 'foto_entrada', (int) $personal->empresa_id, 'entrada', $photos);
 
         try {
-            $registration->register($personal, $request->ip(), $coordinates, $photoPath, 'entrada', $locations->rangeFor($personal, $coordinates['latitud'], $coordinates['longitud']));
+            $range = isset($coordinates['latitud'], $coordinates['longitud'])
+                ? $locations->rangeFor($personal, $coordinates['latitud'], $coordinates['longitud'])
+                : 'Sin geolocalización';
+            $registration->register($personal, $request->ip(), $coordinates, $photoPath, 'entrada', $range);
         } catch (Throwable $exception) {
-            $photos->delete($photoPath);
+            if ($photoPath) $photos->delete($photoPath);
             if ($exception instanceof ValidationException) {
                 return back()->with('error', $exception->errors()['pin'][0] ?? 'No se pudo registrar la entrada.');
             }
@@ -123,14 +131,17 @@ class AsistenciaController extends Controller
 
     public function markExit(Request $request, RegistroAsistenciaService $registration, AttendancePhotoService $photos, AttendanceLocationService $locations)
     {
-        [$personal] = $this->currentPersonalAndSchedule($request, $locations);
+        [$personal] = $this->currentPersonalAndSchedule($request);
         $coordinates = $this->validatedCoordinates($request, 'latitud_salida', 'longitud_salida');
         $photoPath = $this->uploadAttendancePhoto($request, 'foto_salida', (int) $personal->empresa_id, 'salida', $photos);
 
         try {
-            $registration->register($personal, $request->ip(), $coordinates, $photoPath, 'salida', $locations->rangeFor($personal, $coordinates['latitud_salida'], $coordinates['longitud_salida']));
+            $range = isset($coordinates['latitud_salida'], $coordinates['longitud_salida'])
+                ? $locations->rangeFor($personal, $coordinates['latitud_salida'], $coordinates['longitud_salida'])
+                : 'Sin geolocalización';
+            $registration->register($personal, $request->ip(), $coordinates, $photoPath, 'salida', $range);
         } catch (Throwable $exception) {
-            $photos->delete($photoPath);
+            if ($photoPath) $photos->delete($photoPath);
             if ($exception instanceof ValidationException) {
                 return back()->with('error', $exception->errors()['pin'][0] ?? 'No se pudo registrar la salida.');
             }
@@ -142,7 +153,7 @@ class AsistenciaController extends Controller
         return back()->with('status', 'La salida se registró correctamente.');
     }
 
-    private function currentPersonalAndSchedule(Request $request, AttendanceLocationService $locations): array
+    private function currentPersonalAndSchedule(Request $request): array
     {
         $personal = $request->user()->personal;
         abort_unless($personal && in_array($personal->empresa_id, $this->companyIdsFor($request), true), 403);
@@ -152,8 +163,8 @@ class AsistenciaController extends Controller
             throw ValidationException::withMessages(['asistencia' => 'EMPRESA INACTIVA, no podrás marcar asistencias.']);
         }
 
-        if (! $personal->centro || ! $locations->parseCoordinates($personal->centro->geolocalizacion)) {
-            throw ValidationException::withMessages(['asistencia' => 'Configura el centro de trabajo y su geolocalización antes de registrar asistencia.']);
+        if (! $personal->centro) {
+            throw ValidationException::withMessages(['asistencia' => 'Configura un centro de trabajo antes de registrar asistencia.']);
         }
 
         return [$personal, null];
@@ -161,24 +172,33 @@ class AsistenciaController extends Controller
 
     private function validatedCoordinates(Request $request, string $latitudeKey, string $longitudeKey): array
     {
-        return $request->validate([
-            $latitudeKey => ['required', 'numeric', 'between:-90,90'],
-            $longitudeKey => ['required', 'numeric', 'between:-180,180'],
-        ], [
-            $latitudeKey.'.required' => 'Activa la ubicación para registrar tu asistencia.',
-            $longitudeKey.'.required' => 'Activa la ubicación para registrar tu asistencia.',
+        $coordinates = $request->validate([
+            $latitudeKey => ['nullable', 'numeric', 'between:-90,90'],
+            $longitudeKey => ['nullable', 'numeric', 'between:-180,180'],
         ]);
+
+        if ($request->filled($latitudeKey) xor $request->filled($longitudeKey)) {
+            throw ValidationException::withMessages([
+                $latitudeKey => 'No se recibió una ubicación completa.',
+            ]);
+        }
+
+        return array_filter($coordinates, fn ($value) => $value !== null);
     }
 
-    private function uploadAttendancePhoto(Request $request, string $field, int $companyId, string $type, AttendancePhotoService $photos): string
+    private function uploadAttendancePhoto(Request $request, string $field, int $companyId, string $type, AttendancePhotoService $photos): ?string
     {
+        if (! $request->filled($field)) {
+            return null;
+        }
+
         $photoData = $request->validate([
-            $field => ['required', 'string', 'max:4200000'],
-        ], [
-            $field.'.required' => 'Toma una foto antes de registrar la asistencia.',
+            $field => ['nullable', 'string', 'max:4200000'],
         ])[$field];
 
-        return $photos->uploadBase64Jpeg($photoData, $companyId, $type, $field);
+        return $photoData !== null
+            ? $photos->uploadBase64Jpeg($photoData, $companyId, $type, $field)
+            : null;
     }
 
     private function deleteAttendancePhoto(string $path, AttendancePhotoService $photos): void

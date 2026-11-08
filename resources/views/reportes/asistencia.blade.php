@@ -42,6 +42,11 @@
     .report-footer { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.25rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); font-size:.8rem; }
     .report-pagination { display:flex; align-items:center; gap:.55rem; }
     .report-pagination [aria-disabled="true"] { pointer-events:none; opacity:.55; }
+    .attendance-loader { position:fixed; inset:0; z-index:25000; display:grid; place-items:center; padding:1rem; background:rgba(17,24,39,.42); }
+    .attendance-loader[hidden] { display:none; }
+    .attendance-loader-card { display:flex; align-items:center; gap:.8rem; padding:1rem 1.25rem; border:1px solid var(--card-border); border-radius:.85rem; color:var(--body-text); background:var(--card-bg); box-shadow:0 12px 40px rgba(17,24,39,.2); font-weight:650; }
+    .attendance-loader-spinner { width:1.35rem; height:1.35rem; border:3px solid var(--body-border); border-top-color:var(--color-primary); border-radius:50%; animation:attendance-loader-spin .7s linear infinite; }
+    @keyframes attendance-loader-spin { to { transform:rotate(360deg); } }
     .report-photo-modal .modal-content { border:1px solid var(--card-border); border-radius:1rem; color:var(--body-text); background:var(--card-bg); }
     .report-photo-modal .modal-header,.report-photo-modal .modal-footer { border-color:var(--body-border); }
     .report-photo-modal .modal-body { background:var(--body-bg); text-align:center; }
@@ -65,21 +70,21 @@
                 </div>
                 <div class="report-filter"><label for="desde">Desde <span class="text-danger">*</span></label><input class="hr-input" id="desde" name="desde" type="date" value="{{ $startDate }}" required></div>
                 <div class="report-filter"><label for="hasta">Hasta <span class="text-danger">*</span></label><input class="hr-input" id="hasta" name="hasta" type="date" value="{{ $endDate }}" required></div>
-                <div class="report-form-actions"><button type="submit" class="btn-hr btn-primary-hr"><i class="fa-light fa-magnifying-glass" aria-hidden="true"></i> Generar reporte</button><a href="{{ route('reportes.general') }}" class="btn-hr btn-outline-hr"><i class="fa-light fa-arrow-rotate-left" aria-hidden="true"></i> Limpiar</a></div>
+                <div class="report-form-actions"><button type="submit" data-loading-message="Generando reporte…" class="btn-hr btn-primary-hr"><i class="{{ config('constantes.tipo_iconos') }} fa-magnifying-glass" aria-hidden="true"></i> Generar reporte</button><a href="{{ route('reportes.general') }}" class="btn-hr btn-outline-hr"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-rotate-left" aria-hidden="true"></i> Limpiar</a></div>
             </form>
         </div>
     </div>
 
     @if($reportGenerated)
         <div class="report-summary">
-            <article class="report-summary-card"><div class="report-summary-icon"><i class="fa-light fa-clipboard-user" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Registros</small><strong>{{ $summary['total'] }}</strong></div></article>
-            <article class="report-summary-card"><div class="report-summary-icon is-late"><i class="fa-light fa-clock" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Llegadas tarde</small><strong>{{ $summary['late'] }}</strong></div></article>
-            <article class="report-summary-card"><div class="report-summary-icon is-range"><i class="fa-light fa-location-dot" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Fuera de rango</small><strong>{{ $summary['outOfRange'] }}</strong></div></article>
-            <article class="report-summary-card"><div class="report-summary-icon is-exit"><i class="fa-light fa-person-walking-arrow-right" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Sin salida</small><strong>{{ $summary['withoutExit'] }}</strong></div></article>
+            <article class="report-summary-card"><div class="report-summary-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-clipboard-user" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Registros</small><strong>{{ $summary['total'] }}</strong></div></article>
+            <article class="report-summary-card"><div class="report-summary-icon is-late"><i class="{{ config('constantes.tipo_iconos') }} fa-clock" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Llegadas tarde</small><strong>{{ $summary['late'] }}</strong></div></article>
+            <article class="report-summary-card"><div class="report-summary-icon is-range"><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Fuera de rango</small><strong>{{ $summary['outOfRange'] }}</strong></div></article>
+            <article class="report-summary-card"><div class="report-summary-icon is-exit"><i class="{{ config('constantes.tipo_iconos') }} fa-person-walking-arrow-right" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Sin salida</small><strong>{{ $summary['withoutExit'] }}</strong></div></article>
         </div>
 
         <div class="card-hr">
-            <div class="card-hd report-card-heading"><div><h2 class="card-title-hr">Detalle de asistencias</h2><p>Periodo del {{ \Carbon\Carbon::parse($startDate)->format('d/m/Y') }} al {{ \Carbon\Carbon::parse($endDate)->format('d/m/Y') }}</p></div><button type="submit" form="attendance-report-form" formaction="{{ route('reportes.asistencia.exportar') }}" class="btn-hr btn-outline-hr report-export-btn" @disabled($attendance->total() === 0)><i class="fa-light fa-file-excel" aria-hidden="true"></i> Exportar a Excel</button></div>
+            <div class="card-hd report-card-heading"><div><h2 class="card-title-hr">Detalle de asistencias</h2><p>Periodo del {{ \Carbon\Carbon::parse($startDate)->format('d/m/Y') }} al {{ \Carbon\Carbon::parse($endDate)->format('d/m/Y') }}</p></div><button type="submit" form="attendance-report-form" formaction="{{ route('reportes.asistencia.exportar') }}" data-loading-message="Preparando el archivo de Excel…" class="btn-hr btn-outline-hr report-export-btn" @disabled($attendance->total() === 0)><i class="{{ config('constantes.tipo_iconos') }} fa-file-excel" aria-hidden="true"></i> Exportar a Excel</button></div>
             @if($attendance->count())
                 <div class="table-wrap"><table class="bs-table hover report-table">
                     <thead><tr><th>Personal</th><th>Fecha</th><th>Modalidad</th><th>Entrada</th><th>Rango entrada</th><th>Distancia entrada</th><th>Tarde</th><th>Salida</th><th>Rango salida</th><th>Distancia salida</th><th>Salida temprana</th><th>Tiempo de pausas</th><th>Tiempo productivo</th><th>Detalle de pausas</th><th>Evidencia entrada</th><th>Evidencia salida</th></tr></thead>
@@ -104,15 +109,15 @@
                             <td class="report-minute">{{ $record->minutos_salida_temprano ? $record->minutos_salida_temprano . ' min' : '0 min' }}</td>
                             <td>{{ \App\Models\Asistencia::formatoDuracion($record->tiempoPausasMinutos()) }}</td>
                             <td>{{ \App\Models\Asistencia::formatoDuracion($record->tiempoProductivoMinutos()) }}</td>
-                            <td><button type="button" class="btn-hr btn-outline-hr btn-sm-hr" data-pause-detail-url="{{ route('reportes.asistencia.pausas', ['asistencia' => $record->id, 'empresa_id' => $selectedCompanyId, 'desde' => $startDate, 'hasta' => $endDate]) }}"><i class="fa-light fa-mug-hot" aria-hidden="true"></i> Ver pausas</button></td>
+                            <td><button type="button" class="btn-hr btn-outline-hr btn-sm-hr" data-pause-detail-url="{{ route('reportes.asistencia.pausas', ['asistencia' => $record->id, 'empresa_id' => $selectedCompanyId, 'desde' => $startDate, 'hasta' => $endDate]) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-mug-hot" aria-hidden="true"></i> Ver pausas</button></td>
                             <td><div class="report-evidence">
-                                @if($entryPhotoUrl)<button type="button" class="report-icon-action" data-photo-url="{{ $entryPhotoUrl }}" data-photo-title="Foto de entrada" aria-label="Ver foto de entrada de {{ $employee?->nombre }}" title="Ver foto de entrada"><i class="fa-light fa-camera" aria-hidden="true"></i></button>@endif
-                                @if($record->latitud !== null && $record->longitud !== null)<a class="report-icon-action" href="https://www.google.com/maps?q={{ $record->latitud }},{{ $record->longitud }}" target="_blank" rel="noopener" aria-label="Ver ubicación de entrada de {{ $employee?->nombre }}" title="Ver ubicación de entrada"><i class="fa-light fa-location-dot" aria-hidden="true"></i></a>@endif
+                                @if($entryPhotoUrl)<button type="button" class="report-icon-action" data-photo-url="{{ $entryPhotoUrl }}" data-photo-title="Foto de entrada" aria-label="Ver foto de entrada de {{ $employee?->nombre }}" title="Ver foto de entrada"><i class="{{ config('constantes.tipo_iconos') }} fa-camera" aria-hidden="true"></i></button>@endif
+                                @if($record->latitud !== null && $record->longitud !== null)<a class="report-icon-action" href="https://www.google.com/maps?q={{ $record->latitud }},{{ $record->longitud }}" target="_blank" rel="noopener" aria-label="Ver ubicación de entrada de {{ $employee?->nombre }}" title="Ver ubicación de entrada"><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i></a>@endif
                                 @if(!$entryPhotoUrl && ($record->latitud === null || $record->longitud === null))—@endif
                             </div></td>
                             <td><div class="report-evidence">
-                                @if($exitPhotoUrl)<button type="button" class="report-icon-action" data-photo-url="{{ $exitPhotoUrl }}" data-photo-title="Foto de salida" aria-label="Ver foto de salida de {{ $employee?->nombre }}" title="Ver foto de salida"><i class="fa-light fa-camera" aria-hidden="true"></i></button>@endif
-                                @if($record->latitud_salida !== null && $record->longitud_salida !== null)<a class="report-icon-action" href="https://www.google.com/maps?q={{ $record->latitud_salida }},{{ $record->longitud_salida }}" target="_blank" rel="noopener" aria-label="Ver ubicación de salida de {{ $employee?->nombre }}" title="Ver ubicación de salida"><i class="fa-light fa-location-dot" aria-hidden="true"></i></a>@endif
+                                @if($exitPhotoUrl)<button type="button" class="report-icon-action" data-photo-url="{{ $exitPhotoUrl }}" data-photo-title="Foto de salida" aria-label="Ver foto de salida de {{ $employee?->nombre }}" title="Ver foto de salida"><i class="{{ config('constantes.tipo_iconos') }} fa-camera" aria-hidden="true"></i></button>@endif
+                                @if($record->latitud_salida !== null && $record->longitud_salida !== null)<a class="report-icon-action" href="https://www.google.com/maps?q={{ $record->latitud_salida }},{{ $record->longitud_salida }}" target="_blank" rel="noopener" aria-label="Ver ubicación de salida de {{ $employee?->nombre }}" title="Ver ubicación de salida"><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i></a>@endif
                                 @if(!$exitPhotoUrl && ($record->latitud_salida === null || $record->longitud_salida === null))—@endif
                             </div></td>
                         </tr>
@@ -127,6 +132,10 @@
     @endif
 </section>
 
+<div id="attendance-report-loader" class="attendance-loader" role="status" aria-live="assertive" aria-atomic="true" aria-busy="false" hidden>
+    <div class="attendance-loader-card"><span class="attendance-loader-spinner" aria-hidden="true"></span><span id="attendance-report-loader-message">Generando reporte…</span></div>
+</div>
+
 <div class="modal fade report-photo-modal" id="attendance-report-photo-modal" tabindex="-1" aria-labelledby="attendance-report-photo-title" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5" id="attendance-report-photo-title">Foto de asistencia</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div><div class="modal-body"><img id="attendance-report-photo" src="" alt="Foto de asistencia"></div><div class="modal-footer"><button type="button" class="btn-hr btn-outline-hr" data-bs-dismiss="modal">Cerrar</button></div></div></div>
 </div>
@@ -137,6 +146,65 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const reportForm = document.getElementById('attendance-report-form');
+    const loader = document.getElementById('attendance-report-loader');
+    const loaderMessage = document.getElementById('attendance-report-loader-message');
+    const showLoader = (message = 'Generando reporte…') => {
+        loaderMessage.textContent = message;
+        loader.hidden = false;
+        loader.setAttribute('aria-busy', 'true');
+    };
+    const hideLoader = () => {
+        loader.hidden = true;
+        loader.setAttribute('aria-busy', 'false');
+    };
+
+    reportForm?.addEventListener('submit', (event) => {
+        const submitter = event.submitter;
+        const exportUrl = submitter?.getAttribute('formaction');
+        if (!exportUrl) {
+            showLoader(submitter?.dataset.loadingMessage || 'Generando reporte…');
+            return;
+        }
+
+        event.preventDefault();
+        showLoader(submitter.dataset.loadingMessage || 'Preparando el archivo de Excel…');
+        const url = new URL(exportUrl, window.location.href);
+        url.search = new URLSearchParams(new FormData(reportForm)).toString();
+        fetch(url, { credentials: 'same-origin', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(async (response) => {
+                if (!response.ok) throw new Error('No se pudo generar el archivo de Excel.');
+                const contentType = response.headers.get('Content-Type') || '';
+                if (!contentType.includes('spreadsheetml')) throw new Error('El servidor no devolvió un archivo de Excel.');
+                const filenameHeader = response.headers.get('Content-Disposition') || '';
+                const filename = filenameHeader.match(/filename="?([^";]+)"?/i)?.[1]
+                    || `reporte_asistencia_${reportForm.elements.desde.value}_${reportForm.elements.hasta.value}.xlsx`;
+                return { file: await response.blob(), filename };
+            })
+            .then(({ file, filename }) => {
+                const downloadUrl = URL.createObjectURL(file);
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 60000);
+            })
+            .catch((error) => Swal.fire({
+                icon: 'error',
+                title: 'No se pudo exportar',
+                text: error.message || 'Ocurrió un error al generar el archivo de Excel.',
+                confirmButtonText: 'Entendido',
+                buttonsStyling: false,
+                customClass: { confirmButton: 'btn-hr btn-primary-hr' }
+            }))
+            .finally(hideLoader);
+    });
+    document.querySelectorAll('.report-pagination a:not([aria-disabled="true"])').forEach((link) => {
+        link.addEventListener('click', () => showLoader('Cargando página…'));
+    });
+
     const modalElement = document.getElementById('attendance-report-photo-modal');
     const photoModal = window.bootstrap.Modal.getOrCreateInstance(modalElement);
     const photo = document.getElementById('attendance-report-photo');

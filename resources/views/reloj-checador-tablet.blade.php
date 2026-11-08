@@ -50,7 +50,7 @@
     <header class="site-header">
         <nav class="nav-wrap" aria-label="Navegación principal">
             <a class="brand" href="{{ route('inicio') }}" aria-label="{{ config('app.name') }}, inicio"><img src="{{ asset('assets/logos/logoLN.png') }}" alt="{{ config('app.name') }}, tu equipo a tiempo"></a>
-            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú"><i class="{{ config('constantes.tipo_iconos') }} fa-bars" aria-hidden="true"></i></button>
             <div class="nav-content" id="main-nav">
                 <div class="nav-links"><a href="{{ route('inicio') }}">Inicio</a><a href="#como-funciona">Cómo funciona</a><a href="#requisitos">Requisitos</a><a href="#precios">Precios</a><a href="#preguntas">Preguntas</a></div>
                 <div class="nav-actions"><a class="button button-outline" href="{{ route('login') }}">Iniciar sesión</a><a class="button button-primary" href="{{ route('registro.create') }}">Crear mi cuenta</a></div>
@@ -62,13 +62,13 @@
         <section class="tablet-hero" aria-labelledby="tablet-title">
             <div class="tablet-hero-inner section-shell">
                 <div class="tablet-hero-copy">
-                    <span class="eyebrow"><i class="fa-solid fa-tablet-screen-button" aria-hidden="true"></i> Checador web para tu empresa</span>
+                    <span class="eyebrow"><i class="{{ config('constantes.tipo_iconos') }} fa-tablet-screen-button" aria-hidden="true"></i> Checador web para tu empresa</span>
                     <h1 id="tablet-title">Convierte una tablet en tu <span>reloj checador</span></h1>
                     <p class="tablet-lede">Registra entradas, salidas y pausas de tus empleados desde una tablet compatible. Cada persona se identifica con su PIN y, en entradas y salidas, el checador web captura fotografía y ubicación.</p>
                     <p class="tablet-device-benefit">Utiliza las tablets que necesites, sin pagar licencias adicionales por dispositivo.</p>
-                    <a class="button button-primary button-large" href="{{ route('registro.create') }}">Crear mi cuenta <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-                    <p class="hero-trial-note"><i class="fa-solid fa-gift" aria-hidden="true"></i><span>¡Tu primer mes es gratis!</span></p>
-                    <p class="tablet-unlimited"><i class="fa-solid fa-check" aria-hidden="true"></i><span>Tablets ilimitadas · Sin costo adicional por dispositivo</span></p>
+                    <a class="button button-primary button-large" href="{{ route('registro.create') }}">Crear mi cuenta <i class="{{ config('constantes.tipo_iconos') }} fa-arrow-right" aria-hidden="true"></i></a>
+                    <p class="hero-trial-note"><i class="{{ config('constantes.tipo_iconos') }} fa-gift" aria-hidden="true"></i><span>¡Tu primer mes es gratis!</span></p>
+                    <p class="tablet-unlimited"><i class="{{ config('constantes.tipo_iconos') }} fa-check" aria-hidden="true"></i><span>Tablets ilimitadas · Sin costo adicional por dispositivo</span></p>
                 </div>
                 <figure class="tablet-product">
                     <div class="tablet-product-frame"><img src="{{ asset('assets/images/checador-web-tablet.png') }}" alt="Checador web de Horalia con teclado para PIN y acceso a pausas, con empresa de demostración" width="580" height="768" fetchpriority="high"></div>
@@ -79,7 +79,7 @@
 
         <section class="tablet-alternative section-shell" aria-labelledby="alternative-title">
             <div><span class="eyebrow">Tus dispositivos, un punto de registro</span><h2 id="alternative-title">Un reloj checador en las tablets de tu empresa</h2></div>
-            <div><p>Utiliza tus propias tablets compatibles como puntos de registro de asistencia. Con Horalia, cada empleado marca con su PIN y la información queda disponible para su consulta desde la plataforma. Puedes habilitar varios dispositivos sin pagar una licencia adicional por cada tablet.</p><p class="tablet-note">Las tablets no están incluidas; se requiere un dispositivo compatible y conexión a internet.</p><p class="tablet-text-link"><a href="{{ route('inicio') }}">Conoce Horalia, nuestro reloj checador en línea <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></p></div>
+            <div><p>Utiliza tus propias tablets compatibles como puntos de registro de asistencia. Con Horalia, cada empleado marca con su PIN y la información queda disponible para su consulta desde la plataforma. Puedes habilitar varios dispositivos sin pagar una licencia adicional por cada tablet.</p><p class="tablet-note">Las tablets no están incluidas; se requiere un dispositivo compatible y conexión a internet.</p><p class="tablet-text-link"><a href="{{ route('inicio') }}">Conoce Horalia, nuestro reloj checador en línea <i class="{{ config('constantes.tipo_iconos') }} fa-arrow-right" aria-hidden="true"></i></a></p></div>
         </section>
 
         <section class="tablet-process" id="como-funciona" aria-labelledby="process-title">
@@ -91,15 +91,15 @@
                     <li><span class="tablet-step-number" aria-hidden="true">03</span><h3>Registra la asistencia</h3><p>En entradas y salidas, el checador web solicita ubicación y fotografía; muestra una confirmación cuando el servidor acepta el registro.</p></li>
                     <li><span class="tablet-step-number" aria-hidden="true">04</span><h3>Consulta los registros</h3><p>La empresa revisa la asistencia y los reportes desde el área de administración de Horalia.</p></li>
                 </ol>
-                <p class="tablet-text-link"><a href="{{ route('control-asistencia.empleados') }}">Conoce cómo organizar y consultar la asistencia de tu personal <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></p>
+                <p class="tablet-text-link"><a href="{{ route('control-asistencia.empleados') }}">Conoce cómo organizar y consultar la asistencia de tu personal <i class="{{ config('constantes.tipo_iconos') }} fa-arrow-right" aria-hidden="true"></i></a></p>
             </div>
         </section>
 
         <section class="tablet-marks section-shell" aria-labelledby="marks-title">
             <div class="tablet-marks-copy"><span class="eyebrow">Un dispositivo compartido</span><h2 id="marks-title">Entradas, salidas y pausas desde el mismo dispositivo</h2><p>El personal registra el inicio y fin de su jornada con su PIN. También puede iniciar y finalizar pausas de comida, sanitario, descanso o permiso desde el checador, de acuerdo con las reglas de Horalia.</p><p class="tablet-note">La fotografía se solicita para entradas y salidas en el checador web, no para las pausas. Para iniciar una pausa debe existir una entrada abierta; solo puede haber una pausa activa.</p></div>
             <div class="tablet-marks-panel">
-                <div class="tablet-mark-row"><span class="tablet-mark-icon"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i></span><div><h3>Entradas y salidas</h3><p>PIN · Fotografía · Ubicación</p></div></div>
-                <div class="tablet-mark-row"><span class="tablet-mark-icon"><i class="fa-solid fa-mug-hot" aria-hidden="true"></i></span><div><h3>Pausas durante la jornada</h3><p>Inicio y fin con PIN</p></div></div>
+                <div class="tablet-mark-row"><span class="tablet-mark-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-right-to-bracket" aria-hidden="true"></i></span><div><h3>Entradas y salidas</h3><p>PIN · Fotografía · Ubicación</p></div></div>
+                <div class="tablet-mark-row"><span class="tablet-mark-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-mug-hot" aria-hidden="true"></i></span><div><h3>Pausas durante la jornada</h3><p>Inicio y fin con PIN</p></div></div>
                 <ul class="tablet-pause-types" aria-label="Tipos de pausa"><li>Comida</li><li>Sanitario</li><li>Descanso</li><li>Permiso</li></ul>
             </div>
         </section>
@@ -108,11 +108,11 @@
             <div class="section-shell">
                 <div class="tablet-section-heading"><span class="eyebrow">Antes de comenzar</span><h2 id="requirements-title">¿Qué necesita tu tablet para funcionar?</h2></div>
                 <ul class="tablet-requirement-list">
-                    <li><i class="fa-solid fa-tablet-screen-button" aria-hidden="true"></i><span>Tablet con navegador compatible y cámara funcional.</span></li>
-                    <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>Acceso a ubicación y permisos de cámara y ubicación habilitados.</span></li>
-                    <li><i class="fa-solid fa-wifi" aria-hidden="true"></i><span>Conexión a internet durante las marcaciones y acceso seguro HTTPS.</span></li>
-                    <li><i class="fa-solid fa-users" aria-hidden="true"></i><span>Empresa y empleados activos, PIN asignado y ubicación del centro de trabajo configurada.</span></li>
-                    <li><i class="fa-solid fa-display" aria-hidden="true"></i><span>Configurar el bloqueo de pantalla del dispositivo según las necesidades de operación.</span></li>
+                    <li><i class="{{ config('constantes.tipo_iconos') }} fa-tablet-screen-button" aria-hidden="true"></i><span>Tablet con navegador compatible y cámara funcional.</span></li>
+                    <li><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i><span>Acceso a ubicación y permisos de cámara y ubicación habilitados.</span></li>
+                    <li><i class="{{ config('constantes.tipo_iconos') }} fa-wifi" aria-hidden="true"></i><span>Conexión a internet durante las marcaciones y acceso seguro HTTPS.</span></li>
+                    <li><i class="{{ config('constantes.tipo_iconos') }} fa-users" aria-hidden="true"></i><span>Empresa y empleados activos, PIN asignado y ubicación del centro de trabajo configurada.</span></li>
+                    <li><i class="{{ config('constantes.tipo_iconos') }} fa-display" aria-hidden="true"></i><span>Configurar el bloqueo de pantalla del dispositivo según las necesidades de operación.</span></li>
                 </ul>
                 <p class="tablet-note">El checador web requiere conexión a internet. Comprueba el funcionamiento con la tablet y el navegador que usarás en tu empresa; la compatibilidad depende del dispositivo y de los permisos disponibles.</p>
             </div>
@@ -124,7 +124,7 @@
                 <p class="tablet-price">{{ '$' . number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} <span>MXN / mes</span></p>
                 <p class="tablet-price-detail">Por empresa · IVA incluido · Hasta 200 empleados</p>
                 <ul class="check-list"><li>Tablets ilimitadas, sin licencias adicionales por dispositivo.</li><li>Primer mes gratis.</li><li>Cada bloque adicional de hasta 200 empleados cuesta {{ '$' . number_format(config('constantes.precio_mensual_por_empresa_mxn')) }} MXN mensuales, IVA incluido.</li></ul>
-                <a class="button button-primary button-large" href="{{ route('registro.create') }}">Crear mi cuenta <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                <a class="button button-primary button-large" href="{{ route('registro.create') }}">Crear mi cuenta <i class="{{ config('constantes.tipo_iconos') }} fa-arrow-right" aria-hidden="true"></i></a>
             </div>
         </section>
 
@@ -139,14 +139,14 @@
             </div>
         </section>
 
-        <section class="tablet-final" aria-labelledby="final-title"><div class="section-shell"><span class="eyebrow">Comienza con tus dispositivos</span><h2 id="final-title">Convierte tus tablets en puntos de registro de asistencia</h2><p>Crea tu cuenta, configura a tus empleados y comienza a registrar asistencia con Horalia. Utiliza las tablets compatibles que necesites sin pagar por dispositivo.</p><a class="button button-primary button-large" href="{{ route('registro.create') }}">Crear mi cuenta <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a><p class="hero-trial-note"><i class="fa-solid fa-gift" aria-hidden="true"></i><span>¡Tu primer mes es gratis!</span></p></div></section>
+        <section class="tablet-final" aria-labelledby="final-title"><div class="section-shell"><span class="eyebrow">Comienza con tus dispositivos</span><h2 id="final-title">Convierte tus tablets en puntos de registro de asistencia</h2><p>Crea tu cuenta, configura a tus empleados y comienza a registrar asistencia con Horalia. Utiliza las tablets compatibles que necesites sin pagar por dispositivo.</p><a class="button button-primary button-large" href="{{ route('registro.create') }}">Crear mi cuenta <i class="{{ config('constantes.tipo_iconos') }} fa-arrow-right" aria-hidden="true"></i></a><p class="hero-trial-note"><i class="{{ config('constantes.tipo_iconos') }} fa-gift" aria-hidden="true"></i><span>¡Tu primer mes es gratis!</span></p></div></section>
     </main>
 
     <footer class="site-footer" id="footer">
         <div class="footer-inner section-shell">
             <a class="brand" href="{{ route('inicio') }}" aria-label="{{ config('app.name') }}, inicio"><img src="{{ asset('assets/logos/logoLN.png') }}" alt="{{ config('app.name') }}, tu equipo a tiempo"></a>
             <nav class="footer-legal-links" aria-label="Documentos legales"><a href="{{ route('legal.terms') }}" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a><a href="{{ route('legal.privacy') }}" target="_blank" rel="noopener noreferrer">Política de Privacidad</a><a href="{{ route('legal.cookies') }}" target="_blank" rel="noopener noreferrer">Política de Cookies</a></nav>
-            <div class="footer-support" aria-label="Contacto y soporte"><a href="https://wa.me/525513447932?text={{ rawurlencode('Hola, requiero soporte para ' . config('app.name') . '.') }}" target="_blank" rel="noopener noreferrer" aria-label="Solicitar soporte para {{ config('app.name') }} por WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>WhatsApp</span></a><a href="mailto:contacto@horalia.mx" aria-label="Enviar correo a contacto@horalia.mx"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span>Correo</span></a></div>
+            <div class="footer-support" aria-label="Contacto y soporte"><a href="https://wa.me/525513447932?text={{ rawurlencode('Hola, requiero soporte para ' . config('app.name') . '.') }}" target="_blank" rel="noopener noreferrer" aria-label="Solicitar soporte para {{ config('app.name') }} por WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>WhatsApp</span></a><a href="mailto:contacto@horalia.mx" aria-label="Enviar correo a contacto@horalia.mx"><i class="{{ config('constantes.tipo_iconos') }} fa-envelope" aria-hidden="true"></i><span>Correo</span></a></div>
             <small>Horalia es un servicio de <a href="https://solventia.com.mx">Solventia Software</a>. © {{ date('Y') }} Todos los derechos reservados.</small>
         </div>
     </footer>

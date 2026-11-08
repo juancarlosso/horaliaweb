@@ -43,7 +43,7 @@
                 @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
             </select>
         </div>
-        @if($canCreate)<a class="btn-hr btn-primary-hr personal-toolbar-action" href="{{ route('personal.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="fa-light fa-plus" aria-hidden="true"></i> Agregar personal</a>@endif
+        @if($canCreate)<a class="btn-hr btn-primary-hr personal-toolbar-action" href="{{ route('personal.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-plus" aria-hidden="true"></i> Agregar personal</a>@endif
     </div>
 
     <div class="card-hr">
@@ -65,10 +65,10 @@
                         <td>{{ $empleado->sexo ? ucfirst($empleado->sexo) : '—' }}</td>
                         <td><div class="personal-actions">
                             @if(in_array($empleado->empresa_id, $manageableIds, true))
-                                <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('personal.edit', $empleado) }}" title="Editar" aria-label="Editar {{ $empleado->nombre }}"><i class="fa-light fa-pen-to-square" aria-hidden="true"></i></a>
+                                <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('personal.edit', $empleado) }}" title="Editar" aria-label="Editar {{ $empleado->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-pen-to-square" aria-hidden="true"></i></a>
                                 @if($empleado->activo)
-                                    <button class="btn-hr btn-outline-hr btn-sm-hr" type="button" data-bs-toggle="modal" data-bs-target="#assign-password-modal" data-password-url="{{ route('personal.password.assign', $empleado) }}" data-employee-id="{{ $empleado->id }}" data-employee-name="{{ $empleado->nombre }}" title="Asignar nueva contraseña" aria-label="Asignar nueva contraseña a {{ $empleado->nombre }}"><i class="fa-light fa-lock" aria-hidden="true"></i></button>
-                                    <form method="POST" action="{{ route('personal.destroy', $empleado) }}" data-confirm-termination data-record-name="{{ $empleado->nombre }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" title="Dar de baja" aria-label="Dar de baja a {{ $empleado->nombre }}"><i class="fa-light fa-user-minus" aria-hidden="true"></i> Dar de baja</button></form>
+                                    <button class="btn-hr btn-outline-hr btn-sm-hr" type="button" data-bs-toggle="modal" data-bs-target="#assign-password-modal" data-password-url="{{ route('personal.password.assign', $empleado) }}" data-employee-id="{{ $empleado->id }}" data-employee-name="{{ $empleado->nombre }}" title="Asignar nueva contraseña" aria-label="Asignar nueva contraseña a {{ $empleado->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-lock" aria-hidden="true"></i></button>
+                                    <form method="POST" action="{{ route('personal.destroy', $empleado) }}" data-confirm-termination data-record-name="{{ $empleado->nombre }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" title="Dar de baja" aria-label="Dar de baja a {{ $empleado->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-user-minus" aria-hidden="true"></i> Dar de baja</button></form>
                                 @endif
                             @else<span class="company-rfc">Solo lectura</span>@endif
                         </div></td>

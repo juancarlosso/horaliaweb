@@ -37,7 +37,7 @@
 <section class="pm-page">
     <header class="pm-heading">
         <div><h1>Métodos de Pago</h1><p>Administra las tarjetas que podrán utilizarse para realizar cobros a cada empresa.</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
     </header>
 
     @if($errors->has('stripe')) <div class="pm-feedback" role="alert">{{ $errors->first('stripe') }}</div> @endif

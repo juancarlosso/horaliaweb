@@ -23,7 +23,7 @@
 <section class="subscription-page">
     <header class="subscription-heading">
         <div><h1>Suscripción</h1><p>Consulta y administra la suscripción de cada empresa.</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
     </header>
 
     @if($errors->has('subscription')) <div class="subscription-feedback error" role="alert">{{ $errors->first('subscription') }}</div> @endif

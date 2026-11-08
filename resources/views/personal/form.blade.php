@@ -53,19 +53,19 @@
     @media(max-width:575px) { .personal-heading { align-items:stretch; flex-direction:column; } .personal-photo-row { align-items:flex-start; } }
 </style>
 
-<section class="personal-page">
+<section class="personal-page" data-default-tab="{{ session('activePersonalTab', $errors->has('archivo') ? 'documentos' : 'general') }}">
     <header class="personal-heading">
         <div><h1>{{ $isEdit ? 'Editar personal' : 'Agregar personal' }}</h1><p>{{ $isEdit ? 'Actualiza los datos y el horario laboral del colaborador.' : 'Registra a un colaborador y configura sus días y horarios laborales.' }}</p></div>
         <div class="d-flex flex-wrap gap-2">
-            <a class="btn-hr btn-outline-hr" href="{{ route('personal.index', $selectedCompany ? ['empresa_id' => $selectedCompany] : []) }}"><i class="fa-light fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+            <a class="btn-hr btn-outline-hr" href="{{ route('personal.index', $selectedCompany ? ['empresa_id' => $selectedCompany] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
             @if($isEdit)
                 <form method="POST" action="{{ route('personal.password.regenerate', $empleado) }}" data-confirm-regenerate-password>
                     @csrf
-                    <button class="btn-hr btn-outline-hr" type="submit"><i class="fa-light fa-key" aria-hidden="true"></i> Regenerar contraseña</button>
+                    <button class="btn-hr btn-outline-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-key" aria-hidden="true"></i> Regenerar contraseña</button>
                 </form>
                 <form method="POST" action="{{ route('personal.pin.resend', $empleado) }}" data-confirm-resend-pin data-recipient-email="{{ $empleado->email }}">
                     @csrf
-                    <button class="btn-hr btn-outline-hr" type="submit"><i class="fa-light fa-envelope" aria-hidden="true"></i> Reenviar PIN</button>
+                    <button class="btn-hr btn-outline-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-envelope" aria-hidden="true"></i> Reenviar PIN</button>
                 </form>
             @endif
         </div>
@@ -77,6 +77,11 @@
     <div class="card-hr">
         <div class="card-hd"><div><h2 class="card-title-hr">Información del colaborador</h2><p class="card-subtitle-hr">Los campos marcados con * son obligatorios.</p></div></div>
         <div class="card-bd">
+            <div class="tab-bar mb-1rem" role="tablist" aria-label="Secciones del expediente">
+                <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-personal-tab="general">Datos Generales</button>
+                <button class="tab-btn" type="button" role="tab" aria-selected="false" data-personal-tab="documentos" @unless($isEdit) disabled title="Guarda al colaborador para habilitar documentos" @endunless>Documentos</button>
+            </div>
+            <div data-personal-panel="general">
             <form method="POST" action="{{ $isEdit ? route('personal.update', $empleado) : route('personal.store') }}" enctype="multipart/form-data" id="personal-form">
                 @csrf @if($isEdit) @method('PUT') @endif
                 <div class="row g-3">
@@ -112,15 +117,15 @@
 
                 <div class="row g-3">
                     <div class="col-lg-2 col-md-3">
-                        <div class="form-label-hr personal-field-label"><label class="mb-0" for="codigo">Código</label><button class="personal-info-button" type="button" aria-label="Información sobre Código" data-personal-popover data-bs-placement="top" data-bs-title="Código" data-bs-content="Es el código con el que se identifica al empleado, algunas empresas lo llaman &quot;Número de Empleado&quot;, &quot;ID del empleado&quot;, etc..."><i class="fa-light fa-circle-info" aria-hidden="true"></i></button></div>
+                        <div class="form-label-hr personal-field-label"><label class="mb-0" for="codigo">Código</label><button class="personal-info-button" type="button" aria-label="Información sobre Código" data-personal-popover data-bs-placement="top" data-bs-title="Código" data-bs-content="Es el código con el que se identifica al empleado, algunas empresas lo llaman &quot;Número de Empleado&quot;, &quot;ID del empleado&quot;, etc..."><i class="{{ config('constantes.tipo_iconos') }} fa-circle-info" aria-hidden="true"></i></button></div>
                         <input class="hr-input @error('codigo') personal-input-error @enderror" id="codigo" name="codigo" type="text" value="{{ old('codigo', $empleado->codigo) }}" maxlength="100">
                         @error('codigo')<span class="personal-field-error">{{ $message }}</span>@enderror
                     </div>
                     <div class="col-lg-2 col-md-3">
-                        <div class="form-label-hr personal-field-label"><label class="mb-0" for="pin">PIN del checador</label><button class="personal-info-button" type="button" aria-label="Información sobre PIN del checador" data-personal-popover data-bs-placement="top" data-bs-title="PIN del Checador" data-bs-content="Es el PIN con el que el empleado podrá marcar sus entradas, salidas y pausas en el reloj checador. Se puede capturar manualmente o dejar en blanco para que el sistema lo asigne automáticamente."><i class="fa-light fa-circle-info" aria-hidden="true"></i></button></div>
+                        <div class="form-label-hr personal-field-label"><label class="mb-0" for="pin">PIN del checador</label><button class="personal-info-button" type="button" aria-label="Información sobre PIN del checador" data-personal-popover data-bs-placement="top" data-bs-title="PIN del Checador" data-bs-content="Es el PIN con el que el empleado podrá marcar sus entradas, salidas y pausas en el reloj checador. Se puede capturar manualmente o dejar en blanco para que el sistema lo asigne automáticamente."><i class="{{ config('constantes.tipo_iconos') }} fa-circle-info" aria-hidden="true"></i></button></div>
                         <div class="personal-pin-input">
                             <input class="hr-input @error('pin') personal-input-error @enderror" id="pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" value="{{ old('pin', $empleado->pin) }}" autocomplete="off">
-                            <button class="personal-pin-toggle" id="pin-visibility-toggle" type="button" aria-label="Mostrar PIN" aria-pressed="false" aria-controls="pin"><i class="fa-light fa-eye" aria-hidden="true"></i></button>
+                            <button class="personal-pin-toggle" id="pin-visibility-toggle" type="button" aria-label="Mostrar PIN" aria-pressed="false" aria-controls="pin"><i class="{{ config('constantes.tipo_iconos') }} fa-eye" aria-hidden="true"></i></button>
                         </div>
                         @error('pin')<span class="personal-field-error">{{ $message }}</span>@enderror
                     </div>
@@ -206,6 +211,10 @@
                                         <option value="PRESENCIAL" @selected(old('modalidades.' . $day, $selectedSchedule?->modalidad ?? 'PRESENCIAL') === 'PRESENCIAL')>Presencial</option>
                                         <option value="HOME_OFFICE" @selected(old('modalidades.' . $day, $selectedSchedule?->modalidad ?? 'PRESENCIAL') === 'HOME_OFFICE')>Home Office</option>
                                     </select>
+                                    <label class="form-check form-switch mt-2 mb-0 d-flex align-items-center gap-2" for="trabaja_festivos_{{ $day }}">
+                                        <input class="form-check-input holiday-work-check" type="checkbox" role="switch" id="trabaja_festivos_{{ $day }}" name="trabaja_festivos[{{ $day }}]" value="1" @checked((bool) old('trabaja_festivos.' . $day, $selectedSchedule?->trabaja_festivos ?? false)) @unless($isChecked) disabled @endunless>
+                                        <span>Trabaja en días festivos</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -213,10 +222,26 @@
                 </div>
 
                 <div class="personal-form-actions">
-                    <button class="btn-hr btn-primary-hr" type="submit"><i class="fa-light fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar personal' }}</button>
+                    <button class="btn-hr btn-primary-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-floppy-disk" aria-hidden="true"></i> {{ $isEdit ? 'Guardar cambios' : 'Guardar personal' }}</button>
                     <a class="btn-hr btn-outline-hr" href="{{ route('personal.index', $selectedCompany ? ['empresa_id' => $selectedCompany] : []) }}">Cancelar</a>
                 </div>
             </form>
+            </div>
+            @if($isEdit)
+            <div data-personal-panel="documentos" hidden>
+                @if($errors->has('archivo'))<div class="personal-error" role="alert">{{ $errors->first('archivo') }}</div>@endif
+                <form method="POST" action="{{ route('personal.documentos.store', $empleado) }}" enctype="multipart/form-data" class="row g-3 mb-4 align-items-start" id="personal-document-upload-form">
+                    @csrf
+                    <div class="col-lg-5"><label class="form-label-hr" for="documento_tipo">Tipo de documento *</label><select class="hr-input select2" id="documento_tipo" name="tipo" required><option value="">Selecciona un documento</option>@foreach($documentCatalog as $group => $types)<optgroup label="{{ $group }}">@foreach($types as $type)<option value="{{ $type }}">{{ $type }}</option>@endforeach</optgroup>@endforeach</select></div>
+                    <div class="col-12" id="custom-document-name" hidden><label class="form-label-hr" for="nombre_personalizado">Nombre personalizado *</label><input class="hr-input" id="nombre_personalizado" name="nombre_personalizado" maxlength="255"></div>
+                    <div class="col-lg-5"><label class="form-label-hr" for="documento_archivo">Archivo *</label><input class="hr-input" id="documento_archivo" name="archivo" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp" required><small class="text-muted">PDF, JPG, PNG o WebP; máximo {{ number_format(config('filesystems.personal_document_max_kb', 10240) / 1024, 0) }} MB.</small></div>
+                    <div class="col-lg-2 pt-lg-4"><button class="btn-hr btn-primary-hr" type="submit" data-document-upload-submit><i class="{{ config('constantes.tipo_iconos') }} fa-spinner fa-spin me-1" aria-hidden="true" data-document-upload-spinner hidden></i><span data-document-upload-label>Cargar documento</span></button></div>
+                </form>
+                <div class="table-wrap"><table class="bs-table hover"><thead><tr><th>Documento</th><th>Fecha de carga</th><th>Archivo</th><th>Acciones</th></tr></thead><tbody>
+                @forelse($documentos as $documento)<tr><td>{{ $documento->nombre_personalizado ?: $documento->tipo }}</td><td>{{ $documento->created_at->format('d/m/Y H:i') }}</td><td>{{ $documento->nombre_original }}</td><td><div class="d-flex align-items-center gap-2"><a class="btn-hr btn-outline-hr btn-sm-hr" target="_blank" rel="noopener" href="{{ route('personal.documentos.show', [$empleado, $documento]) }}" aria-label="Visualizar {{ $documento->nombre_original }}" title="Visualizar"><i class="{{ config('constantes.tipo_iconos') }} fa-eye" aria-hidden="true"></i></a><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('personal.documentos.download', [$empleado, $documento]) }}" aria-label="Descargar {{ $documento->nombre_original }}" title="Descargar"><i class="{{ config('constantes.tipo_iconos') }} fa-download" aria-hidden="true"></i></a><form class="m-0" method="POST" action="{{ route('personal.documentos.destroy', [$empleado, $documento]) }}" data-confirm-document-delete>@csrf @method('DELETE')<button class="btn-hr btn-outline-hr btn-sm-hr text-danger" type="submit" aria-label="Eliminar {{ $documento->nombre_original }}" title="Eliminar"><i class="{{ config('constantes.tipo_iconos') }} fa-trash" aria-hidden="true"></i></button></form></div></td></tr>@empty<tr><td colspan="4" class="text-muted">Aún no hay documentos en el expediente.</td></tr>@endforelse
+                </tbody></table></div>
+            </div>
+            @endif
         </div>
     </div>
 </section>
@@ -239,6 +264,40 @@
             });
         });
 
+        const personalTabs = document.querySelectorAll('[data-personal-tab]');
+        function activatePersonalTab(name) {
+            const targetButton = document.querySelector('[data-personal-tab="' + name + '"]');
+            if (!targetButton || targetButton.disabled) return;
+            document.querySelectorAll('[data-personal-panel]').forEach(panel => panel.hidden = panel.dataset.personalPanel !== name);
+            personalTabs.forEach(tab => {
+                const active = tab === targetButton;
+                tab.classList.toggle('active', active);
+                tab.setAttribute('aria-selected', String(active));
+            });
+        }
+        activatePersonalTab(document.querySelector('.personal-page')?.dataset.defaultTab || 'general');
+        personalTabs.forEach(button => button.addEventListener('click', function () {
+            if (this.disabled) return;
+            activatePersonalTab(this.dataset.personalTab);
+        }));
+        const documentUploadForm = document.getElementById('personal-document-upload-form');
+        documentUploadForm?.addEventListener('submit', function () {
+            const submitButton = this.querySelector('[data-document-upload-submit]');
+            if (!submitButton || submitButton.disabled) return;
+            submitButton.disabled = true;
+            submitButton.setAttribute('aria-busy', 'true');
+            submitButton.querySelector('[data-document-upload-spinner]')?.removeAttribute('hidden');
+            submitButton.querySelector('[data-document-upload-label]').textContent = 'Cargando…';
+        });
+
+        const documentType = document.getElementById('documento_tipo');
+        const customNameWrap = document.getElementById('custom-document-name');
+        const customName = document.getElementById('nombre_personalizado');
+        documentType?.addEventListener('change', function () { const custom = this.value === 'Otro documento'; customNameWrap.hidden = !custom; customName.required = custom; if (!custom) customName.value = ''; });
+        document.querySelectorAll('[data-confirm-document-delete]').forEach(form => form.addEventListener('submit', function (event) {
+            event.preventDefault(); Swal.fire({ icon: 'warning', title: '¿Eliminar documento?', text: 'Se quitará del expediente. La eliminación física se sujeta a la política de conservación.', showCancelButton: true, confirmButtonText: 'Eliminar', cancelButtonText: 'Cancelar', buttonsStyling: false, customClass: { confirmButton: 'btn-hr btn-primary-hr', cancelButton: 'btn-hr btn-outline-hr' } }).then(result => { if (result.isConfirmed) form.submit(); });
+        }));
+
         const pinInput = document.getElementById('pin');
         const pinToggle = document.getElementById('pin-visibility-toggle');
         pinToggle?.addEventListener('click', function () {
@@ -246,7 +305,7 @@
             pinInput.type = showPin ? 'text' : 'password';
             pinToggle.setAttribute('aria-pressed', String(showPin));
             pinToggle.setAttribute('aria-label', showPin ? 'Ocultar PIN' : 'Mostrar PIN');
-            pinToggle.innerHTML = `<i class="fa-light ${showPin ? 'fa-eye-slash' : 'fa-eye'}" aria-hidden="true"></i>`;
+            pinToggle.innerHTML = `<i class="{{ config('constantes.tipo_iconos') }} ${showPin ? 'fa-eye-slash' : 'fa-eye'}" aria-hidden="true"></i>`;
         });
 
         document.querySelectorAll('[data-confirm-regenerate-password]').forEach(function (form) {
@@ -325,11 +384,13 @@
             const $schedule = $card.find('.personal-day-schedule');
             const $select = $card.find('.schedule-select');
             const $modality = $card.find('[name^="modalidades["]');
+            const $holidayWork = $card.find('[name^="trabaja_festivos["]');
             const selected = this.checked;
             $card.toggleClass('is-selected', selected);
             $schedule.prop('hidden', !selected);
             $select.prop('required', selected);
             $modality.prop('disabled', !selected);
+            $holidayWork.prop('disabled', !selected);
             if (!selected) $select.val('').trigger('change.select2');
         });
 

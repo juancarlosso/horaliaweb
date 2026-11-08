@@ -6,7 +6,7 @@
 </style>
 <section class="pauses-page">
     <div class="pauses-heading">
-        <div><h1><i class="fa-light fa-mug-hot" aria-hidden="true"></i> Pausas</h1><p>Registra y consulta las pausas de tu jornada actual.</p></div>
+        <div><h1><i class="{{ config('constantes.tipo_iconos') }} fa-mug-hot" aria-hidden="true"></i> Pausas</h1><p>Registra y consulta las pausas de tu jornada actual.</p></div>
         <div class="pauses-context"><div><strong>Empleado</strong><small>{{ $personal->nombre }}</small></div><div><strong>Jornada</strong><small>{{ $attendance?->fecha?->format('d/m/Y') ?? 'Sin entrada vigente' }}</small></div></div>
     </div>
 
@@ -14,14 +14,14 @@
         @foreach($types as $key => $type)
             @php($isActive = $activePause?->tipo === $key)
             <article class="pause-card {{ $isActive ? 'is-active' : '' }}" style="--pause-color:{{ ['orange'=>'#f58220','green'=>'#16a34a','purple'=>'#9333ea','blue'=>'#1677f2'][$type['color']] ?? '#1677f2' }}">
-                <div class="pause-icon"><i class="fa-light fa-{{ $type['icono'] }}" aria-hidden="true"></i></div>
+                <div class="pause-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-{{ $type['icono'] }}" aria-hidden="true"></i></div>
                 <h2>{{ $type['nombre'] }}</h2>
                 <p>{{ $type['descripcion'] }}</p>
                 @if($isActive)
-                    <form method="POST" action="{{ route('pausas.finish') }}">@csrf<button class="btn-hr btn-danger-hr pause-finish-button" type="submit"><i class="fa-light fa-stop" aria-hidden="true"></i> FINALIZAR</button></form>
-                    <div class="pause-status"><i class="fa-light fa-clock" aria-hidden="true"></i> En curso desde <span class="pause-clock">{{ $activePause->inicio->format('H:i') }}</span></div>
+                    <form method="POST" action="{{ route('pausas.finish') }}">@csrf<button class="btn-hr btn-danger-hr pause-finish-button" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-stop" aria-hidden="true"></i> FINALIZAR</button></form>
+                    <div class="pause-status"><i class="{{ config('constantes.tipo_iconos') }} fa-clock" aria-hidden="true"></i> En curso desde <span class="pause-clock">{{ $activePause->inicio->format('H:i') }}</span></div>
                 @else
-                    <form method="POST" action="{{ route('pausas.start') }}">@csrf<input type="hidden" name="tipo" value="{{ $key }}"><button class="btn-hr {{ $activePause || !$attendance ? 'btn-outline-hr' : 'btn-primary-hr' }}" type="submit" @disabled($activePause || !$attendance)><i class="fa-light fa-play" aria-hidden="true"></i> INICIAR</button></form>
+                    <form method="POST" action="{{ route('pausas.start') }}">@csrf<input type="hidden" name="tipo" value="{{ $key }}"><button class="btn-hr {{ $activePause || !$attendance ? 'btn-outline-hr' : 'btn-primary-hr' }}" type="submit" @disabled($activePause || !$attendance)><i class="{{ config('constantes.tipo_iconos') }} fa-play" aria-hidden="true"></i> INICIAR</button></form>
                     <div class="pause-status is-placeholder" aria-hidden="true">En curso desde 00:00</div>
                 @endif
             </article>
@@ -35,7 +35,7 @@
                 @foreach($history as $index => $pause)
                     @php($type = $types[$pause->tipo] ?? ['nombre' => strtoupper($pause->tipo), 'color' => 'blue'])
                     @php($minutes = $pause->fin_utc ? $pause->inicio_utc->diffInMinutes($pause->fin_utc) : null)
-                    <tr><td>{{ $index + 1 }}</td><td><div class="pause-type-cell" style="--pause-color:{{ ['orange'=>'#f58220','green'=>'#16a34a','purple'=>'#9333ea','blue'=>'#1677f2'][$type['color']] ?? '#1677f2' }}"><span class="pause-type-icon"><i class="fa-light fa-{{ $type['icono'] ?? 'mug-hot' }}" aria-hidden="true"></i></span>{{ $type['nombre'] }}</div></td><td>{{ $pause->inicio->format('H:i') }}</td><td>{{ $pause->fin?->format('H:i') ?? '—' }}</td><td>@if($minutes !== null){{ sprintf('%02d:%02d', intdiv($minutes, 60), $minutes % 60) }}@else—@endif</td><td><span class="pause-state {{ $pause->fin ? '' : 'is-open' }}">{{ $pause->fin ? 'Finalizada' : 'En curso' }}</span></td></tr>
+                    <tr><td>{{ $index + 1 }}</td><td><div class="pause-type-cell" style="--pause-color:{{ ['orange'=>'#f58220','green'=>'#16a34a','purple'=>'#9333ea','blue'=>'#1677f2'][$type['color']] ?? '#1677f2' }}"><span class="pause-type-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-{{ $type['icono'] ?? 'mug-hot' }}" aria-hidden="true"></i></span>{{ $type['nombre'] }}</div></td><td>{{ $pause->inicio->format('H:i') }}</td><td>{{ $pause->fin?->format('H:i') ?? '—' }}</td><td>@if($minutes !== null){{ sprintf('%02d:%02d', intdiv($minutes, 60), $minutes % 60) }}@else—@endif</td><td><span class="pause-state {{ $pause->fin ? '' : 'is-open' }}">{{ $pause->fin ? 'Finalizada' : 'En curso' }}</span></td></tr>
                 @endforeach
             </tbody></table></div>
         @else

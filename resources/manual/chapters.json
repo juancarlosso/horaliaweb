@@ -29,6 +29,10 @@
         "text": "Esta guía te mostrará, paso a paso, cómo configurar y utilizar las principales funciones de Horalia, desde el registro de tus colaboradores hasta la consulta de reportes de asistencia."
       },
       {
+        "type": "paragraph",
+        "text": "La guía también incluye la administración de festivos, el ajuste de pausas, los expedientes documentales, las vacaciones y el nuevo reporte de incidencias."
+      },
+      {
         "type": "heading",
         "text": "¿Qué necesitas para comenzar?"
       },
@@ -767,8 +771,8 @@
       },
       {
         "type": "image",
-        "src": "image6.png",
-        "alt": "Pantalla de asistencia e historial de registros"
+        "src": "asistencia-computadora.png",
+        "alt": "Vista de Mi asistencia de hoy y los filtros de consulta desde una computadora."
       },
       {
         "type": "heading",
@@ -846,6 +850,11 @@
         "type": "callout",
         "kind": "tip",
         "text": "Verifica que tu dispositivo tenga conexión a Internet. Permite el acceso a tu ubicación cuando el navegador lo solicite. Registra tu entrada al comenzar tu jornada y tu salida al finalizarla. Revisa que cada registro se haya realizado correctamente."
+      },
+      {
+        "type": "callout",
+        "kind": "tip",
+        "text": "La aplicación móvil también recibió una mejora para capturar fotografías al registrar la asistencia. Mantén la aplicación actualizada para contar con la versión más reciente."
       }
     ]
   },
@@ -912,8 +921,8 @@
       },
       {
         "type": "image",
-        "src": "image7.png",
-        "alt": "Pantalla de inicio del reloj checador"
+        "src": "checador-computadora.png",
+        "alt": "Configuración del reloj checador desde navegador en computadora."
       },
       {
         "type": "heading",
@@ -1158,8 +1167,244 @@
     ]
   },
   {
-    "id": "12-todo-listo-para-comenzar",
+    "id": "12-administracion-de-festivos",
     "number": "12",
+    "title": "Administración de festivos",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Consulta los días festivos oficiales y registra los días propios de cada empresa. Puedes agregar tantos festivos empresariales como necesites."
+      },
+      {
+        "type": "step",
+        "number": 1,
+        "text": "En el menú lateral, abre Organización → Festivos."
+      },
+      {
+        "type": "step",
+        "number": 2,
+        "text": "Selecciona la empresa y el año que quieres consultar."
+      },
+      {
+        "type": "step",
+        "number": 3,
+        "text": "Para agregar un día propio de la empresa, haz clic en Agregar festivo, captura la fecha y la conmemoración y guarda el registro."
+      },
+      {
+        "type": "step",
+        "number": 4,
+        "text": "Los festivos empresariales se pueden editar o eliminar desde la tabla. Los festivos oficiales aparecen como solo lectura."
+      },
+      {
+        "type": "image",
+        "src": "festivos-computadora.png",
+        "alt": "Pantalla de Festivos en computadora, con días oficiales y empresariales."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "Los días festivos se consideran al calcular vacaciones y al validar la asistencia, de acuerdo con la configuración de trabajo en festivos de cada día del horario."
+      }
+    ]
+  },
+  {
+    "id": "13-configurar-pausas-en-tiempo-trabajado",
+    "number": "13",
+    "title": "Configurar el cálculo de pausas",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Cada empresa puede decidir si las pausas registradas forman parte del tiempo trabajado que aparece en los reportes."
+      },
+      {
+        "type": "step",
+        "number": 1,
+        "text": "Abre Organización → Empresas y edita la empresa."
+      },
+      {
+        "type": "step",
+        "number": 2,
+        "text": "En la pestaña Datos Generales, localiza Incluir Pausas en tiempo trabajado."
+      },
+      {
+        "type": "step",
+        "number": 3,
+        "text": "Selecciona Sí para incluir las pausas en el total o No para descontarlas. Pulsa Guardar cambios."
+      },
+      {
+        "type": "image",
+        "src": "pausas-tiempo-trabajado-computadora.png",
+        "alt": "Opción No: las pausas registradas se descuentan del tiempo trabajado."
+      },
+      {
+        "type": "callout",
+        "kind": "tip",
+        "text": "La opción inicial es No, por lo que las pausas se descuentan del tiempo trabajado."
+      }
+    ]
+  },
+  {
+    "id": "14-documentacion-del-personal",
+    "number": "14",
+    "title": "Documentación del personal",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "El expediente de cada colaborador permite cargar y consultar sus documentos desde Horalia."
+      },
+      {
+        "type": "step",
+        "number": 1,
+        "text": "Abre Operación → Personal, busca al colaborador y entra a Editar."
+      },
+      {
+        "type": "step",
+        "number": 2,
+        "text": "Selecciona la pestaña Documentos."
+      },
+      {
+        "type": "step",
+        "number": 3,
+        "text": "Elige el tipo de documento, selecciona un archivo PDF, JPG, PNG o WebP de hasta 10 MB y pulsa Cargar documento."
+      },
+      {
+        "type": "step",
+        "number": 4,
+        "text": "Usa las acciones de la tabla para consultar, descargar o quitar un documento del expediente."
+      },
+      {
+        "type": "image",
+        "src": "documentos-colaborador-computadora.png",
+        "alt": "Pestaña Documentos del expediente de un colaborador, abierta en computadora."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "La pestaña Documentos está disponible después de guardar la ficha del colaborador."
+      }
+    ]
+  },
+  {
+    "id": "15-configurar-trabajo-en-festivos",
+    "number": "15",
+    "title": "Configurar quién trabaja en días festivos",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "La disponibilidad para trabajar en festivos se configura para cada día laborable de la ficha del colaborador."
+      },
+      {
+        "type": "step",
+        "number": 1,
+        "text": "En Operación → Personal, edita al colaborador."
+      },
+      {
+        "type": "step",
+        "number": 2,
+        "text": "En Datos Generales, dentro de Días y horarios laborales, marca el día y asigna su horario y modalidad."
+      },
+      {
+        "type": "step",
+        "number": 3,
+        "text": "Activa Trabaja en días festivos para los días en que la persona sí debe registrar asistencia aunque coincidan con un festivo."
+      },
+      {
+        "type": "image",
+        "src": "trabaja-festivos-computadora.png",
+        "alt": "Horario de lunes con el control Trabaja en días festivos visible en computadora."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "El control se configura por día. Si queda desactivado, Horalia aplica el descanso de festivo para ese día."
+      }
+    ]
+  },
+  {
+    "id": "16-registro-de-vacaciones",
+    "number": "16",
+    "title": "Registrar vacaciones",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Registra los periodos vacacionales previamente autorizados. Horalia calcula los días a descontar según los días laborales del colaborador, sus descansos y los festivos aplicables."
+      },
+      {
+        "type": "step",
+        "number": 1,
+        "text": "Abre Operación → Vacaciones y pulsa Registrar vacaciones."
+      },
+      {
+        "type": "step",
+        "number": 2,
+        "text": "Selecciona la empresa y al colaborador que solicita las vacaciones."
+      },
+      {
+        "type": "step",
+        "number": 3,
+        "text": "Captura las fechas Desde y Hasta y selecciona a la persona que autorizó el periodo."
+      },
+      {
+        "type": "step",
+        "number": 4,
+        "text": "Revisa el cálculo de días que aparece en el formulario y pulsa Registrar periodo."
+      },
+      {
+        "type": "image",
+        "src": "vacaciones-computadora.png",
+        "alt": "Formulario en computadora para seleccionar colaborador, fechas y persona que autorizó."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "Horalia evita registrar periodos que se traslapan con otras vacaciones vigentes del mismo colaborador."
+      }
+    ]
+  },
+  {
+    "id": "17-reporte-de-incidencias",
+    "number": "17",
+    "title": "Reporte de incidencias",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "El reporte reúne situaciones detectadas en las jornadas y permite descargarlas para su análisis."
+      },
+      {
+        "type": "step",
+        "number": 1,
+        "text": "Abre Reportes → Incidencias."
+      },
+      {
+        "type": "step",
+        "number": 2,
+        "text": "Selecciona la empresa y las fechas Desde y Hasta."
+      },
+      {
+        "type": "step",
+        "number": 3,
+        "text": "Marca los tipos de incidencia que quieres consultar: retardos, faltas, salidas pendientes, vacaciones, vacaciones trabajadas y festivos trabajados."
+      },
+      {
+        "type": "step",
+        "number": 4,
+        "text": "Pulsa Generar reporte. Para descargar los resultados, pulsa Exportar a Excel."
+      },
+      {
+        "type": "image",
+        "src": "incidencias-computadora.png",
+        "alt": "Filtros del reporte de incidencias en computadora, con sus seis tipos disponibles."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "El reporte es de consulta: no modifica los registros originales de asistencia."
+      }
+    ]
+  },
+  {
+    "id": "12-todo-listo-para-comenzar",
+    "number": "18",
     "title": "¡Todo listo para comenzar!",
     "blocks": [
       {

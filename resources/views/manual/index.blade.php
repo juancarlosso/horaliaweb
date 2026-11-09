@@ -52,7 +52,7 @@
     <header class="manual-intro">
         <span class="manual-intro-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.2 1.8c-1.1 1-1.8 1.4-1.8 2.7m0 3h.01"/></svg></span>
         <div><h1>Manual de usuario</h1><p>Guía de configuración y control de asistencia</p></div>
-        <span class="manual-version">Versión 1.0 · Octubre 2026</span>
+        <span class="manual-version">Versión 2.0 · Noviembre 2026</span>
     </header>
 
     <div class="manual-layout">

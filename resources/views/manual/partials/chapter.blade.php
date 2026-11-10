@@ -25,7 +25,8 @@
                     @endforeach
                 </tbody></table></div>
             @elseif($block['type'] === 'image')
-                <figure><a class="manual-image-link" href="{{ asset('assets/manual/' . $block['src']) }}" target="_blank" rel="noopener noreferrer" aria-label="Abrir imagen en una pestaña nueva: {{ $block['alt'] ?: 'Captura de pantalla del manual de Horalia' }}"><img class="manual-image" src="{{ asset('assets/manual/' . $block['src']) }}" alt="{{ $block['alt'] ?: 'Captura de pantalla del manual de Horalia' }}" loading="lazy"></a><figcaption class="manual-caption">{{ $block['alt'] }}</figcaption></figure>
+                @php($imageDimensions = getimagesize(public_path('assets/manual/' . $block['src'])))
+                <figure><a class="manual-image-link" href="{{ asset('assets/manual/' . $block['src']) }}" target="_blank" rel="noopener noreferrer" aria-label="Abrir imagen en una pestaña nueva: {{ $block['alt'] ?: 'Captura de pantalla del manual de Horalia' }}"><img class="manual-image" src="{{ asset('assets/manual/' . $block['src']) }}" alt="{{ $block['alt'] ?: 'Captura de pantalla del manual de Horalia' }}" width="{{ $imageDimensions[0] }}" height="{{ $imageDimensions[1] }}" loading="lazy"></a><figcaption class="manual-caption">{{ $block['alt'] }}</figcaption></figure>
             @elseif($block['type'] === 'link')
                 <p><a class="manual-link" href="{{ $block['url'] }}" target="_blank" rel="noopener noreferrer">{{ $block['text'] }}</a></p>
             @elseif($block['type'] === 'caption')

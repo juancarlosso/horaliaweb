@@ -233,21 +233,21 @@ class DashboardController extends Controller
 
     private function adminDashboardData(Request $request): array
     {
-        $firstRecordedYear = collect([
-            Empresa::query()->min('created_at'),
-            Asistencia::query()->min('fecha'),
-        ])->filter()->map(fn ($date) => (int) date('Y', strtotime((string) $date)))->min();
         $currentYear = (int) today()->format('Y');
-        $firstYear = min($firstRecordedYear ?: $currentYear, $currentYear);
+        $availableYears = array_map('intval', config('constantes.aniosAsistencia', []));
+        $chartYears = array_reverse($availableYears);
+        $defaultChartYear = in_array($currentYear, $availableYears, true)
+            ? $currentYear
+            : ($chartYears[0] ?? $currentYear);
 
         $filters = $request->validate([
             'metric' => ['nullable', Rule::in(['empresas', 'asistencias'])],
             'month' => ['nullable', 'integer', 'between:1,12'],
-            'year' => ['nullable', 'integer', "between:{$firstYear},{$currentYear}"],
+            'year' => ['nullable', 'integer', Rule::in($availableYears)],
         ]);
 
         $month = (int) ($filters['month'] ?? today()->month);
-        $year = (int) ($filters['year'] ?? $currentYear);
+        $year = (int) ($filters['year'] ?? $defaultChartYear);
         $metric = $filters['metric'] ?? 'empresas';
         $start = today()->setDate($year, $month, 1)->startOfDay();
         $end = $start->copy()->endOfMonth();
@@ -303,7 +303,7 @@ class DashboardController extends Controller
             'chartMetric' => $metric,
             'chartMonth' => $month,
             'chartYear' => $year,
-            'chartYears' => range($currentYear, $firstYear),
+            'chartYears' => $chartYears,
             'chartDaysInMonth' => $daysInMonth,
             'chartPoints' => $chartPoints,
             'chartGrid' => collect(range(0, (int) ($axisMax / $axisStep)))->map(function (int $step) use ($plot, $axisMax, $axisStep): array {

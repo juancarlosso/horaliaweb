@@ -29,7 +29,7 @@ class MembershipRenewalMail extends Mailable implements ShouldQueue
             default => 'Membresía desactivada por falta de pago',
         };
 
-        return new Envelope(subject: $subject);
+        return new Envelope(subject: EmailSubject::prefix($subject));
     }
 
     public function content(): Content

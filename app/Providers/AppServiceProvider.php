@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use App\Mail\EmailSubject;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -66,7 +67,7 @@ class AppServiceProvider extends ServiceProvider
             ];
 
             return (new MailMessage)
-                ->subject('Restablece tu contraseña de ' . config('app.name'))
+                ->subject(EmailSubject::prefix('Restablece tu contraseña de ' . config('app.name')))
                 ->view('emails.auth.password-reset', $data)
                 ->text('emails.auth.password-reset-text', $data);
         });

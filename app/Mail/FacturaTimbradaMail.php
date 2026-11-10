@@ -19,7 +19,7 @@ class FacturaTimbradaMail extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Tu factura de Horalia ' . $this->factura->serie . '-' . $this->factura->folio);
+        return new Envelope(subject: EmailSubject::prefix('Tu factura de Horalia ' . $this->factura->serie . '-' . $this->factura->folio));
     }
 
     public function content(): Content

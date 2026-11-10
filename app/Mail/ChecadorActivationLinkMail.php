@@ -22,7 +22,7 @@ class ChecadorActivationLinkMail extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Enlace para el reloj checador de Horalia');
+        return new Envelope(subject: EmailSubject::prefix('Enlace para el reloj checador de Horalia'));
     }
 
     public function content(): Content

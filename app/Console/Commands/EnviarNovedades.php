@@ -165,7 +165,7 @@ class EnviarNovedades extends Command
     {
         return User::query()
             ->where('profile', 2)
-            ->whereHas('empresas')
+            ->whereHas('empresas', fn ($query) => $query->where('empresas.activa', true))
             ->whereNotNull('email')
             ->whereNotNull('created_at')
             ->get(['email', 'created_at'])

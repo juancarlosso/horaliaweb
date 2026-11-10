@@ -21,7 +21,7 @@ class ChecadorPinMail extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Tu PIN del checador de Horalia');
+        return new Envelope(subject: EmailSubject::prefix('Tu PIN del checador de Horalia'));
     }
 
     public function content(): Content

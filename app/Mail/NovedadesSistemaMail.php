@@ -19,7 +19,7 @@ class NovedadesSistemaMail extends Mailable
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Novedades de Horalia '.$this->identificador);
+        return new Envelope(subject: EmailSubject::prefix('Novedades de Horalia '.$this->identificador));
     }
 
     public function content(): Content

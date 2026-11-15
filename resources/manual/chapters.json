@@ -30,7 +30,7 @@
       },
       {
         "type": "paragraph",
-        "text": "La guía también incluye la administración de festivos, el ajuste de pausas, los expedientes documentales, las vacaciones y el nuevo reporte de incidencias."
+        "text": "La guía también incluye la administración de festivos, el ajuste de pausas, los expedientes documentales, las vacaciones, el registro de incapacidades y el reporte de incidencias."
       },
       {
         "type": "heading",
@@ -1362,13 +1362,68 @@
     ]
   },
   {
-    "id": "17-reporte-de-incidencias",
+    "id": "17-registro-de-incapacidades",
     "number": "17",
+    "title": "Registrar incapacidades",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Registra el periodo de incapacidad de un colaborador y conserva una copia de su calendario laboral al momento del registro. El resumen permite consultar las jornadas afectadas, los comprobantes y las observaciones."
+      },
+      {
+        "type": "step",
+        "number": 1,
+        "text": "Abre Operación → Incapacidades. El perfil 1 puede consultar registros de todas las empresas; el perfil 2 consulta las empresas que tiene asignadas con control total."
+      },
+      {
+        "type": "step",
+        "number": 2,
+        "text": "Para registrar un periodo, pulsa Registrar incapacidad. Esta acción está disponible para el perfil 2. Selecciona la empresa y el colaborador activo."
+      },
+      {
+        "type": "step",
+        "number": 3,
+        "text": "Indica las fechas Desde y Hasta y selecciona el motivo: Enfermedad general, Riesgo de trabajo o Maternidad."
+      },
+      {
+        "type": "step",
+        "number": 4,
+        "text": "Agrega observaciones si hace falta. Puedes adjuntar hasta tres comprobantes PDF, JPG, JPEG, PNG o WebP, de hasta 10 MB cada uno."
+      },
+      {
+        "type": "step",
+        "number": 5,
+        "text": "Revisa el periodo y pulsa Registrar incapacidad. Horalia calcula las jornadas según los horarios y festivos configurados y guarda ese resumen como una fotografía del registro."
+      },
+      {
+        "type": "image",
+        "src": "incapacidades-computadora.png",
+        "alt": "Listado del módulo de incapacidades en una computadora, con un periodo de demostración."
+      },
+      {
+        "type": "image",
+        "src": "incapacidades-registro-computadora.png",
+        "alt": "Formulario para registrar una incapacidad, abierto en una computadora."
+      },
+      {
+        "type": "paragraph",
+        "text": "Abre Información para consultar los datos, descargar los comprobantes y revisar cada fecha del resumen. El perfil 2 puede cancelar un registro vigente; la cancelación conserva su historial y sus comprobantes."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "No se permiten periodos que se traslapen con otra incapacidad vigente del mismo colaborador. Si coincide con vacaciones registradas, Horalia conserva ambos periodos y muestra un aviso; no los cambia automáticamente."
+      }
+    ]
+  },
+  {
+    "id": "18-reporte-de-incidencias",
+    "number": "18",
     "title": "Reporte de incidencias",
     "blocks": [
       {
         "type": "paragraph",
-        "text": "El reporte reúne situaciones detectadas en las jornadas y permite descargarlas para su análisis."
+        "text": "El reporte reúne situaciones detectadas en las jornadas y permite descargar los resultados para su análisis. Solo está disponible para los perfiles 1 y 2: el perfil 1 puede consultar todas las empresas y el perfil 2 las que tiene asignadas con control total."
       },
       {
         "type": "step",
@@ -1383,7 +1438,7 @@
       {
         "type": "step",
         "number": 3,
-        "text": "Marca los tipos de incidencia que quieres consultar: retardos, faltas, salidas pendientes, vacaciones, vacaciones trabajadas y festivos trabajados."
+        "text": "Marca los tipos de incidencia que quieres consultar: Retardo, Falta, Salida Pendiente, Vacaciones, Vacaciones Trabajadas, Festivo Trabajado, Incapacidad e Incapacidad trabajada."
       },
       {
         "type": "step",
@@ -1393,7 +1448,11 @@
       {
         "type": "image",
         "src": "incidencias-computadora.png",
-        "alt": "Filtros del reporte de incidencias en computadora, con sus seis tipos disponibles."
+        "alt": "Filtros del reporte y resultados de incidencias, incluidos Incapacidad e Incapacidad trabajada, en una computadora."
+      },
+      {
+        "type": "paragraph",
+        "text": "Incapacidad aparece cuando una jornada está cubierta por un periodo vigente y no tiene entrada registrada. Si hay entrada, se genera Incapacidad trabajada; la asistencia se conserva y pueden aparecer otras incidencias que correspondan, como Retardo o Salida Pendiente. Los periodos cancelados no generan estas incidencias."
       },
       {
         "type": "callout",
@@ -1404,7 +1463,7 @@
   },
   {
     "id": "12-todo-listo-para-comenzar",
-    "number": "18",
+    "number": "19",
     "title": "¡Todo listo para comenzar!",
     "blocks": [
       {

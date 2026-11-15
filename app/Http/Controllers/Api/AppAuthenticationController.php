@@ -18,6 +18,7 @@ class AppAuthenticationController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => ['required', 'email', 'max:255'],
             'password' => ['required', 'string'],
+            'supports_multi_company' => ['sometimes', 'boolean'],
         ]);
 
         if ($validator->fails()) {
@@ -37,14 +38,17 @@ class AppAuthenticationController extends Controller
             return $this->error('El correo o la contraseña no son correctos.', 401);
         }
 
-        $company = $this->manageableActiveCompany($user);
-        if (!$company) {
+        $companies = $this->manageableActiveCompanies($user);
+        if ($companies->isEmpty()) {
             return $this->error('Esta cuenta no tiene autorización para usar la aplicación, solo los administradores de la empresa pueden accesar', 403);
         }
 
+        $supportsMultiCompany = (bool) ($credentials['supports_multi_company'] ?? false);
+        $sessionCompanies = $supportsMultiCompany ? $companies : $companies->take(1)->values();
+        $sessionCompanyIds = $sessionCompanies->modelKeys();
         $token = $user->createToken(
             'horalia-mobile',
-            ['horalia-app', 'empresa:' . $company->getKey()]
+            array_merge(['horalia-app'], array_map(fn ($id) => 'empresa:' . $id, $sessionCompanyIds))
         );
 
         return response()->json([
@@ -54,7 +58,8 @@ class AppAuthenticationController extends Controller
                 'token' => $token->plainTextToken,
                 'token_type' => 'Bearer',
                 'user' => $this->userData($user),
-                'empresa' => $this->companyData($company),
+                'empresa' => $this->companyData($sessionCompanies->first()),
+                'empresas' => $sessionCompanies->map(fn (Empresa $company) => $this->companyData($company))->values(),
             ],
         ]);
     }
@@ -68,9 +73,9 @@ class AppAuthenticationController extends Controller
             return $this->error('La sesión no es válida.', 401);
         }
 
-        $companyId = $this->companyIdFromToken($token);
-        $company = $companyId ? $this->manageableActiveCompany($user, $companyId) : null;
-        if (!$company) {
+        $companyIds = $this->companyIdsFromToken($token);
+        $companies = $companyIds ? $this->manageableActiveCompanies($user, $companyIds) : collect();
+        if ($companies->isEmpty()) {
             return $this->error('Esta cuenta ya no tiene autorización para usar la aplicación.', 403);
         }
 
@@ -79,7 +84,8 @@ class AppAuthenticationController extends Controller
             'message' => 'Sesión válida.',
             'data' => [
                 'user' => $this->userData($user),
-                'empresa' => $this->companyData($company),
+                'empresa' => $this->companyData($companies->first()),
+                'empresas' => $companies->map(fn (Empresa $company) => $this->companyData($company))->values(),
             ],
         ]);
     }
@@ -100,30 +106,31 @@ class AppAuthenticationController extends Controller
         ]);
     }
 
-    private function manageableActiveCompany(User $user, ?int $companyId = null): ?Empresa
+    private function manageableActiveCompanies(User $user, ?array $companyIds = null)
     {
         if ((int) $user->profile !== 2
             || ($user->personal_id !== null && (!$user->personal || !$user->personal->activo))) {
-            return null;
+            return collect();
         }
 
         return $user->empresas()
             ->wherePivot('control_total', true)
             ->where('empresas.activa', true)
-            ->when($companyId, fn ($query) => $query->where('empresas.id', $companyId))
+            ->when($companyIds !== null, fn ($query) => $query->whereIn('empresas.id', $companyIds))
             ->orderBy('empresas.nombre')
-            ->first();
+            ->get();
     }
 
-    private function companyIdFromToken(PersonalAccessToken $token): ?int
+    private function companyIdsFromToken(PersonalAccessToken $token): array
     {
+        $ids = [];
         foreach ((array) $token->abilities as $ability) {
             if (is_string($ability) && preg_match('/^empresa:(\d+)$/', $ability, $matches)) {
-                return (int) $matches[1];
+                $ids[] = (int) $matches[1];
             }
         }
 
-        return null;
+        return array_values(array_unique($ids));
     }
 
     private function userData(User $user): array

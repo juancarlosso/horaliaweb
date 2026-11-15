@@ -79,6 +79,38 @@ class AppAuthenticationTest extends TestCase
         ])->assertUnprocessable()->assertJsonValidationErrors(['email']);
     }
 
+    public function test_legacy_login_stays_on_one_company_and_current_app_can_request_all_companies(): void
+    {
+        [$user, $firstCompany] = $this->administrator();
+        $secondCompany = $this->company();
+        $user->empresas()->attach($secondCompany->id, ['control_total' => true]);
+
+        $legacy = $this->postJson('/api/app/login', [
+            'email' => $user->email,
+            'password' => 'correct-password',
+        ])->assertOk();
+
+        $legacyCompanyId = $legacy->json('data.empresa.id');
+        $this->assertContains($legacyCompanyId, [$firstCompany->id, $secondCompany->id]);
+        $this->assertCount(1, $legacy->json('data.empresas'));
+        $legacyToken = $user->tokens()->latest('id')->firstOrFail();
+        $this->assertCount(2, $legacyToken->abilities);
+        $this->assertContains('empresa:'.$legacyCompanyId, $legacyToken->abilities);
+
+        $current = $this->postJson('/api/app/login', [
+            'email' => $user->email,
+            'password' => 'correct-password',
+            'supports_multi_company' => true,
+        ])->assertOk();
+
+        $this->assertCount(2, $current->json('data.empresas'));
+        $currentToken = $user->tokens()->latest('id')->firstOrFail();
+        $this->assertContains('empresa:'.$firstCompany->id, $currentToken->abilities);
+        $this->assertContains('empresa:'.$secondCompany->id, $currentToken->abilities);
+        $this->withToken($current->json('data.token'))->getJson('/api/app/me')
+            ->assertOk()->assertJsonCount(2, 'data.empresas');
+    }
+
     public function test_login_rejects_users_without_company_administrator_permissions(): void
     {
         $company = $this->company();

@@ -23,8 +23,12 @@ class AppAttendanceController extends Controller
     public function verifyPausePin(Request $request, AsistenciaPausaService $pauses): JsonResponse
     {
         $data = $request->validate(['pin' => ['required', 'regex:/^\\d{5}$/']]);
-        [$user, $companyId] = $this->authorizedCompany($request);
-        $personal = $this->personalForPin($data['pin'], $companyId);
+        [$user, $companyIds] = $this->authorizedCompany($request);
+        $matches = $this->personalsForPin($data['pin'], $companyIds);
+        if ($matches->count() > 1) {
+            return response()->json(['success' => false, 'message' => 'Este PIN está asignado a más de un colaborador de tus empresas. Contacta a tu administrador.'], 422);
+        }
+        $personal = $matches->first();
         if (! $personal) {
             return response()->json(['success' => false, 'message' => 'PIN no reconocido.'], 422);
         }
@@ -41,6 +45,7 @@ class AppAttendanceController extends Controller
             'user_id' => $user->getKey(),
             'token_id' => $token->getKey(),
             'personal_id' => $personal->getKey(),
+            'company_id' => $personal->empresa_id,
             'center_id' => $personal->centro_id,
             'pin_hash' => hash('sha256', $data['pin']),
         ], now()->addMinutes(2));
@@ -75,7 +80,7 @@ class AppAttendanceController extends Controller
             $rules['tipo'] = ['required', 'string', 'in:'.implode(',', array_keys(config('constantes.tiposPausa', [])))];
         }
         $data = $request->validate($rules);
-        [$user, $companyId] = $this->authorizedCompany($request);
+        [$user, $companyIds] = $this->authorizedCompany($request);
         $token = $user->currentAccessToken();
 
         $verification = Cache::lock($this->pauseProofLockKey($data['proof']), 15)->block(3, function () use ($data) {
@@ -88,6 +93,8 @@ class AppAttendanceController extends Controller
             return response()->json(['success' => false, 'message' => 'La validación del PIN venció. Inténtalo de nuevo.'], 422);
         }
 
+        $companyId = (int) ($verification['company_id'] ?? 0);
+        abort_unless(in_array($companyId, $companyIds, true), 403, 'La sesión ya no tiene acceso a esta empresa.');
         $personal = $this->personalForPin($data['pin'], $companyId);
         if (! $personal || (int) $personal->getKey() !== (int) ($verification['personal_id'] ?? 0)
             || (int) $personal->centro_id !== (int) ($verification['center_id'] ?? 0)) {
@@ -116,9 +123,12 @@ class AppAttendanceController extends Controller
     public function verifyPin(Request $request, RegistroAsistenciaService $registration, AttendanceLocationService $locations): JsonResponse
     {
         $data = $request->validate(['pin' => ['required', 'regex:/^\\d{5}$/']]);
-        [$user, $companyId] = $this->authorizedCompany($request);
-
-        $personal = $this->personalForPin($data['pin'], $companyId);
+        [$user, $companyIds] = $this->authorizedCompany($request);
+        $matches = $this->personalsForPin($data['pin'], $companyIds);
+        if ($matches->count() > 1) {
+            return response()->json(['success' => false, 'message' => 'Este PIN está asignado a más de un colaborador de tus empresas. Contacta a tu administrador.'], 422);
+        }
+        $personal = $matches->first();
 
         if (! $personal) {
             return response()->json(['success' => false, 'message' => 'PIN no reconocido.'], 422);
@@ -126,6 +136,7 @@ class AppAttendanceController extends Controller
         if (! $locations->parseCoordinates($personal->centro?->geolocalizacion)) {
             return response()->json(['success' => false, 'message' => 'El centro de trabajo del colaborador no tiene geolocalización configurada. Contacta a tu administrador.'], 422);
         }
+        $companyId = (int) $personal->empresa_id;
 
         try {
             $kind = $registration->preview($personal, ['empresa_id' => $companyId, 'centro_id' => $personal->centro_id]);
@@ -139,6 +150,7 @@ class AppAttendanceController extends Controller
             'user_id' => $user->getKey(),
             'token_id' => $token->getKey(),
             'personal_id' => $personal->getKey(),
+            'company_id' => $personal->empresa_id,
             'center_id' => $personal->centro_id,
             'pin_hash' => hash('sha256', $data['pin']),
             'kind' => $kind,
@@ -160,7 +172,7 @@ class AppAttendanceController extends Controller
             'longitud' => ['sometimes', 'required_with:latitud', 'nullable', 'numeric', 'between:-180,180'],
             'foto' => ['sometimes', 'nullable', 'string', 'max:4200000'],
         ]);
-        [$user, $companyId] = $this->authorizedCompany($request);
+        [$user, $companyIds] = $this->authorizedCompany($request);
         $token = $user->currentAccessToken();
 
         // A proof can be consumed only once, even when concurrent requests race.
@@ -175,6 +187,8 @@ class AppAttendanceController extends Controller
             return response()->json(['success' => false, 'message' => 'La validación del PIN venció. Inténtalo de nuevo.'], 422);
         }
 
+        $companyId = (int) ($verification['company_id'] ?? 0);
+        abort_unless(in_array($companyId, $companyIds, true), 403, 'La sesión ya no tiene acceso a esta empresa.');
         $personal = $this->personalForPin($data['pin'], $companyId);
 
         if (! $personal || (int) $personal->getKey() !== (int) ($verification['personal_id'] ?? 0)
@@ -226,37 +240,37 @@ class AppAttendanceController extends Controller
         ]);
     }
 
-    /** @return array{User, int} */
+    /** @return array{User, array<int, int>} */
     private function authorizedCompany(Request $request): array
     {
         $user = $request->user();
         $token = $user?->currentAccessToken();
         abort_unless($user instanceof User && $token instanceof PersonalAccessToken && $token->can('horalia-app'), 401);
 
-        $companyId = null;
+        $companyIds = [];
         foreach ((array) $token->abilities as $ability) {
             if (is_string($ability) && preg_match('/^empresa:(\\d+)$/', $ability, $matches)) {
-                $companyId = (int) $matches[1];
-                break;
+                $companyIds[] = (int) $matches[1];
             }
         }
-        abort_unless($companyId, 403, 'La sesión no tiene una empresa asignada.');
+        $companyIds = array_values(array_unique($companyIds));
+        abort_unless($companyIds, 403, 'La sesión no tiene una empresa asignada.');
 
         $user->loadMissing('personal');
-        $company = $user->empresas()
+        $companies = $user->empresas()
             ->wherePivot('control_total', true)
             ->where('empresas.activa', true)
-            ->whereKey($companyId)
-            ->first();
+            ->whereIn('empresas.id', $companyIds)
+            ->get();
         abort_unless(
             (int) $user->profile === 2
                 && (! $user->personal_id || $user->personal?->activo)
-                && $company,
+                && $companies->isNotEmpty(),
             403,
             'Esta cuenta ya no tiene autorización para usar el reloj checador.'
         );
 
-        return [$user, $companyId];
+        return [$user, $companies->modelKeys()];
     }
 
     private function proofKey(string $proof): string
@@ -274,6 +288,18 @@ class AppAttendanceController extends Controller
             ->whereHas('empresa', fn ($query) => $query->where('activa', true))
             ->whereHas('centro', fn ($query) => $query->where('activo', true)->whereColumn('centros.empresa_id', 'personal.empresa_id'))
             ->first();
+    }
+
+    private function personalsForPin(string $pin, array $companyIds)
+    {
+        return Personal::query()
+            ->with(['empresa', 'centro'])
+            ->where('pin', $pin)
+            ->where('activo', true)
+            ->whereIn('empresa_id', $companyIds)
+            ->whereHas('empresa', fn ($query) => $query->where('activa', true))
+            ->whereHas('centro', fn ($query) => $query->where('activo', true)->whereColumn('centros.empresa_id', 'personal.empresa_id'))
+            ->get();
     }
 
     private function pauseData($pause, Personal $personal): array

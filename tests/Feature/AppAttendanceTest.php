@@ -19,6 +19,91 @@ class AppAttendanceTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_legacy_app_is_limited_to_one_company_while_current_app_marks_across_companies(): void
+    {
+        [$user, $firstCompany] = $this->administrator();
+        $secondCompany = Empresa::query()->create([
+            'rfc' => strtoupper(fake()->unique()->bothify('????######???')),
+            'razon_social' => 'Segunda empresa móvil',
+            'activa' => true,
+        ]);
+        $user->empresas()->attach($secondCompany->id, ['control_total' => true]);
+
+        $weekday = Carbon::now('America/Mexico_City')->dayOfWeekIso;
+        $employees = [];
+        foreach ([[$firstCompany, '11111'], [$secondCompany, '22222']] as [$company, $pin]) {
+            $center = Centro::query()->create([
+                'empresa_id' => $company->id,
+                'nombre' => 'Centro '.$company->id,
+                'activo' => true,
+                'geolocalizacion' => '19.4326,-99.1332',
+                'timezone' => 'America/Mexico_City',
+            ]);
+            $employee = Personal::query()->create([
+                'empresa_id' => $company->id,
+                'centro_id' => $center->id,
+                'nombre' => 'Colaborador '.$company->id,
+                'pin' => $pin,
+                'activo' => true,
+                'laborados' => (string) $weekday,
+            ]);
+            $employee->horarios()->create([
+                'dia' => $weekday,
+                'entrada' => '08:00:00',
+                'salida' => '17:00:00',
+            ]);
+            $employees[$company->id] = $employee;
+        }
+        $this->travelTo(Carbon::now('America/Mexico_City')->setTime(9, 0));
+
+        $legacyLogin = $this->postJson('/api/app/login', [
+            'email' => $user->email,
+            'password' => 'correct-password',
+        ])->assertOk();
+        $legacyToken = $legacyLogin->json('data.token');
+        $legacyCompanyId = (int) $legacyLogin->json('data.empresa.id');
+        $otherCompanyId = $legacyCompanyId === (int) $firstCompany->id
+            ? (int) $secondCompany->id
+            : (int) $firstCompany->id;
+        $otherPin = $employees[$otherCompanyId]->pin;
+        $this->assertDatabaseHas('personal', ['pin' => $otherPin, 'empresa_id' => $otherCompanyId, 'activo' => true]);
+        $this->assertSame(1, Personal::query()->where('pin', $otherPin)->where('activo', true)
+            ->where('empresa_id', $otherCompanyId)
+            ->whereHas('empresa', fn ($query) => $query->where('activa', true))
+            ->whereHas('centro', fn ($query) => $query->where('activo', true)->whereColumn('centros.empresa_id', 'personal.empresa_id'))
+            ->count());
+
+        $this->withToken($legacyToken)->postJson('/api/app/attendance/verify-pin', ['pin' => $otherPin])
+            ->assertUnprocessable()->assertJsonPath('message', 'PIN no reconocido.');
+
+        Auth::forgetGuards();
+        $currentLogin = $this->postJson('/api/app/login', [
+            'email' => $user->email,
+            'password' => 'correct-password',
+            'supports_multi_company' => true,
+        ])->assertOk();
+        $this->assertCount(2, $currentLogin->json('data.empresas'));
+        $currentToken = $currentLogin->json('data.token');
+        Auth::forgetGuards();
+        $verified = $this->withToken($currentToken)
+            ->postJson('/api/app/attendance/verify-pin', ['pin' => $otherPin])
+            ->assertOk()->assertJsonPath('data.employee', $employees[$otherCompanyId]->nombre);
+
+        $this->mock(AttendancePhotoService::class)
+            ->shouldReceive('uploadBase64Jpeg')->once()->andReturn('asistencias/test/legacy-multi-company.jpg');
+        $this->withToken($currentToken)->postJson('/api/app/attendance/mark', [
+            'pin' => $otherPin,
+            'proof' => $verified->json('data.proof'),
+            'latitud' => 19.4326,
+            'longitud' => -99.1332,
+            'foto' => 'data:image/jpeg;base64,ZmFrZQ==',
+        ])->assertOk()->assertJsonPath('data.employee', $employees[$otherCompanyId]->nombre);
+
+        $this->assertDatabaseHas('asistencias', [
+            'personal_id' => $employees[$otherCompanyId]->id,
+        ]);
+    }
+
     public function test_mobile_attendance_uses_the_pin_personal_center_and_records_through_shared_service(): void
     {
         [$user, $company] = $this->administrator();

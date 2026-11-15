@@ -15,7 +15,8 @@ class ReporteIncidenciasController extends Controller
 
     public function index(Request $request, ReporteIncidenciasService $service)
     {
-        $companies = $this->companiesFor($request);
+        abort_unless(in_array((int) $request->user()->profile, [1, 2], true), 403);
+        $companies = $this->companiesFor($request, true);
         $companyIds = $companies->modelKeys();
         $selectedCompanyId = $this->selectedCompanyForFilter($request, $companies);
         $startDate = $request->input('desde', now()->startOfMonth()->toDateString());
@@ -44,17 +45,19 @@ class ReporteIncidenciasController extends Controller
             'typeColors' => [
                 'retardos' => '#F59E0B', 'posibles_faltas' => '#EF4444', 'salidas_pendientes' => '#06B6D4',
                 'vacaciones' => '#8B5CF6', 'vacaciones_trabajadas' => '#10B981', 'festivos_trabajados' => '#4F6EF7',
+                'incapacidades' => '#E11D48', 'incapacidades_trabajadas' => '#BE123C',
             ],
         ]);
     }
 
     public function export(Request $request, ReporteIncidenciasService $service, ReporteIncidenciasExport $exporter)
     {
+        abort_unless(in_array((int) $request->user()->profile, [1, 2], true), 403);
         $filters = $request->validate([
             'empresa_id' => ['required', 'integer', 'min:1'], 'desde' => ['required', 'date'], 'hasta' => ['required', 'date', 'after_or_equal:desde'],
             'tipos' => ['required', 'array', 'min:1'], 'tipos.*' => ['required', 'string', 'in:'.implode(',', ReporteIncidenciasService::TYPES)],
         ]);
-        $companyId = (int) $filters['empresa_id']; abort_unless(in_array($companyId, $this->companyIdsFor($request), true), 403);
+        $companyId = (int) $filters['empresa_id']; abort_unless(in_array($companyId, $this->companyIdsFor($request, true), true), 403);
         $types = array_values(array_unique($filters['tipos']));
         $rows = $service->generate($companyId, $filters['desde'], $filters['hasta'], $types)->all();
         $company = Empresa::query()->findOrFail($companyId);

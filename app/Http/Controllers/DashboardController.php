@@ -30,6 +30,7 @@ class DashboardController extends Controller
         'pausas' => ['label' => 'Pausas', 'icon' => 'mug-hot', 'group' => 'Operación'],
         'reloj-checador' => ['label' => 'Reloj Checador', 'icon' => 'tablet-screen-button', 'group' => 'Operación'],
         'vacaciones' => ['label' => 'Vacaciones', 'icon' => 'umbrella-beach', 'group' => 'Operación'],
+        'incapacidades' => ['label' => 'Incapacidades', 'icon' => 'briefcase-medical', 'group' => 'Operación'],
         'reportes-general' => ['label' => 'General', 'icon' => 'chart-line', 'group' => 'REPORTES'],
         'reportes-incidencias' => ['label' => 'Incidencias', 'icon' => 'triangle-exclamation', 'group' => 'REPORTES'],
         'reportes-departamento' => ['label' => 'Por Departamento', 'icon' => 'chart-pie', 'group' => 'REPORTES'],
@@ -42,6 +43,8 @@ class DashboardController extends Controller
         if (! $user || ! in_array((int) $user->profile, [2, 3], true) || ! $user->personal) {
             unset($sections['pausas']);
         }
+        if (! $user || ! in_array((int) $user->profile, [1, 2], true)) unset($sections['incapacidades']);
+        if (! $user || ! in_array((int) $user->profile, [1, 2], true)) unset($sections['reportes-incidencias']);
 
         return $sections;
     }
@@ -113,6 +116,9 @@ class DashboardController extends Controller
                 ->map(function (Empresa $company) use ($stripe) {
                     $cards = [];
                     try {
+                        if ($company->metodo_pago === 'TRANSFERENCIA') {
+                            return ['empresa' => $company, 'cards' => [], 'pending_payment_method_id' => null, 'automatic_pending' => false];
+                        }
                         $cards = $stripe->cards($company);
                     } catch (Throwable $exception) {
                         Log::warning('No se pudieron cargar las tarjetas para el pago pendiente.', [

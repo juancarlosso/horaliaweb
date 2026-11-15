@@ -19,6 +19,8 @@ class ReporteIncidenciasExport
         'vacaciones' => 7,
         'vacaciones_trabajadas' => 8,
         'festivos_trabajados' => 9,
+        'incapacidades' => 7,
+        'incapacidades_trabajadas' => 8,
     ];
 
     public function generate(array $rows, Empresa $company, string $from, string $through, array $types): string

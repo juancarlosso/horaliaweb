@@ -22,8 +22,11 @@ class PaymentMethodController extends Controller
         $empresa = $empresas->firstWhere('id', $empresaId) ?? ($empresas->count() === 1 ? $empresas->first() : null);
         $cards = [];
         $stripeError = null;
+        $conceptoTransferencia = $empresa?->metodo_pago === 'TRANSFERENCIA'
+            ? 'HORALIA '.$empresa->referenciaTransferencia()
+            : null;
 
-        if ($empresa && $stripe->ready()) {
+        if ($empresa && $empresa->metodo_pago === 'TARJETA' && $stripe->ready()) {
             try {
                 $cards = $stripe->cards($empresa);
                 $cardIds = array_column($cards, 'id');
@@ -40,17 +43,62 @@ class PaymentMethodController extends Controller
             }
         }
 
-        return view('payment-methods.index', compact('empresas', 'empresa', 'cards', 'stripeError') + [
+        return view('payment-methods.index', compact('empresas', 'empresa', 'cards', 'stripeError', 'conceptoTransferencia') + [
             'navigation' => DashboardController::navigation(),
             'activeSection' => null,
-            'stripeReady' => $stripe->ready(),
-            'publishableKey' => $stripe->publishableKey(),
+            'canChangeMethod' => true,
+            'stripeReady' => $empresa?->metodo_pago === 'TARJETA' && $stripe->ready(),
+            'publishableKey' => $empresa?->metodo_pago === 'TARJETA' ? $stripe->publishableKey() : null,
         ]);
+    }
+
+    public function updateMode(Request $request)
+    {
+        $this->authorizeProfile($request);
+        $data = $request->validate([
+            'empresa_id' => ['required', 'integer', 'exists:empresas,id'],
+            'metodo_pago' => ['required', 'in:TARJETA,TRANSFERENCIA'],
+        ]);
+        $empresa = $this->authorizedCompany($request);
+
+        if ($data['metodo_pago'] === 'TRANSFERENCIA' && $empresa->metodo_pago !== 'TRANSFERENCIA'
+            && (!filled(config('constantes.pagos_transferencia.beneficiario'))
+                || !filled(config('constantes.pagos_transferencia.banco'))
+                || preg_match('/^\d{18}$/', trim((string) config('constantes.pagos_transferencia.clabe'))) !== 1
+                || !filter_var(config('constantes.pagos_transferencia.correo_admin'), FILTER_VALIDATE_EMAIL))) {
+            return back()->withInput()->withErrors(['metodo_pago' => 'Configura beneficiario, banco, CLABE válida de 18 dígitos y correo administrativo antes de habilitar transferencias.']);
+        }
+
+        $updated = DB::transaction(function () use ($empresa, $data): bool {
+            $locked = Empresa::query()->whereKey($empresa->id)->lockForUpdate()->firstOrFail();
+            if ($locked->metodo_pago === $data['metodo_pago']) return true;
+
+            $cycle = $locked->fecha_renovacion?->toDateString();
+            $hasPendingStripe = $cycle && $locked->intentosPago()
+                ->whereDate('fecha_renovacion', $cycle)->where('resultado', 'pendiente')->exists();
+            $hasPendingTransfer = $locked->transferencias()->where('estado', 'pendiente_de_confirmar')->exists();
+            if ($hasPendingStripe || $hasPendingTransfer) return false;
+
+            $locked->forceFill(['metodo_pago' => $data['metodo_pago']])->save();
+            if ($locked->metodo_pago === 'TRANSFERENCIA') $locked->referenciaTransferencia();
+            return true;
+        }, 3);
+
+        if (!$updated) {
+            return back()->withInput()->withErrors(['metodo_pago' => 'Resuelve primero el cobro o comprobante pendiente antes de cambiar la modalidad.']);
+        }
+
+        $message = $data['metodo_pago'] === 'TRANSFERENCIA'
+            ? 'La empresa quedó configurada para pagar por transferencia.'
+            : 'La empresa quedó configurada para pagar con tarjeta. Las tarjetas guardadas se conservaron.';
+
+        return redirect()->route('payment-methods.index', ['empresa_id' => $empresa->id])->with('status', $message);
     }
 
     public function setupIntent(Request $request, StripeCardService $stripe)
     {
         $empresa = $this->authorizedCompany($request);
+        abort_unless($empresa->metodo_pago === 'TARJETA', 409);
         abort_unless($stripe->ready(), 503, 'Stripe no está configurado.');
 
         try {
@@ -69,6 +117,7 @@ class PaymentMethodController extends Controller
     public function destroy(Request $request, StripeCardService $stripe, string $paymentMethod)
     {
         $empresa = $this->authorizedCompany($request);
+        abort_unless($empresa->metodo_pago === 'TARJETA', 409);
         abort_unless(preg_match('/^pm_[A-Za-z0-9]+$/', $paymentMethod) === 1, 404);
 
         if (IntentoPago::query()
@@ -99,6 +148,7 @@ class PaymentMethodController extends Controller
     public function makeDefault(Request $request, StripeCardService $stripe, string $paymentMethod)
     {
         $empresa = $this->authorizedCompany($request);
+        abort_unless($empresa->metodo_pago === 'TARJETA', 409);
         abort_unless(preg_match('/^pm_[A-Za-z0-9]+$/', $paymentMethod) === 1, 404);
 
         try {
@@ -117,6 +167,7 @@ class PaymentMethodController extends Controller
     public function completeSetup(Request $request, StripeCardService $stripe)
     {
         $empresa = $this->authorizedCompany($request);
+        abort_unless($empresa->metodo_pago === 'TARJETA', 409);
         $data = $request->validate([
             'setup_intent_id' => ['required', 'string', 'regex:/^seti_[A-Za-z0-9]+$/'],
             'consent' => ['accepted'],

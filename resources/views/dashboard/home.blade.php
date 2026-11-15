@@ -231,8 +231,13 @@
                 @php($modalId = 'membership-payment-' . $company->id)
                 <div class="alert alert-danger membership-alert" role="alert" id="membership-alert-{{ $company->id }}">
                     <div><strong>Pago pendiente de la membresía de Horalia</strong><br>{{ $company->nombre }} · Renovación vencida el {{ $company->fecha_renovacion->format('d/m/Y') }}</div>
-                    <button class="btn-hr btn-primary-hr" type="button" data-open-membership-modal="{{ $modalId }}">Pagar ${{ number_format((float) $company->precio, 2) }}</button>
+                    @if($company->metodo_pago === 'TRANSFERENCIA')
+                        <a class="btn-hr btn-primary-hr" href="{{ route('transferencias.upload-form', $company->id) }}">Subir comprobante · ${{ number_format((float) $company->precio, 2) }}</a>
+                    @else
+                        <button class="btn-hr btn-primary-hr" type="button" data-open-membership-modal="{{ $modalId }}">Pagar ${{ number_format((float) $company->precio, 2) }}</button>
+                    @endif
                 </div>
+                @if($company->metodo_pago === 'TRANSFERENCIA') @continue @endif
                 <div class="membership-modal" id="{{ $modalId }}" role="dialog" aria-modal="true" aria-labelledby="{{ $modalId }}-title" hidden>
                     <div class="membership-modal-card">
                         <div class="membership-modal-head">

@@ -16,6 +16,7 @@ class MembershipPaymentController extends Controller
         $company = (int) $request->user()->profile === 1
             ? \App\Models\Empresa::query()->findOrFail($empresa)
             : $request->user()->empresas()->whereKey($empresa)->firstOrFail();
+        abort_unless($company->metodo_pago === 'TARJETA', 409, 'La empresa está configurada para pagar por transferencia.');
         abort_unless($stripe->ready(), 503, 'El proveedor de pagos no está disponible.');
 
         $data = $request->validate([
@@ -62,6 +63,7 @@ class MembershipPaymentController extends Controller
         $company = (int) $request->user()->profile === 1
             ? \App\Models\Empresa::query()->findOrFail($empresa)
             : $request->user()->empresas()->whereKey($empresa)->firstOrFail();
+        abort_unless($company->metodo_pago === 'TARJETA', 409, 'La empresa está configurada para pagar por transferencia.');
         $data = $request->validate([
             'payment_intent_id' => ['required', 'string', 'regex:/^pi_[A-Za-z0-9]+$/'],
         ]);

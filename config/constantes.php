@@ -5,6 +5,25 @@ return [
     'tipo_iconos' => 'fa-solid',
     'precio_mensual_por_empresa_mxn' => 150,
     'tasa_iva' => 16,
+    'pagos_transferencia' => [
+        // Completar con los datos bancarios reales antes de habilitar esta modalidad.
+        'beneficiario' => 'JUAN CARLOS SALINAS OJEDA',
+        'banco' => 'SANTANDER',
+        'clabe' => '014180565132930732',
+        'cuenta' => '56513293073',
+        'correo_admin' => 'juan.carlos@solventia.com.mx',
+        'max_kb' => 10240,
+        'mail_attach_max_kb' => 4096,
+        'horario' => [
+            'timezone' => 'America/Mexico_City',
+            'dias' => 'Lunes a Viernes',
+            'abre' => '09:00',
+            'cierra' => '18:00',
+            'inhabiles' => 'Sábados, domingos y días festivos',
+        ],
+        'terminos_version' => 'transferencias-v1',
+        'terminos' => 'El importe debe coincidir exactamente con la mensualidad vigente. Los excedentes no se aplicarán automáticamente a otras mensualidades y cualquier diferencia se revisará conforme a las condiciones aplicables. La revisión puede tomar hasta 48 horas hábiles; presentar el comprobante no confirma el pago ni renueva el servicio. El servicio puede suspenderse conforme a las reglas vigentes mientras el pago permanece pendiente.',
+    ],
     'video_como_funciona_youtube' => 'https://youtu.be/TdkJnSW34to',
     'promociones_footer' => [
         ['headline' => '💻 ¿Necesitas software a tu medida?', 'copy' => 'Creamos sistemas y aplicaciones para tu negocio.', 'cta' => '¡Hablemos! →'],
@@ -113,6 +132,7 @@ return [
         'CN01' => 'Nómina',
     ],
     'formas_pago_sat' => [
+        '03' => 'Transferencia electrónica de fondos',
         '04' => 'Tarjeta de crédito',
         '28' => 'Tarjeta de débito',
     ],

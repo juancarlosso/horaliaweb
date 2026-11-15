@@ -56,7 +56,7 @@ class EnviarAvisosRenovacion extends Command
 
                 try {
                     Mail::to($email, (string) $administrador->name)
-                        ->send(new AvisoRenovacionProximaMail($fecha->format('d/m/Y')));
+                        ->send(new AvisoRenovacionProximaMail($fecha->format('d/m/Y'), $empresa));
                     $enviados++;
                 } catch (Throwable $exception) {
                     $errores++;

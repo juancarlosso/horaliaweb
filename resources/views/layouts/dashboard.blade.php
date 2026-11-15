@@ -137,6 +137,9 @@
                     <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-chart-line" aria-hidden="true"></i></span><span class="nav-text">Resumen</span>
                 </a>
             </div>
+            <div class="nav-li">
+                <a href="{{ route('transferencias.admin.index') }}" class="nav-lnk {{ request()->routeIs('transferencias.admin.*') ? 'active' : '' }}" data-sidebar-tooltip="Validar Transferencias"><span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-building-columns" aria-hidden="true"></i></span><span class="nav-text">Validar Transferencias</span></a>
+            </div>
         @endif
         @foreach(['Organización', 'Operación', 'REPORTES'] as $group)
             @if(!$isRegularProfile || $group === 'Operación')
@@ -144,7 +147,7 @@
                 @foreach($navigation as $slug => $item)
                     @if($item['group'] === $group && (!$isRegularProfile || in_array($slug, ['asistencia', 'pausas'], true)) && ($slug !== 'reloj-checador' || $canManageChecador))
                         <div class="nav-li">
-                            <a href="{{ $slug === 'empresas' ? route('empresas.index') : ($slug === 'festivos' ? route('festivos.index') : ($slug === 'vacaciones' ? route('vacaciones.index') : ($slug === 'pausas' ? route('pausas.index') : ($slug === 'reloj-checador' ? route('checador.index') : ($slug === 'reportes-general' ? route('reportes.general') : ($slug === 'reportes-incidencias' ? route('reportes.incidencias') : ($slug === 'reportes-departamento' ? route('reportes.departamento') : route('dashboard.module', ['section' => $slug])))))))) }}" class="nav-lnk {{ $activeSection === $slug ? 'active' : '' }}" @if($activeSection === $slug) aria-current="page" @endif data-sidebar-tooltip="{{ $item['label'] }}">
+                            <a href="{{ $slug === 'empresas' ? route('empresas.index') : ($slug === 'festivos' ? route('festivos.index') : ($slug === 'vacaciones' ? route('vacaciones.index') : ($slug === 'incapacidades' ? route('incapacidades.index') : ($slug === 'pausas' ? route('pausas.index') : ($slug === 'reloj-checador' ? route('checador.index') : ($slug === 'reportes-general' ? route('reportes.general') : ($slug === 'reportes-incidencias' ? route('reportes.incidencias') : ($slug === 'reportes-departamento' ? route('reportes.departamento') : route('dashboard.module', ['section' => $slug]))))))))) }}" class="nav-lnk {{ $activeSection === $slug ? 'active' : '' }}" @if($activeSection === $slug) aria-current="page" @endif data-sidebar-tooltip="{{ $item['label'] }}">
                                 <span class="nav-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-{{ $item['icon'] }}" aria-hidden="true"></i></span><span class="nav-text">{{ $item['label'] }}</span>
                             </a>
                         </div>

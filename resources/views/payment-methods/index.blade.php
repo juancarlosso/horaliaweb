@@ -8,7 +8,9 @@
     .pm-heading p,.pm-muted { margin:0; color:var(--body-text-muted); font-size:.875rem; line-height:1.6; }
     .pm-feedback { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(239,68,68,.2); border-radius:.625rem; color:#b42318; background:rgba(239,68,68,.07); font-size:.85rem; }
     .pm-success { color:#087f5b; border-color:rgba(16,185,129,.22); background:rgba(16,185,129,.08); }
-    .pm-company { max-width:480px; margin-bottom:1.25rem; }
+    .pm-company { display:flex; align-items:flex-end; gap:.75rem; flex-wrap:wrap; margin-bottom:1.25rem; }
+    .pm-company-field { display:grid; gap:.35rem; width:min(100%,480px); }
+    .pm-company-field .hr-input { width:100%; }
     .pm-list { display:grid; gap:.75rem; margin:1rem 0 1.25rem; }
     .pm-card { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.1rem; border:1px solid var(--body-border); border-radius:.75rem; background:var(--card-bg); }
     .pm-card-copy { display:flex; align-items:center; gap:.9rem; }
@@ -23,6 +25,37 @@
     .pm-consent { display:flex; align-items:flex-start; gap:.6rem; color:var(--body-text-muted); font-size:.84rem; line-height:1.55; }
     .pm-consent input { margin-top:.2rem; }
     .pm-empty { padding:1.25rem; border:1px dashed var(--body-border); border-radius:.75rem; color:var(--body-text-muted); text-align:center; }
+    .pm-transfer-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:2rem; align-items:start; }
+    .pm-transfer-notice { text-align:left; }
+    .pm-transfer-notice h3 { color:var(--body-text); }
+    .pm-transfer-notice ul { padding-left:1.25rem; line-height:1.6; }
+    @media(max-width:767px) { .pm-transfer-grid { grid-template-columns:1fr; } }
+    .pm-config-head { display:flex; align-items:center; gap:1rem; }
+    .pm-icon { display:grid; place-items:center; width:44px; height:44px; flex:none; border-radius:12px; color:#6240e8; background:#eeeaff; font-size:1.1rem; }
+    .pm-company-field { flex:1 1 280px; width:auto; }
+    .pm-options { display:flex; gap:.5rem; flex-wrap:wrap; }
+    .pm-option { display:flex; align-items:center; gap:.55rem; padding:.7rem 1rem; border:1px solid #dcdff0; border-radius:.65rem; color:#202344; cursor:pointer; background:#fff; font-size:.85rem; font-weight:700; }
+    .pm-option:has(input:checked) { border-color:#7656fa; background:#f2efff; color:#4b22c6; box-shadow:0 0 0 1px #7656fa; }
+    .pm-option input { accent-color:#623be7; }
+    .pm-status { display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; margin:0 0 1.25rem; padding:.8rem 1rem; border:1px solid #c9f0d4; border-radius:.65rem; color:#14652e; background:#e8f8ed; }
+    .pm-transfer-grid { gap:1rem; align-items:stretch; }
+    .pm-transfer-panel { overflow:hidden; border:1px solid #e8e5fa; border-radius:.85rem; background:#fff; box-shadow:0 5px 18px rgba(70,48,155,.08); text-align:left; }
+    .pm-panel-head { display:flex; align-items:center; gap:.8rem; padding:1rem 1.2rem; background:#f1efff; }
+    .pm-panel-head h3 { margin:0; color:#4c25c7; font-size:1.12rem; font-weight:800; }
+    .pm-panel-head p { margin:.15rem 0 0; color:#665e99; font-size:.8rem; }
+    .pm-panel-body { padding:1rem 1.25rem; }
+    .pm-notice-list { display:grid; gap:.8rem; list-style:none; padding:0; margin:0 0 1.1rem; color:#272a46; font-size:.88rem; line-height:1.45; }
+    .pm-notice-list li { display:flex; gap:.8rem; }
+    .pm-notice-list i { width:20px; flex:none; color:#6944eb; font-size:1.05rem; text-align:center; padding-top:.15rem; }
+    .pm-bank { background:linear-gradient(145deg,#fafaff,#f1efff); }
+    .pm-bank-row { display:grid; grid-template-columns:minmax(130px, 40%) 1fr; border-bottom:1px solid #e2dff3; font-size:.85rem; }
+    .pm-bank-row span,.pm-bank-row strong { padding:.65rem .4rem; overflow-wrap:anywhere; }
+    .pm-bank-row span { color:#37316d; } .pm-bank-row strong { color:#20213b; }
+    .pm-bank-row i { width:24px; color:#6944eb; }
+    .pm-concept { margin-top:1rem; padding:1rem; border:1px solid #987cff; border-radius:.75rem; color:#4a27bc; background:#f3f0ff; }
+    .pm-concept strong { font-size:.82rem; } .pm-concept-inner { display:flex; align-items:center; gap:.75rem; margin-top:.55rem; }
+    .pm-concept-value { flex:1; margin:0; padding:.5rem; border-radius:.55rem; background:#e2d9ff; color:#5f35e5; text-align:center; font-size:1.3rem; font-weight:800; overflow-wrap:anywhere; }
+    @media(max-width:575px) { .pm-concept-inner { flex-wrap:wrap; } .pm-bank-row { grid-template-columns:1fr; } .pm-bank-row strong { padding-top:0; } }
     .pm-stripe-logo { display:block; width:120px; max-width:32vw; height:auto; flex:none; }
     .pm-loading { position:fixed; inset:0; z-index:10000; display:grid; place-items:center; padding:1rem; background:rgba(15,19,38,.58); backdrop-filter:blur(3px); }
     .pm-loading[hidden] { display:none; }
@@ -36,29 +69,82 @@
 
 <section class="pm-page">
     <header class="pm-heading">
-        <div><h1>Métodos de Pago</h1><p>Administra las tarjetas que podrán utilizarse para realizar cobros a cada empresa.</p></div>
+        <div><h1>Métodos de Pago</h1><p>Consulta el método asignado a cada empresa y administra las opciones disponibles.</p></div>
         <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
     </header>
 
     @if($errors->has('stripe')) <div class="pm-feedback" role="alert">{{ $errors->first('stripe') }}</div> @endif
+    @if($errors->has('metodo_pago')) <div class="pm-feedback" role="alert">{{ $errors->first('metodo_pago') }}</div> @endif
 
     <div class="card-hr mb-1rem">
-        <div class="card-hd"><div><h2 class="card-title-hr">Tarjetas por empresa</h2><p class="card-subtitle-hr">Cada empresa mantiene sus propias tarjetas en Stripe.</p></div><img class="pm-stripe-logo" src="{{ asset('assets/images/stripe.svg') }}" alt="Powered by Stripe"></div>
+        <div class="card-hd"><div class="pm-config-head"><span class="pm-icon"><i class="fa-solid fa-gear" aria-hidden="true"></i></span><div><h2 class="card-title-hr">Configuración de pago</h2><p class="card-subtitle-hr">Selecciona la empresa y define su método de pago.</p></div></div></div>
         <div class="card-bd">
             @if($empresas->isEmpty())
                 <div class="pm-empty">Tu usuario todavía no tiene empresas asignadas.</div>
             @else
-                <form method="GET" action="{{ route('payment-methods.index') }}" class="pm-company">
-                    <label class="form-label-hr" for="empresa_id">Empresa</label>
-                    <select class="hr-input select2" id="empresa_id" name="empresa_id" onchange="this.form.submit()" required>
-                        <option value="" disabled @selected(!$empresa)>Selecciona una empresa</option>
-                        @foreach($empresas as $item)
-                            <option value="{{ $item->id }}" @selected($empresa?->id === $item->id)>{{ $item->nombre ?: 'Empresa #' . $item->id }}</option>
-                        @endforeach
-                    </select>
-                </form>
+                <div class="pm-company">
+                    <form method="GET" action="{{ route('payment-methods.index') }}" class="pm-company-field">
+                        <label class="form-label-hr" for="empresa_id">Empresa</label>
+                        <select class="hr-input select2" id="empresa_id" name="empresa_id" onchange="this.form.submit()" required>
+                            <option value="" disabled @selected(!$empresa)>Selecciona una empresa</option>
+                            @foreach($empresas as $item)
+                                <option value="{{ $item->id }}" @selected($empresa?->id === $item->id)>{{ $item->nombre ?: 'Empresa #' . $item->id }}</option>
+                            @endforeach
+                        </select>
+                    </form>
+
+                    @if($empresa && $canChangeMethod)
+                        <form id="payment-mode-form" method="POST" action="{{ route('payment-methods.mode') }}">
+                            @csrf @method('PUT')
+                            <input type="hidden" name="empresa_id" value="{{ $empresa->id }}">
+                        </form>
+                        <div class="pm-company-field">
+                            <span class="form-label-hr">Modalidad de pago</span>
+                            <div class="pm-options">
+                                <label class="pm-option"><input type="radio" name="metodo_pago" value="TARJETA" form="payment-mode-form" onchange="this.form.requestSubmit()" @checked($empresa->metodo_pago === 'TARJETA') required><i class="fa-regular fa-credit-card" aria-hidden="true"></i> Tarjeta (Débito/Crédito)</label>
+                                <label class="pm-option"><input type="radio" name="metodo_pago" value="TRANSFERENCIA" form="payment-mode-form" onchange="this.form.requestSubmit()" @checked($empresa->metodo_pago === 'TRANSFERENCIA')><i class="fa-solid fa-building-columns" aria-hidden="true"></i> Transferencia bancaria</label>
+                            </div>
+                        </div>
+                    @endif
+                </div>
 
                 @if($empresa)
+                    <div class="pm-status"><span><i class="fa-regular fa-circle-check" aria-hidden="true"></i> <strong>Modalidad actual:</strong> {{ $empresa->metodo_pago === 'TRANSFERENCIA' ? 'Transferencia bancaria' : 'Tarjeta' }}</span><span>Aplica para las próximas renovaciones.</span></div>
+                    @if($empresa->metodo_pago === 'TRANSFERENCIA')
+                        <div class="pm-transfer-grid">
+                            <section class="pm-transfer-panel">
+                                <div class="pm-panel-head"><span class="pm-icon"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i></span><div><h3>¡ IMPORTANTE !</h3><p>Considera lo siguiente para realizar tu pago:</p></div></div>
+                                <div class="pm-panel-body"><ul class="pm-notice-list">
+                                    <li><i class="fa-solid fa-tag" aria-hidden="true"></i><span><strong>Concepto obligatorio:</strong> escribe exactamente <strong>{{ $conceptoTransferencia }}</strong> en el campo «Concepto» de la transferencia.</span></li>
+                                    <li><i class="fa-solid fa-coins" aria-hidden="true"></i><span><strong>Importe exacto:</strong> transfiere solo el importe del periodo; los excedentes no se aplican automáticamente a otras mensualidades.</span></li>
+                                    <li><i class="fa-regular fa-clock" aria-hidden="true"></i><span><strong>Validación del pago:</strong> la revisión puede tomar hasta <strong>48 horas hábiles</strong> después de recibir el comprobante.</span></li>
+                                    <li><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i><span><strong>Comprobante:</strong> estará disponible para subirlo al llegar la fecha de renovación.</span></li>
+                                    <li><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><span><strong>Confirmación:</strong> subir el comprobante no confirma el pago ni renueva el servicio.</span></li>
+                                    <li><i class="fa-regular fa-calendar" aria-hidden="true"></i><span><strong>Suspensión:</strong> el servicio puede suspenderse al agotar cinco intentos automáticos fallidos.</span></li>
+                                    <li><i class="fa-regular fa-clock" aria-hidden="true"></i><span><strong>Horario de revisión:</strong>
+                                        @if(filled(config('constantes.pagos_transferencia.horario.dias')) && filled(config('constantes.pagos_transferencia.horario.abre')) && filled(config('constantes.pagos_transferencia.horario.cierra')))
+                                            {{ config('constantes.pagos_transferencia.horario.dias') }}, de {{ config('constantes.pagos_transferencia.horario.abre') }} a {{ config('constantes.pagos_transferencia.horario.cierra') }} ({{ config('constantes.pagos_transferencia.horario.timezone') }}).
+                                            @if(filled(config('constantes.pagos_transferencia.horario.inhabiles'))) Días inhábiles: {{ config('constantes.pagos_transferencia.horario.inhabiles') }}. @endif
+                                        @else
+                                            Aún no está configurado.
+                                        @endif
+                                    </span></li>
+                                </ul></div>
+                            </section>
+                            <section class="pm-transfer-panel pm-bank">
+                                <div class="pm-panel-head"><span class="pm-icon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></span><div><h3>Pago por transferencia</h3><p>Realiza tu pago con los siguientes datos:</p></div></div>
+                                <div class="pm-panel-body">
+                                    <div class="pm-bank-row"><span><i class="fa-regular fa-user" aria-hidden="true"></i> Beneficiario</span><strong>{{ config('constantes.pagos_transferencia.beneficiario') ?: 'Pendiente de configuración' }}</strong></div>
+                                    <div class="pm-bank-row"><span><i class="fa-solid fa-building-columns" aria-hidden="true"></i> Banco</span><strong>{{ config('constantes.pagos_transferencia.banco') ?: 'Pendiente de configuración' }}</strong></div>
+                                    <div class="pm-bank-row"><span><i class="fa-regular fa-credit-card" aria-hidden="true"></i> CLABE interbancaria</span><strong>{{ config('constantes.pagos_transferencia.clabe') ?: 'Pendiente de configuración' }}</strong></div>
+                                    @if(config('constantes.pagos_transferencia.cuenta'))<div class="pm-bank-row"><span><i class="fa-regular fa-credit-card" aria-hidden="true"></i> Cuenta</span><strong>{{ config('constantes.pagos_transferencia.cuenta') }}</strong></div>@endif
+                                    <div class="pm-bank-row"><span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Fecha de pago</span><strong>{{ $empresa->fecha_renovacion?->format('d/m/Y') ?? 'No disponible' }}</strong></div>
+                                    <div class="pm-concept"><strong>Concepto permanente de tu empresa</strong><div class="pm-concept-inner"><p class="pm-concept-value" id="payment-transfer-concept">{{ $conceptoTransferencia }}</p><button class="btn-hr btn-outline-hr" type="button" onclick="navigator.clipboard.writeText(document.getElementById('payment-transfer-concept').textContent.trim())"><i class="fa-regular fa-copy" aria-hidden="true"></i> Copiar</button></div></div>
+                                </div>
+                            </section>
+                        </div>
+                    @else
+                    <img class="pm-stripe-logo" src="{{ asset('assets/images/stripe.svg') }}" alt="Powered by Stripe">
                     @if(!$stripeReady)
                         <div class="pm-feedback" role="status">La conexión con Stripe aún no está configurada. Contacta al administrador.</div>
                     @else
@@ -104,6 +190,7 @@
                                 <button class="btn-hr btn-outline-hr" id="cancel-card" type="button">Cancelar</button>
                             </div>
                         </form>
+                    @endif
                     @endif
                 @endif
             @endif

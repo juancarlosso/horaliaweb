@@ -50,7 +50,6 @@
             <form method="POST" action="{{ $isEdit ? route('empresas.update', $empresa) : route('empresas.store') }}" enctype="multipart/form-data">
                 @csrf
                 @if($isEdit) @method('PUT') @endif
-
                 <div class="tab-bar mb-1rem" role="tablist" aria-label="Datos de la empresa">
                     <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-company-tab="general">Datos Generales</button>
                     <button class="tab-btn" type="button" role="tab" aria-selected="false" data-company-tab="facturacion">Datos de Facturación</button>

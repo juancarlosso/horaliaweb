@@ -28,7 +28,7 @@
             <div><strong>Periodo de renovación</strong><div>{{ $payment->fecha_renovacion?->format('d/m/Y') ?? '—' }}</div></div>
             <div><strong>Importe</strong><div>${{ number_format((float) $payment->cantidad, 2) }} {{ strtoupper($payment->moneda) }}</div></div>
             <div><strong>Estado</strong><div>{{ $payment->resultado === 'exitoso' ? 'Exitoso' : ($payment->resultado === 'fallido' ? 'Rechazado' : 'Pendiente de confirmación') }}</div></div>
-            <div class="payment-method-field {{ $payment->resultado === 'exitoso' ? 'is-successful' : '' }}"><strong>Método de pago</strong><div>{{ $payment->tarjeta_marca && $payment->tarjeta_ultimos4 ? ucfirst($payment->tarjeta_marca) . ' ****' . $payment->tarjeta_ultimos4 : 'No hay datos de marca y últimos cuatro dígitos disponibles.' }}</div></div>
+            <div class="payment-method-field {{ $payment->resultado === 'exitoso' ? 'is-successful' : '' }}"><strong>Método de pago</strong><div>{{ $payment->origen === 'transferencia' ? 'Transferencia bancaria' : ($payment->tarjeta_marca && $payment->tarjeta_ultimos4 ? ucfirst($payment->tarjeta_marca) . ' ****' . $payment->tarjeta_ultimos4 : 'No hay datos de marca y últimos cuatro dígitos disponibles.') }}</div></div>
             @if($payment->resultado !== 'exitoso')<div><strong>Referencia técnica</strong><div>{{ $payment->transaccion_id ?: '—' }}</div></div>@endif
             @if($payment->resultado !== 'exitoso')
                 <div class="payment-reason-field"><strong>Motivo</strong><div>{{ $payment->resultado === 'fallido' ? $safeFailureReason : 'El proveedor aún no confirma el resultado del cobro.' }}</div></div>

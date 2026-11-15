@@ -17,6 +17,7 @@ class Empresa extends Model
                 : now()->startOfDay();
 
             $empresa->precio ??= config('constantes.precio_mensual_por_empresa_mxn');
+            $empresa->metodo_pago ??= 'TARJETA';
             $empresa->fecha_inicio ??= $fechaInicio->toDateString();
             $empresa->fecha_renovacion ??= $fechaInicio->copy()->addMonthNoOverflow()->toDateString();
         });
@@ -47,6 +48,8 @@ class Empresa extends Model
         'stripe_default_payment_method_id',
         'intentos',
         'cancelar_al_renovar',
+        'metodo_pago',
+        'referencia_transferencia',
     ];
 
     protected function casts(): array
@@ -61,6 +64,7 @@ class Empresa extends Model
             'fecha_renovacion' => 'date',
             'intentos' => 'integer',
             'cancelar_al_renovar' => 'boolean',
+            'metodo_pago' => 'string',
         ];
     }
 
@@ -99,6 +103,20 @@ class Empresa extends Model
     public function intentosPago()
     {
         return $this->hasMany(IntentoPago::class);
+    }
+
+    public function transferencias()
+    {
+        return $this->hasMany(TransferenciaPago::class);
+    }
+
+    public function referenciaTransferencia(): string
+    {
+        if ($this->referencia_transferencia) return $this->referencia_transferencia;
+        $letra = chr(random_int(65, 90));
+        $reference = 'H'.$this->id.$letra;
+        $this->forceFill(['referencia_transferencia' => $reference])->save();
+        return $reference;
     }
 
     public function logoUrl(): ?string

@@ -22,12 +22,14 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\PersonalDocumentoController;
 use App\Http\Controllers\VacacionesController;
+use App\Http\Controllers\IncapacidadesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\ReporteAsistenciaController;
 use App\Http\Controllers\ReporteIncidenciasController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\TransferenciaPagoController;
 use App\Http\Middleware\EnsureActiveLinkedPersonal;
 use App\Http\Middleware\ValidateChecadorToken;
 use Illuminate\Support\Facades\Route;
@@ -75,11 +77,17 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
         ->name('novedades.show');
     Route::post('/home/empresas/{empresa}/membresia/pagar', [MembershipPaymentController::class, 'pay'])->whereNumber('empresa')->name('membership.pay');
     Route::post('/home/empresas/{empresa}/membresia/confirmar', [MembershipPaymentController::class, 'confirm'])->whereNumber('empresa')->name('membership.confirm');
+    Route::get('/home/empresas/{empresa}/transferencia', [TransferenciaPagoController::class, 'uploadForm'])->whereNumber('empresa')->name('transferencias.upload-form');
+    Route::post('/home/empresas/{empresa}/transferencia', [TransferenciaPagoController::class, 'upload'])->whereNumber('empresa')->middleware('throttle:10,1')->name('transferencias.upload');
+    Route::get('/home/admin/transferencias', [TransferenciaPagoController::class, 'adminIndex'])->name('transferencias.admin.index');
+    Route::get('/home/admin/transferencias/comprobantes/{proof}', [TransferenciaPagoController::class, 'reviewFile'])->whereNumber('proof')->name('transferencias.admin.file');
+    Route::post('/home/admin/transferencias/{transferencia}/revisar', [TransferenciaPagoController::class, 'review'])->whereNumber('transferencia')->name('transferencias.admin.review');
     Route::get('/mi-perfil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/mi-perfil', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/mi-perfil/cambiar-contrasena', [ProfileController::class, 'editPassword'])->name('profile.password.edit');
     Route::put('/mi-perfil/cambiar-contrasena', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
     Route::get('/mi-perfil/metodos-de-pago', [PaymentMethodController::class, 'index'])->name('payment-methods.index');
+    Route::put('/mi-perfil/metodos-de-pago/modalidad', [PaymentMethodController::class, 'updateMode'])->name('payment-methods.mode');
     Route::get('/mi-perfil/suscripcion', [SubscriptionController::class, 'index'])->name('subscription.index');
     Route::post('/mi-perfil/empresas/{empresa}/suscripcion/cancelar', [SubscriptionController::class, 'cancel'])->whereNumber('empresa')->name('subscription.cancel');
     Route::delete('/mi-perfil/empresas/{empresa}/suscripcion/cancelacion', [SubscriptionController::class, 'resume'])->whereNumber('empresa')->name('subscription.resume');
@@ -134,6 +142,12 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::post('/home/vacaciones/preview', [VacacionesController::class, 'preview'])->name('vacaciones.preview');
     Route::post('/home/vacaciones', [VacacionesController::class, 'store'])->name('vacaciones.store');
     Route::delete('/home/vacaciones/{vacacion}', [VacacionesController::class, 'cancel'])->whereNumber('vacacion')->name('vacaciones.cancel');
+    Route::get('/home/incapacidades', [IncapacidadesController::class, 'index'])->name('incapacidades.index');
+    Route::get('/home/incapacidades/create', [IncapacidadesController::class, 'create'])->name('incapacidades.create');
+    Route::post('/home/incapacidades', [IncapacidadesController::class, 'store'])->middleware('throttle:20,1')->name('incapacidades.store');
+    Route::delete('/home/incapacidades/{incapacidad}', [IncapacidadesController::class, 'cancel'])->whereNumber('incapacidad')->name('incapacidades.cancel');
+    Route::get('/home/incapacidades/{incapacidad}/comprobantes/{comprobante}', [IncapacidadesController::class, 'showFile'])->whereNumber('incapacidad')->whereNumber('comprobante')->name('incapacidades.comprobantes.show');
+    Route::get('/home/incapacidades/{incapacidad}/comprobantes/{comprobante}/descargar', [IncapacidadesController::class, 'downloadFile'])->whereNumber('incapacidad')->whereNumber('comprobante')->name('incapacidades.comprobantes.download');
     Route::get('/home/personal/create', [PersonalController::class, 'create'])->name('personal.create');
     Route::post('/home/personal', [PersonalController::class, 'store'])->name('personal.store');
     Route::get('/home/personal/{personal}/edit', [PersonalController::class, 'edit'])->whereNumber('personal')->name('personal.edit');
@@ -165,7 +179,7 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::get('/home/reportes/asistencia/exportar', [ReporteAsistenciaController::class, 'export'])->name('reportes.asistencia.exportar');
     Route::get('/home/reportes/asistencias/{asistencia}/pausas', [ReporteAsistenciaController::class, 'pauseDetail'])->whereNumber('asistencia')->name('reportes.asistencia.pausas');
     Route::get('/home/{section}', [DashboardController::class, 'module'])
-        ->where('section', 'empresas|centros-de-trabajo|departamentos|puestos|horarios|personal|vacaciones|asistencia|reportes')
+        ->where('section', 'empresas|centros-de-trabajo|departamentos|puestos|horarios|personal|vacaciones|incapacidades|asistencia|reportes')
         ->name('dashboard.module');
 });
 

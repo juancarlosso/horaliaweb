@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\IntentoPago;
 use App\Models\Empresa;
+use App\Models\TransferenciaPago;
 use App\Services\PaymentInvoiceAmounts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -48,6 +49,8 @@ class PaymentHistoryController extends Controller
             'companies' => $companies,
             'navigation' => DashboardController::navigation(),
             'activeSection' => 'payment-history',
+            'transferCompanies' => Empresa::query()->whereIn('id', $companyIds)->where('metodo_pago', 'TRANSFERENCIA')->whereNotNull('fecha_renovacion')->whereDate('fecha_renovacion', '<=', today())->get(),
+            'transferStates' => TransferenciaPago::query()->whereIn('empresa_id', $companyIds)->get()->keyBy(fn ($row) => $row->empresa_id.':'.$row->fecha_renovacion->toDateString()),
         ]);
     }
 

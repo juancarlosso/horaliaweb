@@ -28,6 +28,15 @@
 <section class="payment-history">
     <h1>Historial de pagos</h1>
     <p class="subtitle">Pagos confirmados e intentos de cobro de tus empresas.</p>
+    @foreach($transferCompanies as $company)
+        @php($transfer = $transferStates->get($company->id.':'.$company->fecha_renovacion->toDateString()))
+        <div class="card-hr" style="padding:1rem;margin-bottom:.8rem"><strong>{{ $company->nombre }}</strong> · Transferencia para renovación del {{ $company->fecha_renovacion->format('d/m/Y') }} · ${{ number_format((float) ($transfer?->cantidad ?? $company->precio), 2) }} MXN
+            @if(!$transfer || in_array($transfer->estado, ['pendiente_de_pago', 'rechazado'], true)) <a class="btn-hr btn-primary-hr" href="{{ route('transferencias.upload-form', $company->id) }}">{{ $transfer?->estado === 'rechazado' ? 'Reemplazar comprobante' : 'Subir comprobante' }}</a>
+            @elseif($transfer->estado === 'pendiente_de_confirmar') <span class="payment-status pending">Pendiente de confirmar</span>
+            @elseif($transfer->estado === 'confirmado') <span class="payment-status success">Confirmado</span>@endif
+            @if($transfer?->estado === 'rechazado')<p>Motivo: {{ $transfer->motivo_rechazo }}</p>@endif
+        </div>
+    @endforeach
     <div class="card-hr">
         <form class="payment-filters" method="GET" action="{{ route('payment-history.index') }}">
             <label>Empresa

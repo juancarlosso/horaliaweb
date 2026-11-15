@@ -7,12 +7,13 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Empresa;
 
 class AvisoRenovacionProximaMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public string $renewalDate) {}
+    public function __construct(public string $renewalDate, public ?Empresa $empresa = null) {}
 
     public function envelope(): Envelope
     {
@@ -26,6 +27,8 @@ class AvisoRenovacionProximaMail extends Mailable
             text: 'emails.aviso-renovacion-proxima-text',
             with: [
                 'renewalDate' => $this->renewalDate,
+                'empresa' => $this->empresa,
+                'historyUrl' => route('payment-history.index'),
                 'appName' => config('app.name', 'Horalia'),
                 'logoUrl' => asset('assets/logos/logoLB.png'),
             ],

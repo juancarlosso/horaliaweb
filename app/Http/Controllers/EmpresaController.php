@@ -128,11 +128,12 @@ class EmpresaController extends Controller
 
         try {
             DB::transaction(function () use ($record, $data, $newLogoPath) {
-                $record->fill($data);
+                $locked = Empresa::query()->whereKey($record->id)->lockForUpdate()->firstOrFail();
+                $locked->fill($data);
                 if ($newLogoPath) {
-                    $record->logo = $newLogoPath;
+                    $locked->logo = $newLogoPath;
                 }
-                $record->save();
+                $locked->save();
             });
         } catch (Throwable $exception) {
             $this->deleteLogo($newLogoPath);

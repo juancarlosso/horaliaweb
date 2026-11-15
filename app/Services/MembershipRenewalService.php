@@ -48,6 +48,9 @@ class MembershipRenewalService
                 $empresa->forceFill(['activa' => false])->save();
                 return ['status' => 'canceled', 'empresa_id' => $empresa->id, 'fecha_fin' => $cycleDate];
             }
+            if ($empresa->metodo_pago === 'TRANSFERENCIA') {
+                return ['status' => 'transfer_pending', 'empresa_id' => $empresa->id, 'renewal_date' => $cycleDate];
+            }
             $existingSuccess = IntentoPago::query()
                 ->where('empresa_id', $empresa->id)
                 ->whereDate('fecha_renovacion', $cycleDate)
@@ -140,7 +143,7 @@ class MembershipRenewalService
                     ]);
 
                     if ($charge['outcome'] === 'succeeded') {
-                        $newDate = $empresa->fecha_renovacion->copy()->addMonthNoOverflow()->toDateString();
+                        $newDate = MembershipRenewalDate::next($empresa);
                         $empresa->forceFill([
                             'fecha_renovacion' => $newDate,
                             'intentos' => 0,
@@ -202,6 +205,7 @@ class MembershipRenewalService
     {
         $result = DB::transaction(function () use ($empresa, $paymentMethodId) {
             $locked = Empresa::query()->whereKey($empresa->id)->lockForUpdate()->firstOrFail();
+            abort_unless($locked->metodo_pago !== 'TRANSFERENCIA', 409, 'Esta empresa está configurada para pagar por transferencia.');
             if (!$locked->fecha_renovacion || $locked->fecha_renovacion->toDateString() > today()->toDateString()) {
                 return ['status' => 'not_due', 'message' => 'La membresía de esta empresa no tiene un pago pendiente.'];
             }
@@ -320,7 +324,7 @@ class MembershipRenewalService
                 return ['status' => 'failed', 'message' => $this->manualPaymentFailureMessage($charge)];
             }
 
-            $newDate = today()->addMonthNoOverflow()->toDateString();
+            $newDate = MembershipRenewalDate::next($locked);
             $locked->forceFill([
                 'activa' => true,
                 'intentos' => 0,
@@ -372,7 +376,7 @@ class MembershipRenewalService
             }
 
             if (($intent['status'] ?? null) === 'succeeded') {
-                $newDate = today()->addMonthNoOverflow()->toDateString();
+                $newDate = MembershipRenewalDate::next($locked);
                 $attempt->forceFill([
                     'resultado' => 'exitoso',
                     'descripcion' => 'Pago confirmado correctamente por el proveedor.',

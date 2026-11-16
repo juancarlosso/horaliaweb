@@ -13,7 +13,6 @@
     $selectedPosition = old('puesto_id', $empleado->puesto_id);
     $personalProfiles = config('constantes.perfilesPersonal', []);
     $selectedProfile = old('profile', $empleado->usuario?->profile ?? data_get($personalProfiles, 'empleado_regular.id'));
-    $fotoUrl = $empleado->fotoUrl();
     $centerOptionsJson = $centros->map(fn ($center) => ['id' => $center->id, 'empresa_id' => $center->empresa_id, 'nombre' => $center->nombre])->values()->toJson();
     $departmentOptionsJson = $departamentos->map(fn ($department) => ['id' => $department->id, 'empresa_id' => $department->empresa_id, 'nombre' => $department->nombre])->values()->toJson();
     $positionOptionsJson = $puestos->map(fn ($position) => ['id' => $position->id, 'empresa_id' => $position->empresa_id, 'nombre' => $position->nombre])->values()->toJson();
@@ -106,7 +105,7 @@
                 <div class="personal-photo-row mt-1rem">
                     <div class="personal-photo-preview" id="foto-preview">
                         <span>{{ mb_strtoupper(mb_substr(trim($empleado->nombre ?? ''), 0, 1)) ?: 'P' }}</span>
-                        @if($fotoUrl)<img src="{{ $fotoUrl }}" id="foto-preview-image" alt="Foto de perfil actual" onerror="this.remove()">@endif
+                        <img src="{{ $empleado->avatarUrl() }}" id="foto-preview-image" alt="Vista previa de la foto de perfil" onerror="this.remove()">
                     </div>
                     <div class="flex-grow-1">
                         <label class="form-label-hr" for="foto">Foto de perfil</label>

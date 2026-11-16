@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Helper\Wasabi;
+use App\Support\GraphoriaAvatar;
 
 class Personal extends Model
 {
@@ -72,6 +73,11 @@ class Personal extends Model
     public function pausas()
     {
         return $this->hasManyThrough(AsistenciaPausa::class, Asistencia::class, 'personal_id', 'asistencia_id');
+    }
+
+    public function avatarUrl(): string
+    {
+        return $this->fotoUrl() ?? GraphoriaAvatar::url($this->nombre);
     }
 
     public function fotoUrl(): ?string

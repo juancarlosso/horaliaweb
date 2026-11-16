@@ -55,10 +55,9 @@
                 @foreach($personal as $empleado)
                     @php
                         $initial = mb_strtoupper(mb_substr(trim($empleado->nombre ?? ''), 0, 1)) ?: 'P';
-                        $photoUrl = $empleado->fotoUrl();
                     @endphp
                     <tr>
-                        <td><div class="personal-person-cell"><div class="personal-avatar"><span>{{ $initial }}</span>@if($photoUrl)<img src="{{ $photoUrl }}" alt="" loading="lazy" onerror="this.remove()">@endif</div><div><div class="personal-name">{{ $empleado->nombre }} @unless($empleado->activo)<span class="company-rfc"> · Dado de baja</span>@endunless</div><div class="personal-code">{{ $empleado->codigo ?: 'Sin código' }}@if($empleado->fecha_baja) · Baja {{ $empleado->fecha_baja->format('d/m/Y H:i') }}@endif</div></div></div></td>
+                        <td><div class="personal-person-cell"><div class="personal-avatar"><span>{{ $initial }}</span><img src="{{ $empleado->avatarUrl() }}" alt="" loading="lazy" onerror="this.remove()"></div><div><div class="personal-name">{{ $empleado->nombre }} @unless($empleado->activo)<span class="company-rfc"> · Dado de baja</span>@endunless</div><div class="personal-code">{{ $empleado->codigo ?: 'Sin código' }}@if($empleado->fecha_baja) · Baja {{ $empleado->fecha_baja->format('d/m/Y H:i') }}@endif</div></div></div></td>
                         <td>{{ $empleado->email ?: '—' }}</td>
                         <td>{{ $empleado->empresa?->nombre ?? '—' }}</td>
                         <td>{{ $empleado->centro?->nombre ?? '—' }}</td>

@@ -150,13 +150,12 @@
                 @foreach($attendance as $record)
                     @php
                         $employee = $record->personal;
-                        $photoUrl = $employee?->fotoUrl();
                         $entryEvidenceUrl = $record->fotoEntradaUrl();
                         $exitEvidenceUrl = $record->fotoSalidaUrl();
                         $initial = mb_strtoupper(mb_substr(trim($employee?->nombre ?? ''), 0, 1)) ?: 'P';
                     @endphp
                     <tr>
-                        <td><div class="attendance-user"><div class="attendance-avatar"><span>{{ $initial }}</span>@if($photoUrl)<img src="{{ $photoUrl }}" alt="" loading="lazy" onerror="this.remove()">@endif</div><div><div class="attendance-user-name">{{ $employee?->nombre ?? 'No disponible' }}</div><div class="attendance-user-company">{{ $employee?->empresa?->nombre ?? '—' }}</div></div></div></td>
+                        <td><div class="attendance-user"><div class="attendance-avatar"><span>{{ $initial }}</span>@if($employee)<img src="{{ $employee->avatarUrl() }}" alt="" loading="lazy" onerror="this.remove()">@endif</div><div><div class="attendance-user-name">{{ $employee?->nombre ?? 'No disponible' }}</div><div class="attendance-user-company">{{ $employee?->empresa?->nombre ?? '—' }}</div></div></div></td>
                         <td>{{ $record->fecha?->format('d/m/Y') ?? '—' }}</td>
                         <td>{{ ($record->modalidad ?? 'PRESENCIAL') === 'HOME_OFFICE' ? 'Home Office' : 'Presencial' }}</td>
                         <td><div class="attendance-time-cell"><span>{{ $record->llegada?->format('H:i') ?? '—' }}</span>

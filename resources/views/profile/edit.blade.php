@@ -48,7 +48,6 @@
             @php
                 $workDayNumbers = array_map('intval', array_filter(explode('@', (string) $personal->laborados), fn ($day) => $day !== ''));
                 $personalSchedules = $personal->horarios->keyBy('dia');
-                $personalPhotoUrl = $personal->fotoUrl();
                 $sexLabels = ['masculino' => 'Masculino', 'femenino' => 'Femenino', 'otro' => 'Otro'];
                 $accessProfile = collect(config('constantes.perfilesPersonal', []))->first(fn ($profile) => (int) $profile['id'] === (int) $user->profile);
                 $timezoneName = $personal->centro?->timezone;
@@ -59,7 +58,7 @@
                     <div class="profile-employee-heading">
                         <div class="profile-employee-photo" aria-hidden="true">
                             <span>{{ mb_strtoupper(mb_substr(trim((string) $personal->nombre), 0, 1)) ?: 'P' }}</span>
-                            @if($personalPhotoUrl)<img src="{{ $personalPhotoUrl }}" alt="" width="76" height="76" onerror="this.remove()">@endif
+                            <img src="{{ $personal->avatarUrl() }}" alt="" width="76" height="76" onerror="this.remove()">
                         </div>
                         <div>
                             <h3 class="card-title-hr mb-1">{{ $personal->nombre ?: 'Sin nombre registrado' }}</h3>
@@ -132,9 +131,7 @@
                 <div class="profile-photo-row">
                     <div class="profile-photo" aria-hidden="true">
                         <span>{{ mb_strtoupper(mb_substr(trim($user->name), 0, 1)) }}</span>
-                        @if($user->personal?->foto)
-                            <img src="{{ $avatarUrl }}" alt="" width="80" height="80" onerror="this.remove()">
-                        @endif
+                        <img src="{{ $avatarUrl }}" alt="" width="80" height="80" onerror="this.remove()">
                     </div>
                     <div class="profile-photo-actions">
                         <input class="profile-file-input" id="foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="foto-ayuda foto-seleccionada">

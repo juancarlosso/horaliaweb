@@ -68,12 +68,12 @@
         .topbar-user-copy { display:flex; flex-direction:column; min-width:0; }
         .topbar-user-name { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.82rem; font-weight:700; color:var(--body-text); }
         .topbar-user-email { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.7rem; color:var(--body-text-muted); }
-        .account-avatar { display:block; width:36px; height:36px; flex:none; border:2px solid rgba(83,109,245,.18); border-radius:50%; object-fit:cover; background:#4f6ef7; }
+        .account-avatar { position:relative; display:grid; place-items:center; width:36px; height:36px; flex:none; overflow:hidden; border:2px solid rgba(83,109,245,.18); border-radius:50%; color:#fff; background:#4f6ef7; }
         .account-menu { width:260px; right:0; left:auto; }
         .account-menu .account-menu-content { padding:1rem; }
         .account-menu .account-menu-header { display:flex; align-items:center; gap:.875rem; min-width:0; margin-bottom:1rem; }
         .account-menu .account-menu-avatar { position:relative; display:grid; place-items:center; width:48px; height:48px; flex:none; overflow:hidden; border-radius:.875rem; color:#fff; background:linear-gradient(135deg,#4f6ef7,#8b5cf6); font-size:1.125rem; font-weight:800; }
-        .account-menu .account-menu-avatar img { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; }
+        .account-avatar img,.account-menu .account-menu-avatar img { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; }
         .account-menu .account-menu-copy { min-width:0; }
         .account-menu .account-menu-name { overflow:hidden; color:var(--body-text); font-size:.9375rem; font-weight:700; text-overflow:ellipsis; white-space:nowrap; }
         .account-menu .account-menu-email { overflow:hidden; color:var(--body-text-muted); font-size:.775rem; text-overflow:ellipsis; white-space:nowrap; }
@@ -255,18 +255,20 @@
                 <i class="theme-icon-light {{ config('constantes.tipo_iconos') }} fa-sun" aria-hidden="true"></i>
                 <i class="theme-icon-dark {{ config('constantes.tipo_iconos') }} fa-moon" aria-hidden="true"></i>
             </button>
+            @php($accountAvatarUrl = auth()->user()->avatarUrl())
             <button type="button" class="topbar-user btn-hr btn-ghost-hr" data-panel-toggle="account-panel" aria-label="Cuenta de {{ auth()->user()->name }}" aria-expanded="false">
                 <div class="topbar-user-copy"><span class="topbar-user-name">{{ auth()->user()->name }}</span><span class="topbar-user-email">{{ auth()->user()->email }}</span></div>
-                <img class="account-avatar" src="{{ auth()->user()->avatarUrl() }}" alt="Avatar de {{ auth()->user()->name }}" width="36" height="36" decoding="async">
+                <span class="account-avatar" aria-hidden="true">
+                    {{ mb_strtoupper(mb_substr(trim(auth()->user()->name), 0, 1)) }}
+                    <img src="{{ $accountAvatarUrl }}" alt="" width="36" height="36" decoding="async" onerror="this.remove()">
+                </span>
             </button>
             <div class="hr-panel panel-w260 account-menu" id="account-panel">
                 <div class="account-menu-content">
                     <div class="account-menu-header">
                         <div class="account-menu-avatar">
                             <span aria-hidden="true">{{ mb_strtoupper(mb_substr(trim(auth()->user()->name), 0, 1)) }}</span>
-                            @if(auth()->user()->personal?->foto)
-                                <img src="{{ auth()->user()->avatarUrl() }}" alt="Foto de {{ auth()->user()->name }}" width="48" height="48" decoding="async" onerror="this.remove()">
-                            @endif
+                            <img src="{{ $accountAvatarUrl }}" alt="" width="48" height="48" decoding="async" onerror="this.remove()">
                         </div>
                         <div class="account-menu-copy">
                             <div class="account-menu-name">{{ auth()->user()->name }}</div>

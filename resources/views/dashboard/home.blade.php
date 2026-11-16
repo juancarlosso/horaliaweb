@@ -103,12 +103,12 @@
 <section class="employee-dashboard">
     @if(!$personal)
         <div class="welcome-banner">
-            <div class="wb-avatar">{{ mb_strtoupper(mb_substr(trim(auth()->user()->name), 0, 1)) }}</div>
+            <div class="wb-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr(trim(auth()->user()->name), 0, 1)) }}<img class="position-absolute top-0 start-0 w-100 h-100 rounded-circle object-fit-cover" src="{{ auth()->user()->avatarUrl() }}" alt="" onerror="this.remove()"></div>
             <div class="wb-copy"><h1 class="wb-greeting">Hola, {{ auth()->user()->name }} 👋</h1><div class="wb-sub">No encontramos tu ficha de personal asociada. Contacta al administrador de tu empresa.</div></div>
         </div>
     @else
         <section class="welcome-banner" aria-labelledby="welcome-title">
-            <div class="wb-avatar">{{ mb_strtoupper(mb_substr(trim($personal->nombre ?: auth()->user()->name), 0, 1)) }}</div>
+            <div class="wb-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr(trim($personal->nombre ?: auth()->user()->name), 0, 1)) }}<img class="position-absolute top-0 start-0 w-100 h-100 rounded-circle object-fit-cover" src="{{ $personal->avatarUrl() }}" alt="" onerror="this.remove()"></div>
             <div class="wb-copy">
                 <h1 class="wb-greeting" id="welcome-title">Hola, {{ $personal->nombre ?: auth()->user()->name }} 👋</h1>
                 <div class="wb-sub">
@@ -278,7 +278,7 @@
         </div>
     @endif
     <header class="manager-banner">
-        <div class="manager-avatar">{{ mb_strtoupper(mb_substr(trim(auth()->user()->name), 0, 1)) }}</div>
+        <div class="manager-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr(trim(auth()->user()->name), 0, 1)) }}<img class="position-absolute top-0 start-0 w-100 h-100 rounded-circle object-fit-cover" src="{{ auth()->user()->avatarUrl() }}" alt="" onerror="this.remove()"></div>
         <div class="manager-banner-copy">
             <h1>Hola, {{ auth()->user()->name }} 👋</h1>
             <p>{{ $companyCount }} {{ $companyCount === 1 ? 'empresa asignada' : 'empresas asignadas' }} · <strong>{{ now()->locale('es')->translatedFormat('l, j \\d\\e F') }}</strong> · {{ $scheduledEmployeeCount }} {{ $scheduledEmployeeCount === 1 ? 'persona con jornada hoy' : 'personas con jornada hoy' }}</p>

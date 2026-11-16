@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Helper\Wasabi;
 use App\Notifications\QueuedResetPassword;
+use App\Support\GraphoriaAvatar;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -53,13 +53,7 @@ class User extends Authenticatable
 
     public function avatarUrl(): string
     {
-        $photoPath = $this->personal?->foto;
-
-        if ($photoPath && ($url = Wasabi::url($photoPath))) {
-            return $url;
-        }
-
-        return 'https://graphoria.dev/avatar?name=' . urlencode(trim($this->name)) . '&background=4f6ef7&color=ffffff&size=128';
+        return $this->personal?->fotoUrl() ?? GraphoriaAvatar::url($this->name);
     }
 
     public function sendPasswordResetNotification($token): void

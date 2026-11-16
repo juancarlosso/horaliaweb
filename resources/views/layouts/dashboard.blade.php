@@ -127,7 +127,7 @@
     <a class="sidebar-brand horalia-brand" href="{{ route('home') }}" aria-label="{{ config('app.name') }}, Home">
         <img src="{{ asset('assets/logos/logoLB.png') }}" alt="{{ config('app.name') }}">
     </a>
-    <button type="button" class="btn-icon-top sidebar-close-toggle" data-sidebar-mobile-toggle aria-label="Cerrar menú"><i class="{{ config('constantes.tipo_iconos') }} fa-xmark" aria-hidden="true"></i></button>
+    <button type="button" class="btn-icon-top sidebar-close-toggle" data-sidebar-mobile-close aria-label="Cerrar menú"><i class="{{ config('constantes.tipo_iconos') }} fa-xmark" aria-hidden="true"></i></button>
     <div class="sidebar-nav" id="sidebarNav">
         @php($isRegularProfile = (int) auth()->user()->profile === 3)
         @php($isCompanyAdmin = (int) auth()->user()->profile === 2)

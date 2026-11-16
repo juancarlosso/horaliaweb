@@ -26,6 +26,10 @@ const SidebarManager = {
     document.querySelectorAll('[data-sidebar-mobile-toggle]')
       .forEach(btn => btn.addEventListener('click', () => this.mobileToggle()));
 
+    // Explicit close control inside the mobile drawer
+    document.querySelectorAll('[data-sidebar-mobile-close]')
+      .forEach(btn => btn.addEventListener('click', () => this.mobileClose()));
+
     // Backdrop closes mobile drawer
     this.backdrop?.addEventListener('click', () => this.mobileClose());
 
@@ -100,8 +104,8 @@ const SidebarManager = {
    * inline expansion anyway).
    * ─────────────────────────────────────────────────────────────────── */
   _toggleGroup(btn) {
-    const navLi = btn.parentElement;           // the wrapping .nav-li
-    const body  = navLi?.nextElementSibling;   // the .nav-group-body
+    const navLi = btn.parentElement;
+    const body  = navLi?.nextElementSibling;
     if (!body || !body.classList.contains('nav-group-body')) return;
 
     if (this.sidebar.classList.contains('collapsed')) {

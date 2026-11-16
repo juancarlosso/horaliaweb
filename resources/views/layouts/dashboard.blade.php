@@ -103,12 +103,27 @@
         .module-placeholder h2 { margin:0 0 .55rem; color:var(--body-text); font-size:1.35rem; font-weight:800; }
         .module-placeholder p { margin:0; color:var(--body-text-muted); font-size:.9rem; line-height:1.65; }
         @media(max-width:900px) { .dashboard-start { grid-template-columns:1fr; } .start-item { min-height:auto; } }
-        @media(max-width:767px) { [data-sidebar-toggle] { display:none; } [data-sidebar-mobile-toggle] { display:flex; } .topbar-manual-link,.topbar-news-link { display:none; } }
-        @media(max-width:1024px) {
-            [data-sidebar-toggle] { display:none !important; }
-            [data-sidebar-mobile-toggle] { display:flex !important; }
-            .sidebar,.sidebar.collapsed { width:264px !important; transform:translateX(-100%); transition:transform .28s cubic-bezier(.4,0,.2,1); z-index:1200; }
-            .sidebar.mobile-open { transform:translateX(0) !important; overflow-y:auto; box-shadow:8px 0 40px rgba(0,0,0,.35); }
+        @media(max-width:767px) { .topbar-manual-link,.topbar-news-link { display:none; } }
+        @media (max-width:1024px), (max-width:1200px) and (orientation:landscape) and (pointer:coarse) {
+            [data-sidebar-toggle] { display:none; }
+            [data-sidebar-mobile-toggle] { display:flex; }
+            .sidebar.anim-sil {
+                /* The desktop entrance animation retains its final transform. */
+                animation:none;
+                width:min(264px, 90vw) !important;
+                height:100dvh;
+                visibility:hidden;
+                transform:translateX(-100%);
+                transition:transform .28s cubic-bezier(.4,0,.2,1), visibility 0s linear .28s;
+                z-index:1200;
+            }
+            .sidebar.anim-sil.mobile-open {
+                visibility:visible;
+                transition-delay:0s;
+            }
+            .sidebar .horalia-brand { padding-right:3.75rem; }
+            .sidebar .horalia-brand img { max-width:100%; }
+            .sidebar .sidebar-nav { min-height:0; padding-bottom:max(1rem, env(safe-area-inset-bottom)); }
             .sidebar.mobile-open .nav-text,.sidebar.mobile-open .brand-name,.sidebar.mobile-open .brand-tagline,.sidebar.mobile-open .nav-badge,.sidebar.mobile-open .sidebar-section { display:block !important; }
             .sidebar.mobile-open .nav-lnk { justify-content:flex-start !important; padding:.5625rem .875rem !important; }
             .sidebar.mobile-open .nav-chevron { display:flex !important; }
@@ -123,7 +138,7 @@
 <body>
 <div class="mobile-backdrop" aria-hidden="true"></div>
 <div id="sb-main-popup" role="menu" aria-hidden="true"></div>
-<nav class="sidebar anim-sil" aria-label="Navegación principal">
+<nav id="dashboard-sidebar" class="sidebar anim-sil" aria-label="Navegación principal">
     <a class="sidebar-brand horalia-brand" href="{{ route('home') }}" aria-label="{{ config('app.name') }}, Home">
         <img src="{{ asset('assets/logos/logoLB.png') }}" alt="{{ config('app.name') }}">
     </a>
@@ -224,7 +239,7 @@
     <header class="topbar" role="banner">
         <div class="topbar-left">
             <button type="button" class="btn-icon-top" data-sidebar-toggle aria-label="Contraer o expandir el menú"><i class="{{ config('constantes.tipo_iconos') }} fa-bars" aria-hidden="true"></i></button>
-            <button type="button" class="btn-icon-top" data-sidebar-mobile-toggle aria-label="Abrir menú"><i class="{{ config('constantes.tipo_iconos') }} fa-bars" aria-hidden="true"></i></button>
+            <button type="button" class="btn-icon-top" data-sidebar-mobile-toggle aria-controls="dashboard-sidebar" aria-expanded="false" aria-label="Abrir menú"><i class="{{ config('constantes.tipo_iconos') }} fa-bars" aria-hidden="true"></i></button>
             <nav class="breadcrumb-bar" aria-label="Ruta de navegación"><span>{{ config('app.name') }}</span><span class="bc-sep">/</span><span class="bc-current">{{ $pageTitle }}</span></nav>
         </div>
         <div class="topbar-right pos-rel">
@@ -297,7 +312,7 @@
 <script defer src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
 <script defer src="{{ asset('assets/vendor/select2/js/select2.min.js') }}"></script>
 <script defer src="{{ asset('assets/hrnexus/js/bootstrap.bundle.min.js') }}"></script>
-<script defer src="{{ asset('assets/hrnexus/js/hrnexus.min.js') }}"></script>
+<script defer src="{{ asset('assets/hrnexus/js/hrnexus.min.js') }}?v=dashboard-sidebar-2"></script>
 <script defer src="{{ asset('assets/vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

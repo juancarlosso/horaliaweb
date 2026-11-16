@@ -53,6 +53,7 @@ class PersonalController extends Controller
 
         $personal = Personal::query()
             ->with(['empresa', 'centro'])
+            ->withExists(['usuario as es_administrador' => fn ($query) => $query->where('profile', $this->administratorProfileId())])
             ->whereIn('empresa_id', $companyIds)
             ->when($selectedCompanyId, fn ($query) => $query->where('empresa_id', $selectedCompanyId))
             ->orderBy('nombre')

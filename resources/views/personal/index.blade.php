@@ -50,7 +50,7 @@
         <div class="card-hd"><div><h2 class="card-title-hr">Listado de personal</h2><p class="card-subtitle-hr">{{ $personal->total() }} {{ $personal->total() === 1 ? 'colaborador registrado' : 'colaboradores registrados' }}</p></div></div>
         @if($personal->count())
             <div class="table-wrap"><table class="bs-table hover">
-                <thead><tr><th>Colaborador</th><th>Correo electrónico</th><th>Empresa</th><th>Centro de trabajo</th><th>Sexo</th><th class="text-end">Acciones</th></tr></thead>
+                <thead><tr><th>Colaborador</th><th>Correo electrónico</th><th>Empresa</th><th>Centro de trabajo</th><th class="text-center">ADMIN</th><th class="text-end">Acciones</th></tr></thead>
                 <tbody>
                 @foreach($personal as $empleado)
                     @php
@@ -62,7 +62,11 @@
                         <td>{{ $empleado->email ?: '—' }}</td>
                         <td>{{ $empleado->empresa?->nombre ?? '—' }}</td>
                         <td>{{ $empleado->centro?->nombre ?? '—' }}</td>
-                        <td>{{ $empleado->sexo ? ucfirst($empleado->sexo) : '—' }}</td>
+                        <td class="text-center">
+                            @if($empleado->es_administrador)
+                                <span title="Es Administrador"><i class="{{ config('constantes.tipo_iconos') }} fa-user-crown" aria-hidden="true"></i><span class="visually-hidden">Es Administrador</span></span>
+                            @endif
+                        </td>
                         <td><div class="personal-actions">
                             @if(in_array($empleado->empresa_id, $manageableIds, true))
                                 <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('personal.edit', $empleado) }}" title="Editar" aria-label="Editar {{ $empleado->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-pen-to-square" aria-hidden="true"></i></a>

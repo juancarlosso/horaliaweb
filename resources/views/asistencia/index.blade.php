@@ -82,7 +82,12 @@
     @if(isset($holidayCommemorations) && $holidayCommemorations->isNotEmpty())
         <div class="alert alert-warning d-flex align-items-start gap-2" role="alert">
             <i class="{{ config('constantes.tipo_iconos') }} fa-triangle-exclamation mt-1" aria-hidden="true"></i>
-            <div><strong>Hoy es día festivo.</strong> {{ $holidayCommemorations->join(' · ') }}@if($todaySchedule && !$todaySchedule->trabaja_festivos) No tienes habilitado registrar asistencia en días festivos.@endif</div>
+            <div>
+                <div><strong>Hoy es día festivo.</strong> {{ $holidayCommemorations->join(' · ') }}</div>
+                @if($todaySchedule && !$todaySchedule->trabaja_festivos)
+                    <div class="mt-1">No tienes habilitado registrar asistencia en días festivos.</div>
+                @endif
+            </div>
         </div>
     @endif
     @if($canMarkAttendance)

@@ -42,6 +42,7 @@
         .swal2-title,.swal2-html-container { color:var(--body-text); }
         .horalia-brand { display:flex; align-items:center; justify-content:center; min-height:68px; }
         .horalia-brand img { display:block; width:166px; height:auto; }
+        .sidebar-close-toggle { display:none; position:absolute; top:.85rem; right:.85rem; z-index:1; }
         .sidebar-nav { padding-bottom:1rem; }
         .sidebar-section { margin-top:.5rem; }
         [data-sidebar-mobile-toggle] { display:none; }
@@ -108,9 +109,11 @@
             [data-sidebar-mobile-toggle] { display:flex !important; }
             .sidebar,.sidebar.collapsed { width:264px !important; transform:translateX(-100%); transition:transform .28s cubic-bezier(.4,0,.2,1); z-index:1200; }
             .sidebar.mobile-open { transform:translateX(0) !important; overflow-y:auto; box-shadow:8px 0 40px rgba(0,0,0,.35); }
-            .sidebar.mobile-open .nav-text,.sidebar.mobile-open .brand-name,.sidebar.mobile-open .brand-tagline,.sidebar.mobile-open .nav-badge,.sidebar.mobile-open .sidebar-section { display:block; }
-            .sidebar.mobile-open .nav-lnk { justify-content:flex-start; padding:.5625rem .875rem; }
-            .sidebar.mobile-open .nav-chevron { display:flex; }
+            .sidebar.mobile-open .nav-text,.sidebar.mobile-open .brand-name,.sidebar.mobile-open .brand-tagline,.sidebar.mobile-open .nav-badge,.sidebar.mobile-open .sidebar-section { display:block !important; }
+            .sidebar.mobile-open .nav-lnk { justify-content:flex-start !important; padding:.5625rem .875rem !important; }
+            .sidebar.mobile-open .nav-chevron { display:flex !important; }
+            .sidebar.mobile-open .nav-group-body.open { max-height:900px !important; pointer-events:auto !important; }
+            .sidebar.mobile-open .sidebar-close-toggle { display:flex; }
             .main-content,.main-content.sidebar-collapsed { margin-left:0 !important; }
         }
         @media(max-width:575px) { .dashboard-welcome { padding:1.4rem; } .topbar-user-copy { display:none; } .page-inner { padding-left:1rem; padding-right:1rem; } }
@@ -124,6 +127,7 @@
     <a class="sidebar-brand horalia-brand" href="{{ route('home') }}" aria-label="{{ config('app.name') }}, Home">
         <img src="{{ asset('assets/logos/logoLB.png') }}" alt="{{ config('app.name') }}">
     </a>
+    <button type="button" class="btn-icon-top sidebar-close-toggle" data-sidebar-mobile-toggle aria-label="Cerrar menú"><i class="{{ config('constantes.tipo_iconos') }} fa-xmark" aria-hidden="true"></i></button>
     <div class="sidebar-nav" id="sidebarNav">
         @php($isRegularProfile = (int) auth()->user()->profile === 3)
         @php($isCompanyAdmin = (int) auth()->user()->profile === 2)

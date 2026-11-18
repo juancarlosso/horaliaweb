@@ -270,8 +270,43 @@ class AttendanceCenterTimezoneTest extends TestCase
         $this->actingAs($administrator)->get(route('centros.edit', $center))
             ->assertOk()
             ->assertSee('value="America/Tijuana" selected', false)
+            ->assertSee('Geolocalización (latitud, longitud)')
             ->assertSee('Importante:')
             ->assertSee('Los registros anteriores conservarán sus fechas y horas originales.');
+    }
+
+    public function test_creating_and_updating_centers_requires_valid_coordinates(): void
+    {
+        $administrator = User::factory()->create(['profile' => 2]);
+        $company = Empresa::query()->create(['rfc' => 'AAA010101AAA', 'razon_social' => 'Empresa de prueba']);
+        $administrator->empresas()->attach($company->id, ['control_total' => true]);
+        $center = $this->center($company->id, 'America/Mexico_City');
+        $legacyAddress = 'Constitucion y ramon figueroa';
+        $center->update(['geolocalizacion' => $legacyAddress]);
+        $data = [
+            'empresa_id' => $company->id,
+            'nombre' => 'Centro de trabajo',
+            'activo' => true,
+            'timezone' => 'America/Mexico_City',
+        ];
+        $this->actingAs($administrator);
+
+        foreach ([null, $legacyAddress, '19.42698', '19.42, -99.16, 0', '90.1, -99.16', '19.42, -180.1'] as $invalid) {
+            $payload = $data + ['geolocalizacion' => $invalid];
+            $this->post(route('centros.store'), $payload)->assertSessionHasErrors('geolocalizacion');
+            $this->put(route('centros.update', $center), $payload)->assertSessionHasErrors('geolocalizacion');
+        }
+        $this->assertDatabaseCount('centros', 1);
+        $this->assertSame($legacyAddress, $center->fresh()->geolocalizacion);
+
+        $index = route('centros.index', ['empresa_id' => $company->id]);
+        $this->post(route('centros.store'), $data + ['geolocalizacion' => '19.42698, -99.16767'])
+            ->assertRedirect($index);
+        $this->assertDatabaseHas('centros', ['nombre' => $data['nombre'], 'geolocalizacion' => '19.42698, -99.16767']);
+
+        $this->put(route('centros.update', $center), $data + ['geolocalizacion' => '0, 180'])
+            ->assertRedirect($index);
+        $this->assertSame('0, 180', $center->fresh()->geolocalizacion);
     }
 
     public function test_center_with_attendance_shows_friendly_deletion_alert_and_keeps_foreign_key_guard(): void

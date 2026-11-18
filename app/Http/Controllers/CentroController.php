@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Concerns\ManagesCompanyCatalogs;
 use App\Models\Asistencia;
 use App\Models\Centro;
+use App\Services\AttendanceLocationService;
 use App\Support\HoraliaTimezones;
+use Closure;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class CentroController extends Controller
 {
     use ManagesCompanyCatalogs;
+
+    public function __construct(private readonly AttendanceLocationService $locations) {}
 
     public function index(Request $request)
     {
@@ -143,13 +147,20 @@ class CentroController extends Controller
             'empresa_id' => ['required', 'integer', 'exists:empresas,id'],
             'nombre' => ['required', 'string', 'max:255'],
             'activo' => ['required', 'boolean'],
-            'geolocalizacion' => ['required', 'string', 'max:255'],
+            'geolocalizacion' => [
+                'bail', 'required', 'string', 'max:255',
+                function (string $attribute, string $value, Closure $fail): void {
+                    if ($this->locations->parseCoordinates($value) === null) {
+                        $fail('Ingresa una latitud entre -90 y 90 y una longitud entre -180 y 180, separadas por una coma. Usa punto decimal, por ejemplo 19.42698, -99.16767.');
+                    }
+                },
+            ],
             'timezone' => ['required', 'string', 'timezone', 'max:64'],
         ], [
             'empresa_id.required' => 'Selecciona la empresa.',
             'nombre.required' => 'Escribe el nombre del centro de trabajo.',
             'activo.required' => 'Selecciona el estatus del centro.',
-            'geolocalizacion.required' => 'Indica la geolocalización del centro.',
+            'geolocalizacion.required' => 'Ingresa la latitud y la longitud del centro de trabajo.',
             'timezone.required' => 'Selecciona la zona horaria del centro.',
         ]);
     }

@@ -48,12 +48,13 @@
                         @error('activo')<span class="catalog-field-error">{{ $message }}</span>@enderror
                     </div>
                     <div class="col-12">
-                        <label class="form-label-hr" for="geolocalizacion">Geolocalización <span class="text-danger" aria-hidden="true">*</span></label>
+                        <label class="form-label-hr" for="geolocalizacion">Geolocalización (latitud, longitud) <span class="text-danger" aria-hidden="true">*</span></label>
                         <div class="catalog-map-row">
-                            <input class="hr-input @error('geolocalizacion') catalog-input-error @enderror" id="geolocalizacion" name="geolocalizacion" type="text" value="{{ old('geolocalizacion', $centro->geolocalizacion) }}" maxlength="255" required placeholder="latitud, longitud, ejemplo: 19.42698287419, -99.1676693843">
+                            <input class="hr-input @error('geolocalizacion') catalog-input-error @enderror" id="geolocalizacion" name="geolocalizacion" type="text" value="{{ old('geolocalizacion', $centro->geolocalizacion) }}" maxlength="255" required placeholder="19.42698, -99.16767" aria-describedby="geolocalizacion-help @error('geolocalizacion') geolocalizacion-error @enderror" @error('geolocalizacion') aria-invalid="true" @enderror>
                             <button class="btn-hr btn-outline-hr catalog-map-button" type="button" id="open-map"><i class="{{ config('constantes.tipo_iconos') }} fa-map-location-dot" aria-hidden="true"></i> Ver en Maps</button>
                         </div>
-                        @error('geolocalizacion')<span class="catalog-field-error">{{ $message }}</span>@enderror
+                        @error('geolocalizacion')<span class="catalog-field-error" id="geolocalizacion-error">{{ $message }}</span>@enderror
+                        <p class="catalog-help" id="geolocalizacion-help">Captura primero la latitud y después la longitud. Usa una coma como separador y punto para los decimales.</p>
                     </div>
                     <div class="col-lg-6 col-md-8">
                         <label class="form-label-hr" for="timezone">Zona horaria <span class="text-danger" aria-hidden="true">*</span></label>

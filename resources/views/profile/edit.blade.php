@@ -4,9 +4,6 @@
 <style>
     .page-inner { max-width:none; }
     .profile-page { width:100%; }
-    .profile-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin:0 0 1.25rem; }
-    .profile-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .profile-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
     .profile-photo-row { display:flex; align-items:center; gap:1.125rem; padding-bottom:1.25rem; margin-bottom:1.25rem; border-bottom:1px solid var(--body-border); }
     .profile-photo { position:relative; display:grid; place-items:center; width:80px; height:80px; flex:none; overflow:hidden; border-radius:1rem; color:#fff; background:linear-gradient(135deg,#4f6ef7,#8b5cf6); font-size:1.75rem; font-weight:800; }
     .profile-photo img { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; }
@@ -33,16 +30,11 @@
     .profile-workday-row { display:flex; justify-content:space-between; align-items:center; gap:1rem; padding:.75rem .9rem; border:1px solid var(--body-border); border-radius:.65rem; }
     .profile-workday-name { color:var(--body-text); font-weight:650; }
     .profile-workday-detail { color:var(--body-text-muted); font-size:.84rem; text-align:right; }
-    @media(max-width:575px) { .profile-heading { align-items:stretch; flex-direction:column; } .profile-photo-row { align-items:flex-start; } .profile-photo { width:64px; height:64px; border-radius:.875rem; font-size:1.4rem; } }
+    @media(max-width:575px) { .profile-photo-row { align-items:flex-start; } .profile-photo { width:64px; height:64px; border-radius:.875rem; font-size:1.4rem; } }
     @media(max-width:575px) { .profile-readonly-grid { grid-template-columns:1fr; } .profile-workday-row { align-items:flex-start; flex-direction:column; gap:.15rem; } .profile-workday-detail { text-align:left; } }
 </style>
 
 <section class="profile-page">
-    <header class="profile-heading">
-        <div><h1>Mi Perfil</h1><p>{{ $isEmployeeProfile ? 'Consulta los datos de tu ficha de personal y tu horario laboral.' : 'Actualiza tu nombre y la foto que aparece en tu cuenta.' }}</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
-    </header>
-
     @if($isEmployeeProfile)
         @if($personal)
             @php
@@ -156,7 +148,6 @@
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h9"/></svg>
                         Guardar cambios
                     </button>
-                    <a class="btn-hr btn-outline-hr" href="{{ route('home') }}">Cancelar</a>
                 </div>
             </form>
         </div>

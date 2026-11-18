@@ -5,12 +5,9 @@
 <style>
     .page-inner { max-width:none; }
     .catalog-page { width:100%; }
-    .catalog-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .catalog-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .catalog-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
-    .catalog-toolbar { display:flex; align-items:end; gap:1rem; margin-bottom:1.25rem; }
+    .catalog-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem 1rem; margin-bottom:1rem; }
     .catalog-filter { width:min(100%, 420px); flex:1 1 280px; }
-    .catalog-filter label { display:block; margin:0 0 .4rem; color:var(--body-text); font-size:.82rem; font-weight:650; }
+    .catalog-filter label { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
     .catalog-filter select { width:100%; }
     .catalog-toolbar-action { margin-left:auto; white-space:nowrap; }
     .catalog-actions { display:flex; justify-content:flex-end; gap:.4rem; white-space:nowrap; }
@@ -40,14 +37,10 @@
     .vacation-detail-excluded { color:#667085; }
     @media(max-width:600px) { .vacation-detail-row { align-items:flex-start; flex-direction:column; gap:.15rem; } .vacation-detail-result { text-align:left; } }
     @media(max-width:600px) { .vacation-info-grid { grid-template-columns:1fr; gap:.55rem; } }
-    @media(max-width:700px) { .catalog-heading { align-items:stretch; flex-direction:column; } .catalog-toolbar { align-items:stretch; flex-direction:column; } .catalog-footer { align-items:flex-start; flex-direction:column; } }
+    @media(max-width:700px) { .catalog-toolbar { align-items:stretch; flex-direction:column; } .catalog-footer { align-items:flex-start; flex-direction:column; } }
 </style>
 
 <section class="catalog-page">
-    <header class="catalog-heading">
-        <div><h1>Incapacidades</h1><p>Periodos registrados y comprobantes privados del colaborador.</p></div>
-    </header>
-
     <div class="catalog-toolbar">
         <div class="catalog-filter">
             <label for="empresa_id">Empresa</label>
@@ -67,7 +60,7 @@
     </div>
 
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Listado de incapacidades</h2><p class="card-subtitle-hr">{{ $records->count() }} {{ $records->count() === 1 ? 'registro' : 'registros' }}</p></div></div>
+        <div class="card-hd"><div><h1 class="card-title-hr">Listado de incapacidades</h1><p class="card-subtitle-hr">{{ $records->count() }} {{ $records->count() === 1 ? 'registro' : 'registros' }}</p></div></div>
         @if($records->count())
             <div class="table-wrap"><table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}">
                 <thead><tr><th>Empresa</th><th>Colaborador</th><th>Periodo</th><th>Motivo</th><th>Jornadas</th><th>Estado</th><th class="no-search text-end">Acciones</th></tr></thead>

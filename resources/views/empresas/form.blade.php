@@ -4,9 +4,8 @@
 <style>
     .page-inner { max-width:none; }
     .company-form-page { width:100%; }
-    .company-form-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .company-form-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .company-form-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
+    .company-form-card-heading { flex-wrap:wrap; }
+    .company-form-back { margin-left:auto; }
     .company-form-field { margin-bottom:0; }
     .company-form-error { display:block; margin-top:.35rem; color:#dc2626; font-size:.775rem; }
     .company-form-input-error { border-color:#ef4444; }
@@ -23,10 +22,10 @@
     .company-form-actions { display:flex; justify-content:flex-start; gap:.5rem; flex-wrap:wrap; padding-top:1.25rem; margin-top:1.25rem; border-top:1px solid var(--body-border); }
     .company-form-actions svg,.company-logo-label svg { width:16px; height:16px; stroke:currentColor; stroke-width:1.8; }
     .company-form-section { padding-top:1.25rem; margin-top:1.25rem; border-top:1px solid var(--body-border); }
-    .company-form-section h3 { margin:0 0 .35rem; color:var(--body-text); font-size:1rem; font-weight:750; }
+    .company-form-section h2 { margin:0 0 .35rem; color:var(--body-text); font-size:1rem; font-weight:750; }
     .company-form-section p { margin:0 0 1rem; color:var(--body-text-muted); font-size:.825rem; }
     .company-form-panel[hidden] { display:none !important; }
-    @media(max-width:575px) { .company-form-heading { align-items:stretch; flex-direction:column; } .company-logo-row { align-items:flex-start; } .company-logo-preview { width:68px; height:68px; } }
+    @media(max-width:575px) { .company-logo-row { align-items:flex-start; } .company-logo-preview { width:68px; height:68px; } }
 </style>
 
 @php
@@ -34,17 +33,13 @@
     $defaultTab = collect($billingFields)->contains(fn ($field) => $errors->has($field)) ? 'facturacion' : 'general';
 @endphp
 <section class="company-form-page" data-default-tab="{{ $defaultTab }}">
-    <header class="company-form-heading">
-        <div><h1>{{ $isEdit ? 'Editar empresa' : 'Agregar empresa' }}</h1><p>{{ $isEdit ? 'Actualiza la información de la empresa.' : 'Registra los datos de una empresa.' }}</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('empresas.index') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
-    </header>
-
     <div class="card-hr">
-        <div class="card-hd">
+        <div class="card-hd company-form-card-heading">
             <div>
-                <h2 class="card-title-hr">Datos de la empresa</h2>
+                <h1 class="card-title-hr">Datos de la empresa</h1>
                 <p class="card-subtitle-hr">Completa los campos para guardar la información.</p>
             </div>
+            <a class="btn-hr btn-outline-hr company-form-back" href="{{ route('empresas.index') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
         </div>
         <div class="card-bd">
             <form method="POST" action="{{ $isEdit ? route('empresas.update', $empresa) : route('empresas.store') }}" enctype="multipart/form-data">
@@ -126,7 +121,7 @@
 
                 <div class="company-form-panel" data-company-panel="facturacion" hidden>
                 <section class="company-form-section" aria-labelledby="fiscal-details-heading">
-                    <h3 id="fiscal-details-heading">Datos de facturación</h3>
+                    <h2 id="fiscal-details-heading">Datos de facturación</h2>
                     <p>Captura estos datos cuando necesites solicitar una factura. La razón social y el nombre de empresa pueden ser distintos.</p>
                     <div class="row g-3">
                         <div class="col-md-6 company-form-field">

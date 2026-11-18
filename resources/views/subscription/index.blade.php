@@ -3,9 +3,7 @@
 @section('content')
 <style>
     .subscription-page { width:100%; max-width:none; }
-    .subscription-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .subscription-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; }
-    .subscription-heading p,.subscription-muted { margin:0; color:var(--body-text-muted); font-size:.875rem; line-height:1.6; }
+    .subscription-muted { margin:0; color:var(--body-text-muted); font-size:.875rem; line-height:1.6; }
     .subscription-feedback { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(16,185,129,.22); border-radius:.625rem; color:#087f5b; background:rgba(16,185,129,.08); font-size:.85rem; }
     .subscription-feedback.error { color:#b42318; border-color:rgba(239,68,68,.2); background:rgba(239,68,68,.07); }
     .subscription-company { max-width:480px; margin-bottom:1.25rem; }
@@ -17,15 +15,10 @@
     .subscription-detail-note { color:var(--body-text-muted); font-size:.82rem; line-height:1.55; }
     .subscription-actions { display:flex; flex-wrap:wrap; gap:.65rem; margin-top:1.25rem; }
     .subscription-empty { padding:1.5rem; color:var(--body-text-muted); text-align:center; }
-    @media(max-width:575px) { .subscription-heading { flex-direction:column; } .subscription-details { grid-template-columns:1fr; } }
+    @media(max-width:575px) { .subscription-details { grid-template-columns:1fr; } }
 </style>
 
 <section class="subscription-page">
-    <header class="subscription-heading">
-        <div><h1>Suscripción</h1><p>Consulta y administra la suscripción de cada empresa.</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
-    </header>
-
     @if($errors->has('subscription')) <div class="subscription-feedback error" role="alert">{{ $errors->first('subscription') }}</div> @endif
 
     <div class="card-hr">

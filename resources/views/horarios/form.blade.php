@@ -4,24 +4,17 @@
 <style>
     .page-inner { max-width:none; }
     .schedule-form-page { width:100%; }
-    .schedule-form-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .schedule-form-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .schedule-form-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
+    .schedule-form-card-heading { flex-wrap:wrap; }
+    .schedule-form-back { margin-left:auto; }
     .schedule-field-error { display:block; margin-top:.35rem; color:#dc2626; font-size:.775rem; }
     .schedule-input-error { border-color:#ef4444; }
     .schedule-form-actions { display:flex; justify-content:flex-start; gap:.5rem; flex-wrap:wrap; padding-top:1.25rem; margin-top:1.25rem; border-top:1px solid var(--body-border); }
     .schedule-form-actions i { font-size:15px; }
-    @media(max-width:575px) { .schedule-form-heading { align-items:stretch; flex-direction:column; } }
 </style>
 
 <section class="schedule-form-page">
-    <header class="schedule-form-heading">
-        <div><h1>{{ $isEdit ? 'Editar horario' : 'Agregar horario' }}</h1><p>{{ $isEdit ? 'Actualiza la información del horario.' : 'Registra un horario para una empresa.' }}</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('horarios.index', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
-    </header>
-
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Información del horario</h2><p class="card-subtitle-hr">Los campos marcados con * son obligatorios.</p></div></div>
+        <div class="card-hd schedule-form-card-heading"><div><h1 class="card-title-hr">Información del horario</h1><p class="card-subtitle-hr">Los campos marcados con * son obligatorios.</p></div><a class="btn-hr btn-outline-hr schedule-form-back" href="{{ route('horarios.index', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a></div>
         <div class="card-bd">
             <form method="POST" action="{{ $isEdit ? route('horarios.update', $horario) : route('horarios.store') }}">
                 @csrf @if($isEdit) @method('PUT') @endif

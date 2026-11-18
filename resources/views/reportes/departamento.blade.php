@@ -7,10 +7,7 @@
 @section('content')
 <style>
     .department-report-page { width:100%; }
-    .department-report-heading { margin-bottom:1.25rem; }
-    .department-report-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .department-report-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
-    .department-report-filters { display:grid; grid-template-columns:minmax(240px,1fr) minmax(0,1fr) minmax(0,1fr) auto; align-items:end; gap:1rem; width:100%; }
+    .department-report-filters { display:grid; grid-template-columns:minmax(0,4fr) minmax(0,1fr) minmax(0,1fr) auto; align-items:end; gap:1rem; width:100%; }
     .department-report-filter { min-width:0; }
     .department-report-filter label { display:block; margin:0 0 .4rem; color:var(--body-text); font-size:.82rem; font-weight:650; }
     .department-report-filter .hr-input { width:100%; }
@@ -40,10 +37,9 @@
 </style>
 
 <section class="department-report-page">
-    <header class="department-report-heading"><h1>Reporte por departamento</h1><p>Compara las asistencias registradas en cada departamento de la empresa.</p></header>
 
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Filtros del reporte</h2><p class="card-subtitle-hr">Selecciona una empresa y un periodo de hasta {{ \App\Rules\ReportDateRange::MAX_DAYS }} días.</p></div></div>
+        <div class="card-hd"><div><h2 class="card-title-hr">Reporte por departamento</h2><p class="card-subtitle-hr">Selecciona una empresa y un periodo de hasta {{ \App\Rules\ReportDateRange::MAX_DAYS }} días.</p></div></div>
         <div class="card-bd">
             <form data-report-max-days="{{ \App\Rules\ReportDateRange::MAX_DAYS }}" class="department-report-filters" method="GET" action="{{ route('reportes.departamento') }}">
                 <div class="department-report-filter"><label for="empresa_id">Empresa <span class="text-danger">*</span></label>

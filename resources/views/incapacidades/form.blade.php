@@ -2,11 +2,12 @@
 
 @section('content')
 <section class="page-inner" style="width:100%;max-width:none">
-    <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
-        <div><h1 class="h3 mb-1">Registrar incapacidad</h1><p class="text-muted mb-0">Registra el periodo y los comprobantes disponibles del colaborador.</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('incapacidades.index') }}">Regresar</a>
-    </div>
-    <div class="card-hr"><div class="card-bd">
+    <div class="card-hr">
+        <div class="card-hd d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <h1 class="card-title-hr">Registrar incapacidad</h1>
+            <a class="btn-hr btn-outline-hr" href="{{ route('incapacidades.index') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+        </div>
+        <div class="card-bd">
         <form id="incapacity-form" method="POST" action="{{ route('incapacidades.store') }}" enctype="multipart/form-data">@csrf
             <div class="row g-3">
                 <div class="col-md-6"><label class="form-label-hr" for="empresa_id">Empresa <span class="text-danger" aria-hidden="true">*</span></label><select class="hr-input select2" id="empresa_id" name="empresa_id" required><option value="">Selecciona una empresa</option>@foreach($companies as $company)<option value="{{ $company->id }}" @selected((string)old('empresa_id', $companyId)===(string)$company->id)>{{ $company->nombre }}</option>@endforeach</select>@error('empresa_id')<small class="text-danger">{{ $message }}</small>@enderror</div>

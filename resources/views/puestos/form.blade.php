@@ -4,24 +4,17 @@
 <style>
     .page-inner { max-width:none; }
     .catalog-form-page { width:100%; }
-    .catalog-form-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .catalog-form-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .catalog-form-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
+    .catalog-form-card-heading { flex-wrap:wrap; }
+    .catalog-form-back { margin-left:auto; }
     .catalog-field-error { display:block; margin-top:.35rem; color:#dc2626; font-size:.775rem; }
     .catalog-input-error { border-color:#ef4444; }
     .catalog-form-actions { display:flex; justify-content:flex-start; gap:.5rem; flex-wrap:wrap; padding-top:1.25rem; margin-top:1.25rem; border-top:1px solid var(--body-border); }
     .catalog-form-actions i { font-size:15px; }
-    @media(max-width:575px) { .catalog-form-heading { align-items:stretch; flex-direction:column; } }
 </style>
 
 <section class="catalog-form-page">
-    <header class="catalog-form-heading">
-        <div><h1>{{ $isEdit ? 'Editar puesto' : 'Agregar puesto' }}</h1><p>{{ $isEdit ? 'Actualiza los datos del puesto.' : 'Registra un puesto para tu empresa.' }}</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('puestos.index', $puesto->empresa_id ? ['empresa_id' => $puesto->empresa_id] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
-    </header>
-
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Información del puesto</h2><p class="card-subtitle-hr">Los campos marcados con * son obligatorios.</p></div></div>
+        <div class="card-hd catalog-form-card-heading"><div><h1 class="card-title-hr">Información del puesto</h1><p class="card-subtitle-hr">Los campos marcados con * son obligatorios.</p></div><a class="btn-hr btn-outline-hr catalog-form-back" href="{{ route('puestos.index', $puesto->empresa_id ? ['empresa_id' => $puesto->empresa_id] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a></div>
         <div class="card-bd">
             <form method="POST" action="{{ $isEdit ? route('puestos.update', $puesto) : route('puestos.store') }}">
                 @csrf @if($isEdit) @method('PUT') @endif

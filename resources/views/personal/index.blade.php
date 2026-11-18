@@ -5,14 +5,11 @@
 <style>
     .page-inner { max-width:none; }
     .personal-page { width:100%; }
-    .personal-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .personal-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .personal-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
     .personal-toolbar, .personal-filters { display:flex; align-items:end; flex-wrap:wrap; gap:.75rem; }
-    .personal-toolbar { margin-bottom:1.25rem; }
+    .personal-toolbar { margin-bottom:1rem; }
     .personal-filters { flex:1; }
     .personal-filter { flex:1 1 12rem; max-width:300px; }
-    .personal-filter label { display:block; margin:0 0 .4rem; color:var(--body-text); font-size:.82rem; font-weight:650; }
+    .personal-filter label { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
     .personal-filter .hr-input { width:100%; }
     .personal-toolbar-action { margin-left:auto; white-space:nowrap; }
     .personal-error { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(239,68,68,.2); border-radius:.625rem; color:#b42318; background:rgba(239,68,68,.07); font-size:.845rem; }
@@ -31,11 +28,10 @@
     .personal-footer { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.25rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); font-size:.8rem; }
     .personal-pagination { display:flex; align-items:center; gap:.55rem; }
     .personal-pagination [aria-disabled="true"] { pointer-events:none; opacity:.55; }
-    @media(max-width:700px) { .personal-heading { align-items:stretch; flex-direction:column; } .personal-toolbar { align-items:stretch; flex-direction:column; } .personal-filter { max-width:none; } .personal-footer { align-items:flex-start; flex-direction:column; } }
+    @media(max-width:700px) { .personal-toolbar { align-items:stretch; flex-direction:column; } .personal-filter { max-width:none; } .personal-footer { align-items:flex-start; flex-direction:column; } }
 </style>
 
 <section class="personal-page">
-    <header class="personal-heading"><div><h1>Personal</h1><p>Administra los colaboradores y sus horarios laborales.</p></div></header>
     @if($errors->has('personal'))<div class="personal-error" role="alert">{{ $errors->first('personal') }}</div>@endif
     @if($errors->has('password') && !old('personal_id'))<div class="personal-error" role="alert">{{ $errors->first('password') }}</div>@endif
     <div class="personal-toolbar">
@@ -52,7 +48,7 @@
     </div>
 
     <div class="card-hr" id="personal-results" data-datatable-source>
-        <div class="card-hd"><div><h2 class="card-title-hr">Listado de personal</h2><p class="card-subtitle-hr" data-datatable-fallback>{{ $personal->total() }} {{ $search !== '' ? ($personal->total() === 1 ? 'coincidencia' : 'coincidencias') : ($personal->total() === 1 ? 'colaborador registrado' : 'colaboradores registrados') }}</p></div></div>
+        <div class="card-hd"><div><h1 class="card-title-hr">Listado de personal</h1><p class="card-subtitle-hr" data-datatable-fallback>{{ $personal->total() }} {{ $search !== '' ? ($personal->total() === 1 ? 'coincidencia' : 'coincidencias') : ($personal->total() === 1 ? 'colaborador registrado' : 'colaboradores registrados') }}</p></div></div>
         @fragment('personal-results')
         <template data-table-total="{{ $unfilteredTotal }}" data-table-filtered="{{ $personal->total() }}"></template>
         <div class="table-wrap"><table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}" data-per-page="{{ $personal->perPage() }}" data-page="{{ $personal->currentPage() }}" data-search-placeholder="Buscar..." data-empty="Aún no hay colaboradores.">

@@ -4,24 +4,15 @@
 <style>
     .page-inner { max-width:none; }
     .profile-page { width:100%; }
-    .profile-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin:0 0 1.25rem; }
-    .profile-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .profile-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
     .profile-field { margin-bottom:1rem; }
     .profile-feedback { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid transparent; border-radius:.625rem; font-size:.845rem; line-height:1.5; }
     .profile-feedback-success { color:#087f5b; background:rgba(16,185,129,.08); border-color:rgba(16,185,129,.22); }
     .profile-feedback-error { color:#b42318; background:rgba(239,68,68,.07); border-color:rgba(239,68,68,.2); }
     .profile-input-error { border-color:#ef4444; }
     .profile-error-text { display:block; margin-top:.35rem; color:#dc2626; font-size:.775rem; }
-    @media(max-width:575px) { .profile-heading { align-items:stretch; flex-direction:column; } }
 </style>
 
 <section class="profile-page">
-    <header class="profile-heading">
-        <div><h1>Cambiar mi contraseña</h1><p>Actualiza tu contraseña para mantener segura tu cuenta.</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
-    </header>
-
     <div class="card-hr mb-1rem">
         <div class="card-hd">
             <div>
@@ -53,7 +44,6 @@
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>
                         Actualizar contraseña
                     </button>
-                    <a class="btn-hr btn-outline-hr" href="{{ route('home') }}">Cancelar</a>
                 </div>
             </form>
         </div>

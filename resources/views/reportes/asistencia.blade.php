@@ -9,10 +9,7 @@
 <style>
     .page-inner { max-width:none; }
     .attendance-report-page { width:100%; }
-    .report-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .report-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .report-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
-    .report-filters { display:grid; grid-template-columns:minmax(240px,1fr) minmax(0,1fr) minmax(0,1fr) auto; align-items:end; gap:1rem; width:100%; }
+    .report-filters { display:grid; grid-template-columns:minmax(0,4fr) minmax(0,1fr) minmax(0,1fr) auto; align-items:end; gap:1rem; width:100%; }
     .report-filter { min-width:0; }
     .report-filter label { display:block; margin:0 0 .4rem; color:var(--body-text); font-size:.82rem; font-weight:650; }
     .report-filter .hr-input { width:100%; }
@@ -61,10 +58,9 @@
 </style>
 
 <section class="attendance-report-page">
-    <header class="report-heading"><div><h1>Reporte general</h1><p>Consulta las asistencias, horarios, ubicaciones y evidencias de tu personal.</p></div></header>
 
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Filtros del reporte</h2><p class="card-subtitle-hr">Selecciona una empresa y un periodo de hasta {{ \App\Rules\ReportDateRange::MAX_DAYS }} días.</p></div></div>
+        <div class="card-hd"><div><h2 class="card-title-hr">Reporte general de asistencias</h2><p class="card-subtitle-hr">Selecciona una empresa y un periodo de hasta {{ \App\Rules\ReportDateRange::MAX_DAYS }} días.</p></div></div>
         <div class="card-bd">
             <form data-report-max-days="{{ \App\Rules\ReportDateRange::MAX_DAYS }}" id="attendance-report-form" class="report-filters" method="GET" action="{{ route('reportes.general') }}">
                 <div class="report-filter"><label for="empresa_id">Empresa <span class="text-danger">*</span></label>

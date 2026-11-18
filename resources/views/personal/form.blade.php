@@ -21,9 +21,8 @@
 <style>
     .page-inner { max-width:none; }
     .personal-page { width:100%; }
-    .personal-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .personal-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .personal-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
+    .personal-form-card-heading { flex-wrap:wrap; }
+    .personal-form-heading-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:.5rem; margin-left:auto; }
     .personal-error { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(239,68,68,.2); border-radius:.625rem; color:#b42318; background:rgba(239,68,68,.07); font-size:.845rem; }
     .personal-field-error { display:block; margin-top:.35rem; color:#dc2626; font-size:.775rem; }
     .personal-input-error { border-color:#ef4444; }
@@ -49,13 +48,14 @@
     .personal-day-schedule[hidden] { display:none !important; }
     .personal-form-actions { display:flex; justify-content:flex-start; gap:.5rem; flex-wrap:wrap; padding-top:1.25rem; margin-top:1.25rem; border-top:1px solid var(--body-border); }
     .personal-form-actions i { font-size:15px; }
-    @media(max-width:575px) { .personal-heading { align-items:stretch; flex-direction:column; } .personal-photo-row { align-items:flex-start; } }
+    @media(max-width:575px) { .personal-photo-row { align-items:flex-start; } }
 </style>
 
 <section class="personal-page" data-default-tab="{{ session('activePersonalTab', $errors->has('archivo') ? 'documentos' : 'general') }}">
-    <header class="personal-heading">
-        <div><h1>{{ $isEdit ? 'Editar personal' : 'Agregar personal' }}</h1><p>{{ $isEdit ? 'Actualiza los datos y el horario laboral del colaborador.' : 'Registra a un colaborador y configura sus días y horarios laborales.' }}</p></div>
-        <div class="d-flex flex-wrap gap-2">
+    <div class="card-hr">
+        <div class="card-hd personal-form-card-heading">
+            <h1 class="card-title-hr">Información del colaborador</h1>
+            <div class="personal-form-heading-actions">
             <a class="btn-hr btn-outline-hr" href="{{ route('personal.index', $selectedCompany ? ['empresa_id' => $selectedCompany] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
             @if($isEdit)
                 <form method="POST" action="{{ route('personal.password.regenerate', $empleado) }}" data-confirm-regenerate-password>
@@ -67,14 +67,12 @@
                     <button class="btn-hr btn-outline-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-envelope" aria-hidden="true"></i> Reenviar PIN</button>
                 </form>
             @endif
+            </div>
         </div>
-    </header>
 
     @if($errors->has('personal'))<div class="personal-error" role="alert">{{ $errors->first('personal') }}</div>@endif
     @if($errors->has('foto'))<div class="personal-error" role="alert">{{ $errors->first('foto') }}</div>@endif
 
-    <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Información del colaborador</h2><p class="card-subtitle-hr">Los campos marcados con * son obligatorios.</p></div></div>
         <div class="card-bd">
             <div class="tab-bar mb-1rem" role="tablist" aria-label="Secciones del expediente">
                 <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-personal-tab="general">Datos Generales</button>

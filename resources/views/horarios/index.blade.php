@@ -5,10 +5,7 @@
 <style>
     .page-inner { max-width:none; }
     .schedule-page { width:100%; }
-    .schedule-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .schedule-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .schedule-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
-    .schedule-toolbar { display:flex; align-items:end; gap:1rem; margin-bottom:1.25rem; }
+    .schedule-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem 1rem; margin-bottom:1rem; }
     .schedule-filter { width:min(100%, 420px); }
     .schedule-filter label { display:block; margin:0 0 .4rem; color:var(--body-text); font-size:.82rem; font-weight:650; }
     .schedule-filter select { width:100%; }
@@ -21,14 +18,13 @@
     .schedule-empty { padding:2.5rem 1rem; color:var(--body-text-muted); text-align:center; }
     .schedule-empty h2 { margin:0 0 .4rem; color:var(--body-text); font-size:1rem; font-weight:750; }
     .schedule-empty p { margin:0; font-size:.845rem; }
-    @media(max-width:700px) { .schedule-heading { align-items:stretch; flex-direction:column; } .schedule-toolbar { align-items:stretch; flex-direction:column; } .schedule-footer { align-items:flex-start; flex-direction:column; } }
+    @media(max-width:700px) { .schedule-footer { align-items:flex-start; flex-direction:column; } }
 </style>
 
 <section class="schedule-page">
-    <header class="schedule-heading"><div><h1>Horarios</h1><p>Administra los horarios de trabajo de tus empresas.</p></div></header>
     <div class="schedule-toolbar">
         <div class="schedule-filter">
-            <label for="empresa_id">Empresa</label>
+            <label class="visually-hidden" for="empresa_id">Empresa</label>
             <select class="hr-input select2" id="empresa_id" name="empresa_id">
                 @if($companies->count() !== 1)<option value="0" @selected(!$selectedCompanyId)>Todas las empresas</option>@endif
                 @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
@@ -38,7 +34,7 @@
     </div>
 
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Listado de horarios</h2><p class="card-subtitle-hr">{{ $horarios->count() }} {{ $horarios->count() === 1 ? 'horario registrado' : 'horarios registrados' }}</p></div></div>
+        <div class="card-hd"><div><h1 class="card-title-hr">Listado de horarios</h1><p class="card-subtitle-hr">{{ $horarios->count() }} {{ $horarios->count() === 1 ? 'horario registrado' : 'horarios registrados' }}</p></div></div>
         @if($horarios->count())
             <div class="table-wrap"><table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}">
                 <thead><tr><th>Empresa</th><th>Nombre del horario</th><th>Hora de entrada</th><th>Hora de salida</th><th class="no-search text-end">Acciones</th></tr></thead>

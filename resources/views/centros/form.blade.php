@@ -4,9 +4,8 @@
 <style>
     .page-inner { max-width:none; }
     .catalog-form-page { width:100%; }
-    .catalog-form-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .catalog-form-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .catalog-form-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
+    .catalog-form-card-heading { flex-wrap:wrap; }
+    .catalog-form-back { margin-left:auto; }
     .catalog-field-error { display:block; margin-top:.35rem; color:#dc2626; font-size:.775rem; }
     .catalog-input-error { border-color:#ef4444; }
     .catalog-help { margin:.35rem 0 0; color:var(--body-text-muted); font-size:.775rem; }
@@ -14,14 +13,18 @@
     .catalog-form-actions i,.catalog-map-button i { font-size:15px; }
     .catalog-map-row { display:flex; gap:.5rem; }
     .catalog-map-row .hr-input { min-width:0; flex:1; }
-    @media(max-width:575px) { .catalog-form-heading { align-items:stretch; flex-direction:column; } .catalog-map-row { flex-direction:column; } .catalog-map-row .btn-hr { align-self:flex-start; } }
+    @media(max-width:575px) { .catalog-map-row { flex-direction:column; } .catalog-map-row .btn-hr { align-self:flex-start; } }
 </style>
 
 <section class="catalog-form-page">
-    <header class="catalog-form-heading"><div><h1>{{ $isEdit ? 'Editar centro de trabajo' : 'Agregar centro de trabajo' }}</h1><p>{{ $isEdit ? 'Actualiza la información y ubicación del centro.' : 'Registra una ubicación para la empresa.' }}</p></div><a class="btn-hr btn-outline-hr" href="{{ route('centros.index', $centro->empresa_id ? ['empresa_id' => $centro->empresa_id] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
-
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Información del centro</h2><p class="card-subtitle-hr">Los campos marcados con * son obligatorios.</p></div></div>
+        <div class="card-hd catalog-form-card-heading">
+            <div>
+                <h1 class="card-title-hr">Información del centro</h1>
+                <p class="card-subtitle-hr">Los campos marcados con * son obligatorios.</p>
+            </div>
+            <a class="btn-hr btn-outline-hr catalog-form-back" href="{{ route('centros.index', $centro->empresa_id ? ['empresa_id' => $centro->empresa_id] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
+        </div>
         <div class="card-bd">
             <form method="POST" action="{{ $isEdit ? route('centros.update', $centro) : route('centros.store') }}">
                 @csrf @if($isEdit) @method('PUT') @endif

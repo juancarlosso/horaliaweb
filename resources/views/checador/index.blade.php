@@ -3,7 +3,7 @@
 @section('content')
 <style>
     .kiosk-admin { width:100%; max-width:none; margin:0; }
-    .kiosk-admin-heading { display:flex; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
+    .kiosk-admin-heading { margin-bottom:1.25rem; }
     .kiosk-admin-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; }
     .kiosk-admin-heading p,.kiosk-note { margin:0; color:var(--body-text-muted); font-size:.875rem; }
     .kiosk-app-card { margin-bottom:1.75rem; border-color:rgba(83,109,245,.3); }
@@ -31,10 +31,12 @@
     .kiosk-email-modal-head p { margin:.3rem 0 0; color:var(--body-text-muted); font-size:.84rem; }
     .kiosk-email-modal-actions { display:flex; justify-content:flex-end; gap:.65rem; margin-top:1.1rem; }
     @media(max-width:575px) { .kiosk-email-modal-card { padding:1rem; } }
-    @media(max-width:600px) { .kiosk-admin-heading { align-items:stretch; flex-direction:column; } }
 </style>
 <section class="kiosk-admin">
-    <header class="kiosk-admin-heading"><div><h1>Reloj Checador</h1><p>Usa la aplicación de Horalia en tu tablet o genera un enlace para usar el reloj checador desde un navegador.</p></div><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a></header>
+    <header class="kiosk-admin-heading">
+        <h1>Reloj Checador</h1>
+        <p>Usa la aplicación de Horalia en tu tablet o genera un enlace para usar el reloj checador desde un navegador.</p>
+    </header>
     @if($errors->any())<div class="personal-error" role="alert">{{ $errors->first() }}</div>@endif
     <article class="card-hr kiosk-app-card" aria-labelledby="kiosk-app-title">
         <div class="card-hd"><div><h2 class="card-title-hr" id="kiosk-app-title">Convierte tu tablet en un reloj checador</h2></div></div>

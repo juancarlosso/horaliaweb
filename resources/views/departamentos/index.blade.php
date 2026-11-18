@@ -5,12 +5,10 @@
 <style>
     .page-inner { max-width:none; }
     .catalog-page { width:100%; }
-    .catalog-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .catalog-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .catalog-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
-    .catalog-toolbar { display:flex; align-items:end; gap:1rem; margin-bottom:1.25rem; }
+    .catalog-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem 1rem; margin-bottom:1rem; }
     .catalog-filter { width:min(100%, 420px); }
     .catalog-filter label { display:block; margin:0 0 .4rem; color:var(--body-text); font-size:.82rem; font-weight:650; }
+    .catalog-filter .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
     .catalog-filter select { width:100%; }
     .catalog-toolbar-action { margin-left:auto; white-space:nowrap; }
     .catalog-actions { display:flex; justify-content:flex-end; gap:.4rem; white-space:nowrap; }
@@ -25,18 +23,13 @@
     .catalog-empty { padding:2.5rem 1rem; color:var(--body-text-muted); text-align:center; }
     .catalog-empty h2 { margin:0 0 .4rem; color:var(--body-text); font-size:1rem; font-weight:750; }
     .catalog-empty p { margin:0 0 1rem; font-size:.845rem; }
-    @media(max-width:700px) { .catalog-heading { align-items:stretch; flex-direction:column; } .catalog-toolbar { align-items:stretch; flex-direction:column; } .catalog-footer { align-items:flex-start; flex-direction:column; } }
+    @media(max-width:700px) { .catalog-footer { align-items:flex-start; flex-direction:column; } }
 </style>
 
 <section class="catalog-page">
-    <header class="catalog-heading">
-        <div><h1>Departamentos</h1><p>Organiza las áreas de trabajo de cada empresa.</p></div>
-    </header>
-
-
     <div class="catalog-toolbar">
         <div class="catalog-filter">
-            <label for="empresa_id">Empresa</label>
+            <label class="visually-hidden" for="empresa_id">Empresa</label>
             <select class="hr-input select2" id="empresa_id" name="empresa_id">
                 @if($companies->count() !== 1)<option value="0" @selected(!$selectedCompanyId)>Todas las empresas</option>@endif
                 @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
@@ -48,7 +41,7 @@
     </div>
 
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Listado de departamentos</h2><p class="card-subtitle-hr">{{ $departamentos->count() }} {{ $departamentos->count() === 1 ? 'departamento registrado' : 'departamentos registrados' }}</p></div></div>
+        <div class="card-hd"><div><h1 class="card-title-hr">Listado de departamentos</h1><p class="card-subtitle-hr">{{ $departamentos->count() }} {{ $departamentos->count() === 1 ? 'departamento registrado' : 'departamentos registrados' }}</p></div></div>
         @if($departamentos->count())
             <div class="table-wrap"><table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}">
                 <thead><tr><th>Empresa</th><th>Departamento</th><th>Estatus</th><th class="no-search text-end">Acciones</th></tr></thead>

@@ -5,9 +5,6 @@
 <style>
     .page-inner { max-width:none; }
     .attendance-page { width:100%; }
-    .attendance-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .attendance-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .attendance-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
     .attendance-mark-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; margin-bottom:1.25rem; }
     .attendance-today { margin-bottom:1.25rem; overflow:hidden; }
     .attendance-today .card-hd { min-height:3.4rem; }
@@ -79,7 +76,6 @@
 </style>
 
 <section class="attendance-page">
-    <header class="attendance-heading"><div><h1>Asistencias</h1><p>Consulta y registra las entradas y salidas del personal.</p></div></header>
     @if(isset($holidayCommemorations) && $holidayCommemorations->isNotEmpty())
         <div class="alert alert-warning d-flex align-items-start gap-2" role="alert">
             <i class="{{ config('constantes.tipo_iconos') }} fa-triangle-exclamation mt-1" aria-hidden="true"></i>

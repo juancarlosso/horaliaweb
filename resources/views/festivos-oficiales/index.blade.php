@@ -4,30 +4,25 @@
 @include('components.datatable-assets')
 <style>
     .page-inner { max-width:none; }
-    .holiday-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .holiday-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .holiday-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
-    .holiday-toolbar { display:flex; align-items:end; gap:1rem; margin-bottom:1.25rem; }
+    .holiday-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem 1rem; margin-bottom:1rem; }
     .holiday-filter { width:min(100%, 260px); }
     .holiday-filter label { display:block; margin:0 0 .4rem; color:var(--body-text); font-size:.82rem; font-weight:650; }
     .holiday-actions { display:flex; justify-content:flex-end; gap:.4rem; white-space:nowrap; }
     .holiday-actions form { margin:0; }
     .holiday-empty { padding:2.5rem 1rem; color:var(--body-text-muted); text-align:center; }
     .holiday-empty h2 { margin:0 0 .4rem; color:var(--body-text); font-size:1rem; font-weight:750; }
-    @media(max-width:700px) { .holiday-heading { align-items:stretch; flex-direction:column; } .holiday-toolbar { align-items:stretch; flex-direction:column; } }
 </style>
 
 <section>
-    <header class="holiday-heading"><div><h1>Festivos Oficiales</h1><p>Administra las fechas y conmemoraciones oficiales.</p></div></header>
     <div class="holiday-toolbar">
-        <div class="holiday-filter"><label for="anio">Año</label><select class="hr-input select2" id="anio" name="anio">@foreach($years as $year)<option value="{{ $year }}" @selected($selectedYear === $year)>{{ $year }}</option>@endforeach</select></div>
+        <div class="holiday-filter"><label class="visually-hidden" for="anio">Año</label><select class="hr-input select2" id="anio" name="anio">@foreach($years as $year)<option value="{{ $year }}" @selected($selectedYear === $year)>{{ $year }}</option>@endforeach</select></div>
         <a class="btn-hr btn-primary-hr" href="{{ route('festivos-oficiales.create') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-plus" aria-hidden="true"></i> Agregar festivo</a>
     </div>
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Listado de {{ $selectedYear }}</h2><p class="card-subtitle-hr">{{ $festivos->count() }} {{ $festivos->count() === 1 ? 'festivo registrado' : 'festivos registrados' }}</p></div></div>
+        <div class="card-hd"><div><h1 class="card-title-hr">Festivos de {{ $selectedYear }}</h1><p class="card-subtitle-hr">{{ $festivos->count() }} {{ $festivos->count() === 1 ? 'festivo registrado' : 'festivos registrados' }}</p></div></div>
         @if($festivos->isNotEmpty())
             <div class="table-wrap"><table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}"><thead><tr><th>Fecha</th><th>Conmemoración</th><th class="no-search text-end">Acciones</th></tr></thead><tbody>
-                @foreach($festivos as $festivo)<tr><td data-order="{{ $festivo->fecha->toDateString() }}">{{ $festivo->fecha->format('d/m/Y') }}</td><td class="fw-bold">{{ $festivo->conmemoracion }}</td><td><div class="holiday-actions"><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('festivos-oficiales.edit', $festivo) }}" aria-label="Editar {{ $festivo->conmemoracion }}"><i class="{{ config('constantes.tipo_iconos') }} fa-pen-to-square" aria-hidden="true"></i> Editar</a><form method="POST" action="{{ route('festivos-oficiales.destroy', $festivo) }}" data-confirm-delete data-record-name="{{ $festivo->conmemoracion }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" aria-label="Eliminar {{ $festivo->conmemoracion }}"><i class="{{ config('constantes.tipo_iconos') }} fa-trash-can" aria-hidden="true"></i> Eliminar</button></form></div></td></tr>@endforeach
+                @foreach($festivos as $festivo)<tr><td class="text-start" data-order="{{ $festivo->fecha->toDateString() }}">{{ $festivo->fecha->format('d/m/Y') }}</td><td class="fw-bold">{{ $festivo->conmemoracion }}</td><td><div class="holiday-actions"><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('festivos-oficiales.edit', $festivo) }}" aria-label="Editar {{ $festivo->conmemoracion }}"><i class="{{ config('constantes.tipo_iconos') }} fa-pen-to-square" aria-hidden="true"></i> Editar</a><form method="POST" action="{{ route('festivos-oficiales.destroy', $festivo) }}" data-confirm-delete data-record-name="{{ $festivo->conmemoracion }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" aria-label="Eliminar {{ $festivo->conmemoracion }}"><i class="{{ config('constantes.tipo_iconos') }} fa-trash-can" aria-hidden="true"></i> Eliminar</button></form></div></td></tr>@endforeach
             </tbody></table></div>
         @else
             <div class="holiday-empty"><h2>No hay festivos para {{ $selectedYear }}</h2><p>Agrega el primer festivo de este año.</p></div>

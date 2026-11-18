@@ -5,10 +5,9 @@
 <style>
     .page-inner { max-width:none; }
     .companies-page { width:100%; }
-    .companies-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .companies-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .companies-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
-    .companies-heading .btn-hr svg { width:16px; height:16px; stroke:currentColor; stroke-width:1.8; }
+    .companies-card-heading { flex-wrap:wrap; }
+    .companies-add { margin-left:auto; }
+    .companies-add svg { width:16px; height:16px; stroke:currentColor; stroke-width:1.8; }
     .companies-status { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(16,185,129,.22); border-radius:.625rem; color:#087f5b; background:rgba(16,185,129,.08); font-size:.845rem; }
     .company-logo { position:relative; display:grid; place-items:center; width:42px; height:42px; overflow:hidden; border:1px solid var(--body-border); border-radius:.7rem; color:var(--color-primary); background:var(--color-primary-light); }
     .company-logo img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:var(--card-bg); }
@@ -31,30 +30,21 @@
     .company-history-modal .modal-body p { margin:0 0 .8rem; color:var(--body-text-muted); font-size:.9rem; line-height:1.6; }
     .company-history-modal .modal-body strong { color:var(--body-text); }
     .company-history-modal .modal-body a { color:var(--color-primary); font-weight:700; }
-    @media(max-width:700px) { .companies-heading { align-items:stretch; flex-direction:column; } .companies-heading .btn-hr { align-self:flex-start; } .company-pagination { align-items:flex-start; flex-direction:column; } }
 </style>
 
 <section class="companies-page">
-    <header class="companies-heading">
-        <div>
-            <h1>Empresas</h1>
-            <p>Administra los datos y las tolerancias de tus empresas.</p>
-        </div>
-        @if($canCreate)
-            <a class="btn-hr btn-primary-hr" href="{{ route('empresas.create') }}">
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-                Agregar empresa
-            </a>
-        @endif
-    </header>
-
-
     <div class="card-hr">
-        <div class="card-hd">
+        <div class="card-hd companies-card-heading">
             <div>
-                <h2 class="card-title-hr">Listado de empresas</h2>
+                <h1 class="card-title-hr">Listado de empresas</h1>
                 <p class="card-subtitle-hr">{{ $empresas->count() }} {{ $empresas->count() === 1 ? 'empresa registrada' : 'empresas registradas' }}</p>
             </div>
+            @if($canCreate)
+                <a class="btn-hr btn-primary-hr companies-add" href="{{ route('empresas.create') }}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                    Agregar empresa
+                </a>
+            @endif
         </div>
         @if($empresas->count())
             <div class="table-wrap">
@@ -122,9 +112,6 @@
                 <div class="company-empty-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 21h18M5 21V7l8-4v18m0-12h6v12M8 9v.01M8 12v.01M8 15v.01M16 13v.01M16 16v.01"/></svg></div>
                 <h2>Aún no hay empresas</h2>
                 <p>Cuando registres una empresa, aparecerá en esta lista.</p>
-                @if($canCreate)
-                    <a class="btn-hr btn-primary-hr" href="{{ route('empresas.create') }}">Agregar empresa</a>
-                @endif
             </div>
         @endif
     </div>

@@ -3,9 +3,7 @@
 @section('content')
 <style>
     .pm-page { max-width:100%; }
-    .pm-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-    .pm-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
-    .pm-heading p,.pm-muted { margin:0; color:var(--body-text-muted); font-size:.875rem; line-height:1.6; }
+    .pm-muted { margin:0; color:var(--body-text-muted); font-size:.875rem; line-height:1.6; }
     .pm-feedback { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(239,68,68,.2); border-radius:.625rem; color:#b42318; background:rgba(239,68,68,.07); font-size:.85rem; }
     .pm-success { color:#087f5b; border-color:rgba(16,185,129,.22); background:rgba(16,185,129,.08); }
     .pm-company { display:flex; align-items:flex-end; gap:.75rem; flex-wrap:wrap; margin-bottom:1.25rem; }
@@ -64,20 +62,15 @@
     .pm-loading-title { margin:0 0 .2rem; font-weight:750; }
     .pm-loading-copy { margin:0; color:var(--body-text-muted); font-size:.84rem; line-height:1.5; }
     @keyframes pm-spin { to { transform:rotate(360deg); } }
-    @media(max-width:575px) { .pm-heading { flex-direction:column; } .pm-card { align-items:flex-start; } }
+    @media(max-width:575px) { .pm-card { align-items:flex-start; } }
 </style>
 
 <section class="pm-page">
-    <header class="pm-heading">
-        <div><h1>Métodos de Pago</h1><p>Consulta el método asignado a cada empresa y administra las opciones disponibles.</p></div>
-        <a class="btn-hr btn-outline-hr" href="{{ route('home') }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-left" aria-hidden="true"></i> Regresar</a>
-    </header>
-
     @if($errors->has('stripe')) <div class="pm-feedback" role="alert">{{ $errors->first('stripe') }}</div> @endif
     @if($errors->has('metodo_pago')) <div class="pm-feedback" role="alert">{{ $errors->first('metodo_pago') }}</div> @endif
 
     <div class="card-hr mb-1rem">
-        <div class="card-hd"><div class="pm-config-head"><span class="pm-icon"><i class="fa-solid fa-gear" aria-hidden="true"></i></span><div><h2 class="card-title-hr">Configuración de pago</h2><p class="card-subtitle-hr">Selecciona la empresa y define su método de pago.</p></div></div></div>
+        <div class="card-hd"><div class="pm-config-head"><span class="pm-icon"><i class="fa-solid fa-gear" aria-hidden="true"></i></span><div><h2 class="card-title-hr">Métodos de Pago</h2><p class="card-subtitle-hr">Selecciona la empresa y define su método de pago.</p></div></div></div>
         <div class="card-bd">
             @if($empresas->isEmpty())
                 <div class="pm-empty">Tu usuario todavía no tiene empresas asignadas.</div>

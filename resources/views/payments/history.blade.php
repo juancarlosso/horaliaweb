@@ -4,8 +4,6 @@
 @include('components.datatable-assets')
 <style>
     .payment-history { width:100%; }
-    .payment-history h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; }
-    .payment-history .subtitle { margin:0 0 1.25rem; color:var(--body-text-muted); font-size:.875rem; }
     .payment-filters { box-sizing:border-box; display:grid; grid-template-columns:minmax(280px,2fr) minmax(170px,1.2fr) repeat(2,minmax(150px,1fr)) auto auto; align-items:end; gap:.75rem; width:100%; padding:1rem 1.25rem; }
     .payment-filters label { display:grid; min-width:0; gap:.35rem; color:var(--body-text-muted); font-size:.78rem; font-weight:650; }
     .payment-filters input { width:100%; min-width:0; min-height:38px; padding:.4rem .65rem; border:1px solid var(--body-border); border-radius:.5rem; background:var(--card-bg); color:var(--body-text); }
@@ -26,8 +24,6 @@
     @media(max-width:700px) { .payment-footer { flex-direction:column; } }
 </style>
 <section class="payment-history">
-    <h1>Historial de pagos</h1>
-    <p class="subtitle">Pagos confirmados e intentos de cobro de tus empresas.</p>
     @foreach($transferCompanies as $company)
         @php($transfer = $transferStates->get($company->id.':'.$company->fecha_renovacion->toDateString()))
         <div class="card-hr" style="padding:1rem;margin-bottom:.8rem"><strong>{{ $company->nombre }}</strong> · Transferencia para renovación del {{ $company->fecha_renovacion->format('d/m/Y') }} · ${{ number_format((float) ($transfer?->cantidad ?? $company->precio), 2) }} MXN
@@ -38,6 +34,7 @@
         </div>
     @endforeach
     <div class="card-hr">
+        <div class="card-hd"><h1 class="card-title-hr">Historial de pagos</h1></div>
         <form class="payment-filters" method="GET" action="{{ route('payment-history.index') }}">
             <label>Empresa
                 <select class="hr-input select2" id="empresa_id" name="empresa_id" aria-label="Empresa"><option value="">Todas las empresas</option>@foreach($companies as $company)<option value="{{ $company->id }}" @selected((string) ($filters['empresa_id'] ?? '') === (string) $company->id)>{{ $company->nombre ?: 'Empresa #' . $company->id }}</option>@endforeach</select>

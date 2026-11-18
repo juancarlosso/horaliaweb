@@ -213,21 +213,44 @@ class AppAttendanceTest extends TestCase
         $this->assertGreaterThan(100000, (float) $attendance->distancia_salida_metros);
     }
 
-    public function test_mobile_attendance_rejects_unknown_pin_and_personnel_without_a_valid_center(): void
+    public function test_mobile_attendance_accepts_active_centers_without_valid_coordinates(): void
     {
+        $this->travelTo('2026-07-06 09:00:00 America/Mexico_City');
         [$user, $company] = $this->administrator();
-        $center = Centro::query()->create(['empresa_id' => $company->id, 'nombre' => 'Sin GPS', 'activo' => true]);
-        Personal::query()->create([
-            'empresa_id' => $company->id, 'centro_id' => $center->id, 'nombre' => 'Sin GPS',
-            'pin' => '54321', 'activo' => true, 'laborados' => '1@2@3@4@5@6@7',
+        $center = Centro::query()->create([
+            'empresa_id' => $company->id, 'nombre' => 'Sin GPS', 'activo' => true,
+            'geolocalizacion' => 'Constitucion y ramon figueroa',
         ]);
+        $personal = Personal::query()->create([
+            'empresa_id' => $company->id, 'centro_id' => $center->id, 'nombre' => 'Sin GPS',
+            'pin' => '54321', 'activo' => true, 'laborados' => '1',
+        ]);
+        $personal->horarios()->create(['dia' => 1, 'entrada' => '08:00:00', 'salida' => '17:00:00']);
         $token = $this->login($user);
 
         $this->withToken($token)->postJson('/api/app/attendance/verify-pin', ['pin' => '99999'])
             ->assertUnprocessable()->assertJsonPath('message', 'PIN no reconocido.');
-        Auth::forgetGuards();
-        $this->withToken($token)->postJson('/api/app/attendance/verify-pin', ['pin' => '54321'])
-            ->assertUnprocessable()->assertJsonPath('message', 'El centro de trabajo del colaborador no tiene geolocalización configurada. Contacta a tu administrador.');
+
+        foreach (['entrada', 'salida'] as $kind) {
+            Auth::forgetGuards();
+            $verified = $this->withToken($token)->postJson('/api/app/attendance/verify-pin', ['pin' => $personal->pin])
+                ->assertOk()->assertJsonPath('data.kind', $kind);
+
+            Auth::forgetGuards();
+            $this->withToken($token)->postJson('/api/app/attendance/mark', [
+                'pin' => $personal->pin, 'proof' => $verified->json('data.proof'),
+                'latitud' => 19.4326, 'longitud' => -99.1332,
+            ])->assertOk()->assertJsonPath('data.kind', $kind);
+            $center->update(['geolocalizacion' => null]);
+        }
+
+        $this->assertDatabaseHas('asistencias', [
+            'personal_id' => $personal->id,
+            'rango_entrada' => null, 'rango_salida' => null,
+            'latitud' => 19.4326, 'longitud' => -99.1332,
+            'latitud_salida' => 19.4326, 'longitud_salida' => -99.1332,
+            'distancia_entrada_metros' => null, 'distancia_salida_metros' => null,
+        ]);
     }
 
     public function test_mobile_pause_flow_uses_shared_pause_service_and_server_times(): void

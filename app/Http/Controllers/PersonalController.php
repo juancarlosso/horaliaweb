@@ -14,6 +14,7 @@ use App\Models\Personal;
 use App\Models\Puesto;
 use App\Models\User;
 use App\Models\UserEmpresa;
+use App\Support\DataTable;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Arr;
@@ -43,6 +44,8 @@ class PersonalController extends Controller
 
     public function index(Request $request)
     {
+        $validated = $request->validate(['q' => ['nullable', 'string', 'max:150']]);
+        $search = trim($validated['q'] ?? '');
         $companies = $this->companiesFor($request);
         $companyIds = $companies->modelKeys();
         $selectedCompanyId = $this->selectedCompanyForFilter($request, $companies);
@@ -51,24 +54,53 @@ class PersonalController extends Controller
             abort_unless(in_array($selectedCompanyId, $companyIds, true), 404);
         }
 
-        $personal = Personal::query()
+        $query = Personal::query()
             ->with(['empresa', 'centro'])
             ->withExists(['usuario as es_administrador' => fn ($query) => $query->where('profile', $this->administratorProfileId())])
             ->whereIn('empresa_id', $companyIds)
-            ->when($selectedCompanyId, fn ($query) => $query->where('empresa_id', $selectedCompanyId))
-            ->orderBy('nombre')
-            ->paginate(config('constantes.itemsPorPagina'))
+            ->when($selectedCompanyId, fn ($query) => $query->where('empresa_id', $selectedCompanyId));
+
+        $unfilteredTotal = $search !== '' ? (clone $query)->count() : null;
+        [$perPage, $sort, $direction] = DataTable::options($request, ['nombre', 'email', 'empresa', 'centro', 'es_administrador']);
+        $sortColumn = match ($sort) {
+            'empresa' => Empresa::query()->select('nombre')->whereColumn('empresas.id', 'personal.empresa_id'),
+            'centro' => Centro::query()->select('nombre')->whereColumn('centros.id', 'personal.centro_id'),
+            default => $sort ?? 'nombre',
+        };
+        $personal = $query
+            ->when($search !== '', function ($query) use ($search) {
+                $pattern = '%'.strtr($search, ['!' => '!!', '%' => '!%', '_' => '!_']).'%';
+
+                $query->where(function ($query) use ($pattern) {
+                    $query->whereRaw("personal.nombre LIKE ? ESCAPE '!'", [$pattern])
+                        ->orWhereRaw("personal.codigo LIKE ? ESCAPE '!'", [$pattern])
+                        ->orWhereRaw("personal.email LIKE ? ESCAPE '!'", [$pattern])
+                        ->orWhereHas('empresa', fn ($empresa) => $empresa->whereRaw("nombre LIKE ? ESCAPE '!'", [$pattern]))
+                        ->orWhereHas('centro', fn ($centro) => $centro->whereRaw("nombre LIKE ? ESCAPE '!'", [$pattern]));
+                });
+            })
+            ->orderBy($sortColumn, $sort ? $direction : 'asc')
+            ->orderBy('id')
+            ->paginate($perPage)
             ->withQueryString();
 
-        return view('personal.index', [
+        $view = view('personal.index', [
             'navigation' => DashboardController::navigation(),
             'activeSection' => 'personal',
             'personal' => $personal,
             'companies' => $companies,
             'selectedCompanyId' => $selectedCompanyId,
+            'search' => $search,
+            'unfilteredTotal' => $unfilteredTotal ?? $personal->total(),
             'canCreate' => $this->companiesFor($request, true)->isNotEmpty(),
             'manageableIds' => $this->companyIdsFor($request, true),
         ]);
+
+        if ($request->header('X-Datatable-Fragment') === '1') {
+            return response($view->fragment('personal-results'))->header('Cache-Control', 'no-store');
+        }
+
+        return $view;
     }
 
     public function create(Request $request)

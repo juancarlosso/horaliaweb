@@ -1,5 +1,9 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Reporte por departamento', 'activeSection' => 'reportes-departamento'])
 
+@push('scripts')
+    <script defer src="{{ asset('assets/horalia/js/report-date-range.js') }}"></script>
+@endpush
+
 @section('content')
 <style>
     .department-report-page { width:100%; }
@@ -39,9 +43,9 @@
     <header class="department-report-heading"><h1>Reporte por departamento</h1><p>Compara las asistencias registradas en cada departamento de la empresa.</p></header>
 
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Filtros del reporte</h2><p class="card-subtitle-hr">Selecciona una empresa y el periodo que deseas consultar.</p></div></div>
+        <div class="card-hd"><div><h2 class="card-title-hr">Filtros del reporte</h2><p class="card-subtitle-hr">Selecciona una empresa y un periodo de hasta {{ \App\Rules\ReportDateRange::MAX_DAYS }} días.</p></div></div>
         <div class="card-bd">
-            <form class="department-report-filters" method="GET" action="{{ route('reportes.departamento') }}">
+            <form data-report-max-days="{{ \App\Rules\ReportDateRange::MAX_DAYS }}" class="department-report-filters" method="GET" action="{{ route('reportes.departamento') }}">
                 <div class="department-report-filter"><label for="empresa_id">Empresa <span class="text-danger">*</span></label>
                     <select id="empresa_id" name="empresa_id" class="hr-input select2" required data-placeholder="Selecciona una empresa">
                         @if($companies->count() !== 1)<option value="">Selecciona una empresa</option>@endif

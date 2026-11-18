@@ -1,6 +1,7 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Asistencias', 'activeSection' => 'asistencia'])
 
 @section('content')
+@include('components.datatable-assets')
 <style>
     .page-inner { max-width:none; }
     .attendance-page { width:100%; }
@@ -141,42 +142,9 @@
         <div class="attendance-actions"><button class="btn-hr btn-primary-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-magnifying-glass" aria-hidden="true"></i> Buscar</button><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-rotate-left" aria-hidden="true"></i> Limpiar</a></div>
     </form>
 
-    <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Registro de asistencias</h2><p class="card-subtitle-hr">{{ $attendance->total() }} {{ $attendance->total() === 1 ? 'registro' : 'registros' }} · {{ $periodLabel }}</p></div></div>
-        @if($attendance->count())
-            <div class="table-wrap"><table class="bs-table hover">
-                <thead><tr><th>Colaborador</th><th>Fecha</th><th>Modalidad</th><th>Entrada</th><th>Salida</th><th>Retardo</th><th>Salida temprana</th><th>Rango</th></tr></thead>
-                <tbody>
-                @foreach($attendance as $record)
-                    @php
-                        $employee = $record->personal;
-                        $entryEvidenceUrl = $record->fotoEntradaUrl();
-                        $exitEvidenceUrl = $record->fotoSalidaUrl();
-                        $initial = mb_strtoupper(mb_substr(trim($employee?->nombre ?? ''), 0, 1)) ?: 'P';
-                    @endphp
-                    <tr>
-                        <td><div class="attendance-user"><div class="attendance-avatar"><span>{{ $initial }}</span>@if($employee)<img src="{{ $employee->avatarUrl() }}" alt="" loading="lazy" onerror="this.remove()">@endif</div><div><div class="attendance-user-name">{{ $employee?->nombre ?? 'No disponible' }}</div><div class="attendance-user-company">{{ $employee?->empresa?->nombre ?? '—' }}</div></div></div></td>
-                        <td>{{ $record->fecha?->format('d/m/Y') ?? '—' }}</td>
-                        <td>{{ ($record->modalidad ?? 'PRESENCIAL') === 'HOME_OFFICE' ? 'Home Office' : 'Presencial' }}</td>
-                        <td><div class="attendance-time-cell"><span>{{ $record->llegada?->format('H:i') ?? '—' }}</span>
-                            @if($entryEvidenceUrl)<a class="attendance-icon-action" href="{{ $entryEvidenceUrl }}" target="_blank" rel="noopener" title="Ver foto de entrada" aria-label="Ver foto de entrada de {{ $employee?->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-camera" aria-hidden="true"></i></a>@endif
-                            @if($record->latitud !== null && $record->longitud !== null)<a class="attendance-icon-action" href="https://www.google.com/maps?q={{ $record->latitud }},{{ $record->longitud }}" target="_blank" rel="noopener" title="Ver ubicación de entrada" aria-label="Ver ubicación de entrada de {{ $employee?->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i></a>@endif
-                        </div></td>
-                        <td><div class="attendance-time-cell"><span>{{ $record->salida?->format('H:i') ?? '—' }}</span>
-                            @if($exitEvidenceUrl)<a class="attendance-icon-action" href="{{ $exitEvidenceUrl }}" target="_blank" rel="noopener" title="Ver foto de salida" aria-label="Ver foto de salida de {{ $employee?->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-camera" aria-hidden="true"></i></a>@endif
-                            @if($record->latitud_salida !== null && $record->longitud_salida !== null)<a class="attendance-icon-action" href="https://www.google.com/maps?q={{ $record->latitud_salida }},{{ $record->longitud_salida }}" target="_blank" rel="noopener" title="Ver ubicación de salida" aria-label="Ver ubicación de salida de {{ $employee?->nombre }}"><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i></a>@endif
-                        </div></td>
-                        <td>{{ $record->minutos_tarde ? $record->minutos_tarde . ' min' : '—' }}</td>
-                        <td>{{ $record->minutos_salida_temprano ? $record->minutos_salida_temprano . ' min' : '—' }}</td>
-                        <td><div class="d-flex flex-column gap-1"><span class="attendance-pill {{ $record->rango_entrada === 'En rango' ? 'is-in-range' : ($record->rango_entrada === 'Fuera de rango' ? 'is-out-range' : '') }}">E: {{ $record->rango_entrada ?? '—' }}</span><span class="attendance-pill {{ $record->rango_salida === 'En rango' ? 'is-in-range' : ($record->rango_salida === 'Fuera de rango' ? 'is-out-range' : '') }}">S: {{ $record->rango_salida ?? '—' }}</span></div></td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table></div>
-            @if($attendance->hasPages())<div class="attendance-footer"><span>Mostrando {{ $attendance->firstItem() }}–{{ $attendance->lastItem() }} de {{ $attendance->total() }}</span><div class="attendance-pagination"><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $attendance->previousPageUrl() ?? '#' }}" @if($attendance->onFirstPage()) aria-disabled="true" @endif>Anterior</a><span>Página {{ $attendance->currentPage() }} de {{ $attendance->lastPage() }}</span><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $attendance->nextPageUrl() ?? '#' }}" @unless($attendance->hasMorePages()) aria-disabled="true" @endunless>Siguiente</a></div></div>@endif
-        @else
-            <div class="attendance-empty"><h2>No hay asistencias para este periodo</h2><p>No se encontraron registros para {{ $periodLabel }}.</p></div>
-        @endif
+    <div class="card-hr" data-datatable-source>
+        <div class="card-hd"><div><h2 class="card-title-hr">Registro de asistencias</h2><p class="card-subtitle-hr">{{ $periodLabel }}</p></div></div>
+        @include('asistencia.table')
     </div>
 </section>
 <div class="modal fade" id="attendance-camera-modal" tabindex="-1" aria-labelledby="attendance-camera-title" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">

@@ -39,8 +39,13 @@ class ReporteIncidenciasService
         if ($employees->isEmpty()) return collect();
 
         $employeeIds = $employees->modelKeys();
-        $attendance = Asistencia::query()->whereIn('personal_id', $employeeIds)->whereDate('fecha', '>=', $from)->whereDate('fecha', '<=', $through)
-            ->get()->groupBy(fn ($row) => $row->personal_id.'|'.$row->fecha->toDateString());
+        $attendance = Asistencia::query()
+            ->whereIn('personal_id', $employeeIds)
+            ->where('fecha', '>=', $from)
+            ->where('fecha', '<', CarbonImmutable::parse($through)->addDay()->toDateString())
+            ->whereNotNull('llegada')
+            ->get(['personal_id', 'fecha', 'llegada', 'salida', 'minutos_tarde'])
+            ->keyBy(fn ($row) => $row->personal_id.'|'.$row->fecha->toDateString());
         $holidays = collect();
         foreach (FestivoOficial::query()->whereDate('fecha', '>=', $from)->whereDate('fecha', '<=', $through)->get() as $holiday) {
             $holidays->put($holiday->fecha->toDateString(), ['Oficial: '.$holiday->conmemoracion]);
@@ -61,17 +66,19 @@ class ReporteIncidenciasService
         }
 
         $rows = collect();
+        $startDate = CarbonImmutable::parse($from);
         foreach ($employees as $employee) {
             $timezone = HoraliaTimezones::forCenter($employee->centro?->timezone);
             $lastCompleteDay = CarbonImmutable::now('UTC')->setTimezone($timezone)->startOfDay()->subDay()->toDateString();
             $end = min($through, $lastCompleteDay);
             if ($end < $from) continue;
+            $endDate = CarbonImmutable::parse($end);
             $workdays = array_filter(explode('@', (string) $employee->laborados));
             $schedules = $employee->horarios->keyBy('dia');
-            for ($date = CarbonImmutable::parse($from); $date->lte(CarbonImmutable::parse($end)); $date = $date->addDay()) {
+            for ($date = $startDate; $date->lte($endDate); $date = $date->addDay()) {
                 $day = $date->toDateString(); $key = $employee->id.'|'.$day; $schedule = $schedules->get($date->dayOfWeekIso);
                 $scheduled = $schedule && in_array((string) $date->dayOfWeekIso, $workdays, true);
-                $entries = $attendance->get($key, collect()); $record = $entries->first(fn ($a) => $a->llegada !== null);
+                $record = $attendance->get($key);
                 $vacation = $vacations->has($key); $holidayNames = $holidays->get($day, []);
                 $incapacity = !empty($incapacityDates[$key]);
                 $holidayWork = (bool) ($schedule?->trabaja_festivos);

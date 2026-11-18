@@ -31,7 +31,7 @@ class IncapacidadesController extends Controller
         $personal = Personal::whereIn('empresa_id', $ids)->when($companyId, fn ($q) => $q->where('empresa_id', $companyId))->with('empresa:id,nombre')->orderBy('nombre')->get(['id','empresa_id','nombre']);
         $personalId = $request->integer('personal_id') ?: null;
         abort_if($personalId && !$personal->contains('id', $personalId), 404);
-        $records = Incapacidad::with(['empresa','personal','registradoPor','canceladoPor','comprobantes'])->whereIn('empresa_id', $ids)->when($companyId, fn ($q) => $q->where('empresa_id', $companyId))->when($personalId, fn ($q) => $q->where('personal_id', $personalId))->orderByDesc('fecha_inicio')->paginate(config('constantes.itemsPorPagina'))->withQueryString();
+        $records = Incapacidad::with(['empresa','personal','registradoPor','canceladoPor','comprobantes'])->whereIn('empresa_id', $ids)->when($companyId, fn ($q) => $q->where('empresa_id', $companyId))->when($personalId, fn ($q) => $q->where('personal_id', $personalId))->orderByDesc('fecha_inicio')->get();
         return view('incapacidades.index', ['navigation'=>DashboardController::navigation(),'activeSection'=>'incapacidades','companies'=>$companies,'companyId'=>$companyId,'personal'=>$personal,'personalId'=>$personalId,'records'=>$records,'canManage'=>(int)$request->user()->profile===2]);
     }
 

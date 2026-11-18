@@ -21,8 +21,7 @@ class PaymentAttemptController extends Controller
         $attempts = $company->intentosPago()
             ->orderByDesc('intentado_en')
             ->orderByDesc('id')
-            ->paginate(15)
-            ->withQueryString();
+            ->get();
 
         return view('empresas.intentos-pago', [
             'empresa' => $company,

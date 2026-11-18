@@ -25,8 +25,7 @@ class PuestoController extends Controller
             ->whereIn('empresa_id', $companyIds)
             ->when($selectedCompanyId, fn ($query) => $query->where('empresa_id', $selectedCompanyId))
             ->orderBy('nombre')
-            ->paginate(config('constantes.itemsPorPagina'))
-            ->withQueryString();
+            ->get();
 
         return view('puestos.index', [
             'navigation' => DashboardController::navigation(),

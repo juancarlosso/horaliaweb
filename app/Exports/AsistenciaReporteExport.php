@@ -134,7 +134,7 @@ class AsistenciaReporteExport
         do {
             $chunkQuery = clone $query;
             if ($lastRecord !== null) {
-                $lastDate = $lastRecord->fecha->toDateString();
+                $lastDate = $lastRecord->getRawOriginal('fecha');
                 $lastId = $lastRecord->id;
                 $chunkQuery->where(function ($cursor) use ($lastDate, $lastId): void {
                     $cursor->where('asistencias.fecha', '<', $lastDate)
@@ -144,7 +144,7 @@ class AsistenciaReporteExport
                         });
                 });
             }
-            $records = $chunkQuery->orderByDesc('asistencias.fecha')
+            $records = $chunkQuery->reorder('asistencias.fecha', 'desc')
                 ->orderByDesc('asistencias.id')
                 ->limit(500)
                 ->get();

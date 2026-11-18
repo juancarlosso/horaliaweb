@@ -89,7 +89,7 @@ class ReporteIncidenciasTest extends TestCase
     {
         [$company, $employee] = $this->employee('1@2@3@4@5');
         foreach (range(1, 5) as $weekday) $employee->horarios()->create(['dia' => $weekday, 'entrada' => '08:00', 'salida' => '17:00']);
-        $filters = ['empresa_id' => $company->id, 'desde' => '2026-01-01', 'hasta' => '2026-11-07', 'tipos' => ['posibles_faltas']];
+        $filters = ['empresa_id' => $company->id, 'desde' => '2026-01-01', 'hasta' => '2026-03-31', 'tipos' => ['posibles_faltas']];
 
         $user = User::factory()->create(['profile' => 1]);
         $perPage = (int) config('constantes.itemsPorPagina');
@@ -102,7 +102,7 @@ class ReporteIncidenciasTest extends TestCase
         $response->assertOk()->assertSee('Página 2 de '.$lastPage)->assertSee('Mostrando '.($perPage + 1).'–'.min($perPage * 2, $total).' de '.$total)
             ->assertSee('tipos%5B0%5D=posibles_faltas', false);
         $this->get(route('reportes.incidencias.exportar', $filters + ['page' => 3]))
-            ->assertDownload('horalia_incidencias_20260101_20261107.xlsx');
+            ->assertDownload('horalia_incidencias_20260101_20260331.xlsx');
     }
 
     public function test_incidents_workbook_uses_the_attendance_report_style_layout(): void

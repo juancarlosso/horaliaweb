@@ -1,6 +1,7 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Empresas', 'activeSection' => 'empresas'])
 
 @section('content')
+@include('components.datatable-assets')
 <style>
     .page-inner { max-width:none; }
     .companies-page { width:100%; }
@@ -19,9 +20,6 @@
     .company-actions form { margin:0; }
     .companies-page a.btn-hr,.companies-page a.btn-hr:hover,.companies-page a.btn-hr:focus-visible { text-decoration:none; }
     .company-empty { padding:2.5rem 1rem; color:var(--body-text-muted); text-align:center; }
-    .company-pagination { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.25rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); font-size:.8rem; }
-    .company-pagination-actions { display:flex; align-items:center; gap:.5rem; }
-    .company-pagination [aria-disabled="true"] { cursor:default; opacity:.55; pointer-events:none; }
     .company-empty-icon { display:grid; place-items:center; width:54px; height:54px; margin:0 auto .9rem; border-radius:1rem; color:var(--color-primary); background:var(--color-primary-light); }
     .company-empty-icon svg { width:25px; height:25px; stroke:currentColor; stroke-width:1.8; }
     .company-empty h2 { margin:0 0 .4rem; color:var(--body-text); font-size:1rem; font-weight:750; }
@@ -55,12 +53,12 @@
         <div class="card-hd">
             <div>
                 <h2 class="card-title-hr">Listado de empresas</h2>
-                <p class="card-subtitle-hr">{{ $empresas->total() }} {{ $empresas->total() === 1 ? 'empresa registrada' : 'empresas registradas' }}</p>
+                <p class="card-subtitle-hr">{{ $empresas->count() }} {{ $empresas->count() === 1 ? 'empresa registrada' : 'empresas registradas' }}</p>
             </div>
         </div>
         @if($empresas->count())
             <div class="table-wrap">
-                <table class="bs-table hover">
+                <table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}">
                     <thead>
                         <tr>
                             <th scope="col">Logotipo</th>
@@ -119,24 +117,6 @@
                     </tbody>
                 </table>
             </div>
-            @if($empresas->hasPages())
-                <nav class="company-pagination" aria-label="Paginación de empresas">
-                    <span>Mostrando {{ $empresas->firstItem() }}–{{ $empresas->lastItem() }} de {{ $empresas->total() }}</span>
-                    <div class="company-pagination-actions">
-                        @if($empresas->onFirstPage())
-                            <span class="btn-hr btn-outline-hr btn-sm-hr" aria-disabled="true">Anterior</span>
-                        @else
-                            <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $empresas->previousPageUrl() }}">Anterior</a>
-                        @endif
-                        <span>Página {{ $empresas->currentPage() }} de {{ $empresas->lastPage() }}</span>
-                        @if($empresas->hasMorePages())
-                            <a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $empresas->nextPageUrl() }}">Siguiente</a>
-                        @else
-                            <span class="btn-hr btn-outline-hr btn-sm-hr" aria-disabled="true">Siguiente</span>
-                        @endif
-                    </div>
-                </nav>
-            @endif
         @else
             <div class="company-empty">
                 <div class="company-empty-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 21h18M5 21V7l8-4v18m0-12h6v12M8 9v.01M8 12v.01M8 15v.01M16 13v.01M16 16v.01"/></svg></div>

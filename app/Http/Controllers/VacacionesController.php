@@ -34,7 +34,7 @@ class VacacionesController extends Controller
         $records = Vacacion::query()->with(['empresa', 'personal', 'autorizadoPor', 'registradoPor', 'canceladoPor', 'fechas', 'detalles'])
             ->whereIn('empresa_id', $companyIds)->when($selectedCompanyId, fn($q) => $q->where('empresa_id', $selectedCompanyId))
             ->when($selectedPersonalId, fn ($query) => $query->where('personal_id', $selectedPersonalId))
-            ->orderByDesc('fecha_inicio')->paginate(config('constantes.itemsPorPagina'))->withQueryString();
+            ->orderByDesc('fecha_inicio')->get();
         return view('vacaciones.index', [
             'navigation' => DashboardController::navigation(),
             'activeSection' => 'vacaciones',

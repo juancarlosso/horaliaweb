@@ -78,7 +78,7 @@ class TransferenciaPagoController extends Controller
             ->when($filters['buscar'] ?? null, function ($query, $search) {
                 $query->where(fn ($query) => $query->where('concepto', 'like', '%'.$search.'%')->orWhereHas('empresa', fn ($query) => $query->where('nombre', 'like', '%'.$search.'%')));
             })
-            ->latest('cargado_en')->paginate(25)->withQueryString();
+            ->latest('cargado_en')->get();
         return view('payments.transferencias-admin', ['records' => $records, 'navigation' => DashboardController::navigation(), 'activeSection' => 'transferencias-admin']);
     }
 

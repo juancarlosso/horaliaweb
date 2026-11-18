@@ -269,7 +269,7 @@ class ChecadorController extends Controller
         ]);
     }
 
-    public function verifyPin(Request $request, RegistroAsistenciaService $registration, AttendanceLocationService $locations): JsonResponse
+    public function verifyPin(Request $request, RegistroAsistenciaService $registration): JsonResponse
     {
         $data = $request->validate(['pin' => ['required', 'regex:/^\d{5}$/']]);
         /** @var ChecadorSesion $session */
@@ -281,8 +281,8 @@ class ChecadorController extends Controller
         }
 
         try {
-            if (! $locations->parseCoordinates($personal->centro?->geolocalizacion)) {
-                throw ValidationException::withMessages(['pin' => 'El centro de trabajo no tiene geolocalización configurada. Contacta a tu administrador.']);
+            if (! $personal->centro) {
+                throw ValidationException::withMessages(['pin' => 'El colaborador no tiene un centro de trabajo asignado. Contacta a tu administrador.']);
             }
             $scope = $this->expectedScope($session);
             $kind = $registration->preview($personal, $scope);
@@ -329,8 +329,8 @@ class ChecadorController extends Controller
         if (! $personal || (int) $personal->id !== (int) ($verification['personal_id'] ?? 0)) {
             return response()->json(['message' => 'PIN no reconocido.'], 422);
         }
-        if (! $locations->parseCoordinates($personal->centro?->geolocalizacion)) {
-            return response()->json(['message' => 'El centro de trabajo no tiene geolocalización configurada. Contacta a tu administrador.'], 422);
+        if (! $personal->centro) {
+            return response()->json(['message' => 'El colaborador no tiene un centro de trabajo asignado. Contacta a tu administrador.'], 422);
         }
 
         $kind = $verification['kind'] === 'salida' ? 'salida' : 'entrada';

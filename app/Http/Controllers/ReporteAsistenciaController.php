@@ -7,6 +7,9 @@ use App\Exports\AsistenciaReporteExport;
 use App\Models\Asistencia;
 use App\Models\Departamento;
 use App\Models\Empresa;
+use App\Rules\ReportDateRange;
+use App\Support\DataTable;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -25,12 +28,15 @@ class ReporteAsistenciaController extends Controller
         $reportGenerated = $request->filled(['empresa_id', 'desde', 'hasta']);
         $attendance = null;
         $summary = null;
+        $unfilteredTotal = 0;
+        $fragment = $request->header('X-Datatable-Fragment') === '1';
 
         if ($request->hasAny(['empresa_id', 'desde', 'hasta'])) {
             $filters = $request->validate([
                 'empresa_id' => ['required', 'integer', 'min:1'],
-                'desde' => ['required', 'date'],
-                'hasta' => ['required', 'date', 'after_or_equal:desde'],
+                'q' => ['nullable', 'string', 'max:150'],
+                'desde' => ['required', 'date_format:Y-m-d'],
+                'hasta' => ['bail', 'required', 'date_format:Y-m-d', 'after_or_equal:desde', new ReportDateRange],
             ]);
             $selectedCompanyId = (int) $filters['empresa_id'];
             abort_unless(in_array($selectedCompanyId, $companyIds, true), 403);
@@ -40,29 +46,75 @@ class ReporteAsistenciaController extends Controller
         }
 
         if ($reportGenerated) {
-            $query = $this->attendanceQuery($selectedCompanyId, $startDate, $endDate);
-            $summary = DB::table('asistencias')
-                ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
-                ->where('personal.empresa_id', $selectedCompanyId)
-                ->whereBetween('asistencias.fecha', [$startDate, $endDate])
-                ->selectRaw('COUNT(*) as total')
-                ->selectRaw('SUM(CASE WHEN asistencias.minutos_tarde > 0 THEN 1 ELSE 0 END) as late')
-                ->selectRaw("SUM(CASE WHEN asistencias.rango_entrada = 'Fuera de rango' OR asistencias.rango_salida = 'Fuera de rango' THEN 1 ELSE 0 END) as out_of_range")
-                ->selectRaw('SUM(CASE WHEN asistencias.llegada IS NOT NULL AND asistencias.salida IS NULL THEN 1 ELSE 0 END) as without_exit')
-                ->first();
-            $summary = [
-                'total' => (int) $summary->total,
-                'late' => (int) $summary->late,
-                'outOfRange' => (int) $summary->out_of_range,
-                'withoutExit' => (int) $summary->without_exit,
+            $sortColumns = [
+                'nombre' => 'personal.nombre',
+                'fecha' => 'asistencias.fecha',
+                'modalidad' => 'asistencias.modalidad',
+                'llegada' => 'asistencias.llegada',
+                'rango_entrada' => 'asistencias.rango_entrada',
+                'distancia_entrada' => 'asistencias.distancia_entrada_metros',
+                'retardo' => 'asistencias.minutos_tarde',
+                'salida' => 'asistencias.salida',
+                'rango_salida' => 'asistencias.rango_salida',
+                'distancia_salida' => 'asistencias.distancia_salida_metros',
+                'salida_temprana' => 'asistencias.minutos_salida_temprano',
             ];
-            $perPage = (int) config('constantes.itemsPorPagina');
-            $page = LengthAwarePaginator::resolveCurrentPage();
-            $items = $query->forPage($page, $perPage)->get();
-            $attendance = new LengthAwarePaginator($items, $summary['total'], $perPage, $page, [
-                'path' => LengthAwarePaginator::resolveCurrentPath(),
-                'query' => $request->query(),
-            ]);
+            [$perPage, $sort, $direction] = DataTable::options($request, array_keys($sortColumns));
+            $query = $this->attendanceQuery($selectedCompanyId, $startDate, $endDate);
+
+            if (!$fragment) {
+                $summary = DB::table('asistencias')
+                    ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
+                    ->where('personal.empresa_id', $selectedCompanyId)
+                    ->where('asistencias.fecha', '>=', $startDate)
+                    ->where('asistencias.fecha', '<', CarbonImmutable::parse($endDate)->addDay()->toDateString())
+                    ->selectRaw('COUNT(*) as total')
+                    ->selectRaw('SUM(CASE WHEN asistencias.minutos_tarde > 0 THEN 1 ELSE 0 END) as late')
+                    ->selectRaw("SUM(CASE WHEN asistencias.rango_entrada = 'Fuera de rango' OR asistencias.rango_salida = 'Fuera de rango' THEN 1 ELSE 0 END) as out_of_range")
+                    ->selectRaw('SUM(CASE WHEN asistencias.llegada IS NOT NULL AND asistencias.salida IS NULL THEN 1 ELSE 0 END) as without_exit')
+                    ->first();
+                $summary = [
+                    'total' => (int) $summary->total,
+                    'late' => (int) $summary->late,
+                    'outOfRange' => (int) $summary->out_of_range,
+                    'withoutExit' => (int) $summary->without_exit,
+                ];
+            }
+            $unfilteredTotal = $summary['total'] ?? $query->count();
+
+            $search = $filters['q'] ?? '';
+            if ($search !== '') {
+                $pattern = '%'.strtr($search, ['!' => '!!', '%' => '!%', '_' => '!_']).'%';
+                $query->where(function ($query) use ($pattern) {
+                    $query->whereRaw("personal.nombre LIKE ? ESCAPE '!'", [$pattern])
+                        ->orWhereRaw("personal.codigo LIKE ? ESCAPE '!'", [$pattern])
+                        ->orWhereHas('personal.empresa', fn ($empresa) => $empresa->whereRaw("nombre LIKE ? ESCAPE '!'", [$pattern]));
+
+                    foreach (['fecha', 'llegada', 'salida', 'rango_entrada', 'rango_salida', 'distancia_entrada_metros', 'distancia_salida_metros', 'minutos_tarde', 'minutos_salida_temprano'] as $column) {
+                        $query->orWhereRaw("CAST(asistencias.$column AS CHAR) LIKE ? ESCAPE '!'", [$pattern]);
+                    }
+
+                    if (str_contains(mb_strtolower('Home Office'), mb_strtolower(trim($pattern, '%')))) {
+                        $query->orWhere('asistencias.modalidad', 'HOME_OFFICE');
+                    }
+                    if (str_contains('presencial', mb_strtolower(trim($pattern, '%')))) {
+                        $query->orWhere('asistencias.modalidad', 'PRESENCIAL')->orWhereNull('asistencias.modalidad');
+                    }
+                });
+            }
+            if ($sort !== null) {
+                $query->reorder($sortColumns[$sort], $direction)->orderByDesc('asistencias.id');
+            }
+            $total = $search === '' ? $unfilteredTotal : $query->count();
+            $attendance = $query->paginate($perPage, total: $total)->withQueryString();
+
+            if ($fragment) {
+                $table = view('reportes.partials.asistencia-table', compact(
+                    'attendance', 'unfilteredTotal', 'selectedCompanyId', 'startDate', 'endDate',
+                ));
+
+                return response($table->render())->header('Cache-Control', 'no-store');
+            }
         }
 
         return view('reportes.asistencia', [
@@ -75,6 +127,7 @@ class ReporteAsistenciaController extends Controller
             'reportGenerated' => $reportGenerated,
             'attendance' => $attendance,
             'summary' => $summary,
+            'unfilteredTotal' => $unfilteredTotal,
         ]);
     }
 
@@ -91,8 +144,8 @@ class ReporteAsistenciaController extends Controller
         if ($request->hasAny(['empresa_id', 'desde', 'hasta'])) {
             $filters = $request->validate([
                 'empresa_id' => ['required', 'integer', 'min:1'],
-                'desde' => ['required', 'date'],
-                'hasta' => ['required', 'date', 'after_or_equal:desde'],
+                'desde' => ['required', 'date_format:Y-m-d'],
+                'hasta' => ['bail', 'required', 'date_format:Y-m-d', 'after_or_equal:desde', new ReportDateRange],
             ]);
             $selectedCompanyId = (int) $filters['empresa_id'];
             abort_unless(in_array($selectedCompanyId, $companyIds, true), 403);
@@ -102,15 +155,17 @@ class ReporteAsistenciaController extends Controller
         }
 
         if ($reportGenerated) {
+            $through = CarbonImmutable::parse($endDate)->addDay()->toDateString();
             $departments = Departamento::query()
                 ->where('departamentos.empresa_id', $selectedCompanyId)
                 ->leftJoin('personal', function ($join) use ($selectedCompanyId) {
                     $join->on('personal.departamento_id', '=', 'departamentos.id')
                         ->where('personal.empresa_id', '=', $selectedCompanyId);
                 })
-                ->leftJoin('asistencias', function ($join) use ($startDate, $endDate) {
+                ->leftJoin('asistencias', function ($join) use ($startDate, $through) {
                     $join->on('asistencias.personal_id', '=', 'personal.id')
-                        ->whereBetween('asistencias.fecha', [$startDate, $endDate]);
+                        ->where('asistencias.fecha', '>=', $startDate)
+                        ->where('asistencias.fecha', '<', $through);
                 })
                 ->select('departamentos.id', 'departamentos.nombre')
                 ->selectRaw('COUNT(asistencias.id) as total')
@@ -126,7 +181,8 @@ class ReporteAsistenciaController extends Controller
                 ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
                 ->where('personal.empresa_id', $selectedCompanyId)
                 ->whereNull('personal.departamento_id')
-                ->whereBetween('asistencias.fecha', [$startDate, $endDate])
+                ->where('asistencias.fecha', '>=', $startDate)
+                ->where('asistencias.fecha', '<', $through)
                 ->selectRaw("'Sin departamento' as nombre")
                 ->selectRaw('COUNT(asistencias.id) as total')
                 ->selectRaw('SUM(CASE WHEN asistencias.minutos_tarde > 0 THEN 1 ELSE 0 END) as late')
@@ -156,8 +212,8 @@ class ReporteAsistenciaController extends Controller
     {
         $filters = $request->validate([
             'empresa_id' => ['required', 'integer', 'min:1'],
-            'desde' => ['required', 'date'],
-            'hasta' => ['required', 'date', 'after_or_equal:desde'],
+            'desde' => ['required', 'date_format:Y-m-d'],
+            'hasta' => ['bail', 'required', 'date_format:Y-m-d', 'after_or_equal:desde', new ReportDateRange],
             'tipo' => ['required', 'in:total,late,early_departure,out_of_range,without_exit'],
             'departamento_id' => ['nullable', 'integer', 'min:1'],
             'sin_departamento' => ['nullable', 'boolean'],
@@ -188,7 +244,8 @@ class ReporteAsistenciaController extends Controller
             ->with(['personal.departamento'])
             ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
             ->select('asistencias.*')
-            ->whereBetween('asistencias.fecha', [$filters['desde'], $filters['hasta']])
+            ->where('asistencias.fecha', '>=', $filters['desde'])
+            ->where('asistencias.fecha', '<', CarbonImmutable::parse($filters['hasta'])->addDay()->toDateString())
             ->where('personal.empresa_id', $companyId);
 
         if ($department) {
@@ -228,8 +285,8 @@ class ReporteAsistenciaController extends Controller
     {
         $filters = $request->validate([
             'empresa_id' => ['required', 'integer', 'min:1'],
-            'desde' => ['required', 'date'],
-            'hasta' => ['required', 'date', 'after_or_equal:desde'],
+            'desde' => ['required', 'date_format:Y-m-d'],
+            'hasta' => ['bail', 'required', 'date_format:Y-m-d', 'after_or_equal:desde', new ReportDateRange],
         ]);
         $companyId = (int) $filters['empresa_id'];
         abort_unless(in_array($companyId, $this->companyIdsFor($request), true), 403);
@@ -253,8 +310,8 @@ class ReporteAsistenciaController extends Controller
     {
         $filters = $request->validate([
             'empresa_id' => ['required', 'integer', 'min:1'],
-            'desde' => ['required', 'date'],
-            'hasta' => ['required', 'date', 'after_or_equal:desde'],
+            'desde' => ['required', 'date_format:Y-m-d'],
+            'hasta' => ['bail', 'required', 'date_format:Y-m-d', 'after_or_equal:desde', new ReportDateRange],
         ]);
         $allowedCompanyIds = $this->companyIdsFor($request);
         $companyId = (int) $filters['empresa_id'];
@@ -286,7 +343,8 @@ class ReporteAsistenciaController extends Controller
             ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
             ->select('asistencias.*')
             ->where('personal.empresa_id', $companyId)
-            ->whereBetween('asistencias.fecha', [$startDate, $endDate])
+            ->where('asistencias.fecha', '>=', $startDate)
+            ->where('asistencias.fecha', '<', CarbonImmutable::parse($endDate)->addDay()->toDateString())
             ->orderByDesc('asistencias.fecha')
             ->orderByDesc('asistencias.created_at')
             ->orderByDesc('asistencias.id');

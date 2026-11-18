@@ -1,6 +1,7 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Vacaciones', 'activeSection' => 'vacaciones'])
 
 @section('content')
+@include('components.datatable-assets')
 <style>
     .page-inner { max-width:none; }
     .catalog-page { width:100%; }
@@ -30,9 +31,6 @@
     .catalog-empty { padding:2.5rem 1rem; color:var(--body-text-muted); text-align:center; }
     .catalog-empty h2 { margin:0 0 .4rem; color:var(--body-text); font-size:1rem; font-weight:750; }
     .catalog-empty p { margin:0 0 1rem; font-size:.845rem; }
-    .catalog-footer { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.25rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); font-size:.8rem; }
-    .catalog-pagination { display:flex; align-items:center; gap:.55rem; }
-    .catalog-pagination [aria-disabled="true"] { pointer-events:none; opacity:.55; }
     .vacation-detail-modal { max-height:65vh; overflow:auto; padding:.75rem 1rem; border:1px solid #d7dee8; border-radius:.45rem; text-align:left; }
     .vacation-detail-heading { display:block; margin-bottom:.45rem; color:#252a32; font-size:.95rem; font-weight:700; }
     .vacation-detail-row { display:flex; justify-content:space-between; gap:1rem; padding:.35rem 0; border-top:1px solid #d7dee8; font-size:.85rem; text-align:left; }
@@ -76,16 +74,16 @@
     </div>
 
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Listado de periodos vacacionales</h2><p class="card-subtitle-hr">{{ $vacaciones->total() }} {{ $vacaciones->total() === 1 ? 'periodo registrado' : 'periodos registrados' }}</p></div></div>
+        <div class="card-hd"><div><h2 class="card-title-hr">Listado de periodos vacacionales</h2><p class="card-subtitle-hr">{{ $vacaciones->count() }} {{ $vacaciones->count() === 1 ? 'periodo registrado' : 'periodos registrados' }}</p></div></div>
         @if($vacaciones->count())
-            <div class="table-wrap"><table class="bs-table hover">
-                <thead><tr><th>Empresa</th><th>Colaborador</th><th>Periodo</th><th>Días</th><th>Estado</th><th class="text-end">Acciones</th></tr></thead>
+            <div class="table-wrap"><table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}">
+                <thead><tr><th>Empresa</th><th>Colaborador</th><th>Periodo</th><th>Días</th><th>Estado</th><th class="no-search text-end">Acciones</th></tr></thead>
                 <tbody>
                 @foreach($vacaciones as $vacacion)
                     <tr>
                         <td>{{ $vacacion->empresa?->nombre ?? '—' }}</td>
                         <td>{{ $vacacion->personal->nombre }}</td>
-                        <td>{{ $vacacion->fecha_inicio->format('d/m/Y') }} – {{ $vacacion->fecha_fin->format('d/m/Y') }}
+                        <td data-order="{{ $vacacion->fecha_inicio->toDateString() }}">{{ $vacacion->fecha_inicio->format('d/m/Y') }} – {{ $vacacion->fecha_fin->format('d/m/Y') }}
                             @php($hasDailyBreakdown = $vacacion->detalles->isNotEmpty())
                             @php($vacationDayRows = $hasDailyBreakdown
                                 ? $vacacion->detalles->map(fn ($day) => ['fecha' => $day->fecha->toDateString(), 'cuenta' => $day->cuenta, 'motivo' => $day->motivo, 'festivos' => $day->festivos ?? []])->values()
@@ -122,9 +120,6 @@
                 @endforeach
                 </tbody>
             </table></div>
-            @if($vacaciones->hasPages())
-                <div class="catalog-footer"><span>Mostrando {{ $vacaciones->firstItem() }}–{{ $vacaciones->lastItem() }} de {{ $vacaciones->total() }}</span><div class="catalog-pagination"><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $vacaciones->previousPageUrl() ?? '#' }}" @if($vacaciones->onFirstPage()) aria-disabled="true" @endif>Anterior</a><span>Página {{ $vacaciones->currentPage() }} de {{ $vacaciones->lastPage() }}</span><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $vacaciones->nextPageUrl() ?? '#' }}" @unless($vacaciones->hasMorePages()) aria-disabled="true" @endunless>Siguiente</a></div></div>
-            @endif
         @else
             <div class="catalog-empty"><h2>Aún no hay periodos vacacionales</h2><p>Registra un periodo previamente autorizado para que aparezca en este listado.</p></div>
         @endif

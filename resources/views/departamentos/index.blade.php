@@ -1,6 +1,7 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Departamentos', 'activeSection' => 'departamentos'])
 
 @section('content')
+@include('components.datatable-assets')
 <style>
     .page-inner { max-width:none; }
     .catalog-page { width:100%; }
@@ -24,9 +25,6 @@
     .catalog-empty { padding:2.5rem 1rem; color:var(--body-text-muted); text-align:center; }
     .catalog-empty h2 { margin:0 0 .4rem; color:var(--body-text); font-size:1rem; font-weight:750; }
     .catalog-empty p { margin:0 0 1rem; font-size:.845rem; }
-    .catalog-footer { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.25rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); font-size:.8rem; }
-    .catalog-pagination { display:flex; align-items:center; gap:.55rem; }
-    .catalog-pagination [aria-disabled="true"] { pointer-events:none; opacity:.55; }
     @media(max-width:700px) { .catalog-heading { align-items:stretch; flex-direction:column; } .catalog-toolbar { align-items:stretch; flex-direction:column; } .catalog-footer { align-items:flex-start; flex-direction:column; } }
 </style>
 
@@ -50,10 +48,10 @@
     </div>
 
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Listado de departamentos</h2><p class="card-subtitle-hr">{{ $departamentos->total() }} {{ $departamentos->total() === 1 ? 'departamento registrado' : 'departamentos registrados' }}</p></div></div>
+        <div class="card-hd"><div><h2 class="card-title-hr">Listado de departamentos</h2><p class="card-subtitle-hr">{{ $departamentos->count() }} {{ $departamentos->count() === 1 ? 'departamento registrado' : 'departamentos registrados' }}</p></div></div>
         @if($departamentos->count())
-            <div class="table-wrap"><table class="bs-table hover">
-                <thead><tr><th>Empresa</th><th>Departamento</th><th>Estatus</th><th class="text-end">Acciones</th></tr></thead>
+            <div class="table-wrap"><table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}">
+                <thead><tr><th>Empresa</th><th>Departamento</th><th>Estatus</th><th class="no-search text-end">Acciones</th></tr></thead>
                 <tbody>
                 @foreach($departamentos as $departamento)
                     <tr>
@@ -72,9 +70,6 @@
                 @endforeach
                 </tbody>
             </table></div>
-            @if($departamentos->hasPages())
-                <div class="catalog-footer"><span>Mostrando {{ $departamentos->firstItem() }}–{{ $departamentos->lastItem() }} de {{ $departamentos->total() }}</span><div class="catalog-pagination"><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $departamentos->previousPageUrl() ?? '#' }}" @if($departamentos->onFirstPage()) aria-disabled="true" @endif>Anterior</a><span>Página {{ $departamentos->currentPage() }} de {{ $departamentos->lastPage() }}</span><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $departamentos->nextPageUrl() ?? '#' }}" @unless($departamentos->hasMorePages()) aria-disabled="true" @endunless>Siguiente</a></div></div>
-            @endif
         @else
             <div class="catalog-empty"><h2>Aún no hay departamentos</h2><p>Agrega los departamentos para organizar el equipo de tu empresa.</p></div>
         @endif

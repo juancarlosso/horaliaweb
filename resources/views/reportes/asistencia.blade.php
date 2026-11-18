@@ -1,6 +1,11 @@
 @extends('layouts.dashboard', ['pageTitle' => 'General', 'activeSection' => 'reportes-general'])
 
+@push('scripts')
+    <script defer src="{{ asset('assets/horalia/js/report-date-range.js') }}"></script>
+@endpush
+
 @section('content')
+@include('components.datatable-assets')
 <style>
     .page-inner { max-width:none; }
     .attendance-report-page { width:100%; }
@@ -59,9 +64,9 @@
     <header class="report-heading"><div><h1>Reporte general</h1><p>Consulta las asistencias, horarios, ubicaciones y evidencias de tu personal.</p></div></header>
 
     <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Filtros del reporte</h2><p class="card-subtitle-hr">Selecciona una empresa y el periodo que deseas consultar.</p></div></div>
+        <div class="card-hd"><div><h2 class="card-title-hr">Filtros del reporte</h2><p class="card-subtitle-hr">Selecciona una empresa y un periodo de hasta {{ \App\Rules\ReportDateRange::MAX_DAYS }} días.</p></div></div>
         <div class="card-bd">
-            <form id="attendance-report-form" class="report-filters" method="GET" action="{{ route('reportes.general') }}">
+            <form data-report-max-days="{{ \App\Rules\ReportDateRange::MAX_DAYS }}" id="attendance-report-form" class="report-filters" method="GET" action="{{ route('reportes.general') }}">
                 <div class="report-filter"><label for="empresa_id">Empresa <span class="text-danger">*</span></label>
                     <select id="empresa_id" name="empresa_id" class="hr-input select2" required data-placeholder="Selecciona una empresa">
                         @if($companies->count() !== 1)<option value="">Selecciona una empresa</option>@endif
@@ -83,51 +88,9 @@
             <article class="report-summary-card"><div class="report-summary-icon is-exit"><i class="{{ config('constantes.tipo_iconos') }} fa-person-walking-arrow-right" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Sin salida</small><strong>{{ $summary['withoutExit'] }}</strong></div></article>
         </div>
 
-        <div class="card-hr">
-            <div class="card-hd report-card-heading"><div><h2 class="card-title-hr">Detalle de asistencias</h2><p>Periodo del {{ \Carbon\Carbon::parse($startDate)->format('d/m/Y') }} al {{ \Carbon\Carbon::parse($endDate)->format('d/m/Y') }}</p></div><button type="submit" form="attendance-report-form" formaction="{{ route('reportes.asistencia.exportar') }}" data-loading-message="Preparando el archivo de Excel…" class="btn-hr btn-outline-hr report-export-btn" @disabled($attendance->total() === 0)><i class="{{ config('constantes.tipo_iconos') }} fa-file-excel" aria-hidden="true"></i> Exportar a Excel</button></div>
-            @if($attendance->count())
-                <div class="table-wrap"><table class="bs-table hover report-table">
-                    <thead><tr><th>Personal</th><th>Fecha</th><th>Modalidad</th><th>Entrada</th><th>Rango entrada</th><th>Distancia entrada</th><th>Tarde</th><th>Salida</th><th>Rango salida</th><th>Distancia salida</th><th>Salida temprana</th><th>Tiempo de pausas</th><th>Tiempo productivo</th><th>Detalle de pausas</th><th>Evidencia entrada</th><th>Evidencia salida</th></tr></thead>
-                    <tbody>
-                    @foreach($attendance as $record)
-                        @php
-                            $employee = $record->personal;
-                            $entryPhotoUrl = $record->fotoEntradaUrl();
-                            $exitPhotoUrl = $record->fotoSalidaUrl();
-                        @endphp
-                        <tr>
-                            <td><div class="report-employee"><strong>{{ $employee?->nombre ?? '—' }}</strong><small>{{ $employee?->empresa?->nombre ?? '—' }}</small></div></td>
-                            <td>{{ $record->fecha?->format('d/m/Y') ?? '—' }}</td>
-                            <td>{{ ($record->modalidad ?? 'PRESENCIAL') === 'HOME_OFFICE' ? 'Home Office' : 'Presencial' }}</td>
-                            <td>{{ $record->llegada?->format('H:i') ?? '—' }}</td>
-                            <td><span class="report-status {{ $record->rango_entrada === 'En rango' ? 'is-ok' : ($record->rango_entrada === 'Fuera de rango' ? 'is-bad' : '') }}">{{ $record->rango_entrada ?? '—' }}</span></td>
-                            <td>{{ $record->distancia_entrada_metros !== null ? number_format((float) $record->distancia_entrada_metros, 0) . ' m' : '—' }}</td>
-                            <td class="report-minute">{{ $record->minutos_tarde ? $record->minutos_tarde . ' min' : '0 min' }}</td>
-                            <td>{{ $record->salida?->format('H:i') ?? '—' }}</td>
-                            <td><span class="report-status {{ $record->rango_salida === 'En rango' ? 'is-ok' : ($record->rango_salida === 'Fuera de rango' ? 'is-bad' : '') }}">{{ $record->rango_salida ?? '—' }}</span></td>
-                            <td>{{ $record->distancia_salida_metros !== null ? number_format((float) $record->distancia_salida_metros, 0) . ' m' : '—' }}</td>
-                            <td class="report-minute">{{ $record->minutos_salida_temprano ? $record->minutos_salida_temprano . ' min' : '0 min' }}</td>
-                            <td>{{ \App\Models\Asistencia::formatoDuracion($record->tiempoPausasMinutos()) }}</td>
-                            <td>{{ \App\Models\Asistencia::formatoDuracion($record->tiempoProductivoMinutos()) }}</td>
-                            <td><button type="button" class="btn-hr btn-outline-hr btn-sm-hr" data-pause-detail-url="{{ route('reportes.asistencia.pausas', ['asistencia' => $record->id, 'empresa_id' => $selectedCompanyId, 'desde' => $startDate, 'hasta' => $endDate]) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-mug-hot" aria-hidden="true"></i> Ver pausas</button></td>
-                            <td><div class="report-evidence">
-                                @if($entryPhotoUrl)<button type="button" class="report-icon-action" data-photo-url="{{ $entryPhotoUrl }}" data-photo-title="Foto de entrada" aria-label="Ver foto de entrada de {{ $employee?->nombre }}" title="Ver foto de entrada"><i class="{{ config('constantes.tipo_iconos') }} fa-camera" aria-hidden="true"></i></button>@endif
-                                @if($record->latitud !== null && $record->longitud !== null)<a class="report-icon-action" href="https://www.google.com/maps?q={{ $record->latitud }},{{ $record->longitud }}" target="_blank" rel="noopener" aria-label="Ver ubicación de entrada de {{ $employee?->nombre }}" title="Ver ubicación de entrada"><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i></a>@endif
-                                @if(!$entryPhotoUrl && ($record->latitud === null || $record->longitud === null))—@endif
-                            </div></td>
-                            <td><div class="report-evidence">
-                                @if($exitPhotoUrl)<button type="button" class="report-icon-action" data-photo-url="{{ $exitPhotoUrl }}" data-photo-title="Foto de salida" aria-label="Ver foto de salida de {{ $employee?->nombre }}" title="Ver foto de salida"><i class="{{ config('constantes.tipo_iconos') }} fa-camera" aria-hidden="true"></i></button>@endif
-                                @if($record->latitud_salida !== null && $record->longitud_salida !== null)<a class="report-icon-action" href="https://www.google.com/maps?q={{ $record->latitud_salida }},{{ $record->longitud_salida }}" target="_blank" rel="noopener" aria-label="Ver ubicación de salida de {{ $employee?->nombre }}" title="Ver ubicación de salida"><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i></a>@endif
-                                @if(!$exitPhotoUrl && ($record->latitud_salida === null || $record->longitud_salida === null))—@endif
-                            </div></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table></div>
-                @if($attendance->hasPages())<div class="report-footer"><span>Mostrando {{ $attendance->firstItem() }}–{{ $attendance->lastItem() }} de {{ $attendance->total() }}</span><div class="report-pagination"><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $attendance->previousPageUrl() ?? '#' }}" @if($attendance->onFirstPage()) aria-disabled="true" @endif>Anterior</a><span>Página {{ $attendance->currentPage() }} de {{ $attendance->lastPage() }}</span><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $attendance->nextPageUrl() ?? '#' }}" @unless($attendance->hasMorePages()) aria-disabled="true" @endunless>Siguiente</a></div></div>@endif
-            @else
-                <div class="report-empty"><h2>No se encontraron asistencias</h2><p>No existen registros para la empresa y el periodo seleccionados.</p></div>
-            @endif
+        <div class="card-hr" data-datatable-source>
+            <div class="card-hd report-card-heading"><div><h2 class="card-title-hr">Detalle de asistencias</h2><p>Periodo del {{ \Carbon\Carbon::parse($startDate)->format('d/m/Y') }} al {{ \Carbon\Carbon::parse($endDate)->format('d/m/Y') }}</p></div><button type="submit" form="attendance-report-form" formaction="{{ route('reportes.asistencia.exportar') }}" data-loading-message="Preparando el archivo de Excel…" class="btn-hr btn-outline-hr report-export-btn" @disabled($unfilteredTotal === 0)><i class="{{ config('constantes.tipo_iconos') }} fa-file-excel" aria-hidden="true"></i> Exportar todo a Excel</button></div>
+            @include('reportes.partials.asistencia-table')
         </div>
     @endif
 </section>

@@ -6,8 +6,11 @@ use App\Exports\ReporteIncidenciasExport;
 use App\Http\Controllers\Concerns\ManagesCompanyCatalogs;
 use App\Models\Empresa;
 use App\Services\ReporteIncidenciasService;
+use App\Rules\ReportDateRange;
+use App\Support\DataTable;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 
 class ReporteIncidenciasController extends Controller
 {
@@ -22,24 +25,55 @@ class ReporteIncidenciasController extends Controller
         $startDate = $request->input('desde', now()->startOfMonth()->toDateString());
         $endDate = $request->input('hasta', now()->subDay()->toDateString());
         $selectedTypes = $request->has('tipos') ? (array) $request->input('tipos') : ReporteIncidenciasService::TYPES;
-        $rows = null; $reportGenerated = $request->hasAny(['empresa_id', 'desde', 'hasta', 'tipos']);
+        $rows = null;
+        $unfilteredTotal = 0;
+        $reportGenerated = $request->hasAny(['empresa_id', 'desde', 'hasta', 'tipos']);
         if ($reportGenerated) {
             $filters = $request->validate([
-                'empresa_id' => ['required', 'integer', 'min:1'], 'desde' => ['required', 'date'],
-                'hasta' => ['required', 'date', 'after_or_equal:desde'], 'tipos' => ['required', 'array', 'min:1'],
+                'empresa_id' => ['required', 'integer', 'min:1'], 'desde' => ['required', 'date_format:Y-m-d'],
+                'hasta' => ['bail', 'required', 'date_format:Y-m-d', 'after_or_equal:desde', new ReportDateRange], 'tipos' => ['required', 'array', 'min:1'],
                 'tipos.*' => ['required', 'string', 'in:'.implode(',', ReporteIncidenciasService::TYPES)],
+                'q' => ['nullable', 'string', 'max:150'],
             ]);
-            $selectedCompanyId = (int) $filters['empresa_id']; abort_unless(in_array($selectedCompanyId, $companyIds, true), 403);
-            $startDate = $filters['desde']; $endDate = $filters['hasta']; $selectedTypes = array_values(array_unique($filters['tipos']));
+            $selectedCompanyId = (int) $filters['empresa_id'];
+            abort_unless(in_array($selectedCompanyId, $companyIds, true), 403);
+            $startDate = $filters['desde'];
+            $endDate = $filters['hasta'];
+            $selectedTypes = array_values(array_unique($filters['tipos']));
+            [$perPage, $sort, $direction] = DataTable::options($request, ['fecha', 'empleado', 'codigo', 'tipo', 'detalle']);
+            $labels = ReporteIncidenciasService::LABELS;
+
             $allRows = $service->generate($selectedCompanyId, $startDate, $endDate, $selectedTypes);
-            $perPage = (int) config('constantes.itemsPorPagina');
+            $unfilteredTotal = $allRows->count();
+            $search = Str::lower($filters['q'] ?? '');
+            if ($search !== '') {
+                $allRows = $allRows->filter(function (array $row) use ($search, $labels) {
+                    $date = substr($row['fecha'], 8, 2).'/'.substr($row['fecha'], 5, 2).'/'.substr($row['fecha'], 0, 4);
+                    $text = implode(' ', [$row['fecha'], $date, $row['empleado'], $row['codigo'], $labels[$row['tipo']], $row['detalle']]);
+
+                    return str_contains(Str::lower($text), $search);
+                });
+            }
+            if ($sort !== null) {
+                $allRows = $allRows->sortBy(
+                    fn (array $row) => $sort === 'tipo' ? $labels[$row['tipo']] : $row[$sort],
+                    SORT_NATURAL | SORT_FLAG_CASE,
+                    $direction === 'desc',
+                );
+            }
             $page = LengthAwarePaginator::resolveCurrentPage();
             $rows = new LengthAwarePaginator($allRows->forPage($page, $perPage)->values(), $allRows->count(), $perPage, $page, [
                 'path' => LengthAwarePaginator::resolveCurrentPath(),
                 'query' => $request->query(),
             ]);
+
+            if ($request->header('X-Datatable-Fragment') === '1') {
+                $table = view('reportes.partials.incidencias-table', compact('rows', 'labels', 'unfilteredTotal'));
+
+                return response($table->render())->header('Cache-Control', 'no-store');
+            }
         }
-        return view('reportes.incidencias', compact('companies', 'selectedCompanyId', 'startDate', 'endDate', 'selectedTypes', 'rows', 'reportGenerated') + [
+        return view('reportes.incidencias', compact('companies', 'selectedCompanyId', 'startDate', 'endDate', 'selectedTypes', 'rows', 'unfilteredTotal', 'reportGenerated') + [
             'navigation' => DashboardController::navigation(), 'activeSection' => 'reportes-incidencias',
             'types' => ReporteIncidenciasService::TYPES, 'labels' => ReporteIncidenciasService::LABELS, 'descriptions' => ReporteIncidenciasService::DESCRIPTIONS,
             'typeColors' => [
@@ -54,7 +88,7 @@ class ReporteIncidenciasController extends Controller
     {
         abort_unless(in_array((int) $request->user()->profile, [1, 2], true), 403);
         $filters = $request->validate([
-            'empresa_id' => ['required', 'integer', 'min:1'], 'desde' => ['required', 'date'], 'hasta' => ['required', 'date', 'after_or_equal:desde'],
+            'empresa_id' => ['required', 'integer', 'min:1'], 'desde' => ['required', 'date_format:Y-m-d'], 'hasta' => ['bail', 'required', 'date_format:Y-m-d', 'after_or_equal:desde', new ReportDateRange],
             'tipos' => ['required', 'array', 'min:1'], 'tipos.*' => ['required', 'string', 'in:'.implode(',', ReporteIncidenciasService::TYPES)],
         ]);
         $companyId = (int) $filters['empresa_id']; abort_unless(in_array($companyId, $this->companyIdsFor($request, true), true), 403);

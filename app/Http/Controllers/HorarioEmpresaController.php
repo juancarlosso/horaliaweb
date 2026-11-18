@@ -25,8 +25,7 @@ class HorarioEmpresaController extends Controller
             ->whereIn('empresa_id', $companyIds)
             ->when($selectedCompanyId, fn ($query) => $query->where('empresa_id', $selectedCompanyId))
             ->orderBy('nombre_horario')
-            ->paginate(config('constantes.itemsPorPagina'))
-            ->withQueryString();
+            ->get();
 
         return view('horarios.index', [
             'navigation' => DashboardController::navigation(),

@@ -40,8 +40,7 @@ class PaymentHistoryController extends Controller
             ->when($filters['hasta'] ?? null, fn ($query, $date) => $query->whereDate('intentado_en', '<=', $date))
             ->orderByDesc('intentado_en')
             ->orderByDesc('id')
-            ->paginate(15)
-            ->withQueryString();
+            ->get();
 
         return view('payments.history', [
             'payments' => $payments,

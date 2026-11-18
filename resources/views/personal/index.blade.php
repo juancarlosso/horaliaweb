@@ -1,23 +1,26 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Personal', 'activeSection' => 'personal'])
 
 @section('content')
+@include('components.datatable-assets')
 <style>
     .page-inner { max-width:none; }
     .personal-page { width:100%; }
     .personal-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
     .personal-heading h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; letter-spacing:-.02em; }
     .personal-heading p { margin:0; color:var(--body-text-muted); font-size:.875rem; }
-    .personal-toolbar { display:flex; align-items:end; gap:1rem; margin-bottom:1.25rem; }
-    .personal-filter { width:min(100%, 420px); }
+    .personal-toolbar, .personal-filters { display:flex; align-items:end; flex-wrap:wrap; gap:.75rem; }
+    .personal-toolbar { margin-bottom:1.25rem; }
+    .personal-filters { flex:1; }
+    .personal-filter { flex:1 1 12rem; max-width:300px; }
     .personal-filter label { display:block; margin:0 0 .4rem; color:var(--body-text); font-size:.82rem; font-weight:650; }
-    .personal-filter select { width:100%; }
+    .personal-filter .hr-input { width:100%; }
     .personal-toolbar-action { margin-left:auto; white-space:nowrap; }
     .personal-error { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(239,68,68,.2); border-radius:.625rem; color:#b42318; background:rgba(239,68,68,.07); font-size:.845rem; }
     .personal-actions { display:flex; justify-content:flex-end; gap:.4rem; white-space:nowrap; }
     .personal-actions i { display:inline-block; width:15px; min-width:15px; font-size:15px; line-height:1; text-align:center; }
     .personal-actions form { margin:0; }
     .personal-actions .btn-hr { text-decoration:none; }
-    .personal-person-cell { display:flex; align-items:center; gap:.65rem; min-width:200px; }
+    .personal-person-cell { display:flex; align-items:center; gap:.65rem; min-width:180px; }
     .personal-avatar { position:relative; display:grid; place-items:center; width:40px; height:40px; flex:none; overflow:hidden; border-radius:.7rem; color:#fff; background:linear-gradient(135deg,#4f6ef7,#8b5cf6); font-size:.95rem; font-weight:800; }
     .personal-avatar img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
     .personal-name { color:var(--body-text); font-weight:700; }
@@ -28,7 +31,7 @@
     .personal-footer { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.25rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); font-size:.8rem; }
     .personal-pagination { display:flex; align-items:center; gap:.55rem; }
     .personal-pagination [aria-disabled="true"] { pointer-events:none; opacity:.55; }
-    @media(max-width:700px) { .personal-heading { align-items:stretch; flex-direction:column; } .personal-toolbar { align-items:stretch; flex-direction:column; } .personal-footer { align-items:flex-start; flex-direction:column; } }
+    @media(max-width:700px) { .personal-heading { align-items:stretch; flex-direction:column; } .personal-toolbar { align-items:stretch; flex-direction:column; } .personal-filter { max-width:none; } .personal-footer { align-items:flex-start; flex-direction:column; } }
 </style>
 
 <section class="personal-page">
@@ -36,21 +39,24 @@
     @if($errors->has('personal'))<div class="personal-error" role="alert">{{ $errors->first('personal') }}</div>@endif
     @if($errors->has('password') && !old('personal_id'))<div class="personal-error" role="alert">{{ $errors->first('password') }}</div>@endif
     <div class="personal-toolbar">
-        <div class="personal-filter">
-            <label for="empresa_id">Empresa</label>
-            <select class="hr-input select2" id="empresa_id" name="empresa_id">
-                @if($companies->count() !== 1)<option value="0" @selected(!$selectedCompanyId)>Todas las empresas</option>@endif
-                @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
-            </select>
-        </div>
+        <form class="personal-filters" id="personal-filters" method="get" action="{{ route('personal.index') }}">
+            <div class="personal-filter">
+                <label for="empresa_id">Empresa</label>
+                <select class="hr-input select2" id="empresa_id" name="empresa_id">
+                    @if($companies->count() !== 1)<option value="0" @selected(!$selectedCompanyId)>Todas las empresas</option>@endif
+                    @foreach($companies as $company)<option value="{{ $company->id }}" @selected($selectedCompanyId === $company->id)>{{ $company->nombre }}</option>@endforeach
+                </select>
+            </div>
+        </form>
         @if($canCreate)<a class="btn-hr btn-primary-hr personal-toolbar-action" href="{{ route('personal.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-plus" aria-hidden="true"></i> Agregar personal</a>@endif
     </div>
 
-    <div class="card-hr">
-        <div class="card-hd"><div><h2 class="card-title-hr">Listado de personal</h2><p class="card-subtitle-hr">{{ $personal->total() }} {{ $personal->total() === 1 ? 'colaborador registrado' : 'colaboradores registrados' }}</p></div></div>
-        @if($personal->count())
-            <div class="table-wrap"><table class="bs-table hover">
-                <thead><tr><th>Colaborador</th><th>Correo electrónico</th><th>Empresa</th><th>Centro de trabajo</th><th class="text-center">ADMIN</th><th class="text-end">Acciones</th></tr></thead>
+    <div class="card-hr" id="personal-results" data-datatable-source>
+        <div class="card-hd"><div><h2 class="card-title-hr">Listado de personal</h2><p class="card-subtitle-hr" data-datatable-fallback>{{ $personal->total() }} {{ $search !== '' ? ($personal->total() === 1 ? 'coincidencia' : 'coincidencias') : ($personal->total() === 1 ? 'colaborador registrado' : 'colaboradores registrados') }}</p></div></div>
+        @fragment('personal-results')
+        <template data-table-total="{{ $unfilteredTotal }}" data-table-filtered="{{ $personal->total() }}"></template>
+        <div class="table-wrap"><table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}" data-per-page="{{ $personal->perPage() }}" data-page="{{ $personal->currentPage() }}" data-search-placeholder="Buscar..." data-empty="Aún no hay colaboradores.">
+                <thead><tr><th data-sort-key="nombre">Colaborador</th><th data-sort-key="email">Correo electrónico</th><th data-sort-key="empresa">Empresa</th><th data-sort-key="centro">Centro de trabajo</th><th class="text-center" data-sort-key="es_administrador">ADMIN</th><th class="text-end no-search">Acciones</th></tr></thead>
                 <tbody>
                 @foreach($personal as $empleado)
                     @php
@@ -79,10 +85,13 @@
                 @endforeach
                 </tbody>
             </table></div>
-            @if($personal->hasPages())<div class="personal-footer"><span>Mostrando {{ $personal->firstItem() }}–{{ $personal->lastItem() }} de {{ $personal->total() }}</span><div class="personal-pagination"><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $personal->previousPageUrl() ?? '#' }}" @if($personal->onFirstPage()) aria-disabled="true" @endif>Anterior</a><span>Página {{ $personal->currentPage() }} de {{ $personal->lastPage() }}</span><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $personal->nextPageUrl() ?? '#' }}" @unless($personal->hasMorePages()) aria-disabled="true" @endunless>Siguiente</a></div></div>@endif
-        @else
-            <div class="personal-empty"><h2>Aún no hay colaboradores</h2><p>Agrega personal para comenzar a asignar horarios laborales.</p></div>
+            @if($personal->hasPages())<div class="personal-footer" data-datatable-fallback><span>Mostrando {{ $personal->firstItem() }}–{{ $personal->lastItem() }} de {{ $personal->total() }}</span><div class="personal-pagination"><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $personal->previousPageUrl() ?? '#' }}" @if($personal->onFirstPage()) aria-disabled="true" @endif>Anterior</a><span>Página {{ $personal->currentPage() }} de {{ $personal->lastPage() }}</span><a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ $personal->nextPageUrl() ?? '#' }}" @unless($personal->hasMorePages()) aria-disabled="true" @endunless>Siguiente</a></div></div>@endif
+        @if(!$personal->count() && $search !== '')
+            <div class="personal-empty" data-datatable-fallback><h2>No se encontraron colaboradores</h2><p>Prueba con otro nombre o selecciona otra empresa.</p></div>
+        @elseif(!$personal->count())
+            <div class="personal-empty" data-datatable-fallback><h2>Aún no hay colaboradores</h2><p>Agrega personal para comenzar a asignar horarios laborales.</p></div>
         @endif
+        @endfragment
     </div>
 </section>
 <div class="modal fade" id="assign-password-modal" tabindex="-1" aria-labelledby="assign-password-title" aria-hidden="true">
@@ -103,11 +112,16 @@
     </div></div>
 </div>
 <script>
+    const personalResults = document.getElementById('personal-results');
     document.addEventListener('DOMContentLoaded', function () {
         window.jQuery('#empresa_id').on('change', function () {
-            const url = new URL(@json(route('personal.index')), window.location.origin);
+            const url = new URL(@json(route('personal.index')));
             if (this.value !== '0') url.searchParams.set('empresa_id', this.value);
-            window.location.assign(url);
+            const current = new URLSearchParams(location.search);
+            for (const key of ['q', 'per_page', 'sort', 'direction']) {
+                if (current.has(key)) url.searchParams.set(key, current.get(key));
+            }
+            location.assign(url);
         });
     });
     const assignPasswordModal = document.getElementById('assign-password-modal');
@@ -160,8 +174,9 @@
             new bootstrap.Modal(assignPasswordModal).show();
         }
     @endif
-    document.querySelectorAll('[data-confirm-termination]').forEach(function (form) {
-        form.addEventListener('submit', function (event) {
+    personalResults.addEventListener('submit', function (event) {
+        const form = event.target;
+        if (form.matches('[data-confirm-termination]')) {
             event.preventDefault();
             Swal.fire({
                 icon: 'warning', title: '¿Dar de baja a este colaborador?',
@@ -170,7 +185,7 @@
                 buttonsStyling: false, reverseButtons: true,
                 customClass: { confirmButton: 'btn-hr btn-danger-hr', cancelButton: 'btn-hr btn-outline-hr' }
             }).then(function (result) { if (result.isConfirmed) form.submit(); });
-        });
+        }
     });
 </script>
 @endsection

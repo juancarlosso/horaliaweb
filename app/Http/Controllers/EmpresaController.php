@@ -24,7 +24,7 @@ class EmpresaController extends Controller
         if (!$isAdmin) {
             $query->whereHas('usuarios', fn ($users) => $users->where('users.id', $user->id));
         }
-        $empresas = $query->orderBy('nombre')->paginate(config('constantes.itemsPorPagina'));
+        $empresas = $query->orderBy('nombre')->get();
         $manageableIds = $isAdmin
             ? []
             : $user->empresas()->wherePivot('control_total', true)->pluck('empresas.id')->map(fn ($id) => (int) $id)->all();

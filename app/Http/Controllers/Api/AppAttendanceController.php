@@ -120,7 +120,7 @@ class AppAttendanceController extends Controller
         ]);
     }
 
-    public function verifyPin(Request $request, RegistroAsistenciaService $registration, AttendanceLocationService $locations): JsonResponse
+    public function verifyPin(Request $request, RegistroAsistenciaService $registration): JsonResponse
     {
         $data = $request->validate(['pin' => ['required', 'regex:/^\\d{5}$/']]);
         [$user, $companyIds] = $this->authorizedCompany($request);
@@ -132,9 +132,6 @@ class AppAttendanceController extends Controller
 
         if (! $personal) {
             return response()->json(['success' => false, 'message' => 'PIN no reconocido.'], 422);
-        }
-        if (! $locations->parseCoordinates($personal->centro?->geolocalizacion)) {
-            return response()->json(['success' => false, 'message' => 'El centro de trabajo del colaborador no tiene geolocalización configurada. Contacta a tu administrador.'], 422);
         }
         $companyId = (int) $personal->empresa_id;
 

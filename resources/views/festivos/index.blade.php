@@ -1,6 +1,7 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Festivos', 'activeSection' => 'festivos'])
 
 @section('content')
+@include('components.datatable-assets')
 <style>
     .page-inner { max-width:none; }
     .holidays-heading { margin-bottom:1.25rem; }
@@ -30,8 +31,8 @@
     <div class="card-hr">
         <div class="card-hd"><div><h2 class="card-title-hr">Listado de {{ $selectedYear }}</h2><p class="card-subtitle-hr">{{ $festivos->count() }} {{ $festivos->count() === 1 ? 'festivo' : 'festivos' }}{{ $selectedCompanyId ? ' para la empresa seleccionada' : '' }}</p></div></div>
         @if($festivos->isNotEmpty())
-            <div class="table-wrap"><table class="bs-table hover"><thead><tr><th>Fecha</th><th>Conmemoración</th><th>Tipo</th>@unless($selectedCompanyId)<th>Empresa</th>@endunless<th class="text-end">Acciones</th></tr></thead><tbody>
-                @foreach($festivos as $festivo)<tr><td>{{ $festivo->fecha->format('d/m/Y') }}</td><td class="fw-bold">{{ $festivo->conmemoracion }}</td><td><span class="holidays-type {{ $festivo->tipo === 'Oficial' ? 'holidays-type-official' : 'holidays-type-company' }}">{{ $festivo->tipo }}</span></td>@unless($selectedCompanyId)<td>{{ $festivo->empresa ?? 'Todas' }}</td>@endunless<td><div class="holidays-actions">@if($festivo->tipo === 'Empresarial')<a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('festivos.edit', $festivo->id) }}" aria-label="Editar {{ $festivo->conmemoracion }}"><i class="{{ config('constantes.tipo_iconos') }} fa-pen-to-square" aria-hidden="true"></i> Editar</a><form method="POST" action="{{ route('festivos.destroy', $festivo->id) }}" data-confirm-delete data-record-name="{{ $festivo->conmemoracion }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" aria-label="Eliminar {{ $festivo->conmemoracion }}"><i class="{{ config('constantes.tipo_iconos') }} fa-trash-can" aria-hidden="true"></i> Eliminar</button></form>@else<span class="company-rfc">Solo lectura</span>@endif</div></td></tr>@endforeach
+            <div class="table-wrap"><table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}"><thead><tr><th>Fecha</th><th>Conmemoración</th><th>Tipo</th>@unless($selectedCompanyId)<th>Empresa</th>@endunless<th class="no-search text-end">Acciones</th></tr></thead><tbody>
+                @foreach($festivos as $festivo)<tr><td data-order="{{ $festivo->fecha->toDateString() }}">{{ $festivo->fecha->format('d/m/Y') }}</td><td class="fw-bold">{{ $festivo->conmemoracion }}</td><td><span class="holidays-type {{ $festivo->tipo === 'Oficial' ? 'holidays-type-official' : 'holidays-type-company' }}">{{ $festivo->tipo }}</span></td>@unless($selectedCompanyId)<td>{{ $festivo->empresa ?? 'Todas' }}</td>@endunless<td><div class="holidays-actions">@if($festivo->tipo === 'Empresarial')<a class="btn-hr btn-outline-hr btn-sm-hr" href="{{ route('festivos.edit', $festivo->id) }}" aria-label="Editar {{ $festivo->conmemoracion }}"><i class="{{ config('constantes.tipo_iconos') }} fa-pen-to-square" aria-hidden="true"></i> Editar</a><form method="POST" action="{{ route('festivos.destroy', $festivo->id) }}" data-confirm-delete data-record-name="{{ $festivo->conmemoracion }}">@csrf @method('DELETE')<button class="btn-hr btn-danger-hr btn-sm-hr" type="submit" aria-label="Eliminar {{ $festivo->conmemoracion }}"><i class="{{ config('constantes.tipo_iconos') }} fa-trash-can" aria-hidden="true"></i> Eliminar</button></form>@else<span class="company-rfc">Solo lectura</span>@endif</div></td></tr>@endforeach
             </tbody></table></div>
         @else
             <div class="holidays-empty"><h2>No hay festivos para {{ $selectedYear }}</h2><p>Agrega un festivo empresarial para esta empresa.</p></div>

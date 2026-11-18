@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\ManagesCompanyCatalogs;
 use App\Models\Asistencia;
+use App\Models\Personal;
 use App\Services\AttendanceLocationService;
 use App\Services\AttendancePhotoService;
 use App\Services\RegistroAsistenciaService;
+use App\Support\DataTable;
 use App\Support\HoraliaTimezones;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -26,6 +28,7 @@ class AsistenciaController extends Controller
         $personal?->load('centro');
         $validated = $request->validate([
             'empresa_id' => ['nullable', 'integer'],
+            'q' => ['nullable', 'string', 'max:150'],
             'mes' => ['nullable', 'integer', 'between:1,12'],
             'anio' => ['nullable', 'integer', 'in:'.implode(',', config('constantes.aniosAsistencia', []))],
         ]);
@@ -44,7 +47,7 @@ class AsistenciaController extends Controller
         ];
         $periodLabel = $monthNames[$selectedMonth].' '.$selectedYear;
 
-        $attendance = Asistencia::query()
+        $query = Asistencia::query()
             ->with(['personal.empresa', 'personal.centro'])
             ->whereHas('personal', function ($query) use ($companyIds, $selectedCompanyId) {
                 $query->whereIn('empresa_id', $companyIds)
@@ -52,11 +55,34 @@ class AsistenciaController extends Controller
             })
             ->when($isEmployeeProfile, fn ($query) => $query->where('personal_id', $personal?->id ?? 0))
             ->whereYear('fecha', $selectedYear)
-            ->whereMonth('fecha', $selectedMonth)
-            ->orderByDesc('fecha')
+            ->whereMonth('fecha', $selectedMonth);
+
+        $search = trim($validated['q'] ?? '');
+        $unfilteredTotal = $search !== '' ? (clone $query)->count() : null;
+        [$perPage, $sort, $direction] = DataTable::options($request, [
+            'colaborador', 'fecha', 'modalidad', 'llegada', 'salida', 'minutos_tarde', 'minutos_salida_temprano',
+        ]);
+        $sortColumn = $sort === 'colaborador'
+            ? Personal::query()->select('nombre')->whereColumn('personal.id', 'asistencias.personal_id')
+            : ($sort ?? 'fecha');
+        $attendance = $query
+            ->when($search !== '', function ($query) use ($search) {
+                $pattern = '%'.strtr($search, ['!' => '!!', '%' => '!%', '_' => '!_']).'%';
+
+                $query->whereHas('personal', fn ($personal) => $personal->whereRaw("nombre LIKE ? ESCAPE '!'", [$pattern]));
+            })
+            ->orderBy($sortColumn, $sort ? $direction : 'desc')
             ->orderByDesc('created_at')
-            ->paginate(config('constantes.itemsPorPagina'))
+            ->orderByDesc('id')
+            ->paginate($perPage)
             ->withQueryString();
+
+        $unfilteredTotal ??= $attendance->total();
+        if ($request->header('X-Datatable-Fragment') === '1') {
+            $view = view('asistencia.table', compact('attendance', 'unfilteredTotal', 'periodLabel'));
+
+            return response($view->render())->header('Cache-Control', 'no-store');
+        }
 
         $canMarkAttendance = $personal && $personal->empresa?->activa && in_array($personal->empresa_id, $companyIds, true);
         $attendanceTimezone = $canMarkAttendance
@@ -93,6 +119,7 @@ class AsistenciaController extends Controller
             'monthNames' => $monthNames,
             'periodLabel' => $periodLabel,
             'attendance' => $attendance,
+            'unfilteredTotal' => $unfilteredTotal,
             'personal' => $personal,
             'attendanceTimezone' => $attendanceTimezone,
             'todayAttendance' => $todayAttendance,

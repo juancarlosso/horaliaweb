@@ -159,7 +159,8 @@ class VacacionesModuleTest extends TestCase
             'empresa_id' => $company->id, 'personal_id' => $firstEmployee->id,
         ]))->assertOk()->assertSee('Colaborador filtrado')->assertSee('Personal')->assertSee('personal_id');
         $html = $response->getContent();
-        $tableStart = strpos($html, '<table class="bs-table hover">');
+        $tableStart = strpos($html, '<table class="bs-table hover" data-datatable=');
+        $this->assertNotFalse($tableStart);
         $tableEnd = strpos($html, '</table>', $tableStart);
         $table = substr($html, $tableStart, $tableEnd - $tableStart);
         $this->assertStringNotContainsString('Otro colaborador', $table);

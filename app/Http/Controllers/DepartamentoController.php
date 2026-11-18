@@ -26,8 +26,7 @@ class DepartamentoController extends Controller
             ->whereIn('empresa_id', $companyIds)
             ->when($selectedCompanyId, fn ($query) => $query->where('empresa_id', $selectedCompanyId))
             ->orderBy('nombre')
-            ->paginate(config('constantes.itemsPorPagina'))
-            ->withQueryString();
+            ->get();
 
         return view('departamentos.index', [
             'navigation' => DashboardController::navigation(),

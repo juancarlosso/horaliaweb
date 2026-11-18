@@ -1,6 +1,7 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Historial de pagos', 'activeSection' => 'payment-history'])
 
 @section('content')
+@include('components.datatable-assets')
 <style>
     .payment-history { width:100%; }
     .payment-history h1 { margin:0 0 .35rem; color:var(--body-text); font-size:1.5rem; font-weight:800; }
@@ -22,7 +23,6 @@
     .payment-actions .payment-document { min-width:46px; padding:0 .55rem !important; justify-content:center; }
     .payment-actions .payment-document[aria-disabled="true"] { opacity:.55; cursor:wait; }
     .payment-empty { padding:2.5rem 1rem; color:var(--body-text-muted); text-align:center; }
-    .payment-footer { display:flex; justify-content:space-between; gap:1rem; padding:1rem 1.25rem; border-top:1px solid var(--body-border); color:var(--body-text-muted); font-size:.8rem; }
     @media(max-width:700px) { .payment-footer { flex-direction:column; } }
 </style>
 <section class="payment-history">
@@ -51,17 +51,17 @@
             @if($filters)<a class="btn-hr btn-outline-hr" href="{{ route('payment-history.index') }}">Limpiar</a>@endif
         </form>
         @if($payments->count())
-            <div class="table-wrap"><table class="bs-table hover">
-                <thead><tr><th>Folio</th><th>Fecha y hora</th><th>Empresa</th><th>Concepto</th><th>Importe</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <div class="table-wrap"><table class="bs-table hover" data-datatable="{{ config('constantes.itemsPorPagina') }}">
+                <thead><tr><th>Folio</th><th>Fecha y hora</th><th>Empresa</th><th>Concepto</th><th>Importe</th><th>Estado</th><th class="no-search">Acciones</th></tr></thead>
                 <tbody>@foreach($payments as $payment)
                     @php($statusClass = $payment->resultado === 'exitoso' ? 'success' : ($payment->resultado === 'fallido' ? 'failed' : 'pending'))
                     @php($statusLabel = $payment->resultado === 'exitoso' ? 'Exitoso' : ($payment->resultado === 'fallido' ? 'Rechazado' : 'Pendiente'))
                     <tr>
                         <td>{{ $payment->resultado === 'exitoso' ? ($payment->folio ?: '—') : '—' }}</td>
-                        <td>{{ $payment->intentado_en?->format('d/m/Y H:i') ?? '—' }}</td>
+                        <td data-order="{{ $payment->intentado_en?->format('Y-m-d H:i:s') }}">{{ $payment->intentado_en?->format('d/m/Y H:i') ?? '—' }}</td>
                         <td>{{ $payment->empresa?->nombre ?: 'Empresa #' . $payment->empresa_id }}</td>
                         <td>{{ $payment->concepto }}</td>
-                        <td>${{ number_format((float) $payment->cantidad, 2) }} {{ strtoupper($payment->moneda) }}</td>
+                        <td data-order="{{ $payment->cantidad }}">${{ number_format((float) $payment->cantidad, 2) }} {{ strtoupper($payment->moneda) }}</td>
                         <td><span class="payment-status {{ $statusClass }}">{{ $statusLabel }}</span></td>
                         <td style="white-space:nowrap">
                             <div class="payment-actions">
@@ -84,7 +84,6 @@
                     </tr>
                 @endforeach</tbody>
             </table></div>
-            @if($payments->hasPages())<nav class="payment-footer" aria-label="Paginación del historial"><span>Mostrando {{ $payments->firstItem() }}–{{ $payments->lastItem() }} de {{ $payments->total() }}</span>{{ $payments->links() }}</nav>@endif
         @else
             <div class="payment-empty">No hay movimientos de cobro para los filtros seleccionados.</div>
         @endif

@@ -353,9 +353,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (cameraStream && video.videoWidth && video.videoHeight) {
             showLoading('Procesando la fotografía…');
-            const scale = Math.min(1, 1280 / video.videoWidth);
-            canvas.width = Math.round(video.videoWidth * scale);
-            canvas.height = Math.round(video.videoHeight * scale);
+            const scale = Math.min(1, 960 / Math.max(video.videoWidth, video.videoHeight));
+            canvas.width = Math.max(1, Math.round(video.videoWidth * scale));
+            canvas.height = Math.max(1, Math.round(video.videoHeight * scale));
             canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
             canvas.toBlob(function (blob) {
                 if (!blob) {
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!reader.error) savePhotoAndLocate(reader.result);
                 };
                 reader.readAsDataURL(blob);
-            }, 'image/jpeg', .82);
+            }, 'image/jpeg', 0.65);
         } else {
             savePhotoAndLocate(null);
         }

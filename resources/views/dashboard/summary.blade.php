@@ -28,18 +28,6 @@
         <div><h1>Resumen</h1><p>Totales por empresa de centros de trabajo, personal, asistencias y métodos de pago.</p></div>
     </header>
 
-    <div class="card-hr" style="margin-bottom:1.25rem">
-        <div class="card-hd">
-            <div>
-                <h2 class="card-title-hr">Espacio ocupado en Wasabi</h2>
-                @if($wasabiProjectPath)
-                    <p class="card-subtitle-hr">{{ $wasabiProjectPath }}</p>
-                @endif
-            </div>
-            <span class="admin-summary-number">{{ $wasabiUsedBytes === null ? 'No disponible' : \Illuminate\Support\Number::fileSize($wasabiUsedBytes, maxPrecision: 2) }}</span>
-        </div>
-    </div>
-
     <div class="card-hr">
         <div class="card-hd">
             <div><h2 class="card-title-hr">Empresas</h2><p class="card-subtitle-hr">Desglose de los registros asociados a cada empresa.</p></div>

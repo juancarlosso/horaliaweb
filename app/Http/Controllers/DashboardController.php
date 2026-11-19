@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
 use App\Models\Empresa;
-use App\Models\HorarioEmpresa;
 use App\Models\IntentoPago;
 use App\Models\Personal;
 use App\Services\RegistroAsistenciaService;
@@ -231,13 +230,8 @@ class DashboardController extends Controller
             $company->setAttribute('metodos_pago_count', $paymentMethodCount);
         });
 
-        $bucket = config('filesystems.disks.wasabi.bucket');
-        $prefix = rtrim(config('filesystems.wasabi_project_prefix'), '/');
-
         return view('dashboard.summary', [
             'companies' => $companies,
-            'wasabiProjectPath' => $bucket && $prefix !== '' ? $bucket . '/' . $prefix . '/' : null,
-            'wasabiUsedBytes' => $this->wasabiUsedBytes($bucket, $prefix),
             'navigation' => self::navigation(),
             'activeSection' => 'summary',
         ]);
@@ -336,12 +330,15 @@ class DashboardController extends Controller
         }
 
         $attendanceCount = Asistencia::query()->count();
+        $bucket = config('filesystems.disks.wasabi.bucket');
+        $prefix = rtrim(config('filesystems.wasabi_project_prefix'), '/');
 
         return [
             'isSystemAdminDashboard' => true,
+            'wasabiProjectPath' => $bucket && $prefix !== '' ? $bucket . '/' . $prefix . '/' : null,
+            'wasabiUsedBytes' => $this->wasabiUsedBytes($bucket, $prefix),
             'adminTotals' => [
                 'companies' => Empresa::query()->count(),
-                'schedules' => HorarioEmpresa::query()->count(),
                 'employees' => Personal::query()->count(),
                 'attendance' => $attendanceCount,
             ],

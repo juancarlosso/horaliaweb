@@ -37,7 +37,16 @@
 
     <section class="admin-metrics" aria-label="Resumen general">
         <article class="admin-metric"><div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-building" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['companies']) }}</div><div class="admin-metric-label">Empresas</div></div></article>
-        <article class="admin-metric"><div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-calendar" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['schedules']) }}</div><div class="admin-metric-label">Horarios</div></div></article>
+        <article class="admin-metric">
+            <div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-hard-drive" aria-hidden="true"></i></div>
+            <div>
+                <div class="admin-metric-value">{{ $wasabiUsedBytes === null ? 'No disponible' : \Illuminate\Support\Number::fileSize($wasabiUsedBytes, maxPrecision: 2) }}</div>
+                <div class="admin-metric-label">Espacio ocupado en Wasabi</div>
+                @if($wasabiProjectPath)
+                    <div class="admin-metric-label">{{ $wasabiProjectPath }}</div>
+                @endif
+            </div>
+        </article>
         <article class="admin-metric"><div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-people-group" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['employees']) }}</div><div class="admin-metric-label">Personal</div></div></article>
         <article class="admin-metric"><div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-clock" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['attendance']) }}</div><div class="admin-metric-label">Registros de asistencia</div></div></article>
     </section>

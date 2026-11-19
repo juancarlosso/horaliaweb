@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class DashboardController extends Controller
@@ -197,7 +198,7 @@ class DashboardController extends Controller
             ->groupBy('empresa_id')
             ->pluck('total', 'empresa_id');
 
-        $companies->loadCount(['centros', 'horarios', 'personal']);
+        $companies->loadCount(['centros', 'personal']);
         $attendanceCounts = DB::table('asistencias')
             ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
             ->select('personal.empresa_id', DB::raw('COUNT(asistencias.id) as total'))
@@ -230,11 +231,49 @@ class DashboardController extends Controller
             $company->setAttribute('metodos_pago_count', $paymentMethodCount);
         });
 
+        $bucket = config('filesystems.disks.wasabi.bucket');
+        $prefix = rtrim(config('filesystems.wasabi_project_prefix'), '/');
+
         return view('dashboard.summary', [
             'companies' => $companies,
+            'wasabiProjectPath' => $bucket && $prefix !== '' ? $bucket . '/' . $prefix . '/' : null,
+            'wasabiUsedBytes' => $this->wasabiUsedBytes($bucket, $prefix),
             'navigation' => self::navigation(),
             'activeSection' => 'summary',
         ]);
+    }
+
+    private function wasabiUsedBytes(?string $bucket, string $prefix): ?int
+    {
+        if (! $bucket || $prefix === '') {
+            return null;
+        }
+
+        try {
+            $cacheKey = 'admin-summary-wasabi-bytes-' . hash('sha256', config('filesystems.disks.wasabi.endpoint') . '/' . $bucket . '/' . $prefix . '/');
+
+            return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($bucket, $prefix): int {
+                $pages = Storage::disk('wasabi')->getClient()->getPaginator('ListObjectsV2', [
+                    'Bucket' => $bucket,
+                    'Prefix' => $prefix . '/',
+                    '@http' => ['connect_timeout' => 2, 'timeout' => 5],
+                    '@retries' => 0,
+                ]);
+
+                $bytes = 0;
+                foreach ($pages->search('Contents[].Size') as $size) {
+                    $bytes += $size;
+                }
+
+                return $bytes;
+            });
+        } catch (Throwable $exception) {
+            Log::warning('No se pudo consultar el espacio ocupado en Wasabi para el resumen.', [
+                'exception' => get_class($exception),
+            ]);
+
+            return null;
+        }
     }
 
     private function adminDashboardData(Request $request): array

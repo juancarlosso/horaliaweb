@@ -74,6 +74,7 @@ return [
 
     ],
 
+    'wasabi_project_prefix' => env('WASABI_PREFIJO') ?? 'UPLODIA',
     'wasabi_url_ttl_minutes' => env('WASABI_URL_TTL_MINUTES', 60),
     'personal_document_max_kb' => env('PERSONAL_DOCUMENT_MAX_KB', 10240),
 

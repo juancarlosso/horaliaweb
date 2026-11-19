@@ -25,8 +25,20 @@
 
 <section class="admin-summary-page">
     <header class="admin-summary-heading">
-        <div><h1>Resumen</h1><p>Totales por empresa de centros de trabajo, horarios, personal, asistencias y métodos de pago.</p></div>
+        <div><h1>Resumen</h1><p>Totales por empresa de centros de trabajo, personal, asistencias y métodos de pago.</p></div>
     </header>
+
+    <div class="card-hr" style="margin-bottom:1.25rem">
+        <div class="card-hd">
+            <div>
+                <h2 class="card-title-hr">Espacio ocupado en Wasabi</h2>
+                @if($wasabiProjectPath)
+                    <p class="card-subtitle-hr">{{ $wasabiProjectPath }}</p>
+                @endif
+            </div>
+            <span class="admin-summary-number">{{ $wasabiUsedBytes === null ? 'No disponible' : \Illuminate\Support\Number::fileSize($wasabiUsedBytes, maxPrecision: 2) }}</span>
+        </div>
+    </div>
 
     <div class="card-hr">
         <div class="card-hd">
@@ -42,7 +54,6 @@
                         <tr>
                             <th scope="col" aria-sort="ascending"><button class="admin-sort-button" type="button" data-sort-key="empresa" data-sort-type="text" aria-pressed="true">Empresa<span class="admin-sort-indicator" aria-hidden="true">↑</span></button></th>
                             <th scope="col"><button class="admin-sort-button" type="button" data-sort-key="centros" data-sort-type="number" aria-pressed="false"><abbr title="Centros de trabajo">CT</abbr><span class="admin-sort-indicator" aria-hidden="true">↕</span></button></th>
-                            <th scope="col"><button class="admin-sort-button" type="button" data-sort-key="horarios" data-sort-type="number" aria-pressed="false"><abbr title="Horarios">HRS</abbr><span class="admin-sort-indicator" aria-hidden="true">↕</span></button></th>
                             <th scope="col"><button class="admin-sort-button" type="button" data-sort-key="personal" data-sort-type="number" aria-pressed="false"><abbr title="Personal">PRSN</abbr><span class="admin-sort-indicator" aria-hidden="true">↕</span></button></th>
                             <th scope="col"><button class="admin-sort-button" type="button" data-sort-key="asistencias" data-sort-type="number" aria-pressed="false"><abbr title="Registros de asistencia">RAST</abbr><span class="admin-sort-indicator" aria-hidden="true">↕</span></button></th>
                             <th scope="col"><button class="admin-sort-button" type="button" data-sort-key="metodos-pago" data-sort-type="number" aria-pressed="false"><abbr title="Métodos de pago">MP</abbr><span class="admin-sort-indicator" aria-hidden="true">↕</span></button></th>
@@ -53,7 +64,6 @@
                             <tr>
                                 <td data-sort-value="{{ $company->nombre ?: 'Empresa #' . $company->id }}"><span class="admin-summary-company">{{ $company->nombre ?: 'Empresa #' . $company->id }}</span></td>
                                 <td class="admin-summary-number" data-sort-value="{{ $company->centros_count }}">{{ number_format($company->centros_count) }}</td>
-                                <td class="admin-summary-number" data-sort-value="{{ $company->horarios_count }}">{{ number_format($company->horarios_count) }}</td>
                                 <td class="admin-summary-number" data-sort-value="{{ $company->personal_count }}">{{ number_format($company->personal_count) }}</td>
                                 <td class="admin-summary-number" data-sort-value="{{ $company->asistencias_count }}">{{ number_format($company->asistencias_count) }}</td>
                                 <td class="admin-summary-number" data-sort-value="{{ $company->metodos_pago_count }}">{{ number_format($company->metodos_pago_count) }}</td>

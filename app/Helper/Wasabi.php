@@ -19,7 +19,7 @@ class Wasabi
    public static function upload($carpeta, $archivo, $actual = null)
    {
 
-       $prefijo = env('WASABI_PREFIJO') ?? 'UPLODIA';
+       $prefijo = config('filesystems.wasabi_project_prefix');
 
        if (!$archivo) {
            return $actual; // Si no llega archivo, regresamos el anterior
@@ -64,7 +64,7 @@ class Wasabi
            return null;
        }
 
-       $prefijo = env('WASABI_PREFIJO') ?? 'UPLODIA';
+       $prefijo = config('filesystems.wasabi_project_prefix');
        $nombre = $nombreOriginal ?? basename(str_replace('\\', '/', $archivo->getClientOriginalName()));
        $nombre = preg_replace('/[\\x00-\\x1F\\x7F]/u', '', $nombre);
 

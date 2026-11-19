@@ -136,7 +136,7 @@ class AsistenciaController extends Controller
     {
         [$personal] = $this->currentPersonalAndSchedule($request);
         $coordinates = $this->validatedCoordinates($request, 'latitud', 'longitud');
-        $photoPath = $this->uploadAttendancePhoto($request, 'foto_entrada', (int) $personal->empresa_id, 'entrada', $photos);
+        $photoPath = $this->uploadAttendancePhoto($request, 'foto_entrada', $personal, 'entrada', $photos);
 
         try {
             $range = isset($coordinates['latitud'], $coordinates['longitud'])
@@ -160,7 +160,7 @@ class AsistenciaController extends Controller
     {
         [$personal] = $this->currentPersonalAndSchedule($request);
         $coordinates = $this->validatedCoordinates($request, 'latitud_salida', 'longitud_salida');
-        $photoPath = $this->uploadAttendancePhoto($request, 'foto_salida', (int) $personal->empresa_id, 'salida', $photos);
+        $photoPath = $this->uploadAttendancePhoto($request, 'foto_salida', $personal, 'salida', $photos);
 
         try {
             $range = isset($coordinates['latitud_salida'], $coordinates['longitud_salida'])
@@ -213,7 +213,7 @@ class AsistenciaController extends Controller
         return array_filter($coordinates, fn ($value) => $value !== null);
     }
 
-    private function uploadAttendancePhoto(Request $request, string $field, int $companyId, string $type, AttendancePhotoService $photos): ?string
+    private function uploadAttendancePhoto(Request $request, string $field, Personal $personal, string $type, AttendancePhotoService $photos): ?string
     {
         if (! $request->filled($field)) {
             return null;
@@ -224,7 +224,7 @@ class AsistenciaController extends Controller
         ])[$field];
 
         return $photoData !== null
-            ? $photos->uploadBase64Jpeg($photoData, $companyId, $type, $field)
+            ? $photos->uploadBase64Jpeg($photoData, (int) $personal->empresa_id, $type, $field, $personal->centro?->timezone)
             : null;
     }
 

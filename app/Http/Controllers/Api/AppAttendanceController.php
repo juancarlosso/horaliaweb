@@ -203,7 +203,7 @@ class AppAttendanceController extends Controller
 
         try {
             if (! empty($data['foto'])) {
-                $photoPath = $photos->uploadBase64Jpeg($data['foto'], $companyId, $kind);
+                $photoPath = $photos->uploadBase64Jpeg($data['foto'], $companyId, $kind, centerTimezone: $personal->centro?->timezone);
             }
             $range = $hasCoordinates
                 ? $locations->rangeFor($personal, (float) $data['latitud'], (float) $data['longitud'])

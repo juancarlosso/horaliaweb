@@ -340,7 +340,7 @@ class ChecadorController extends Controller
         $photoPath = null;
 
         try {
-            $photoPath = $photos->uploadBase64Jpeg($data['foto'], (int) $personal->empresa_id, $kind);
+            $photoPath = $photos->uploadBase64Jpeg($data['foto'], (int) $personal->empresa_id, $kind, centerTimezone: $personal->centro?->timezone);
             $range = $locations->rangeFor($personal, (float) $data['latitud'], (float) $data['longitud']);
             $registration->register(
                 $personal,

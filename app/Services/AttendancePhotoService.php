@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Helper\Wasabi;
+use App\Support\HoraliaTimezones;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -10,7 +11,7 @@ use Throwable;
 
 class AttendancePhotoService
 {
-    public function uploadBase64Jpeg(string $photoData, int $companyId, string $type, string $field = 'foto'): string
+    public function uploadBase64Jpeg(string $photoData, int $companyId, string $type, string $field = 'foto', ?string $centerTimezone = null): string
     {
         if (!preg_match('/^data:image\/jpeg;base64,([A-Za-z0-9+\/=]+)$/', $photoData, $matches)) {
             throw ValidationException::withMessages([$field => 'No se pudo procesar la fotografía. Tómala nuevamente.']);
@@ -33,7 +34,8 @@ class AttendancePhotoService
             }
 
             $file = new UploadedFile($temporaryPath, 'asistencia-' . $type . '.jpg', 'image/jpeg', null, true);
-            $path = Wasabi::upload('asistencias/empresa-' . $companyId, $file);
+            $datePath = now(HoraliaTimezones::forCenter($centerTimezone))->format('Y/m/d');
+            $path = Wasabi::upload('asistencias/empresa-' . $companyId . '/' . $datePath, $file);
             if (!is_string($path) || $path === '') {
                 throw new \RuntimeException('Attendance photo upload returned an empty path.');
             }

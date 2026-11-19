@@ -41,7 +41,7 @@
             <div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-hard-drive" aria-hidden="true"></i></div>
             <div>
                 <div class="admin-metric-value">{{ $wasabiUsedBytes === null ? 'No disponible' : \Illuminate\Support\Number::fileSize($wasabiUsedBytes, maxPrecision: 2) }}</div>
-                <div class="admin-metric-label">Espacio ocupado en Wasabi</div>
+                <div class="admin-metric-label">Espacio ocupado</div>
                 @if($wasabiProjectPath)
                     <div class="admin-metric-label">{{ $wasabiProjectPath }}</div>
                 @endif

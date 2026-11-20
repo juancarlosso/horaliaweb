@@ -335,7 +335,6 @@ class DashboardController extends Controller
 
         return [
             'isSystemAdminDashboard' => true,
-            'wasabiProjectPath' => $bucket && $prefix !== '' ? $bucket . '/' . $prefix . '/' : null,
             'wasabiUsedBytes' => $this->wasabiUsedBytes($bucket, $prefix),
             'adminTotals' => [
                 'companies' => Empresa::query()->count(),

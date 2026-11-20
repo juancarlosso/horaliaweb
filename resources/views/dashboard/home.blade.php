@@ -42,9 +42,6 @@
             <div>
                 <div class="admin-metric-value">{{ $wasabiUsedBytes === null ? 'No disponible' : \Illuminate\Support\Number::fileSize($wasabiUsedBytes, maxPrecision: 2) }}</div>
                 <div class="admin-metric-label">Espacio ocupado</div>
-                @if($wasabiProjectPath)
-                    <div class="admin-metric-label">{{ $wasabiProjectPath }}</div>
-                @endif
             </div>
         </article>
         <article class="admin-metric"><div class="admin-metric-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-people-group" aria-hidden="true"></i></div><div><div class="admin-metric-value">{{ number_format($adminTotals['employees']) }}</div><div class="admin-metric-label">Personal</div></div></article>

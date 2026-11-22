@@ -32,7 +32,7 @@ class ReporteIncidenciasTest extends TestCase
         [$company, $employee] = $this->employee('1@2@3@4@5');
         foreach (range(1, 5) as $weekday) $employee->horarios()->create(['dia' => $weekday, 'entrada' => '08:00', 'salida' => '17:00']);
         $employee->update(['fecha_baja' => '2026-11-03 17:00:00']);
-        Asistencia::query()->create(['personal_id' => $employee->id, 'fecha' => '2026-11-02', 'llegada' => '2026-11-02 08:20:00', 'minutos_tarde' => 10]);
+        Asistencia::query()->create(['empresa_id' => $company->id, 'personal_id' => $employee->id, 'fecha' => '2026-11-02', 'llegada' => '2026-11-02 08:20:00', 'minutos_tarde' => 10]);
 
         $rows = app(ReporteIncidenciasService::class)->generate($company->id, '2026-11-02', '2026-11-09', ReporteIncidenciasService::TYPES);
         $dayTwo = $rows->where('fecha', '2026-11-02')->pluck('tipo')->all();
@@ -63,9 +63,9 @@ class ReporteIncidenciasTest extends TestCase
         $user = User::factory()->create(['profile' => 1]);
         $vacation = Vacacion::query()->create(['empresa_id' => $company->id, 'personal_id' => $employee->id, 'autorizado_por_personal_id' => $employee->id, 'registrado_por_user_id' => $user->id, 'fecha_inicio' => '2026-11-02', 'fecha_fin' => '2026-11-03', 'total_dias' => 1, 'estado' => 'registrado']);
         VacacionFecha::query()->create(['vacacion_id' => $vacation->id, 'fecha' => '2026-11-02']);
-        Asistencia::query()->create(['personal_id' => $employee->id, 'fecha' => '2026-11-02', 'llegada' => '2026-11-02 08:00:00']);
+        Asistencia::query()->create(['empresa_id' => $company->id, 'personal_id' => $employee->id, 'fecha' => '2026-11-02', 'llegada' => '2026-11-02 08:00:00']);
         FestivoOficial::query()->create(['fecha' => '2026-11-04', 'conmemoracion' => 'Festivo de prueba']);
-        Asistencia::query()->create(['personal_id' => $employee->id, 'fecha' => '2026-11-04', 'llegada' => '2026-11-04 08:00:00']);
+        Asistencia::query()->create(['empresa_id' => $company->id, 'personal_id' => $employee->id, 'fecha' => '2026-11-04', 'llegada' => '2026-11-04 08:00:00']);
 
         $rows = app(ReporteIncidenciasService::class)->generate($company->id, '2026-11-02', '2026-11-04', ReporteIncidenciasService::TYPES);
         $dayTwo = $rows->where('fecha', '2026-11-02')->pluck('tipo')->all();
@@ -79,7 +79,7 @@ class ReporteIncidenciasTest extends TestCase
         [$company] = $this->employee('1');
         $user = User::factory()->create(['profile' => 1]);
         $base = ['empresa_id' => $company->id, 'desde' => '2026-11-02', 'hasta' => '2026-11-03', 'tipos' => ['posibles_faltas']];
-        $this->actingAs($user)->get(route('reportes.incidencias', $base))->assertOk()->assertSee('Reporte de Incidencias');
+        $this->actingAs($user)->get(route('reportes.incidencias', $base))->assertOk()->assertSee('Reporte de incidencias');
         $this->get(route('reportes.incidencias.exportar', $base))->assertDownload('horalia_incidencias_20261102_20261103.xlsx');
         $this->get(route('reportes.incidencias', array_merge($base, ['empresa_id' => $company->id + 999])))->assertForbidden();
         $this->get(route('reportes.incidencias', ['empresa_id' => $company->id, 'desde' => '2026-11-02', 'hasta' => '2026-11-03']))->assertSessionHasErrors('tipos');

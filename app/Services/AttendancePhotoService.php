@@ -12,7 +12,7 @@ use Throwable;
 class AttendancePhotoService
 {
     private const MAX_EDGE = 960;
-    private const JPEG_QUALITY = 65;
+    private const JPEG_QUALITY = 55;
     private const MAX_INPUT_PIXELS = 24_000_000;
 
     public function uploadBase64Jpeg(string $photoData, int $companyId, string $type, string $field = 'foto', ?string $centerTimezone = null): string

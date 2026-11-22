@@ -199,6 +199,7 @@ class AsistenciaPausasTest extends TestCase
         $admin = User::factory()->create(['profile' => 2]);
         $admin->empresas()->attach($personal->empresa_id, ['control_total' => true]);
         $attendance = Asistencia::query()->create([
+            'empresa_id' => $personal->empresa_id,
             'personal_id' => $personal->id, 'fecha' => '2026-10-19',
             'llegada' => '2026-10-19 08:00:00', 'salida' => '2026-10-19 17:00:00',
             'llegada_utc' => '2026-10-19 14:00:00', 'salida_utc' => '2026-10-19 23:00:00',

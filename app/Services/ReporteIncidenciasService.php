@@ -39,25 +39,26 @@ class ReporteIncidenciasService
         if ($employees->isEmpty()) return collect();
 
         $employeeIds = $employees->modelKeys();
+        $endExclusive = CarbonImmutable::parse($through)->addDay()->toDateString();
         $attendance = Asistencia::query()
-            ->whereIn('personal_id', $employeeIds)
+            ->where('empresa_id', $companyId)
             ->where('fecha', '>=', $from)
-            ->where('fecha', '<', CarbonImmutable::parse($through)->addDay()->toDateString())
+            ->where('fecha', '<', $endExclusive)
             ->whereNotNull('llegada')
             ->get(['personal_id', 'fecha', 'llegada', 'salida', 'minutos_tarde'])
             ->keyBy(fn ($row) => $row->personal_id.'|'.$row->fecha->toDateString());
         $holidays = collect();
-        foreach (FestivoOficial::query()->whereDate('fecha', '>=', $from)->whereDate('fecha', '<=', $through)->get() as $holiday) {
+        foreach (FestivoOficial::query()->where('fecha', '>=', $from)->where('fecha', '<', $endExclusive)->get() as $holiday) {
             $holidays->put($holiday->fecha->toDateString(), ['Oficial: '.$holiday->conmemoracion]);
         }
-        foreach (FestivoEmpresa::query()->where('empresa_id', $companyId)->whereDate('fecha', '>=', $from)->whereDate('fecha', '<=', $through)->get() as $holiday) {
+        foreach (FestivoEmpresa::query()->where('empresa_id', $companyId)->where('fecha', '>=', $from)->where('fecha', '<', $endExclusive)->get() as $holiday) {
             $holidays->put($holiday->fecha->toDateString(), array_merge($holidays->get($holiday->fecha->toDateString(), []), ['Empresa: '.$holiday->conmemoracion]));
         }
         $vacations = VacacionFecha::query()->whereHas('vacacion', fn ($q) => $q->where('empresa_id', $companyId)->where('estado', 'registrado'))
             ->whereHas('vacacion', fn ($q) => $q->whereIn('personal_id', $employeeIds))
-            ->whereDate('fecha', '>=', $from)->whereDate('fecha', '<=', $through)->with('vacacion')->get()->groupBy(fn ($row) => $row->vacacion->personal_id.'|'.$row->fecha->toDateString());
+            ->where('fecha', '>=', $from)->where('fecha', '<', $endExclusive)->with('vacacion')->get()->groupBy(fn ($row) => $row->vacacion->personal_id.'|'.$row->fecha->toDateString());
         $incapacityDates = [];
-        foreach (Incapacidad::query()->where('empresa_id', $companyId)->whereIn('personal_id', $employeeIds)->where('estado', 'vigente')->whereDate('fecha_inicio', '<=', $through)->whereDate('fecha_fin', '>=', $from)->get() as $incapacity) {
+        foreach (Incapacidad::query()->where('empresa_id', $companyId)->whereIn('personal_id', $employeeIds)->where('estado', 'vigente')->where('fecha_inicio', '<', $endExclusive)->where('fecha_fin', '>=', $from)->get() as $incapacity) {
             foreach (($incapacity->snapshot['fechas'] ?? []) as $snapshotDate) {
                 if (!empty($snapshotDate['laborable']) && $snapshotDate['fecha'] >= $from && $snapshotDate['fecha'] <= $through) {
                     $incapacityDates[$incapacity->personal_id.'|'.$snapshotDate['fecha']][] = $incapacity;

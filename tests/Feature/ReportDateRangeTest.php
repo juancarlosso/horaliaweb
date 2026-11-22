@@ -45,7 +45,7 @@ class ReportDateRangeTest extends TestCase
 
         $filters['hasta'] = '2026-03-31';
         $employee = Personal::query()->create(['empresa_id' => $company->id, 'nombre' => 'Colaborador del último día']);
-        Asistencia::query()->create(['personal_id' => $employee->id, 'fecha' => $filters['hasta']]);
+        Asistencia::query()->create(['empresa_id' => $company->id, 'personal_id' => $employee->id, 'fecha' => $filters['hasta']]);
         $this->get(route('reportes.general', $filters))->assertOk()->assertSee($employee->nombre);
         $this->get(route('reportes.departamento', $filters))->assertOk();
         $this->get(route('reportes.incidencias', $filters + ['tipos' => ['retardos']]))->assertOk();

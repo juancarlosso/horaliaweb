@@ -85,6 +85,7 @@ class RegistroAsistenciaService
                     $scheduledExit = $this->scheduledExitForAttendance($schedule, $attendance, $timezone);
                     $earlyMinutes = $now->lessThan($scheduledExit) ? (int) $now->diffInMinutes($scheduledExit) : 0;
                     $attendance->update([
+                        'empresa_id' => $personal->empresa_id,
                         'salida' => $now, 'latitud_salida' => $coordinates['latitud_salida'] ?? null,
                         'longitud_salida' => $coordinates['longitud_salida'] ?? null, 'ip_salida' => $ip,
                         'minutos_salida_temprano' => $earlyMinutes,
@@ -109,7 +110,7 @@ class RegistroAsistenciaService
                 $cutoff = $scheduledEntry->copy()->addMinutes((int) ($personal->empresa->minutos_tolerancia_entrada ?? 0));
                 $lateMinutes = $now->greaterThan($cutoff) ? (int) $cutoff->diffInMinutes($now) : 0;
                 Asistencia::create([
-                    'personal_id' => $personal->id, 'fecha' => $today, 'llegada' => $now,
+                    'personal_id' => $personal->id, 'empresa_id' => $personal->empresa_id, 'fecha' => $today, 'llegada' => $now,
                     'llegada_utc' => $utcNow->format('Y-m-d H:i:s'),
                     'centro_trabajo_entrada_id' => $center->id, 'timezone_entrada' => $timezone,
                     'latitud' => $coordinates['latitud'] ?? null, 'longitud' => $coordinates['longitud'] ?? null,
@@ -139,6 +140,7 @@ class RegistroAsistenciaService
             $scheduledExit = $this->scheduledExitForAttendance($schedule, $attendance, $timezone);
             $earlyMinutes = $now->lessThan($scheduledExit) ? (int) $now->diffInMinutes($scheduledExit) : 0;
             $attendance->update([
+                'empresa_id' => $personal->empresa_id,
                 'salida' => $now, 'latitud_salida' => $coordinates['latitud_salida'] ?? null,
                 'longitud_salida' => $coordinates['longitud_salida'] ?? null, 'ip_salida' => $ip,
                 'minutos_salida_temprano' => $earlyMinutes,

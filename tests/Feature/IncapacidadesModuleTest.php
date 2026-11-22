@@ -32,7 +32,7 @@ class IncapacidadesModuleTest extends TestCase
         $this->assertSame(1,$record->jornadas_afectadas);
         $this->assertSame(['2026-11-02'],collect($record->snapshot['fechas'])->where('laborable',true)->pluck('fecha')->all());
         $employee->horarios()->delete();
-        Asistencia::query()->create(['personal_id'=>$employee->id,'fecha'=>'2026-11-02','llegada'=>'2026-11-02 08:05:00']);
+        Asistencia::query()->create(['empresa_id' => $company->id, 'personal_id'=>$employee->id,'fecha'=>'2026-11-02','llegada'=>'2026-11-02 08:05:00']);
         $rows=app(ReporteIncidenciasService::class)->generate($company->id,'2026-11-02','2026-11-03',['incapacidades','incapacidades_trabajadas','posibles_faltas','salidas_pendientes']);
         $this->assertContains('incapacidades_trabajadas',$rows->where('fecha','2026-11-02')->pluck('tipo')->all());
         $this->assertContains('salidas_pendientes',$rows->where('fecha','2026-11-02')->pluck('tipo')->all());

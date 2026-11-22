@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const width = Math.max(1, Math.round(video.videoWidth * scale));
         const height = Math.max(1, Math.round(video.videoHeight * scale));
         canvas.width=width; canvas.height=height; canvas.getContext('2d').drawImage(video,0,0,width,height);
-        const photo = canvas.toDataURL('image/jpeg', 0.65); stopCamera(); return photo;
+        const photo = canvas.toDataURL('image/jpeg', 0.55); stopCamera(); return photo;
     };
     const clearPauseIdle = () => { clearTimeout(idleTimer); if (kioskMode === 'pauses') idleTimer = setTimeout(() => resetPauseMode('La interacción expiró. Ingresa de nuevo para continuar.'), 90000); };
     const resetPausePanels = () => { pauseEmployee.hidden = true; pauseTypes.hidden = true; activePausePanel.hidden = true; pauseConfirmation.hidden = true; pauseTypes.replaceChildren(); };

@@ -10,6 +10,7 @@ use App\Services\AttendancePhotoService;
 use App\Services\RegistroAsistenciaService;
 use App\Support\DataTable;
 use App\Support\HoraliaTimezones;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -22,7 +23,6 @@ class AsistenciaController extends Controller
     {
         $companies = $this->companiesFor($request);
         $companyIds = $companies->modelKeys();
-        $selectedCompanyId = $this->selectedCompanyForFilter($request, $companies);
         $isEmployeeProfile = (int) $request->user()->profile === 3;
         $personal = $request->user()->personal;
         $personal?->load('centro');
@@ -33,6 +33,11 @@ class AsistenciaController extends Controller
             'anio' => ['nullable', 'integer', 'in:'.implode(',', config('constantes.aniosAsistencia', []))],
         ]);
 
+        $selectedCompanyId = $this->selectedCompanyForFilter($request, $companies);
+        if ((int) $request->user()->profile === 1 && ! isset($validated['empresa_id'])) {
+            $selectedCompanyId = $companyIds[0] ?? null;
+        }
+
         if ($selectedCompanyId) {
             abort_unless(in_array($selectedCompanyId, $companyIds, true), 404);
         }
@@ -40,6 +45,7 @@ class AsistenciaController extends Controller
         $availableYears = config('constantes.aniosAsistencia', []);
         $selectedYear = (int) ($validated['anio'] ?? (in_array((int) today()->year, $availableYears, true) ? today()->year : ($availableYears[0] ?? today()->year)));
         $selectedMonth = (int) ($validated['mes'] ?? today()->month);
+        $monthStart = CarbonImmutable::create($selectedYear, $selectedMonth, 1);
         $monthNames = [
             1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
             5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
@@ -54,8 +60,8 @@ class AsistenciaController extends Controller
                     ->when($selectedCompanyId, fn ($personalQuery) => $personalQuery->where('empresa_id', $selectedCompanyId));
             })
             ->when($isEmployeeProfile, fn ($query) => $query->where('personal_id', $personal?->id ?? 0))
-            ->whereYear('fecha', $selectedYear)
-            ->whereMonth('fecha', $selectedMonth);
+            ->where('fecha', '>=', $monthStart->toDateString())
+            ->where('fecha', '<', $monthStart->addMonth()->toDateString());
 
         $search = trim($validated['q'] ?? '');
         $unfilteredTotal = $search !== '' ? (clone $query)->count() : null;
@@ -92,7 +98,11 @@ class AsistenciaController extends Controller
             ? now('UTC')->setTimezone($attendanceTimezone)
             : null;
         $todayAttendance = $canMarkAttendance
-            ? Asistencia::query()->where('personal_id', $personal->id)->whereDate('fecha', $localNow->toDateString())->first()
+            ? Asistencia::query()
+                ->where('personal_id', $personal->id)
+                ->where('fecha', '>=', $localNow->toDateString())
+                ->where('fecha', '<', $localNow->copy()->addDay()->toDateString())
+                ->first()
             : null;
         $todaySchedule = $canMarkAttendance
             ? $personal->horarios()->where('dia', $localNow->dayOfWeekIso)->first()

@@ -135,7 +135,7 @@
             </div>
         @endif
         <div class="attendance-filter-period"><label for="mes">Mes y año</label><div class="attendance-period-selects"><select class="hr-input select2" id="mes" name="mes" aria-label="Mes">@foreach($monthNames as $monthNumber => $monthName)<option value="{{ $monthNumber }}" @selected($selectedMonth === $monthNumber)>{{ $monthName }}</option>@endforeach</select><select class="hr-input select2" id="anio" name="anio" aria-label="Año">@foreach($availableYears as $year)<option value="{{ $year }}" @selected($selectedYear === $year)>{{ $year }}</option>@endforeach</select></div></div>
-        <div class="attendance-actions"><button class="btn-hr btn-primary-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-magnifying-glass" aria-hidden="true"></i> Buscar</button><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-rotate-left" aria-hidden="true"></i> Limpiar</a></div>
+        <div class="attendance-actions"><button class="btn-hr btn-primary-hr" type="submit"><i class="{{ config('constantes.tipo_iconos') }} fa-magnifying-glass" aria-hidden="true"></i> Buscar</button><a class="btn-hr btn-outline-hr" href="{{ route('asistencia.index', ['empresa_id' => $selectedCompanyId ?? 0]) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-rotate-left" aria-hidden="true"></i> Limpiar</a></div>
     </form>
 
     <div class="card-hr" data-datatable-source>
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
     window.jQuery('#empresa_id').on('change', function () {
         const form = document.getElementById('attendance-filter-form');
         const params = new URLSearchParams();
-        if (this.value !== '0') params.set('empresa_id', this.value);
+        params.set('empresa_id', this.value);
         params.set('mes', document.getElementById('mes').value);
         params.set('anio', document.getElementById('anio').value);
         window.location.assign(form.action + (params.toString() ? '?' + params.toString() : ''));
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!reader.error) savePhotoAndLocate(reader.result);
                 };
                 reader.readAsDataURL(blob);
-            }, 'image/jpeg', 0.65);
+            }, 'image/jpeg', 0.55);
         } else {
             savePhotoAndLocate(null);
         }

@@ -27,7 +27,7 @@ class ReportDataTableTest extends TestCase
             [$company, 'Juan Fuera de periodo', 'JUAN-03', '2026-01-03'],
         ] as [$owner, $name, $code, $day]) {
             $employee = Personal::query()->create(['empresa_id' => $owner->id, 'nombre' => $name, 'codigo' => $code]);
-            Asistencia::query()->create(['personal_id' => $employee->id, 'fecha' => $day, 'llegada' => $day.' 08:00:00']);
+            Asistencia::query()->create(['empresa_id' => $owner->id, 'personal_id' => $employee->id, 'fecha' => $day, 'llegada' => $day.' 08:00:00']);
         }
 
         $filters = ['empresa_id' => $company->id, 'desde' => '2026-01-01', 'hasta' => '2026-01-02'];

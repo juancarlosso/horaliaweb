@@ -64,8 +64,7 @@ class ReporteAsistenciaController extends Controller
 
             if (!$fragment) {
                 $summary = DB::table('asistencias')
-                    ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
-                    ->where('personal.empresa_id', $selectedCompanyId)
+                    ->where('asistencias.empresa_id', $selectedCompanyId)
                     ->where('asistencias.fecha', '>=', $startDate)
                     ->where('asistencias.fecha', '<', CarbonImmutable::parse($endDate)->addDay()->toDateString())
                     ->selectRaw('COUNT(*) as total')
@@ -162,8 +161,9 @@ class ReporteAsistenciaController extends Controller
                     $join->on('personal.departamento_id', '=', 'departamentos.id')
                         ->where('personal.empresa_id', '=', $selectedCompanyId);
                 })
-                ->leftJoin('asistencias', function ($join) use ($startDate, $through) {
+                ->leftJoin('asistencias', function ($join) use ($selectedCompanyId, $startDate, $through) {
                     $join->on('asistencias.personal_id', '=', 'personal.id')
+                        ->where('asistencias.empresa_id', '=', $selectedCompanyId)
                         ->where('asistencias.fecha', '>=', $startDate)
                         ->where('asistencias.fecha', '<', $through);
                 })
@@ -179,7 +179,7 @@ class ReporteAsistenciaController extends Controller
 
             $withoutDepartment = Asistencia::query()
                 ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
-                ->where('personal.empresa_id', $selectedCompanyId)
+                ->where('asistencias.empresa_id', $selectedCompanyId)
                 ->whereNull('personal.departamento_id')
                 ->where('asistencias.fecha', '>=', $startDate)
                 ->where('asistencias.fecha', '<', $through)
@@ -246,7 +246,7 @@ class ReporteAsistenciaController extends Controller
             ->select('asistencias.*')
             ->where('asistencias.fecha', '>=', $filters['desde'])
             ->where('asistencias.fecha', '<', CarbonImmutable::parse($filters['hasta'])->addDay()->toDateString())
-            ->where('personal.empresa_id', $companyId);
+            ->where('asistencias.empresa_id', $companyId);
 
         if ($department) {
             $query->where('personal.departamento_id', $department->id);
@@ -342,7 +342,7 @@ class ReporteAsistenciaController extends Controller
             ->with(['personal.empresa', 'personal.horarios', 'pausas'])
             ->join('personal', 'personal.id', '=', 'asistencias.personal_id')
             ->select('asistencias.*')
-            ->where('personal.empresa_id', $companyId)
+            ->where('asistencias.empresa_id', $companyId)
             ->where('asistencias.fecha', '>=', $startDate)
             ->where('asistencias.fecha', '<', CarbonImmutable::parse($endDate)->addDay()->toDateString())
             ->orderByDesc('asistencias.fecha')

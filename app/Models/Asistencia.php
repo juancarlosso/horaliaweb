@@ -11,7 +11,7 @@ class Asistencia extends Model
     protected $table = 'asistencias';
 
     protected $fillable = [
-        'personal_id', 'fecha', 'llegada', 'salida', 'minutos_tarde', 'minutos_salida_temprano',
+        'personal_id', 'empresa_id', 'fecha', 'llegada', 'salida', 'minutos_tarde', 'minutos_salida_temprano',
         'latitud', 'longitud', 'ip', 'latitud_salida', 'longitud_salida', 'ip_salida',
         'rango_entrada', 'rango_salida', 'foto_entrada', 'foto_salida',
         'centro_trabajo_entrada_id', 'centro_trabajo_salida_id', 'timezone_entrada', 'timezone_salida',

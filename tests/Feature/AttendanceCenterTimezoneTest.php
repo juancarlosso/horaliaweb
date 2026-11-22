@@ -345,6 +345,7 @@ class AttendanceCenterTimezoneTest extends TestCase
         $personal = $this->employeeInZone('America/Tijuana');
         $administrator->empresas()->attach($personal->empresa_id, ['control_total' => true]);
         Asistencia::query()->create([
+            'empresa_id' => $personal->empresa_id,
             'personal_id' => $personal->id,
             'fecha' => '2026-06-14',
             'llegada' => '2026-06-14 23:30:00',

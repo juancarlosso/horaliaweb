@@ -66,7 +66,7 @@
                             @endphp
                             <tr>
                                 <td data-order="{{ ($attempt->intentado_en ?? $attempt->created_at)?->format('Y-m-d H:i:s') }}">{{ $attempt->intentado_en?->format('d/m/Y H:i') ?? $attempt->created_at?->format('d/m/Y H:i') ?? '—' }}</td>
-                                <td>{{ $attempt->concepto }}</td>
+                                <td>{{ $attempt->conceptoVisible() }}</td>
                                 <td data-order="{{ $attempt->cantidad }}">${{ number_format((float) $attempt->cantidad, 2) }} {{ strtoupper($attempt->moneda) }}</td>
                                 <td>{{ $attempt->origen === 'automatico' ? 'Automático' : 'Manual' }}</td>
                                 <td>{{ $attempt->numero_ejecucion ? '#' . $attempt->numero_ejecucion : '—' }}</td>

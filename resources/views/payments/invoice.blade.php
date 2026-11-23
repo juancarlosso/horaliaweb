@@ -76,7 +76,7 @@
         <div class="table-wrap">
             <table class="invoice-summary-table">
                 <thead><tr><th>Cantidad</th><th>Concepto</th><th class="numeric">Precio unitario</th><th class="numeric">Importe</th></tr></thead>
-                <tbody><tr><td>1</td><td>{{ $payment->concepto ?: 'Membresía Horalia' }}</td><td class="numeric">${{ number_format((float) $invoiceAmounts['subtotal'], 2) }}</td><td class="numeric">${{ number_format((float) $invoiceAmounts['subtotal'], 2) }}</td></tr></tbody>
+                <tbody><tr><td>1</td><td>{{ $payment->conceptoVisible() ?: 'Suscripción Horalia' }}</td><td class="numeric">${{ number_format((float) $invoiceAmounts['subtotal'], 2) }}</td><td class="numeric">${{ number_format((float) $invoiceAmounts['subtotal'], 2) }}</td></tr></tbody>
             </table>
         </div>
         <dl class="invoice-summary-totals">

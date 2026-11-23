@@ -10,9 +10,11 @@ use Throwable;
 
 class ProcessMembershipRenewals extends Command
 {
-    protected $signature = 'horalia:renovar-membresias';
+    protected $signature = 'horalia:renovar-suscripciones';
 
-    protected $description = 'Procesa las renovaciones pendientes de membresía de Horalia';
+    protected $aliases = ['horalia:renovar-membresias'];
+
+    protected $description = 'Procesa las renovaciones pendientes de suscripción de Horalia';
 
     public function handle(MembershipRenewalService $renewals): int
     {

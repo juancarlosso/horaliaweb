@@ -75,8 +75,10 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::get('/home/novedades/{identificador}', [NovedadesController::class, 'show'])
         ->where('identificador', '\\d{6}(?:\\d{4})?(?:[-_][A-Za-z0-9_-]+)?')
         ->name('novedades.show');
-    Route::post('/home/empresas/{empresa}/membresia/pagar', [MembershipPaymentController::class, 'pay'])->whereNumber('empresa')->name('membership.pay');
-    Route::post('/home/empresas/{empresa}/membresia/confirmar', [MembershipPaymentController::class, 'confirm'])->whereNumber('empresa')->name('membership.confirm');
+    Route::post('/home/empresas/{empresa}/membresia/pagar', [MembershipPaymentController::class, 'pay'])->whereNumber('empresa');
+    Route::post('/home/empresas/{empresa}/suscripcion/pagar', [MembershipPaymentController::class, 'pay'])->whereNumber('empresa')->name('membership.pay');
+    Route::post('/home/empresas/{empresa}/membresia/confirmar', [MembershipPaymentController::class, 'confirm'])->whereNumber('empresa');
+    Route::post('/home/empresas/{empresa}/suscripcion/confirmar', [MembershipPaymentController::class, 'confirm'])->whereNumber('empresa')->name('membership.confirm');
     Route::get('/home/empresas/{empresa}/transferencia', [TransferenciaPagoController::class, 'uploadForm'])->whereNumber('empresa')->name('transferencias.upload-form');
     Route::post('/home/empresas/{empresa}/transferencia', [TransferenciaPagoController::class, 'upload'])->whereNumber('empresa')->middleware('throttle:10,1')->name('transferencias.upload');
     Route::get('/home/admin/transferencias', [TransferenciaPagoController::class, 'adminIndex'])->name('transferencias.admin.index');

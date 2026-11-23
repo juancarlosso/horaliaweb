@@ -13,7 +13,7 @@ use Throwable;
 
 class MembershipRenewalService
 {
-    public const CONCEPT = 'MEMBRESIA HORALIA';
+    public const CONCEPT = 'SUSCRIPCIÓN HORALIA';
 
     public function __construct(
         private readonly StripeCardService $stripe,
@@ -112,7 +112,7 @@ class MembershipRenewalService
                         continue;
                     }
 
-                    $charge = $this->stripe->chargeMembership($empresa, $paymentMethodId, (string) $attempt->cantidad, $key, true);
+                    $charge = $this->stripe->chargeMembership($empresa, $paymentMethodId, (string) $attempt->cantidad, $key, true, $attempt->concepto);
                     if ($charge['outcome'] === 'indeterminate') {
                         $attempt->forceFill([
                             'descripcion' => $charge['message'],
@@ -175,7 +175,7 @@ class MembershipRenewalService
 
         if ($result['status'] === 'paid') {
             $this->notifyAdministrators($result['empresa'], 'paid', $result['amount'], CarbonImmutable::parse($result['new_date'])->locale('es')->translatedFormat('j \\d\\e F \\d\\e Y'));
-            Log::info('Renovación automática de membresía pagada.', [
+            Log::info('Renovación automática de suscripción pagada.', [
                 'empresa_id' => $result['empresa']->id,
                 'fecha_renovacion' => $result['renewal_date'],
                 'nueva_fecha_renovacion' => $result['new_date'],
@@ -195,7 +195,7 @@ class MembershipRenewalService
         } elseif ($result['status'] === 'indeterminate') {
             Log::error('Stripe no confirmó el resultado de una renovación; se conserva el intento para reconciliarlo sin duplicar el cargo.', $result);
         } elseif ($result['status'] === 'canceled') {
-            Log::info('La membresía terminó al vencer el periodo tras solicitar la cancelación.', $result);
+            Log::info('La suscripción terminó al vencer el periodo tras solicitar la cancelación.', $result);
         }
 
         return $result;
@@ -207,7 +207,7 @@ class MembershipRenewalService
             $locked = Empresa::query()->whereKey($empresa->id)->lockForUpdate()->firstOrFail();
             abort_unless($locked->metodo_pago !== 'TRANSFERENCIA', 409, 'Esta empresa está configurada para pagar por transferencia.');
             if (!$locked->fecha_renovacion || $locked->fecha_renovacion->toDateString() > today()->toDateString()) {
-                return ['status' => 'not_due', 'message' => 'La membresía de esta empresa no tiene un pago pendiente.'];
+                return ['status' => 'not_due', 'message' => 'La suscripción de esta empresa no tiene un pago pendiente.'];
             }
 
             $cycleDate = $locked->fecha_renovacion->toDateString();
@@ -262,7 +262,7 @@ class MembershipRenewalService
             }
 
             $idempotencyKey = $attempt->idempotency_key;
-            $charge = $this->stripe->chargeMembership($locked, $paymentMethodId, (string) $attempt->cantidad, $idempotencyKey, false);
+            $charge = $this->stripe->chargeMembership($locked, $paymentMethodId, (string) $attempt->cantidad, $idempotencyKey, false, $attempt->concepto);
             if ($charge['outcome'] === 'indeterminate') {
                 $attempt->forceFill([
                     'descripcion' => $charge['message'],
@@ -303,14 +303,14 @@ class MembershipRenewalService
             if ($charge['outcome'] === 'succeeded') {
                 $this->folios->assign($attempt);
             }
-            Log::info('Resultado de un intento manual de pago de membresía.', [
+            Log::info('Resultado de un intento manual de pago de suscripción.', [
                 'empresa_id' => $locked->id,
                 'tarjeta_id' => $paymentMethodId,
                 'resultado' => $charge['outcome'],
             ]);
 
             if ($charge['outcome'] !== 'succeeded') {
-                Log::warning('Stripe rechazó un intento manual de pago de membresía.', [
+                Log::warning('Stripe rechazó un intento manual de pago de suscripción.', [
                     'empresa_id' => $locked->id,
                     'payment_method_id' => $paymentMethodId,
                     'http_status' => $charge['http_status'] ?? null,
@@ -334,7 +334,7 @@ class MembershipRenewalService
 
             return [
                 'status' => 'succeeded',
-                'message' => 'El pago de la membresía se realizó correctamente.',
+                'message' => 'El pago de la suscripción se realizó correctamente.',
                 'empresa' => $locked,
                 'amount' => $attempt->cantidad,
                 'new_date' => $newDate,
@@ -385,7 +385,7 @@ class MembershipRenewalService
                 $this->folios->assign($attempt);
                 $locked->forceFill(['activa' => true, 'intentos' => 0, 'fecha_renovacion' => $newDate, 'cancelar_al_renovar' => false])->save();
 
-                return ['status' => 'succeeded', 'message' => 'El pago de la membresía se realizó correctamente.', 'empresa' => $locked, 'amount' => $attempt->cantidad, 'new_date' => $newDate];
+                return ['status' => 'succeeded', 'message' => 'El pago de la suscripción se realizó correctamente.', 'empresa' => $locked, 'amount' => $attempt->cantidad, 'new_date' => $newDate];
             }
 
             if (in_array($intent['status'] ?? null, ['requires_payment_method', 'canceled'], true)) {

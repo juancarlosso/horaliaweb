@@ -64,7 +64,7 @@ class DeleteCompanyCascadeTest extends TestCase
             'empresa_id' => $company->id,
             'fecha_renovacion' => today(),
             'origen' => 'automatico',
-            'concepto' => 'Membresía',
+            'concepto' => 'Suscripción',
             'cantidad' => '150.00',
             'moneda' => 'mxn',
             'resultado' => 'exitoso',

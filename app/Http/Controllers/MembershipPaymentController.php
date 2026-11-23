@@ -26,7 +26,7 @@ class MembershipPaymentController extends Controller
         try {
             $result = $renewals->payManually($company, $data['payment_method_id']);
         } catch (Throwable $exception) {
-            Log::error('Falló el pago manual de una membresía.', [
+            Log::error('Falló el pago manual de una suscripción.', [
                 'empresa_id' => $company->id,
                 'exception' => get_class($exception),
                 'message' => $exception->getMessage(),

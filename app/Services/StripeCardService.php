@@ -127,6 +127,7 @@ class StripeCardService
         string $amount,
         string $idempotencyKey,
         bool $offSession,
+        string $concept = MembershipRenewalService::CONCEPT,
     ): array {
         try {
             $method = $this->request()->get('/payment_methods/' . rawurlencode($paymentMethodId))->throw()->json();
@@ -151,7 +152,7 @@ class StripeCardService
         if ($amountMinor < 1) {
             return [
                 'outcome' => 'failed',
-                'message' => 'El importe de la membresía no es válido.',
+                'message' => 'El importe de la suscripción no es válido.',
                 'code' => 'invalid_amount',
                 'card_brand' => $cardBrand,
                 'card_last4' => $cardLast4,
@@ -168,9 +169,9 @@ class StripeCardService
                 'off_session' => $offSession ? 'true' : 'false',
                 'automatic_payment_methods[enabled]' => 'true',
                 'automatic_payment_methods[allow_redirects]' => 'never',
-                'description' => 'MEMBRESIA HORALIA',
+                'description' => $concept,
                 'metadata[empresa_id]' => (string) $empresa->id,
-                'metadata[concepto]' => 'MEMBRESIA HORALIA',
+                'metadata[concepto]' => $concept,
             ]);
         } catch (ConnectionException $exception) {
             return [

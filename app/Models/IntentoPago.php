@@ -49,6 +49,15 @@ class IntentoPago extends Model
         $this->attributes['folio'] = $value;
     }
 
+    public function conceptoVisible(): ?string
+    {
+        return match (mb_strtolower($this->concepto ?? '')) {
+            'membresia horalia', 'membresía horalia' => 'SUSCRIPCIÓN HORALIA',
+            'membresia', 'membresía' => 'Suscripción',
+            default => $this->concepto,
+        };
+    }
+
     public function empresa()
     {
         return $this->belongsTo(Empresa::class);

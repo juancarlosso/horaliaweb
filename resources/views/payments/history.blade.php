@@ -57,7 +57,7 @@
                         <td>{{ $payment->resultado === 'exitoso' ? ($payment->folio ?: '—') : '—' }}</td>
                         <td data-order="{{ $payment->intentado_en?->format('Y-m-d H:i:s') }}">{{ $payment->intentado_en?->format('d/m/Y H:i') ?? '—' }}</td>
                         <td>{{ $payment->empresa?->nombre ?: 'Empresa #' . $payment->empresa_id }}</td>
-                        <td>{{ $payment->concepto }}</td>
+                        <td>{{ $payment->conceptoVisible() }}</td>
                         <td data-order="{{ $payment->cantidad }}">${{ number_format((float) $payment->cantidad, 2) }} {{ strtoupper($payment->moneda) }}</td>
                         <td><span class="payment-status {{ $statusClass }}">{{ $statusLabel }}</span></td>
                         <td style="white-space:nowrap">

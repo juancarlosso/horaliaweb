@@ -89,7 +89,7 @@ class PaymentFolioServiceTest extends TestCase
             'empresa_id' => $companyId,
             'fecha_renovacion' => '2026-10-01',
             'origen' => 'manual',
-            'concepto' => 'MEMBRESIA HORALIA',
+            'concepto' => 'SUSCRIPCIÓN HORALIA',
             'cantidad' => '150.00',
             'moneda' => 'mxn',
             'resultado' => $result,

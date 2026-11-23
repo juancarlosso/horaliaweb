@@ -123,7 +123,7 @@ class EmployeeTerminationAndSubscriptionTest extends TestCase
             'empresa_id' => $company->id,
             'fecha_renovacion' => '2026-10-12',
             'origen' => 'automatico',
-            'concepto' => 'Membresía',
+            'concepto' => 'Suscripción',
             'cantidad' => '300.00',
             'moneda' => 'mxn',
             'resultado' => 'pendiente',

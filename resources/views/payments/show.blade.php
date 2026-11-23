@@ -24,7 +24,7 @@
             @if($payment->resultado === 'exitoso')<div><strong>Folio</strong><div>{{ $payment->folio ?: 'Pendiente de regularización' }}</div></div>@endif
             <div><strong>Empresa</strong><div>{{ $payment->empresa?->nombre ?: 'Empresa #' . $payment->empresa_id }}</div></div>
             <div><strong>Fecha y hora</strong><div>{{ $payment->intentado_en?->format('d/m/Y H:i:s') ?? '—' }}</div></div>
-            <div><strong>Concepto</strong><div>{{ $payment->concepto }}</div></div>
+            <div><strong>Concepto</strong><div>{{ $payment->conceptoVisible() }}</div></div>
             <div><strong>Periodo de renovación</strong><div>{{ $payment->fecha_renovacion?->format('d/m/Y') ?? '—' }}</div></div>
             <div><strong>Importe</strong><div>${{ number_format((float) $payment->cantidad, 2) }} {{ strtoupper($payment->moneda) }}</div></div>
             <div><strong>Estado</strong><div>{{ $payment->resultado === 'exitoso' ? 'Exitoso' : ($payment->resultado === 'fallido' ? 'Rechazado' : 'Pendiente de confirmación') }}</div></div>

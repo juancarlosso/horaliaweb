@@ -231,12 +231,12 @@
 </style>
 <section class="manager-dashboard">
     @if(($renewalCompanies ?? collect())->isNotEmpty())
-        <div class="membership-alerts" aria-label="Pagos de membresía pendientes">
+        <div class="membership-alerts" aria-label="Pagos de suscripción pendientes">
             @foreach($renewalCompanies as $renewal)
                 @php($company = $renewal['empresa'])
                 @php($modalId = 'membership-payment-' . $company->id)
                 <div class="alert alert-danger membership-alert" role="alert" id="membership-alert-{{ $company->id }}">
-                    <div><strong>Pago pendiente de la membresía de Horalia</strong><br>{{ $company->nombre }} · Renovación vencida el {{ $company->fecha_renovacion->format('d/m/Y') }}</div>
+                    <div><strong>Pago pendiente de la suscripción de Horalia</strong><br>{{ $company->nombre }} · Renovación vencida el {{ $company->fecha_renovacion->format('d/m/Y') }}</div>
                     @if($company->metodo_pago === 'TRANSFERENCIA')
                         <a class="btn-hr btn-primary-hr" href="{{ route('transferencias.upload-form', $company->id) }}">Subir comprobante · ${{ number_format((float) $company->precio, 2) }}</a>
                     @else
@@ -247,10 +247,10 @@
                 <div class="membership-modal" id="{{ $modalId }}" role="dialog" aria-modal="true" aria-labelledby="{{ $modalId }}-title" hidden>
                     <div class="membership-modal-card">
                         <div class="membership-modal-head">
-                            <div><h2 id="{{ $modalId }}-title">Pagar membresía</h2><p>{{ $company->nombre }}</p></div>
+                            <div><h2 id="{{ $modalId }}-title">Pagar suscripción</h2><p>{{ $company->nombre }}</p></div>
                             <button class="btn-hr btn-outline-hr" type="button" data-close-membership-modal aria-label="Cerrar">Cerrar</button>
                         </div>
-                        <p><strong>Concepto:</strong> MEMBRESIA HORALIA<br><strong>Importe:</strong> ${{ number_format((float) $company->precio, 2) }} MXN</p>
+                        <p><strong>Concepto:</strong> SUSCRIPCIÓN HORALIA<br><strong>Importe:</strong> ${{ number_format((float) $company->precio, 2) }} MXN</p>
                         <form class="membership-payment-form" method="POST" action="{{ route('membership.pay', ['empresa' => $company->id]) }}" data-alert="membership-alert-{{ $company->id }}">
                             @csrf
                             @if($renewal['cards'])

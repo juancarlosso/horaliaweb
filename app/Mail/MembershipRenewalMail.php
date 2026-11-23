@@ -24,9 +24,9 @@ class MembershipRenewalMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         $subject = match ($this->type) {
-            'paid' => 'Pago de membresía realizado correctamente',
-            'retry' => 'No se pudo realizar el cobro de tu membresía',
-            default => 'Membresía desactivada por falta de pago',
+            'paid' => 'Pago de suscripción realizado correctamente',
+            'retry' => 'No se pudo realizar el cobro de tu suscripción',
+            default => 'Suscripción desactivada por falta de pago',
         };
 
         return new Envelope(subject: EmailSubject::prefix($subject));

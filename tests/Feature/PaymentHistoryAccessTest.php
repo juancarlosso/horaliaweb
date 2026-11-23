@@ -120,14 +120,19 @@ class PaymentHistoryAccessTest extends TestCase
         $administrator->empresas()->attach($company->id, ['control_total' => true]);
         $this->payment($company, 'HRL-E12345', 'old-filtered-out-key')
             ->forceFill(['intentado_en' => '2026-09-30 23:59:00'])->save();
-        $this->payment($company, 'HRL-F12345', 'current-month-payment-key');
+        $payment = $this->payment($company, 'HRL-F12345', 'current-month-payment-key');
 
         $this->actingAs($administrator)->get('/home/pagos')
             ->assertOk()
             ->assertSee('value="2026-10-01"', false)
             ->assertSee('value="2026-10-08"', false)
             ->assertSee('HRL-F12345')
+            ->assertSee('SUSCRIPCIÓN HORALIA')
             ->assertDontSee('HRL-E12345');
+
+        $this->get(route('payment-history.show', $payment->id))
+            ->assertOk()
+            ->assertSee('SUSCRIPCIÓN HORALIA');
     }
 
     private function company(string $rfc, string $name): Empresa

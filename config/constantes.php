@@ -1,5 +1,8 @@
 <?php
 
+$tipoDocumentoHorasExtra = 'Autorización de Horas Extra';
+$tipoDocumentoIncapacidad = 'Incapacidad';
+
 return [
     'itemsPorPagina' => 50,
     'tipo_iconos' => 'fa-solid',
@@ -33,6 +36,17 @@ return [
         ['headline' => '🚀 Impulsa tu negocio con tecnología.', 'copy' => 'En SOLVENTIA SOFTWARE tenemos la solución que necesitas.', 'cta' => '¡Conócenos! →'],
     ],
     'aniosAsistencia' => [2026, 2027],
+    'tipo_documento_horas_extra' => $tipoDocumentoHorasExtra,
+    'tipo_documento_incapacidad' => $tipoDocumentoIncapacidad,
+    'tipos_documento_personal' => [
+        'Identidad' => ['INE (frente)', 'INE (reverso)', 'Pasaporte', 'Acta de nacimiento', 'CURP', 'RFC', 'Comprobante de domicilio', 'Número de Seguro Social (NSS)', 'Constancia de Situación Fiscal'],
+        'Laboral' => ['Solicitud de empleo', 'Currículum Vitae', 'Contrato individual de trabajo', 'Aviso de privacidad firmado', 'Reglamento interno firmado', 'Carta de confidencialidad (NDA)', 'Descripción de puesto firmada', 'Carta responsiva de equipo', 'Carta de no competencia', 'Carta de antecedentes no penales'],
+        'Administrativo' => ['Alta IMSS (AFIL 01)', 'Modificación de salario (AFIL 02)', 'Baja IMSS (AFIL 03)', 'Recibos de nómina firmados', 'Comprobante INFONAVIT', 'Comprobante FONACOT', $tipoDocumentoHorasExtra, $tipoDocumentoIncapacidad],
+        'Estudios' => ['Certificado de estudios', 'Título profesional', 'Cédula profesional', 'Diplomas de cursos', 'Certificaciones técnicas', 'Constancia DC-3 (STPS)'],
+        'Seguridad e Higiene' => ['Inducción de seguridad firmada', 'Examen médico de ingreso', 'Exámenes médicos periódicos', 'Bitácora de entrega de EPP', 'Evaluación NOM-035', 'Capacitación de brigadas'],
+        'Operativos' => ['Licencia de conducir', 'Tarjetón de conductor', 'Carta de no infracciones', 'Certificado médico para manejo', 'Prueba antidopaje'],
+        'Otros' => ['Fotografías', 'Firma digitalizada', 'Comprobantes varios', 'Correspondencia relevante', 'Documentos internos de RH', 'Permisos especiales / autorizaciones', 'Otro documento'],
+    ],
     'tiposPausa' => [
         'comida' => ['nombre' => 'COMIDA', 'descripcion' => 'Registra tu tiempo de comida durante la jornada.', 'icono' => 'utensils', 'color' => 'orange'],
         'sanitario' => ['nombre' => 'SANITARIO', 'descripcion' => 'Registra salidas breves al sanitario.', 'icono' => 'restroom', 'color' => 'green'],

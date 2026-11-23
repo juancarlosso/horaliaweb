@@ -13,7 +13,7 @@ class PersonalDocumento extends Model
 
     protected $fillable = [
         'empresa_id', 'personal_id', 'tipo', 'nombre_personalizado', 'observaciones',
-        'ruta_privada', 'nombre_original', 'mime', 'tamano', 'cargado_por', 'eliminado_por',
+        'ruta_privada', 'nombre_original', 'mime', 'tamano', 'cargado_por', 'eliminado_por', 'hora_extra_id',
     ];
 
     public function personal()

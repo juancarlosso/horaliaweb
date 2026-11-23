@@ -29,4 +29,13 @@ class HoraliaTimezones
             ? $timezone
             : self::DEFAULT;
     }
+
+    public static function sinAbreviatura(?string $fechaHora): ?string
+    {
+        if ($fechaHora === null) {
+            return null;
+        }
+
+        return preg_replace('/(\d{2}:\d{2}(?::\d{2})?) (?:[A-Z]+(?:[+-]\d{1,2}(?::?\d{2})?)?|[+-]\d{1,2}(?::?\d{2})?)(?= |$)/', '$1', $fechaHora);
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Helper\Wasabi;
 use App\Models\FestivoEmpresa;
 use App\Models\FestivoOficial;
 use App\Models\Incapacidad;
@@ -11,11 +10,12 @@ use Carbon\CarbonImmutable;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class IncapacidadesService
 {
+    public function __construct(private PersonalDocumentosService $documentos) {}
+
     public function snapshot(Personal $personal, string $from, string $through): array
     {
         $days = array_filter(explode('@', (string) $personal->laborados));
@@ -44,26 +44,34 @@ class IncapacidadesService
     {
         $uploadedPaths = [];
         try {
-        return DB::transaction(function () use ($data, $userId, $files, &$uploadedPaths) {
-            $personal = Personal::query()->where('empresa_id', $data['empresa_id'])->whereKey($data['personal_id'])->lockForUpdate()->firstOrFail();
-            $overlap = Incapacidad::query()->where('personal_id', $personal->id)->where('estado', 'vigente')->whereDate('fecha_inicio', '<=', $data['fecha_fin'])->whereDate('fecha_fin', '>=', $data['fecha_inicio'])->exists();
-            if ($overlap) throw ValidationException::withMessages(['fecha_inicio' => 'El periodo se traslapa con una incapacidad vigente del colaborador.']);
-            $snapshot = $this->snapshot($personal, $data['fecha_inicio'], $data['fecha_fin']);
-            $incapacity = Incapacidad::create(['empresa_id' => $personal->empresa_id, 'personal_id' => $personal->id, 'registrado_por_user_id' => $userId,
-                'fecha_inicio' => $data['fecha_inicio'], 'fecha_fin' => $data['fecha_fin'], 'motivo' => $data['motivo'], 'observaciones' => $data['observaciones'] ?? null,
-                'jornadas_afectadas' => $snapshot['jornadas_afectadas'], 'snapshot' => $snapshot, 'snapshot_generado_en' => now(), 'estado' => 'vigente']);
-            foreach ($files as $file) {
-                $name = basename(str_replace('\\', '/', $file->getClientOriginalName()));
-                $name = preg_replace('/[\x00-\x1F\x7F]/u', '', $name);
-                $mime = (string) $file->getMimeType();
-                if (!$name || !in_array($mime, ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'], true)) throw ValidationException::withMessages(['comprobantes' => 'Uno de los archivos no tiene un formato válido.']);
-                $path = Wasabi::uploadWithOriginalName('personal/incapacidades/empresa-'.$personal->empresa_id.'/personal-'.$personal->id, $file, $name);
-                if (!$path || !Storage::disk('wasabi')->exists($path)) throw new \RuntimeException('Wasabi no confirmó la carga del comprobante.');
-                $uploadedPaths[] = $path;
-                $incapacity->comprobantes()->create(['ruta_privada' => $path, 'nombre_original' => Str::limit($name, 255, ''), 'mime' => $mime, 'tamano' => $file->getSize(), 'cargado_por_user_id' => $userId]);
-            }
-            return $incapacity;
-        });
+            return DB::transaction(function () use ($data, $userId, $files, &$uploadedPaths) {
+                $personal = Personal::query()->where('empresa_id', $data['empresa_id'])->whereKey($data['personal_id'])->lockForUpdate()->firstOrFail();
+                $overlap = Incapacidad::query()->where('personal_id', $personal->id)->where('estado', 'vigente')->whereDate('fecha_inicio', '<=', $data['fecha_fin'])->whereDate('fecha_fin', '>=', $data['fecha_inicio'])->exists();
+                if ($overlap) throw ValidationException::withMessages(['fecha_inicio' => 'El periodo se traslapa con una incapacidad vigente del colaborador.']);
+                $snapshot = $this->snapshot($personal, $data['fecha_inicio'], $data['fecha_fin']);
+                $incapacity = Incapacidad::create(['empresa_id' => $personal->empresa_id, 'personal_id' => $personal->id, 'registrado_por_user_id' => $userId,
+                    'fecha_inicio' => $data['fecha_inicio'], 'fecha_fin' => $data['fecha_fin'], 'motivo' => $data['motivo'], 'observaciones' => $data['observaciones'] ?? null,
+                    'jornadas_afectadas' => $snapshot['jornadas_afectadas'], 'snapshot' => $snapshot, 'snapshot_generado_en' => now(), 'estado' => 'vigente']);
+                foreach ($files as $file) {
+                    try {
+                        $documento = $this->documentos->guardar($personal, $file, $userId, [
+                            'tipo' => config('constantes.tipo_documento_incapacidad'),
+                        ]);
+                    } catch (ValidationException $error) {
+                        throw ValidationException::withMessages(['comprobantes' => $error->errors()['archivo']]);
+                    }
+                    $uploadedPaths[] = $documento->ruta_privada;
+                    $incapacity->comprobantes()->create([
+                        'ruta_privada' => $documento->ruta_privada,
+                        'nombre_original' => $documento->nombre_original,
+                        'mime' => $documento->mime,
+                        'tamano' => $documento->tamano,
+                        'cargado_por_user_id' => $userId,
+                        'personal_documento_id' => $documento->id,
+                    ]);
+                }
+                return $incapacity;
+            });
         } catch (\Throwable $exception) {
             foreach ($uploadedPaths as $path) { try { Storage::disk('wasabi')->delete($path); } catch (\Throwable) {} }
             throw $exception;

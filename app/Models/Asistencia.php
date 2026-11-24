@@ -35,6 +35,11 @@ class Asistencia extends Model
         return $this->belongsTo(Personal::class, 'personal_id');
     }
 
+    public function centroEntrada()
+    {
+        return $this->belongsTo(Centro::class, 'centro_trabajo_entrada_id');
+    }
+
     public function pausas()
     {
         return $this->hasMany(AsistenciaPausa::class, 'asistencia_id');

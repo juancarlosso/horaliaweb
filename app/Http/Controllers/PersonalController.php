@@ -218,7 +218,7 @@ class PersonalController extends Controller
             'isEdit' => true,
             'days' => self::DAYS,
             'documentos' => \App\Models\PersonalDocumento::query()->where('empresa_id', $empleado->empresa_id)->where('personal_id', $empleado->id)->latest()->get(),
-            'documentCatalog' => \App\Http\Controllers\PersonalDocumentoController::catalog(),
+            'documentCatalog' => config('constantes.tipos_documento_personal'),
         ]);
     }
 

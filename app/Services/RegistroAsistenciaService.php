@@ -188,11 +188,14 @@ class RegistroAsistenciaService
 
     public function holidayCommemorations(Personal $personal, CarbonInterface|string $date): Collection
     {
-        $date = $date instanceof CarbonInterface ? $date->toDateString() : Carbon::parse($date)->toDateString();
-        $official = FestivoOficial::query()->whereDate('fecha', $date)->pluck('conmemoracion');
+        $day = CarbonImmutable::parse($date);
+        $start = $day->toDateString();
+        $end = $day->addDay()->toDateString();
+        $official = FestivoOficial::query()->where('fecha', '>=', $start)->where('fecha', '<', $end)->pluck('conmemoracion');
         $company = FestivoEmpresa::query()
             ->where('empresa_id', $personal->empresa_id)
-            ->whereDate('fecha', $date)
+            ->where('fecha', '>=', $start)
+            ->where('fecha', '<', $end)
             ->pluck('conmemoracion');
 
         return $official->concat($company)->map(fn ($name) => trim((string) $name))
@@ -299,9 +302,9 @@ class RegistroAsistenciaService
         return substr((string) $schedule->salida, 0, 8) <= substr((string) $schedule->entrada, 0, 8);
     }
 
-    private function scheduledExit($schedule, Carbon $shiftDate, string $timezone): Carbon
+    public function scheduledExit($schedule, string $shiftDate, string $timezone): Carbon
     {
-        $scheduledExit = Carbon::parse($shiftDate->toDateString().' '.$schedule->salida, $timezone);
+        $scheduledExit = Carbon::parse($shiftDate.' '.$schedule->salida, $timezone);
         if ($this->scheduleEndsNextDay($schedule)) {
             $scheduledExit->addDay();
         }
@@ -311,6 +314,6 @@ class RegistroAsistenciaService
 
     private function scheduledExitForAttendance($schedule, Asistencia $attendance, string $timezone): Carbon
     {
-        return $this->scheduledExit($schedule, Carbon::parse($attendance->fecha), $timezone);
+        return $this->scheduledExit($schedule, $attendance->fecha->toDateString(), $timezone);
     }
 }

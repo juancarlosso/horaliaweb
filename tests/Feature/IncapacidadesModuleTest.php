@@ -7,6 +7,7 @@ use App\Models\Empresa;
 use App\Models\Incapacidad;
 use App\Models\IncapacidadComprobante;
 use App\Models\Personal;
+use App\Models\PersonalDocumento;
 use App\Models\User;
 use App\Services\IncapacidadesService;
 use App\Services\ReporteIncidenciasService;
@@ -103,8 +104,71 @@ class IncapacidadesModuleTest extends TestCase
         $payload=['empresa_id'=>$company->id,'personal_id'=>$employee->id,'fecha_inicio'=>'2026-11-02','fecha_fin'=>'2026-11-02','motivo'=>'Riesgo de trabajo'];
         $files=[UploadedFile::fake()->create('uno.pdf',5,'application/pdf'),UploadedFile::fake()->create('dos.pdf',5,'application/pdf'),UploadedFile::fake()->create('tres.pdf',5,'application/pdf')];
         $this->actingAs($user)->post(route('incapacidades.store'),$payload+['comprobantes'=>$files])->assertRedirect();
-        $this->assertSame(3,Incapacidad::firstOrFail()->comprobantes()->count());
+        $incapacidad = Incapacidad::sole();
+        $comprobantes = $incapacidad->comprobantes()->with('documentoPersonal')->get();
+        $this->assertCount(3, $comprobantes);
+        $this->assertDatabaseCount('personal_documentos', 3);
+        $this->assertCount(3, Storage::disk('wasabi')->allFiles());
+        foreach ($comprobantes as $comprobante) {
+            $this->assertSame('Incapacidad', $comprobante->documentoPersonal->tipo);
+            $this->assertEquals($employee->id, $comprobante->documentoPersonal->personal_id);
+            $this->assertSame($comprobante->ruta_privada, $comprobante->documentoPersonal->ruta_privada);
+        }
         $this->post(route('incapacidades.store'),$payload+['comprobantes'=>[...$files,UploadedFile::fake()->create('cuatro.pdf',5,'application/pdf')]])->assertSessionHasErrors('comprobantes');
+
+        $comprobante = $comprobantes->first();
+        $documento = $comprobante->documentoPersonal;
+        $this->get(route('incapacidades.comprobantes.download', [$incapacidad, $comprobante]))->assertOk();
+        $this->get(route('personal.documentos.download', [$employee, $documento]))->assertOk();
+        $this->delete(route('personal.documentos.destroy', [$employee, $documento]))->assertRedirect();
+        $this->assertSoftDeleted($documento);
+        $this->assertSoftDeleted($comprobante);
+        $this->assertNull($comprobante->fresh()->personal_documento_id);
+        $this->get(route('incapacidades.comprobantes.download', [$incapacidad, $comprobante]))->assertNotFound();
+        $this->assertSame(2, $incapacidad->comprobantes()->count());
+        $this->assertSame('vigente', $incapacidad->fresh()->estado);
+        Storage::disk('wasabi')->assertExists($comprobante->ruta_privada);
+    }
+
+    public function test_asocia_comprobantes_historicos_sin_duplicar_archivos_ni_registros(): void
+    {
+        Storage::fake('wasabi');
+        [$empresa, $empleado] = $this->employee();
+        $admin = User::factory()->create(['profile' => 2]);
+        $admin->empresas()->attach($empresa->id, ['control_total' => true]);
+        $incapacidad = Incapacidad::create([
+            'empresa_id' => $empresa->id, 'personal_id' => $empleado->id,
+            'registrado_por_user_id' => $admin->id, 'fecha_inicio' => '2026-11-02', 'fecha_fin' => '2026-11-03',
+            'motivo' => 'Maternidad', 'estado' => 'cancelada', 'jornadas_afectadas' => 0,
+            'snapshot' => ['fechas' => []], 'snapshot_generado_en' => now(),
+        ]);
+        $ruta = 'privado/comprobante-historico.pdf';
+        Storage::disk('wasabi')->put($ruta, 'PDF histórico');
+        $comprobante = $incapacidad->comprobantes()->create([
+            'ruta_privada' => $ruta, 'nombre_original' => 'histórico.pdf', 'mime' => 'application/pdf',
+            'tamano' => strlen('PDF histórico'), 'cargado_por_user_id' => $admin->id,
+        ]);
+        $segundoComprobante = $incapacidad->comprobantes()->create([
+            'ruta_privada' => $ruta, 'nombre_original' => 'histórico.pdf', 'mime' => 'application/pdf',
+            'tamano' => strlen('PDF histórico'), 'cargado_por_user_id' => $admin->id,
+        ]);
+
+        $migracion = require database_path('migrations/2026_11_23_161000_backfill_incapacidad_personal_documentos.php');
+        $migracion->up();
+        $migracion->up();
+
+        $documento = PersonalDocumento::sole();
+        $this->assertSame('Incapacidad', $documento->tipo);
+        $this->assertEquals($empleado->id, $documento->personal_id);
+        $this->assertEquals($admin->id, $documento->cargado_por);
+        $this->assertEquals($comprobante->created_at, $documento->created_at);
+        $this->assertSame($ruta, $documento->ruta_privada);
+        $this->assertEquals($documento->id, $comprobante->fresh()->personal_documento_id);
+        $this->assertEquals($documento->id, $segundoComprobante->fresh()->personal_documento_id);
+        $this->assertSame('cancelada', $incapacidad->fresh()->estado);
+        $this->assertSame([$ruta], Storage::disk('wasabi')->allFiles());
+        $this->actingAs($admin)->get(route('personal.documentos.download', [$empleado, $documento]))
+            ->assertOk()->assertContent('PDF histórico');
     }
 
     private function employee(): array

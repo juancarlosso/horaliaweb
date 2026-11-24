@@ -51,7 +51,7 @@
     @media(max-width:575px) { .personal-photo-row { align-items:flex-start; } }
 </style>
 
-<section class="personal-page" data-default-tab="{{ session('activePersonalTab', $errors->has('archivo') ? 'documentos' : 'general') }}">
+<section class="personal-page" data-default-tab="{{ session('activePersonalTab', $errors->has('archivo') || ($isEdit && request()->query('tab') === 'documentos') ? 'documentos' : 'general') }}">
     <div class="card-hr">
         <div class="card-hd personal-form-card-heading">
             <h1 class="card-title-hr">Información del colaborador</h1>

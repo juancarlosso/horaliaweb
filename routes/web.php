@@ -13,6 +13,7 @@ use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\FestivoEmpresaController;
 use App\Http\Controllers\FestivoOficialController;
 use App\Http\Controllers\HorarioEmpresaController;
+use App\Http\Controllers\HorasExtrasController;
 use App\Http\Controllers\ManualController;
 use App\Http\Controllers\MembershipPaymentController;
 use App\Http\Controllers\NovedadesController;
@@ -144,6 +145,16 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::post('/home/vacaciones/preview', [VacacionesController::class, 'preview'])->name('vacaciones.preview');
     Route::post('/home/vacaciones', [VacacionesController::class, 'store'])->name('vacaciones.store');
     Route::delete('/home/vacaciones/{vacacion}', [VacacionesController::class, 'cancel'])->whereNumber('vacacion')->name('vacaciones.cancel');
+    Route::prefix('/home/horas-extras')->name('horas-extras.')->controller(HorasExtrasController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/agregar', 'create')->name('create');
+        Route::get('/empresas/{empresa}/empleados', 'empleados')->whereNumber('empresa')->name('empleados');
+        Route::post('/', 'store')->middleware('throttle:20,1')->name('store');
+        Route::get('/{horaExtra}', 'show')->whereNumber('horaExtra')->name('show');
+        Route::get('/{horaExtra}/pdf', 'pdf')->whereNumber('horaExtra')->name('pdf');
+        Route::post('/{horaExtra}/constancia-firmada', 'subirConstancia')->whereNumber('horaExtra')->middleware('throttle:20,1')->name('constancia.store');
+        Route::get('/{horaExtra}/constancia-firmada', 'descargarConstancia')->whereNumber('horaExtra')->name('constancia.download');
+    });
     Route::get('/home/incapacidades', [IncapacidadesController::class, 'index'])->name('incapacidades.index');
     Route::get('/home/incapacidades/create', [IncapacidadesController::class, 'create'])->name('incapacidades.create');
     Route::post('/home/incapacidades', [IncapacidadesController::class, 'store'])->middleware('throttle:20,1')->name('incapacidades.store');

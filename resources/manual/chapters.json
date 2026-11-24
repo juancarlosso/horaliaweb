@@ -1462,8 +1462,109 @@
     ]
   },
   {
-    "id": "12-todo-listo-para-comenzar",
+    "id": "19-horas-extras",
     "number": "19",
+    "title": "Registrar y consultar horas extras",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "En Horas Extras puedes registrar el tiempo autorizado de una jornada y quién lo aprobó. También puedes guardar la constancia firmada en el expediente del colaborador."
+      },
+      {
+        "type": "heading",
+        "text": "Buscar la jornada"
+      },
+      {
+        "type": "step",
+        "number": 1,
+        "text": "En el menú Operación, abre Horas Extras y pulsa Agregar horas extras. Los administradores de empresa pueden registrar autorizaciones en las empresas que tienen asignadas con control total."
+      },
+      {
+        "type": "step",
+        "number": 2,
+        "text": "Selecciona la empresa. En Empleado puedes dejar Todos los Empleados para consultar al personal activo o elegir a una persona. Indica las fechas Desde y Hasta y pulsa Buscar jornadas. Puedes consultar hasta 90 días, contando ambas fechas."
+      },
+      {
+        "type": "step",
+        "number": 3,
+        "text": "Localiza al empleado y la fecha. Revisa la hora de salida, las Hr. Detectadas y las condiciones. Pulsa Registrar horas extras en la jornada correspondiente."
+      },
+      {
+        "type": "paragraph",
+        "text": "En una jornada ordinaria, el tiempo detectado es el transcurrido después de la salida programada. En un descanso o festivo no laborable trabajado, se toma el intervalo entre la entrada y la salida. Un festivo programado sin tiempo adicional se muestra como informativo."
+      },
+      {
+        "type": "image",
+        "src": "horas-extras-busqueda-computadora.png",
+        "alt": "Buscador de jornadas en una computadora, con los filtros y el botón Registrar horas extras."
+      },
+      {
+        "type": "heading",
+        "text": "Guardar la autorización"
+      },
+      {
+        "type": "step",
+        "number": 4,
+        "text": "Verifica el horario, las checadas y el tiempo detectado. Captura las horas y los minutos autorizados. Pueden coincidir con el tiempo detectado o ser menores o mayores."
+      },
+      {
+        "type": "step",
+        "number": 5,
+        "text": "En Quién autoriza, selecciona a un empleado activo de la empresa distinto del colaborador que recibe las horas. Escribe el motivo y las observaciones. Ambos campos son obligatorios. Si el tiempo autorizado difiere del detectado, explica la diferencia en las observaciones."
+      },
+      {
+        "type": "step",
+        "number": 6,
+        "text": "Revisa la información y pulsa Guardar autorización. Horalia asigna un folio al registro y vuelve al historial."
+      },
+      {
+        "type": "callout",
+        "kind": "important",
+        "text": "La autorización es definitiva. Solo se puede registrar una por jornada. Revísala antes de guardar, porque el registro no se puede editar ni eliminar."
+      },
+      {
+        "type": "image",
+        "src": "horas-extras-registro-computadora.png",
+        "alt": "Formulario de autorización en una computadora, con el tiempo autorizado, la persona que autoriza, el motivo y las observaciones."
+      },
+      {
+        "type": "heading",
+        "text": "Descargar y subir la constancia firmada"
+      },
+      {
+        "type": "step",
+        "number": 7,
+        "text": "En el historial, ubica la autorización con los filtros de empresa, mes y año. Abre el icono Ver detalle para consultar el folio y los datos de la jornada. Pulsa Descargar PDF para imprimir la constancia y recabar la firma del empleado y de quien autoriza."
+      },
+      {
+        "type": "step",
+        "number": 8,
+        "text": "En el detalle, en Constancia firmada, selecciona el archivo y pulsa Subir constancia firmada. Puedes cargar un PDF, JPG, PNG o WebP de hasta 10 MB. El archivo se guarda en Personal → Documentos con el tipo Autorización de Horas Extra."
+      },
+      {
+        "type": "image",
+        "src": "horas-extras-constancia-computadora.png",
+        "alt": "Detalle de la autorización en una computadora, con la descarga del PDF y el campo para subir la constancia firmada."
+      },
+      {
+        "type": "step",
+        "number": 9,
+        "text": "Una vez cargado el archivo, el historial muestra el botón verde Descargar constancia firmada. Si se elimina el documento del expediente, se conserva la autorización y vuelve a aparecer Descargar PDF."
+      },
+      {
+        "type": "image",
+        "src": "horas-extras-historial-computadora.png",
+        "alt": "Historial de Horas Extras en una computadora, con un PDF disponible para firmar y una constancia firmada."
+      },
+      {
+        "type": "paragraph",
+        "text": "El perfil de administración general puede consultar y descargar las autorizaciones de las empresas. La captura de horas y la carga de constancias se realizan con el perfil de administrador de empresa."
+      }
+    ]
+  },
+  {
+    "id": "12-todo-listo-para-comenzar",
+    "number": "20",
     "title": "¡Todo listo para comenzar!",
     "blocks": [
       {

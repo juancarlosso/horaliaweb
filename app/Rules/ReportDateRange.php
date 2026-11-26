@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use Carbon\CarbonImmutable;
 use Closure;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -14,6 +15,11 @@ class ReportDateRange implements DataAwareRule, ValidationRule
 
     private array $data = [];
 
+    public static function latestDate(): CarbonImmutable
+    {
+        return CarbonImmutable::yesterday(config('app.timezone'));
+    }
+
     public function setData(array $data): static
     {
         $this->data = $data;
@@ -23,8 +29,14 @@ class ReportDateRange implements DataAwareRule, ValidationRule
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
+        if ($value > self::latestDate()->toDateString()) {
+            $fail('La fecha final del reporte debe ser de ayer o anterior.');
+
+            return;
+        }
+
         $start = $this->data['desde'] ?? null;
-        if (!is_string($start) || !preg_match('/^\d{4}-\d{2}-\d{2}$/D', $start)) {
+        if (! is_string($start) || ! preg_match('/^\d{4}-\d{2}-\d{2}$/D', $start)) {
             return;
         }
 

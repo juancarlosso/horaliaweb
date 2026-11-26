@@ -21,6 +21,7 @@ class ReportDateRangeTest extends TestCase
 
     public function test_general_department_and_incidence_reports_reject_more_than_ninety_days(): void
     {
+        $this->travelTo('2026-04-02 18:00:00 UTC');
         $company = Empresa::query()->create(['rfc' => 'AAA010101AAA', 'razon_social' => 'Empresa de prueba']);
         $this->actingAs(User::factory()->create(['profile' => 1]));
         $filters = [
@@ -51,5 +52,49 @@ class ReportDateRangeTest extends TestCase
         $this->get(route('reportes.incidencias', $filters + ['tipos' => ['retardos']]))->assertOk();
         $this->get(route('reportes.asistencia.exportar', $filters))
             ->assertDownload('reporte_asistencia_2026-01-01_2026-03-31.xlsx');
+    }
+
+    public function test_every_report_stops_at_yesterday_in_the_application_timezone(): void
+    {
+        config(['app.timezone' => 'America/Mexico_City']);
+        $company = Empresa::query()->create(['rfc' => 'AAA010101AAA', 'razon_social' => 'Empresa de prueba']);
+        $this->actingAs(User::factory()->create(['profile' => 1]));
+        $forms = ['reportes.general', 'reportes.incidencias', 'reportes.departamento', 'reportes.horas-trabajadas.index'];
+
+        $this->travelTo('2026-12-01 00:15:00 UTC');
+        foreach ($forms as $form) {
+            $this->get(route($form))->assertOk()->assertSee('name="hasta" type="date" max="2026-11-29" value="2026-11-29"', false);
+        }
+
+        $this->travelTo('2026-12-01 06:15:00 UTC');
+        foreach ($forms as $form) {
+            $this->get(route($form))->assertOk()
+                ->assertSee('name="desde" type="date" max="2026-11-30" value="2026-11-01"', false)
+                ->assertSee('name="hasta" type="date" max="2026-11-30" value="2026-11-30"', false);
+        }
+
+        $filters = ['empresa_id' => $company->id, 'desde' => '2026-11-30', 'hasta' => '2026-12-01', 'tipos' => ['retardos']];
+        $stores = [
+            route('reportes.horas-trabajadas.store'),
+            route('reportes.generados.store', 'general'),
+            route('reportes.generados.store', 'incidencias'),
+            route('reportes.generados.store', 'departamento'),
+        ];
+
+        foreach ($stores as $store) {
+            $this->postJson($store, $filters)->assertUnprocessable()
+                ->assertJsonPath('errors.hasta.0', 'La fecha final del reporte debe ser de ayer o anterior.');
+        }
+        $this->assertDatabaseCount('jobs', 0);
+
+        foreach (['reportes.asistencia.exportar', 'reportes.incidencias.exportar', 'reportes.departamento'] as $legacyRoute) {
+            $this->getJson(route($legacyRoute, array_replace($filters, ['hasta' => '2026-12-02'])))
+                ->assertUnprocessable()->assertJsonValidationErrors('hasta');
+        }
+
+        foreach ($stores as $store) {
+            $this->post($store, array_replace($filters, ['hasta' => '2026-11-30']))->assertRedirect();
+        }
+        $this->assertDatabaseCount('jobs', 4);
     }
 }

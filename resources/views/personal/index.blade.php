@@ -11,7 +11,7 @@
     .personal-filter { flex:1 1 12rem; max-width:300px; }
     .personal-filter label { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
     .personal-filter .hr-input { width:100%; }
-    .personal-toolbar-action { margin-left:auto; white-space:nowrap; }
+    .personal-toolbar-actions { display:flex; flex-wrap:wrap; gap:.5rem; margin-left:auto; }
     .personal-error { margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(239,68,68,.2); border-radius:.625rem; color:#b42318; background:rgba(239,68,68,.07); font-size:.845rem; }
     .personal-actions { display:flex; justify-content:flex-end; gap:.4rem; white-space:nowrap; }
     .personal-actions i { display:inline-block; width:15px; min-width:15px; font-size:15px; line-height:1; text-align:center; }
@@ -44,7 +44,18 @@
                 </select>
             </div>
         </form>
-        @if($canCreate)<a class="btn-hr btn-primary-hr personal-toolbar-action" href="{{ route('personal.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}"><i class="{{ config('constantes.tipo_iconos') }} fa-plus" aria-hidden="true"></i> Agregar personal</a>@endif
+        @if($canCreate)
+            <div class="personal-toolbar-actions">
+                <a class="btn-hr btn-primary-hr" href="{{ route('personal.create', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}">
+                    <i class="{{ config('constantes.tipo_iconos') }} fa-plus" aria-hidden="true"></i> Agregar personal
+                </a>
+                @if(!$selectedCompanyId || in_array($selectedCompanyId, $manageableIds, true))
+                    <a class="btn-hr btn-outline-hr" href="{{ route('personal.export', $selectedCompanyId ? ['empresa_id' => $selectedCompanyId] : []) }}">
+                        <i class="{{ config('constantes.tipo_iconos') }} fa-file-excel" aria-hidden="true"></i> Generar Excel con el Personal
+                    </a>
+                @endif
+            </div>
+        @endif
     </div>
 
     <div class="card-hr" id="personal-results" data-datatable-source>

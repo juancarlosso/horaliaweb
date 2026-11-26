@@ -1,6 +1,6 @@
 <template data-table-total="{{ $unfilteredTotal }}" data-table-filtered="{{ $rows->total() }}"></template>
 <div class="table-wrap">
-    <table class="bs-table hover ir-table" data-datatable="{{ config('constantes.itemsPorPagina') }}" data-per-page="{{ $rows->perPage() }}" data-page="{{ $rows->currentPage() }}" data-search-delay="650" data-datatable-no-csv data-empty="No se encontraron incidencias para los filtros seleccionados.">
+    <table class="bs-table hover ir-table" data-datatable="{{ config('constantes.itemsPorPagina') }}" data-per-page="{{ $rows->perPage() }}" data-page="{{ $rows->currentPage() }}" data-search-placeholder="Buscar incidencias…" data-datatable-no-csv data-empty="No se encontraron incidencias para los filtros seleccionados.">
         <thead>
             <tr><th data-sort-key="fecha">Fecha</th><th data-sort-key="empleado">Empleado</th><th data-sort-key="codigo">Código</th><th data-sort-key="tipo">Tipo de incidencia</th><th data-sort-key="detalle">Detalle</th></tr>
         </thead>

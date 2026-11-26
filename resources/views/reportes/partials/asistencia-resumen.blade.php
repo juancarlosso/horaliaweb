@@ -1,0 +1,6 @@
+<div class="report-summary">
+            <article class="report-summary-card"><div class="report-summary-icon"><i class="{{ config('constantes.tipo_iconos') }} fa-clipboard-user" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Registros</small><strong>{{ $summary['total'] }}</strong></div></article>
+            <article class="report-summary-card"><div class="report-summary-icon is-late"><i class="{{ config('constantes.tipo_iconos') }} fa-clock" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Llegadas tarde</small><strong>{{ $summary['late'] }}</strong></div></article>
+            <article class="report-summary-card"><div class="report-summary-icon is-range"><i class="{{ config('constantes.tipo_iconos') }} fa-location-dot" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Fuera de rango</small><strong>{{ $summary['outOfRange'] }}</strong></div></article>
+            <article class="report-summary-card"><div class="report-summary-icon is-exit"><i class="{{ config('constantes.tipo_iconos') }} fa-person-walking-arrow-right" aria-hidden="true"></i></div><div class="report-summary-copy"><small>Sin salida</small><strong>{{ $summary['withoutExit'] }}</strong></div></article>
+        </div>

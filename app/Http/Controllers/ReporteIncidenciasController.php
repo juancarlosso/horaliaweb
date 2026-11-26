@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ReporteIncidenciasExport;
-use App\Http\Controllers\Concerns\ManagesCompanyCatalogs;
+use App\Http\Controllers\Concerns\ManagesGeneratedReports;
 use App\Models\Empresa;
+use App\Models\ReporteGenerado;
 use App\Services\ReporteIncidenciasService;
 use App\Rules\ReportDateRange;
 use App\Support\DataTable;
@@ -14,7 +15,7 @@ use Illuminate\Support\Str;
 
 class ReporteIncidenciasController extends Controller
 {
-    use ManagesCompanyCatalogs;
+    use ManagesGeneratedReports;
 
     public function index(Request $request, ReporteIncidenciasService $service)
     {
@@ -22,8 +23,9 @@ class ReporteIncidenciasController extends Controller
         $companies = $this->companiesFor($request, true);
         $companyIds = $companies->modelKeys();
         $selectedCompanyId = $this->selectedCompanyForFilter($request, $companies);
-        $startDate = $request->input('desde', now()->startOfMonth()->toDateString());
-        $endDate = $request->input('hasta', now()->subDay()->toDateString());
+        $latestDate = ReportDateRange::latestDate();
+        $startDate = $request->input('desde', $latestDate->startOfMonth()->toDateString());
+        $endDate = $request->input('hasta', $latestDate->toDateString());
         $selectedTypes = $request->has('tipos') ? (array) $request->input('tipos') : ReporteIncidenciasService::TYPES;
         $rows = null;
         $unfilteredTotal = 0;
@@ -73,8 +75,9 @@ class ReporteIncidenciasController extends Controller
                 return response($table->render())->header('Cache-Control', 'no-store');
             }
         }
-        return view('reportes.incidencias', compact('companies', 'selectedCompanyId', 'startDate', 'endDate', 'selectedTypes', 'rows', 'unfilteredTotal', 'reportGenerated') + [
+        return view('reportes.incidencias', compact('companies', 'selectedCompanyId', 'startDate', 'endDate', 'latestDate', 'selectedTypes', 'rows', 'unfilteredTotal', 'reportGenerated') + [
             'navigation' => DashboardController::navigation(), 'activeSection' => 'reportes-incidencias',
+            'reports' => $this->reportHistory($request, ReporteGenerado::INCIDENCIAS),
             'types' => ReporteIncidenciasService::TYPES, 'labels' => ReporteIncidenciasService::LABELS, 'descriptions' => ReporteIncidenciasService::DESCRIPTIONS,
             'typeColors' => [
                 'retardos' => '#F59E0B', 'posibles_faltas' => '#EF4444', 'salidas_pendientes' => '#06B6D4',

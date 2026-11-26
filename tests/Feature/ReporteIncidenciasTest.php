@@ -115,7 +115,13 @@ class ReporteIncidenciasTest extends TestCase
             $sheet = $zip->getFromName('xl/worksheets/sheet1.xml');
             $styles = $zip->getFromName('xl/styles.xml');
             $this->assertStringContainsString('REPORTE DE INCIDENCIAS', $sheet);
-            $this->assertStringContainsString('Periodo: 2026-11-01 al 2026-11-07', $sheet);
+            $this->assertStringContainsString('Periodo: 01/11/2026 al 07/11/2026', $sheet);
+            $this->assertStringContainsString('ref="A1:D1"', $sheet);
+            $this->assertStringContainsString('<xdr:col>4</xdr:col>', $zip->getFromName('xl/drawings/drawing1.xml'));
+            $this->assertSame(
+                hash_file('sha256', public_path('assets/logos/logoLN.png')),
+                hash('sha256', $zip->getFromName('xl/media/image1.png')),
+            );
             $this->assertStringContainsString('ySplit="10"', $sheet);
             $this->assertStringContainsString('autoFilter', $sheet);
             $this->assertStringContainsString('FF536DF5', $styles);

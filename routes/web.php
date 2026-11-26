@@ -28,6 +28,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\ReporteAsistenciaController;
 use App\Http\Controllers\ReporteIncidenciasController;
+use App\Http\Controllers\ReporteHorasTrabajadasController;
+use App\Http\Controllers\ReportesGeneradosController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TransferenciaPagoController;
@@ -140,6 +142,7 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::put('/home/horarios/{horario}', [HorarioEmpresaController::class, 'update'])->whereNumber('horario')->name('horarios.update');
     Route::delete('/home/horarios/{horario}', [HorarioEmpresaController::class, 'destroy'])->whereNumber('horario')->name('horarios.destroy');
     Route::get('/home/personal', [PersonalController::class, 'index'])->name('personal.index');
+    Route::get('/home/personal/exportar', [PersonalController::class, 'export'])->name('personal.export');
     Route::get('/home/vacaciones', [VacacionesController::class, 'index'])->name('vacaciones.index');
     Route::get('/home/vacaciones/create', [VacacionesController::class, 'create'])->name('vacaciones.create');
     Route::post('/home/vacaciones/preview', [VacacionesController::class, 'preview'])->name('vacaciones.preview');
@@ -186,6 +189,19 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::get('/home/reportes/general', [ReporteAsistenciaController::class, 'index'])->name('reportes.general');
     Route::get('/home/reportes/incidencias', [ReporteIncidenciasController::class, 'index'])->name('reportes.incidencias');
     Route::get('/home/reportes/incidencias/exportar', [ReporteIncidenciasController::class, 'export'])->name('reportes.incidencias.exportar');
+    Route::prefix('/home/reportes/horas-trabajadas')->name('reportes.horas-trabajadas.')->controller(ReporteHorasTrabajadasController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->middleware('throttle:10,1')->name('store');
+        Route::get('/{reporte}', 'show')->whereUuid('reporte')->name('show');
+        Route::get('/{reporte}/exportar', 'download')->whereUuid('reporte')->name('download');
+    });
+    Route::prefix('/home/reportes/generados')->name('reportes.generados.')->controller(ReportesGeneradosController::class)->group(function () {
+        Route::post('/{tipoReporte}', 'store')->whereIn('tipoReporte', ['general', 'incidencias', 'departamento'])->middleware('throttle:10,1')->name('store');
+        Route::get('/{reporte}', 'show')->whereUuid('reporte')->name('show');
+        Route::get('/{reporte}/exportar', 'download')->whereUuid('reporte')->name('download');
+        Route::get('/{reporte}/pausas/{asistencia}', 'pauses')->whereUuid('reporte')->whereNumber('asistencia')->name('pausas');
+        Route::get('/{reporte}/departamento', 'departmentDetail')->whereUuid('reporte')->name('departamento');
+    });
     Route::get('/home/reportes/asistencia', fn () => redirect()->route('reportes.general'))->name('reportes.asistencia');
     Route::get('/home/reportes/departamento', [ReporteAsistenciaController::class, 'byDepartment'])->name('reportes.departamento');
     Route::get('/home/reportes/departamento/detalle', [ReporteAsistenciaController::class, 'departmentDetail'])->name('reportes.departamento.detalle');

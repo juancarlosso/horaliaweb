@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PersonalExport;
 use App\Helper\Wasabi;
 use App\Mail\ChecadorPinMail;
 use App\Http\Controllers\Concerns\ManagesCompanyCatalogs;
@@ -84,6 +85,7 @@ class PersonalController extends Controller
             ->paginate($perPage)
             ->withQueryString();
 
+        $manageableIds = $this->companyIdsFor($request, true);
         $view = view('personal.index', [
             'navigation' => DashboardController::navigation(),
             'activeSection' => 'personal',
@@ -92,8 +94,8 @@ class PersonalController extends Controller
             'selectedCompanyId' => $selectedCompanyId,
             'search' => $search,
             'unfilteredTotal' => $unfilteredTotal ?? $personal->total(),
-            'canCreate' => $this->companiesFor($request, true)->isNotEmpty(),
-            'manageableIds' => $this->companyIdsFor($request, true),
+            'canCreate' => $manageableIds !== [],
+            'manageableIds' => $manageableIds,
         ]);
 
         if ($request->header('X-Datatable-Fragment') === '1') {
@@ -101,6 +103,25 @@ class PersonalController extends Controller
         }
 
         return $view;
+    }
+
+    public function export(Request $request, PersonalExport $export)
+    {
+        $request->validate(['empresa_id' => ['nullable', 'integer', 'min:0']]);
+        $companyId = $request->integer('empresa_id');
+        $manageableIds = $this->companyIdsFor($request, true);
+        abort_if($manageableIds === [] || ($companyId && ! in_array($companyId, $manageableIds, true)), 403);
+
+        $employees = Personal::query()
+            ->whereIn('empresa_id', $companyId ? [$companyId] : $manageableIds)
+            ->with(['departamento:id,nombre', 'puesto:id,nombre', 'horarios:personal_id,dia,entrada,salida,modalidad'])
+            ->lazyById(500);
+        $path = $export->generate($employees);
+
+        return response()->download($path, 'personal.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Cache-Control' => 'private, no-store',
+        ])->deleteFileAfterSend(true);
     }
 
     public function create(Request $request)

@@ -1,33 +1,67 @@
 @extends('layouts.dashboard', ['pageTitle' => 'Incidencias', 'activeSection' => 'reportes-incidencias'])
 
 @push('scripts')
-    <script defer src="{{ asset('assets/horalia/js/report-date-range.js') }}"></script>
+    <script defer src="{{ asset('assets/horalia/js/report-date-range.js') }}?v=2"></script>
 @endpush
 
 @section('content')
-@include('components.datatable-assets')
-<style>
-    .page-inner{max-width:none}.ir-filters{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,1fr) minmax(0,1fr);gap:1rem;align-items:end}.ir-filter label{display:block;margin-bottom:.4rem;font-size:.82rem;font-weight:650}.ir-filter .hr-input{width:100%}.ir-types{grid-column:1/-1}.ir-type-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.65rem}.ir-type-head label{margin:0}.ir-type-actions{display:flex;gap:.6rem}.ir-type-actions button{border:0;background:none;color:var(--color-primary);font-size:.82rem}.ir-type-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.65rem}.ir-type{display:flex;align-items:center;gap:.6rem;padding:.7rem .875rem;border:1px solid var(--card-border);border-left:3px solid var(--incidence-color);border-radius:.625rem;background:color-mix(in srgb,var(--incidence-color) 7%,var(--card-bg));cursor:pointer;transition:filter .13s}.ir-type:hover{filter:brightness(1.04)}.ir-type input{appearance:none;-webkit-appearance:none;display:grid;place-content:center;flex:none;width:18px;height:18px;margin:0;border:1px solid color-mix(in srgb,var(--incidence-color) 45%,transparent);border-radius:4px;background:color-mix(in srgb,var(--incidence-color) 30%,transparent);cursor:pointer}.ir-type input::before{content:"";width:9px;height:5px;border:solid #fff;border-width:0 0 2px 2px;transform:rotate(-45deg) scale(0);transform-origin:center;transition:transform .1s ease-in-out}.ir-type input:checked{border-color:var(--incidence-color);background:var(--incidence-color)}.ir-type input:checked::before{transform:rotate(-45deg) scale(1)}.ir-type input:focus-visible{outline:2px solid var(--incidence-color);outline-offset:2px}.ir-type span{flex:1;color:var(--body-text);font-size:.875rem;font-weight:600}.ir-info{border:0;background:none;padding:0;color:var(--incidence-color)}.ir-actions{grid-column:1/-1;display:flex;gap:.5rem;white-space:nowrap}.ir-table{min-width:850px}.ir-table td{vertical-align:middle}.ir-empty{padding:2.5rem 1rem;text-align:center;color:var(--body-text-muted)}.ir-empty h2{font-size:1rem;color:var(--body-text)}.ir-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}.ir-head p{margin:.25rem 0 0;color:var(--body-text-muted);font-size:.8rem}.ir-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.25rem;border-top:1px solid var(--body-border);color:var(--body-text-muted);font-size:.8rem}.ir-pagination{display:flex;align-items:center;gap:.55rem}.ir-pagination [aria-disabled="true"]{pointer-events:none;opacity:.55}.ir-loader{position:fixed;inset:0;z-index:25000;display:grid;place-items:center;padding:1rem;background:rgba(17,24,39,.42)}.ir-loader[hidden]{display:none}.ir-loader-card{display:flex;align-items:center;gap:.8rem;padding:1rem 1.25rem;border:1px solid var(--card-border);border-radius:.85rem;background:var(--card-bg);color:var(--body-text);box-shadow:0 12px 40px rgba(17,24,39,.2);font-weight:650}.ir-loader-spinner{width:1.35rem;height:1.35rem;border:3px solid var(--body-border);border-top-color:var(--color-primary);border-radius:50%;animation:ir-spin .7s linear infinite}@keyframes ir-spin{to{transform:rotate(360deg)}}@media(max-width:900px){.ir-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.ir-actions{grid-column:1/-1}.ir-type-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.ir-filters,.ir-type-grid{grid-template-columns:1fr}.ir-types,.ir-actions{grid-column:auto}.ir-head,.ir-type-head,.ir-footer{align-items:flex-start;flex-direction:column}}
-</style>
+@if($reportGenerated)
+    @include('components.datatable-assets')
+@endif
+@include('reportes.partials.incidencias-estilos')
 <section>
-    <div class="card-hr"><div class="card-hd"><div><h2 class="card-title-hr">Reporte de incidencias</h2><p class="card-subtitle-hr">Selecciona la empresa, los tipos de incidencia y un periodo de hasta {{ \App\Rules\ReportDateRange::MAX_DAYS }} días.</p></div></div><div class="card-bd">
-        <form data-report-max-days="{{ \App\Rules\ReportDateRange::MAX_DAYS }}" id="incidents-form" class="ir-filters" method="GET" action="{{ route('reportes.incidencias') }}">
-            <div class="ir-filter"><label for="empresa_id">Empresa <span class="text-danger">*</span></label><select id="empresa_id" name="empresa_id" class="hr-input select2" required data-placeholder="Selecciona una empresa">@if($companies->count() !== 1)<option value="">Selecciona una empresa</option>@endif @foreach($companies as $company)<option value="{{ $company->id }}" @selected((string)$selectedCompanyId === (string)$company->id)>{{ $company->nombre }}</option>@endforeach</select></div>
-            <div class="ir-filter"><label for="desde">Desde <span class="text-danger">*</span></label><input class="hr-input" id="desde" name="desde" type="date" value="{{ $startDate }}" required></div>
-            <div class="ir-filter"><label for="hasta">Hasta <span class="text-danger">*</span></label><input class="hr-input" id="hasta" name="hasta" type="date" value="{{ $endDate }}" required></div>
-            <div class="ir-types"><div class="ir-type-head"><label>Tipos de incidencia <span class="text-danger">*</span></label><div class="ir-type-actions"><button type="button" id="select-all-types">Seleccionar todas</button><button type="button" id="clear-types">Deseleccionar todas</button></div></div>
-                <div class="ir-type-grid">@foreach($types as $type)<label class="ir-type" style="--incidence-color: {{ $typeColors[$type] }}"><input type="checkbox" name="tipos[]" value="{{ $type }}" @checked(in_array($type,$selectedTypes,true))><span>{{ $labels[$type] }}</span><button class="ir-info" type="button" tabindex="0" aria-label="Información sobre {{ $labels[$type] }}" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="{{ $descriptions[$type] }}"><i class="{{ config('constantes.tipo_iconos') }} fa-circle-info" aria-hidden="true"></i></button></label>@endforeach</div>
+    <div class="card-hr">
+        <div class="card-hd">
+            <div>
+                <h2 class="card-title-hr">Reporte de incidencias</h2>
+                <p class="card-subtitle-hr">Selecciona la empresa, los tipos de incidencia y un periodo de hasta {{ \App\Rules\ReportDateRange::MAX_DAYS }} días, con fecha final hasta ayer.</p>
             </div>
-            <div class="ir-actions"><button type="submit" class="btn-hr btn-primary-hr"><i class="{{ config('constantes.tipo_iconos') }} fa-magnifying-glass" aria-hidden="true"></i> Generar reporte</button><a href="{{ route('reportes.incidencias') }}" class="btn-hr btn-outline-hr"><i class="{{ config('constantes.tipo_iconos') }} fa-arrow-rotate-left" aria-hidden="true"></i> Limpiar</a></div>
-        </form>
-    </div></div>
+        </div>
+        <div class="card-bd">
+            <form id="incidents-form" class="row g-3 align-items-end" data-report-max-days="{{ \App\Rules\ReportDateRange::MAX_DAYS }}" method="POST" action="{{ route('reportes.generados.store', ['tipoReporte' => 'incidencias']) }}">
+                @csrf
+                @include('reportes.partials.campos-periodo')
+
+                <fieldset class="col-12">
+                    <legend class="form-label">Tipos de incidencia <span class="text-danger">*</span></legend>
+                    <div class="ir-type-actions mb-2">
+                        <button type="button" id="select-all-types" class="btn-hr btn-outline-hr btn-sm-hr">Seleccionar todas</button>
+                        <button type="button" id="clear-types" class="btn-hr btn-outline-hr btn-sm-hr">Deseleccionar todas</button>
+                    </div>
+                    <div class="ir-type-grid">
+                        @foreach($types as $type)
+                            <div class="ir-type" style="--incidence-color: {{ $typeColors[$type] }}">
+                                <label>
+                                    <input type="checkbox" name="tipos[]" value="{{ $type }}" @checked(in_array($type, (array) old('tipos', $selectedTypes), true))>
+                                    <span>{{ $labels[$type] }}</span>
+                                </label>
+                                <button class="ir-info" type="button" aria-label="Información sobre {{ $labels[$type] }}" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="{{ $descriptions[$type] }}">
+                                    <i class="{{ config('constantes.tipo_iconos') }} fa-circle-info" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        @endforeach
+                    </div>
+                </fieldset>
+
+                <div class="col-12 d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn-hr btn-primary-hr" @disabled($companies->isEmpty())>
+                        <i class="{{ config('constantes.tipo_iconos') }} fa-magnifying-glass" aria-hidden="true"></i> Generar reporte
+                    </button>
+                    <a href="{{ route('reportes.incidencias') }}" class="btn-hr btn-outline-hr">
+                        <i class="{{ config('constantes.tipo_iconos') }} fa-arrow-rotate-left" aria-hidden="true"></i> Limpiar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
     @if($reportGenerated)
         <div class="card-hr" style="margin-top:1.25rem" data-datatable-source><div class="card-hd ir-head"><div><h2 class="card-title-hr">Incidencias encontradas ({{ $unfilteredTotal }})</h2><p>{{ $companies->firstWhere('id',$selectedCompanyId)?->nombre }} · Periodo del {{ \Carbon\Carbon::parse($startDate)->format('d/m/Y') }} al {{ \Carbon\Carbon::parse($endDate)->format('d/m/Y') }}</p></div><button type="submit" form="incidents-form" formaction="{{ route('reportes.incidencias.exportar') }}" data-loading-message="Preparando el archivo de Excel…" class="btn-hr btn-outline-hr" @disabled($unfilteredTotal === 0)><i class="{{ config('constantes.tipo_iconos') }} fa-file-excel" aria-hidden="true"></i> Exportar todo a Excel</button></div>
             @include('reportes.partials.incidencias-table')
         </div>
     @endif
+    @include('reportes.partials.historial')
 </section>
-<div id="incidents-loader" class="ir-loader" role="status" aria-live="assertive" aria-atomic="true" aria-busy="false" hidden><div class="ir-loader-card"><span class="ir-loader-spinner" aria-hidden="true"></span><span id="incidents-loader-message">Generando reporte…</span></div></div>
+<div id="incidents-loader" class="ir-loader" role="status" aria-live="assertive" aria-atomic="true" aria-busy="false" hidden><div class="ir-loader-card"><span class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></span><span id="incidents-loader-message">Generando reporte…</span></div></div>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     let activePopover = null;
@@ -112,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showLoader(submitter.dataset.loadingMessage || 'Preparando el archivo de Excel…');
             const url = new URL(exportUrl, window.location.href);
             url.search = new URLSearchParams(new FormData(form)).toString();
+            url.searchParams.delete('_token');
             fetch(url, { credentials: 'same-origin', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                 .then(async (response) => {
                     if (!response.ok) throw new Error('No se pudo generar el archivo de Excel.');
@@ -140,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 .finally(hideLoader);
             return;
         }
-        showLoader(submitter?.dataset.loadingMessage || 'Generando reporte…');
     });
     document.querySelectorAll('.ir-pagination a:not([aria-disabled="true"])').forEach((link) => link.addEventListener('click', () => showLoader('Cargando página…')));
 });

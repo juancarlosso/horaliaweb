@@ -44,6 +44,15 @@ return [
             'after_commit' => false,
         ],
 
+        'reportes' => [
+            'driver' => 'database',
+            'connection' => null,
+            'table' => 'jobs',
+            'queue' => 'reportes',
+            'retry_after' => 660,
+            'after_commit' => false,
+        ],
+
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => env('BEANSTALKD_QUEUE_HOST', 'localhost'),

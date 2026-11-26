@@ -51,11 +51,34 @@ class EnviarNovedadesTest extends TestCase
         }
     }
 
-    private function administrator(string $email, string $createdAt): User
+    public function test_novelties_only_reach_administrators_linked_to_an_active_company(): void
+    {
+        Mail::fake();
+        $createdAt = '2026-10-01 10:00:00';
+        $active = $this->administrator('activa@example.test', $createdAt);
+        $inactive = $this->administrator('inactiva@example.test', $createdAt, false);
+        $mixed = $this->administrator('mixta@example.test', $createdAt);
+        $mixed->empresas()->attach($inactive->empresas()->firstOrFail()->id);
+
+        $this->artisan('novedades:enviar', ['archivo' => '261020', '--dry-run' => true])
+            ->expectsOutput('261020.md: 2 destinatario(s) pendiente(s).')
+            ->assertExitCode(0);
+        Mail::assertNothingSent();
+
+        $this->artisan('novedades:enviar', ['archivo' => '261020'])->assertExitCode(0);
+
+        Mail::assertSent(NovedadesSistemaMail::class, 2);
+        Mail::assertSent(NovedadesSistemaMail::class, fn (NovedadesSistemaMail $mail) => $mail->hasTo($active->email));
+        Mail::assertSent(NovedadesSistemaMail::class, fn (NovedadesSistemaMail $mail) => $mail->hasTo($mixed->email));
+        $this->assertDatabaseMissing('novedades_enviadas', ['email' => $inactive->email]);
+    }
+
+    private function administrator(string $email, string $createdAt, bool $active = true): User
     {
         $company = Empresa::query()->create([
             'nombre' => 'Empresa '.$email,
             'rfc' => 'AAA'.strtoupper(substr(hash('sha256', $email), 0, 10)),
+            'activa' => $active,
         ]);
         $user = User::factory()->create([
             'email' => $email,

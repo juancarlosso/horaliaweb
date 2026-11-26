@@ -1,3 +1,24 @@
+function showReportDateWarning(input, message) {
+    if (window.Swal.isVisible()) return;
+
+    window.Swal.fire({
+        icon: 'warning',
+        title: 'Revisa el periodo',
+        text: message,
+        confirmButtonText: 'Entendido',
+        buttonsStyling: false,
+        customClass: { confirmButton: 'btn-hr btn-primary-hr' },
+    }).then(() => input.focus());
+}
+
+document.addEventListener('invalid', (event) => {
+    const input = event.target;
+    if (!input.form?.matches('form[data-report-max-days]') || input.type !== 'date' || !input.validity.rangeOverflow || !window.Swal) return;
+
+    event.preventDefault();
+    showReportDateWarning(input, 'Puedes seleccionar fechas de ayer o anteriores.');
+}, true);
+
 document.addEventListener('submit', (event) => {
     const form = event.target.closest('form[data-report-max-days]');
     if (!form) return;
@@ -9,14 +30,7 @@ document.addEventListener('submit', (event) => {
 
     event.preventDefault();
     event.stopImmediatePropagation();
-    window.Swal.fire({
-        icon: 'warning',
-        title: 'Revisa el periodo',
-        text: end < start
-            ? 'La fecha final debe ser igual o posterior a la fecha inicial.'
-            : `Selecciona un periodo de hasta ${days} días, incluyendo la fecha inicial y final.`,
-        confirmButtonText: 'Entendido',
-        buttonsStyling: false,
-        customClass: { confirmButton: 'btn-hr btn-primary-hr' },
-    }).then(() => form.elements.hasta.focus());
+    showReportDateWarning(form.elements.hasta, end < start
+        ? 'La fecha final debe ser igual o posterior a la fecha inicial.'
+        : `Selecciona un periodo de hasta ${days} días, incluyendo la fecha inicial y final.`);
 }, true);

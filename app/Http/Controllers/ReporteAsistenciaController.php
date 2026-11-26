@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Concerns\ManagesCompanyCatalogs;
+use App\Http\Controllers\Concerns\ManagesGeneratedReports;
 use App\Exports\AsistenciaReporteExport;
 use App\Models\Asistencia;
 use App\Models\Departamento;
 use App\Models\Empresa;
+use App\Models\ReporteGenerado;
 use App\Rules\ReportDateRange;
 use App\Support\DataTable;
 use Carbon\CarbonImmutable;
@@ -16,15 +17,16 @@ use Illuminate\Support\Facades\DB;
 
 class ReporteAsistenciaController extends Controller
 {
-    use ManagesCompanyCatalogs;
+    use ManagesGeneratedReports;
 
     public function index(Request $request)
     {
         $companies = $this->companiesFor($request);
         $companyIds = $companies->modelKeys();
         $selectedCompanyId = $this->selectedCompanyForFilter($request, $companies);
-        $startDate = $request->input('desde', now()->startOfMonth()->toDateString());
-        $endDate = $request->input('hasta', now()->endOfMonth()->toDateString());
+        $latestDate = ReportDateRange::latestDate();
+        $startDate = $request->input('desde', $latestDate->startOfMonth()->toDateString());
+        $endDate = $request->input('hasta', $latestDate->toDateString());
         $reportGenerated = $request->filled(['empresa_id', 'desde', 'hasta']);
         $attendance = null;
         $summary = null;
@@ -119,10 +121,12 @@ class ReporteAsistenciaController extends Controller
         return view('reportes.asistencia', [
             'navigation' => DashboardController::navigation(),
             'activeSection' => 'reportes-general',
+            'reports' => $this->reportHistory($request, ReporteGenerado::GENERAL),
             'companies' => $companies,
             'selectedCompanyId' => $selectedCompanyId,
             'startDate' => $startDate,
             'endDate' => $endDate,
+            'latestDate' => $latestDate,
             'reportGenerated' => $reportGenerated,
             'attendance' => $attendance,
             'summary' => $summary,
@@ -135,8 +139,9 @@ class ReporteAsistenciaController extends Controller
         $companies = $this->companiesFor($request);
         $companyIds = $companies->modelKeys();
         $selectedCompanyId = $this->selectedCompanyForFilter($request, $companies);
-        $startDate = $request->input('desde', now()->startOfMonth()->toDateString());
-        $endDate = $request->input('hasta', now()->endOfMonth()->toDateString());
+        $latestDate = ReportDateRange::latestDate();
+        $startDate = $request->input('desde', $latestDate->startOfMonth()->toDateString());
+        $endDate = $request->input('hasta', $latestDate->toDateString());
         $reportGenerated = $request->filled(['empresa_id', 'desde', 'hasta']);
         $departments = collect();
 
@@ -199,10 +204,12 @@ class ReporteAsistenciaController extends Controller
         return view('reportes.departamento', [
             'navigation' => DashboardController::navigation(),
             'activeSection' => 'reportes-departamento',
+            'reports' => $this->reportHistory($request, ReporteGenerado::DEPARTAMENTO),
             'companies' => $companies,
             'selectedCompanyId' => $selectedCompanyId,
             'startDate' => $startDate,
             'endDate' => $endDate,
+            'latestDate' => $latestDate,
             'reportGenerated' => $reportGenerated,
             'departments' => $departments,
         ]);

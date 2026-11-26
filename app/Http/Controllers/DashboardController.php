@@ -33,6 +33,7 @@ class DashboardController extends Controller
         'incapacidades' => ['label' => 'Incapacidades', 'icon' => 'briefcase-medical', 'group' => 'Operación'],
         'horas-extras' => ['label' => 'Horas Extras', 'icon' => 'user-clock', 'group' => 'Operación'],
         'reportes-general' => ['label' => 'General', 'icon' => 'chart-line', 'group' => 'REPORTES'],
+        'reportes-horas-trabajadas' => ['label' => 'Horas trabajadas', 'icon' => 'business-time', 'group' => 'REPORTES', 'route' => 'reportes.horas-trabajadas.index'],
         'reportes-incidencias' => ['label' => 'Incidencias', 'icon' => 'triangle-exclamation', 'group' => 'REPORTES'],
         'reportes-departamento' => ['label' => 'Por Departamento', 'icon' => 'chart-pie', 'group' => 'REPORTES'],
     ];
@@ -45,7 +46,7 @@ class DashboardController extends Controller
             unset($sections['pausas']);
         }
         if (! $user || ! in_array((int) $user->profile, [1, 2], true)) unset($sections['incapacidades'], $sections['horas-extras']);
-        if (! $user || ! in_array((int) $user->profile, [1, 2], true)) unset($sections['reportes-incidencias']);
+        if (! $user || ! in_array((int) $user->profile, [1, 2], true)) unset($sections['reportes-incidencias'], $sections['reportes-horas-trabajadas']);
 
         return $sections;
     }

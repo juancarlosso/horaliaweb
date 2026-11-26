@@ -36,14 +36,29 @@ class ReporteIncidenciasService
     public function generate(int $companyId, string $from, string $through, array $types): Collection
     {
         $employees = Personal::query()->where('empresa_id', $companyId)->with(['centro', 'horarios'])->orderBy('nombre')->get();
+        return $this->generateForEmployees($companyId, $from, $through, $types, $employees, CarbonImmutable::now('UTC'));
+    }
+
+    public function porBloques(int $companyId, string $from, string $through, array $types): iterable
+    {
+        $now = CarbonImmutable::now('UTC');
+        $employees = Personal::query()->where('empresa_id', $companyId)->with(['centro', 'horarios'])->lazyById(150);
+        foreach ($employees->chunk(150) as $batch) {
+            yield from $this->generateForEmployees($companyId, $from, $through, $types, collect($batch->all()), $now);
+        }
+    }
+
+    private function generateForEmployees(int $companyId, string $from, string $through, array $types, Collection $employees, CarbonImmutable $now): Collection
+    {
         if ($employees->isEmpty()) return collect();
 
-        $employeeIds = $employees->modelKeys();
+        $employeeIds = $employees->pluck('id')->all();
         $endExclusive = CarbonImmutable::parse($through)->addDay()->toDateString();
         $attendance = Asistencia::query()
             ->where('empresa_id', $companyId)
             ->where('fecha', '>=', $from)
             ->where('fecha', '<', $endExclusive)
+            ->whereIn('personal_id', $employeeIds)
             ->whereNotNull('llegada')
             ->get(['personal_id', 'fecha', 'llegada', 'salida', 'minutos_tarde'])
             ->keyBy(fn ($row) => $row->personal_id.'|'.$row->fecha->toDateString());
@@ -70,7 +85,7 @@ class ReporteIncidenciasService
         $startDate = CarbonImmutable::parse($from);
         foreach ($employees as $employee) {
             $timezone = HoraliaTimezones::forCenter($employee->centro?->timezone);
-            $lastCompleteDay = CarbonImmutable::now('UTC')->setTimezone($timezone)->startOfDay()->subDay()->toDateString();
+            $lastCompleteDay = $now->setTimezone($timezone)->startOfDay()->subDay()->toDateString();
             $end = min($through, $lastCompleteDay);
             if ($end < $from) continue;
             $endDate = CarbonImmutable::parse($end);

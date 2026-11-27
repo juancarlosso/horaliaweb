@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Empresa;
 use App\Models\IntentoPago;
 use App\Models\TransferenciaPago;
-use App\Services\EmployeeSubscriptionPricing;
 use App\Services\PaymentFolioService;
+use App\Services\TransferMembershipRenewalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -17,15 +17,15 @@ use Throwable;
 
 class TransferenciaPagoController extends Controller
 {
-    public function uploadForm(Request $request, int $empresa, EmployeeSubscriptionPricing $pricing)
+    public function uploadForm(Request $request, int $empresa, TransferMembershipRenewalService $renewals)
     {
-        $company = $this->companyForUser($request, $empresa);
-        abort_unless($company->metodo_pago === 'TRANSFERENCIA' && $company->fecha_renovacion && $company->fecha_renovacion->toDateString() <= today()->toDateString(), 404);
-        $cycle = $company->fecha_renovacion->toDateString();
-        $amount = $pricing->prepareRenewal($company, $cycle);
-        $transfer = TransferenciaPago::firstOrCreate(['empresa_id' => $company->id, 'fecha_renovacion' => $cycle], [
-            'cantidad' => $amount, 'concepto' => 'HORALIA '.$company->referenciaTransferencia(), 'estado' => 'pendiente_de_pago',
-        ]);
+        $authorizedCompany = $this->companyForUser($request, $empresa);
+        [$company, $transfer] = DB::transaction(function () use ($authorizedCompany, $renewals) {
+            $company = Empresa::query()->whereKey($authorizedCompany->id)->lockForUpdate()->firstOrFail();
+            abort_unless($company->metodo_pago === 'TRANSFERENCIA' && $company->fecha_renovacion && $company->fecha_renovacion->toDateString() <= today()->toDateString(), 404);
+
+            return [$company, $renewals->paymentForCycle($company, $company->fecha_renovacion->toDateString())];
+        }, 3);
         $requiresConsent = !DB::table('transferencia_condiciones_aceptadas')->where('empresa_id', $company->id)->where('version', config('constantes.pagos_transferencia.terminos_version'))->exists();
         return view('payments.transferencia', ['transferencia' => $transfer->load('comprobanteActual'), 'empresa' => $company, 'requiresConsent' => $requiresConsent, 'navigation' => DashboardController::navigation(), 'activeSection' => 'payment-history']);
     }
@@ -99,10 +99,11 @@ class TransferenciaPagoController extends Controller
             'concepto_recibido' => ['required_if:accion,confirmar', 'nullable', 'string', 'max:100'],
             'observaciones' => ['nullable', 'string', 'max:2000'],
         ]);
-        $result = DB::transaction(function () use ($request, $transferencia, $data, $folios) {
-            $transfer = TransferenciaPago::query()->whereKey($transferencia)->lockForUpdate()->with('empresa')->firstOrFail();
+        $empresaId = TransferenciaPago::findOrFail($transferencia)->empresa_id;
+        $result = DB::transaction(function () use ($request, $transferencia, $empresaId, $data, $folios) {
+            $empresa = Empresa::query()->whereKey($empresaId)->lockForUpdate()->firstOrFail();
+            $transfer = $empresa->transferencias()->whereKey($transferencia)->lockForUpdate()->firstOrFail();
             abort_unless($transfer->estado === 'pendiente_de_confirmar', 409, 'La solicitud ya fue revisada.');
-            $empresa = Empresa::query()->whereKey($transfer->empresa_id)->lockForUpdate()->firstOrFail();
             $transfer->forceFill(['revisado_por' => $request->user()->id, 'revisado_en' => now(), 'observaciones' => $data['observaciones'] ?? null])->save();
             if ($data['accion'] === 'rechazar') {
                 $transfer->forceFill(['estado' => 'rechazado', 'motivo_rechazo' => $data['motivo']])->save();
@@ -126,7 +127,16 @@ class TransferenciaPagoController extends Controller
             abort_unless($attempt->resultado === 'exitoso', 409);
             $folios->assign($attempt);
             $newDate = \App\Services\MembershipRenewalDate::next($empresa);
-            $empresa->forceFill(['fecha_renovacion' => $newDate, 'intentos' => 0, 'activa' => true, 'cancelar_al_renovar' => false])->save();
+            $suspendedForNonpayment = $empresa->periodo_suspendido_por_transferencia?->toDateString() === $transfer->fecha_renovacion->toDateString()
+                || (int) $empresa->intentos >= 5; // Existing suspensions from the card workflow.
+            $reactivate = $suspendedForNonpayment && !$empresa->cancelar_al_renovar;
+            $empresa->forceFill([
+                'fecha_renovacion' => $newDate,
+                'intentos' => 0,
+                'activa' => $empresa->activa || $reactivate,
+                'cancelar_al_renovar' => !$empresa->activa && $empresa->cancelar_al_renovar,
+                'periodo_suspendido_por_transferencia' => null,
+            ])->save();
             $transfer->forceFill(['estado' => 'confirmado'])->save();
             DB::table('transferencia_auditoria')->insert(['transferencia_pago_id' => $transfer->id, 'usuario_id' => $request->user()->id, 'accion' => 'confirmado', 'datos' => json_encode(['intento_pago_id' => $attempt->id, 'importe_verificado' => $data['importe_recibido'], 'concepto_verificado' => $data['concepto_recibido'], 'nueva_fecha' => $newDate]), 'created_at' => now(), 'updated_at' => now()]);
             return ['status' => 'confirmado', 'empresa' => $empresa, 'new_date' => $newDate, 'attempt' => $attempt];

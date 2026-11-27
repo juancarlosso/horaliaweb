@@ -19,6 +19,7 @@ class MembershipRenewalService
         private readonly StripeCardService $stripe,
         private readonly PaymentFolioService $folios,
         private readonly EmployeeSubscriptionPricing $pricing,
+        private readonly TransferMembershipRenewalService $transferRenewals,
     )
     {
     }
@@ -27,7 +28,7 @@ class MembershipRenewalService
     {
         return Empresa::query()
             ->where('activa', true)
-            ->where('intentos', '<', 5)
+            ->where(fn ($query) => $query->where('intentos', '<', 5)->orWhere('metodo_pago', 'TRANSFERENCIA'))
             ->whereNotNull('fecha_renovacion')
             ->whereDate('fecha_renovacion', '<=', today())
             ->orderBy('fecha_renovacion')
@@ -39,7 +40,7 @@ class MembershipRenewalService
     {
         $result = DB::transaction(function () use ($empresaId) {
             $empresa = Empresa::query()->whereKey($empresaId)->lockForUpdate()->first();
-            if (!$empresa || !$empresa->activa || (int) $empresa->intentos >= 5 || !$empresa->fecha_renovacion || $empresa->fecha_renovacion->isFuture() || $empresa->fecha_renovacion->toDateString() > today()->toDateString()) {
+            if (!$empresa || !$empresa->activa || ($empresa->metodo_pago !== 'TRANSFERENCIA' && (int) $empresa->intentos >= 5) || !$empresa->fecha_renovacion || $empresa->fecha_renovacion->isFuture() || $empresa->fecha_renovacion->toDateString() > today()->toDateString()) {
                 return ['status' => 'skipped', 'empresa_id' => $empresaId];
             }
 
@@ -49,7 +50,7 @@ class MembershipRenewalService
                 return ['status' => 'canceled', 'empresa_id' => $empresa->id, 'fecha_fin' => $cycleDate];
             }
             if ($empresa->metodo_pago === 'TRANSFERENCIA') {
-                return ['status' => 'transfer_pending', 'empresa_id' => $empresa->id, 'renewal_date' => $cycleDate];
+                return $this->transferRenewals->process($empresa, $cycleDate);
             }
             $existingSuccess = IntentoPago::query()
                 ->where('empresa_id', $empresa->id)
@@ -192,6 +193,10 @@ class MembershipRenewalService
             } else {
                 $this->notifyAdministrators($result['empresa'], 'retry', $result['amount']);
             }
+        } elseif ($result['status'] === 'transfer_pending') {
+            $this->transferRenewals->notifyAdministrators($empresaId, $result['renewal_date']);
+        } elseif ($result['status'] === 'transfer_suspended') {
+            Log::info('Suscripción suspendida por falta de confirmación de la transferencia.', $result);
         } elseif ($result['status'] === 'indeterminate') {
             Log::error('Stripe no confirmó el resultado de una renovación; se conserva el intento para reconciliarlo sin duplicar el cargo.', $result);
         } elseif ($result['status'] === 'canceled') {

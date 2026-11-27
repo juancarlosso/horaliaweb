@@ -55,7 +55,7 @@
         <li><i class="fa-solid fa-coins" aria-hidden="true"></i><span><strong>Transfiere únicamente el importe exacto de tu mensualidad.</strong> Los excedentes no se aplicarán automáticamente a otras mensualidades; cualquier diferencia se revisará conforme a las condiciones aplicables.</span></li>
         <li><i class="fa-solid fa-tag" aria-hidden="true"></i><span><strong>Utiliza el concepto indicado: {{ $transferencia->concepto }}.</strong> Es indispensable para identificar tu pago.</span></li>
         <li><i class="fa-regular fa-clock" aria-hidden="true"></i><span><strong>La validación puede tomar hasta 48 horas hábiles</strong> desde la recepción del comprobante.</span></li>
-        <li><i class="fa-regular fa-calendar" aria-hidden="true"></i><span><strong>Evita retrasos en tu pago.</strong> El servicio puede suspenderse al agotar cinco intentos automáticos fallidos de renovación.</span></li>
+        <li><i class="fa-regular fa-calendar" aria-hidden="true"></i><span><strong>Suspensión:</strong> Dispones de cinco días naturales, incluyendo la fecha de renovación, para que tu pago sea confirmado. Si al sexto día no se ha confirmado, el servicio será suspendido automáticamente. Te recomendamos realizar tu transferencia y cargar tu comprobante con suficiente anticipación, considerando los tiempos de validación.</span></li>
         <li><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span><strong>La renovación no es inmediata.</strong> Subir el comprobante no confirma el pago ni renueva el servicio.</span></li>
     </ul></aside>
     @if($transferencia->estado === 'pendiente_de_confirmar')

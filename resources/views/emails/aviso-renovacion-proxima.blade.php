@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light">
     <meta name="supported-color-schemes" content="light">
-    <title>Tu renovación de Horalia está cerca | {{ $appName }}</title>
+    <title>{{ $headline ?? "Tu renovación de Horalia está cerca" }} | {{ $appName }}</title>
 </head>
 <body style="margin:0;padding:0;background-color:#f2f4fa;font-family:Arial,Helvetica,sans-serif;color:#202541;-webkit-text-size-adjust:100%;">
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f2f4fa;padding:36px 12px;">
@@ -16,16 +16,20 @@
                 </td></tr>
                 <tr><td style="padding:42px 42px 36px;color:#626a83;font-size:15px;line-height:1.7;">
                     <p style="margin:0 0 12px;color:#536df5;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;">Renovación de suscripción</p>
-                    <h1 style="margin:0 0 18px;color:#202541;font-size:27px;line-height:1.25;font-weight:700;">⏰ ¡Tu renovación de Horalia está cerca!</h1>
-                    <p style="margin:0 0 14px;color:#444b65;font-size:16px;line-height:1.65;">Estimado cliente:</p>
-                    <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">En <strong>Horalia</strong> queremos agradecerte por la confianza que has depositado en nosotros. Nos alegra seguir acompañándote en la gestión de asistencia de tus colaboradores. 💙</p>
-                    <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">Te recordamos que <strong>tu suscripción está próxima a renovarse el {{ $renewalDate }}</strong>.</p>
-                    @if(($empresa?->metodo_pago ?? 'TARJETA') === 'TRANSFERENCIA')
-                        <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">El importe exacto vigente es <strong>${{ number_format((float) $empresa->precio, 2) }} MXN</strong>. Transfiere a {{ config('constantes.pagos_transferencia.beneficiario') ?: 'la cuenta bancaria indicada en Métodos de Pago' }}@if(config('constantes.pagos_transferencia.banco')) en {{ config('constantes.pagos_transferencia.banco') }}@endif. El concepto obligatorio es <strong>HORALIA {{ $empresa->referenciaTransferencia() }}</strong>.</p>
-                        <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">Presenta tu comprobante desde <a href="{{ $historyUrl }}">Historial de Pagos</a> al llegar el vencimiento. La revisión puede tomar hasta 48 horas hábiles desde que se recibe correctamente; no se confirma el pago al subirlo. El sistema suspende el servicio después de cinco intentos automáticos fallidos; el código no establece un plazo fijo de siete días.</p>
+                    <h1 style="margin:0 0 18px;color:#202541;font-size:27px;line-height:1.25;font-weight:700;">{{ $headline ?? "⏰ ¡Tu renovación de Horalia está cerca!" }}</h1>
+                    @if($transferRenewal ?? false)
+                        @include('emails.transferencia-renovacion')
                     @else
-                        <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">💳 Para garantizar que tu servicio continúe sin interrupciones, te invitamos a verificar que tu tarjeta registrada se encuentre vigente y cuente con fondos suficientes para realizar el cargo automático.</p>
-                        <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">✅ <strong>¡No necesitas hacer nada más!</strong> Si tu método de pago está actualizado, la renovación se realizará automáticamente.</p>
+                        <p style="margin:0 0 14px;color:#444b65;font-size:16px;line-height:1.65;">Estimado cliente:</p>
+                        <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">En <strong>Horalia</strong> queremos agradecerte por la confianza que has depositado en nosotros. Nos alegra seguir acompañándote en la gestión de asistencia de tus colaboradores. 💙</p>
+                        <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">Te recordamos que <strong>tu suscripción está próxima a renovarse el {{ $renewalDate }}</strong>.</p>
+                        @if(($empresa?->metodo_pago ?? 'TARJETA') === 'TRANSFERENCIA')
+                            <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">El importe exacto vigente es <strong>${{ number_format((float) $empresa->precio, 2) }} MXN</strong>. Transfiere a {{ config('constantes.pagos_transferencia.beneficiario') ?: 'la cuenta bancaria indicada en Métodos de Pago' }}@if(config('constantes.pagos_transferencia.banco')) en {{ config('constantes.pagos_transferencia.banco') }}@endif. El concepto obligatorio es <strong>HORALIA {{ $empresa->referenciaTransferencia() }}</strong>.</p>
+                            <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">Presenta tu comprobante desde <a href="{{ $historyUrl }}">Historial de Pagos</a> al llegar el vencimiento. La revisión puede tomar hasta 48 horas hábiles desde que se recibe correctamente; no se confirma el pago al subirlo. Dispones de cinco días naturales, incluyendo la fecha de renovación, para que el pago quede confirmado. Si sigue pendiente al sexto día, el servicio se suspenderá automáticamente.</p>
+                        @else
+                            <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">💳 Para garantizar que tu servicio continúe sin interrupciones, te invitamos a verificar que tu tarjeta registrada se encuentre vigente y cuente con fondos suficientes para realizar el cargo automático.</p>
+                            <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">✅ <strong>¡No necesitas hacer nada más!</strong> Si tu método de pago está actualizado, la renovación se realizará automáticamente.</p>
+                        @endif
                     @endif
                     <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;">Gracias por permitirnos ser parte de tu empresa.</p>
                     <p style="margin:0 0 22px;color:#626a83;font-size:15px;line-height:1.7;"><strong>¡Seguimos trabajando para ofrecerte un Horalia cada día mejor! 🚀</strong></p>

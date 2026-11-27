@@ -62,6 +62,7 @@ class Empresa extends Model
             'precio' => 'decimal:2',
             'fecha_inicio' => 'date',
             'fecha_renovacion' => 'date',
+            'periodo_suspendido_por_transferencia' => 'date',
             'intentos' => 'integer',
             'cancelar_al_renovar' => 'boolean',
             'metodo_pago' => 'string',
@@ -112,11 +113,20 @@ class Empresa extends Model
 
     public function referenciaTransferencia(): string
     {
-        if ($this->referencia_transferencia) return $this->referencia_transferencia;
-        $letra = chr(random_int(65, 90));
-        $reference = 'H'.$this->id.$letra;
-        $this->forceFill(['referencia_transferencia' => $reference])->save();
-        return $reference;
+        if ($this->referencia_transferencia) {
+            return $this->referencia_transferencia;
+        }
+
+        $reference = 'H'.$this->id.chr(random_int(65, 90));
+        $company = static::query()->whereKey($this->id);
+        $updated = (clone $company)
+            ->where(fn ($query) => $query->whereNull('referencia_transferencia')->orWhere('referencia_transferencia', ''))
+            ->update(['referencia_transferencia' => $reference]);
+
+        $this->referencia_transferencia = $updated ? $reference : $company->value('referencia_transferencia');
+        $this->syncOriginalAttribute('referencia_transferencia');
+
+        return $this->referencia_transferencia;
     }
 
     public function logoUrl(): ?string

@@ -30,7 +30,9 @@
             @if(!$transfer || in_array($transfer->estado, ['pendiente_de_pago', 'rechazado'], true)) <a class="btn-hr btn-primary-hr" href="{{ route('transferencias.upload-form', $company->id) }}">{{ $transfer?->estado === 'rechazado' ? 'Reemplazar comprobante' : 'Subir comprobante' }}</a>
             @elseif($transfer->estado === 'pendiente_de_confirmar') <span class="payment-status pending">Pendiente de confirmar</span>
             @elseif($transfer->estado === 'confirmado') <span class="payment-status success">Confirmado</span>@endif
-            @if($transfer?->estado === 'rechazado')<p>Motivo: {{ $transfer->motivo_rechazo }}</p>@endif
+            @if($transfer?->estado === 'rechazado')
+                @include('payments.transfer-rejection', ['rejectedTransfer' => $transfer])
+            @endif
         </div>
     @endforeach
     <div class="card-hr">

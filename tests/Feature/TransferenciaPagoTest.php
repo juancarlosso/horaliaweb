@@ -152,6 +152,65 @@ class TransferenciaPagoTest extends TestCase
             ->assertSee('Concepto obligatorio')->assertSee('48 horas hábiles')->assertSee('$150.00 MXN');
     }
 
+    public function test_home_and_payment_history_show_only_the_current_transfer_rejection(): void
+    {
+        Storage::fake('wasabi');
+        $admin = User::factory()->create(['profile' => 2]);
+        $company = $this->company('PPP010101PPP');
+        $company->forceFill(['metodo_pago' => 'TRANSFERENCIA', 'fecha_renovacion' => today()])->save();
+        $admin->empresas()->attach($company->id, ['control_total' => true]);
+        $transfer = $company->transferencias()->create([
+            'fecha_renovacion' => today()->toDateString(),
+            'cantidad' => 150,
+            'concepto' => 'HORALIA PRUEBA',
+            'estado' => 'rechazado',
+            'motivo_rechazo' => 'El comprobante no corresponde al destinatario.',
+        ]);
+        $company->transferencias()->create([
+            'fecha_renovacion' => today()->subMonth()->toDateString(),
+            'cantidad' => 150,
+            'concepto' => 'HORALIA PRUEBA',
+            'estado' => 'rechazado',
+            'motivo_rechazo' => 'Motivo de otro periodo.',
+        ]);
+        foreach (['anterior', 'rechazado'] as $name) {
+            $path = 'transferencias/'.$name.'.pdf';
+            Storage::disk('wasabi')->put($path, '%PDF-1.4 '.$name);
+            $transfer->comprobantes()->create([
+                'ruta_privada' => $path,
+                'nombre_original' => $name.'.pdf',
+                'mime' => 'application/pdf',
+                'tamano' => 20,
+            ]);
+        }
+
+        $this->actingAs($admin);
+        $proofUrl = route('transferencias.rejected-proof', $company->id);
+        foreach (['home', 'payment-history.index'] as $route) {
+            $this->get(route($route))->assertOk()
+                ->assertSee('Comprobante rechazado.')
+                ->assertSee($transfer->motivo_rechazo)
+                ->assertSee('Reemplazar comprobante')
+                ->assertSee($proofUrl)
+                ->assertDontSee('Motivo de otro periodo.');
+        }
+        $this->get(route('transferencias.upload-form', $company->id))->assertOk()->assertSee($proofUrl);
+        $this->get($proofUrl)->assertOk()
+            ->assertHeader('Content-Type', 'application/pdf')
+            ->assertHeader('Content-Disposition', 'attachment; filename="rechazado.pdf"')
+            ->assertStreamedContent('%PDF-1.4 rechazado');
+        $this->actingAs(User::factory()->create(['profile' => 2]))->get($proofUrl)->assertNotFound();
+
+        $transfer->update(['estado' => 'pendiente_de_confirmar', 'motivo_rechazo' => null]);
+
+        $this->actingAs($admin)->get($proofUrl)->assertNotFound();
+        foreach (['home', 'payment-history.index'] as $route) {
+            $this->get(route($route))->assertOk()
+                ->assertDontSee('Comprobante rechazado.')
+                ->assertDontSee('Motivo de otro periodo.');
+        }
+    }
+
     public function test_card_payment_method_screen_remains_available_for_existing_companies(): void
     {
         config(['services.stripe.key' => 'sk_test_example', 'services.stripe.publishable_key' => 'pk_test_example']);

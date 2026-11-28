@@ -235,10 +235,17 @@
             @foreach($renewalCompanies as $renewal)
                 @php($company = $renewal['empresa'])
                 @php($modalId = 'membership-payment-' . $company->id)
+                @php($rejectedTransfer = $renewal['rejected_transfer'] ?? null)
                 <div class="alert alert-danger membership-alert" role="alert" id="membership-alert-{{ $company->id }}">
-                    <div><strong>Pago pendiente de la suscripción de Horalia</strong><br>{{ $company->nombre }} · Renovación vencida el {{ $company->fecha_renovacion->format('d/m/Y') }}</div>
+                    <div>
+                        <strong>Pago pendiente de la suscripción de Horalia</strong><br>
+                        {{ $company->nombre }} · Renovación vencida el {{ $company->fecha_renovacion->format('d/m/Y') }}
+                        @if($rejectedTransfer)
+                            @include('payments.transfer-rejection', ['rejectedTransfer' => $rejectedTransfer])
+                        @endif
+                    </div>
                     @if($company->metodo_pago === 'TRANSFERENCIA')
-                        <a class="btn-hr btn-primary-hr" href="{{ route('transferencias.upload-form', $company->id) }}">Subir comprobante · ${{ number_format((float) $company->precio, 2) }}</a>
+                        <a class="btn-hr btn-primary-hr" href="{{ route('transferencias.upload-form', $company->id) }}">{{ $rejectedTransfer ? 'Reemplazar comprobante' : 'Subir comprobante' }} · ${{ number_format((float) $company->precio, 2) }}</a>
                     @else
                         <button class="btn-hr btn-primary-hr" type="button" data-open-membership-modal="{{ $modalId }}">Pagar ${{ number_format((float) $company->precio, 2) }}</button>
                     @endif

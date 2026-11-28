@@ -49,7 +49,9 @@ class PaymentHistoryController extends Controller
             'navigation' => DashboardController::navigation(),
             'activeSection' => 'payment-history',
             'transferCompanies' => Empresa::query()->whereIn('id', $companyIds)->where('metodo_pago', 'TRANSFERENCIA')->whereNotNull('fecha_renovacion')->whereDate('fecha_renovacion', '<=', today())->get(),
-            'transferStates' => TransferenciaPago::query()->whereIn('empresa_id', $companyIds)->get()->keyBy(fn ($row) => $row->empresa_id.':'.$row->fecha_renovacion->toDateString()),
+            'transferStates' => TransferenciaPago::query()->whereIn('empresa_id', $companyIds)
+                ->with('comprobanteActual:transferencia_comprobantes.id,transferencia_comprobantes.transferencia_pago_id,mime')
+                ->get()->keyBy(fn ($row) => $row->empresa_id.':'.$row->fecha_renovacion->toDateString()),
         ]);
     }
 

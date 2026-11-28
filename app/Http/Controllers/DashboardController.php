@@ -6,6 +6,7 @@ use App\Models\Asistencia;
 use App\Models\Empresa;
 use App\Models\IntentoPago;
 use App\Models\Personal;
+use App\Models\TransferenciaPago;
 use App\Services\RegistroAsistenciaService;
 use App\Services\StripeCardService;
 use Illuminate\Http\Request;
@@ -113,13 +114,30 @@ class DashboardController extends Controller
                 ? Empresa::query()->get()
                 : $request->user()->empresas;
             $companyIds = $companies->modelKeys();
-            $renewalCompanies = $companies
-                ->filter(fn (Empresa $company) => $company->fecha_renovacion && $company->fecha_renovacion->toDateString() <= today()->toDateString())
-                ->map(function (Empresa $company) use ($stripe) {
+            $dueCompanies = $companies
+                ->filter(fn (Empresa $company) => $company->fecha_renovacion && $company->fecha_renovacion->toDateString() <= today()->toDateString());
+            $transferCompanyIds = $dueCompanies->where('metodo_pago', 'TRANSFERENCIA')->modelKeys();
+            $rejectedTransfers = $transferCompanyIds
+                ? TransferenciaPago::query()
+                    ->with('comprobanteActual:transferencia_comprobantes.id,transferencia_comprobantes.transferencia_pago_id,mime')
+                    ->whereIn('empresa_id', $transferCompanyIds)
+                    ->where('estado', 'rechazado')
+                    ->whereHas('empresa', fn ($query) => $query->whereDate('empresas.fecha_renovacion', DB::raw('DATE(transferencias_pago.fecha_renovacion)')))
+                    ->get(['id', 'empresa_id', 'motivo_rechazo'])
+                    ->keyBy('empresa_id')
+                : collect();
+            $renewalCompanies = $dueCompanies
+                ->map(function (Empresa $company) use ($stripe, $rejectedTransfers) {
                     $cards = [];
                     try {
                         if ($company->metodo_pago === 'TRANSFERENCIA') {
-                            return ['empresa' => $company, 'cards' => [], 'pending_payment_method_id' => null, 'automatic_pending' => false];
+                            return [
+                                'empresa' => $company,
+                                'cards' => [],
+                                'pending_payment_method_id' => null,
+                                'automatic_pending' => false,
+                                'rejected_transfer' => $rejectedTransfers->get($company->id),
+                            ];
                         }
                         $cards = $stripe->cards($company);
                     } catch (Throwable $exception) {

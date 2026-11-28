@@ -83,6 +83,7 @@ Route::middleware(['auth', EnsureActiveLinkedPersonal::class])->group(function (
     Route::post('/home/empresas/{empresa}/membresia/confirmar', [MembershipPaymentController::class, 'confirm'])->whereNumber('empresa');
     Route::post('/home/empresas/{empresa}/suscripcion/confirmar', [MembershipPaymentController::class, 'confirm'])->whereNumber('empresa')->name('membership.confirm');
     Route::get('/home/empresas/{empresa}/transferencia', [TransferenciaPagoController::class, 'uploadForm'])->whereNumber('empresa')->name('transferencias.upload-form');
+    Route::get('/home/empresas/{empresa}/transferencia/comprobante', [TransferenciaPagoController::class, 'rejectedProof'])->whereNumber('empresa')->name('transferencias.rejected-proof');
     Route::post('/home/empresas/{empresa}/transferencia', [TransferenciaPagoController::class, 'upload'])->whereNumber('empresa')->middleware('throttle:10,1')->name('transferencias.upload');
     Route::get('/home/admin/transferencias', [TransferenciaPagoController::class, 'adminIndex'])->name('transferencias.admin.index');
     Route::get('/home/admin/transferencias/comprobantes/{proof}', [TransferenciaPagoController::class, 'reviewFile'])->whereNumber('proof')->name('transferencias.admin.file');

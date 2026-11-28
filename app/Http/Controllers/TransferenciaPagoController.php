@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Empresa;
 use App\Models\IntentoPago;
+use App\Models\TransferenciaComprobante;
 use App\Models\TransferenciaPago;
 use App\Services\PaymentFolioService;
 use App\Services\TransferMembershipRenewalService;
@@ -68,6 +69,22 @@ class TransferenciaPagoController extends Controller
         return redirect()->route('payment-history.index')->with('status', 'Comprobante recibido. El pago quedó pendiente de confirmar; su envío no renueva el servicio.');
     }
 
+    public function rejectedProof(Request $request, int $empresa)
+    {
+        $company = $this->companyForUser($request, $empresa);
+        abort_unless($company->metodo_pago === 'TRANSFERENCIA' && $company->fecha_renovacion?->lte(today()), 404);
+
+        $proof = TransferenciaComprobante::query()
+            ->whereHas('transferencia', fn ($query) => $query
+                ->where('empresa_id', $company->id)
+                ->whereDate('fecha_renovacion', $company->fecha_renovacion->toDateString())
+                ->where('estado', 'rechazado'))
+            ->latest('id')
+            ->firstOrFail();
+
+        return $this->streamProof($proof, $proof->mime === 'application/pdf');
+    }
+
     public function adminIndex(Request $request)
     {
         $this->adminOnly($request);
@@ -85,7 +102,7 @@ class TransferenciaPagoController extends Controller
     public function reviewFile(Request $request, int $proof)
     {
         $this->adminOnly($request);
-        $record = \App\Models\TransferenciaComprobante::findOrFail($proof);
+        $record = TransferenciaComprobante::findOrFail($proof);
         return $this->streamProof($record, $request->boolean('descargar'));
     }
 
@@ -162,7 +179,7 @@ class TransferenciaPagoController extends Controller
         return (int) $user->profile === 1 ? Empresa::findOrFail($id) : $user->empresas()->where('empresas.id', $id)->firstOrFail();
     }
     private function adminOnly(Request $request): void { abort_unless((int) $request->user()->profile === 1, 403); }
-    private function streamProof(\App\Models\TransferenciaComprobante $proof, bool $download)
+    private function streamProof(TransferenciaComprobante $proof, bool $download)
     {
         $disk = Storage::disk('wasabi'); abort_unless($disk->exists($proof->ruta_privada), 404);
         $stream = $disk->readStream($proof->ruta_privada); abort_unless(is_resource($stream), 404);

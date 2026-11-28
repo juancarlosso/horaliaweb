@@ -63,7 +63,11 @@
     @elseif(in_array($transferencia->estado, ['pendiente_de_pago', 'rechazado'], true))
         <form class="tr-card" method="POST" enctype="multipart/form-data" action="{{ route('transferencias.upload', $empresa->id) }}">@csrf
             <div class="tr-title"><span class="tr-icon"><i class="fa-solid fa-paperclip" aria-hidden="true"></i></span><div><h2>Adjunta tu comprobante</h2><p>Una vez realizada tu transferencia, sube aquí el comprobante (PDF, JPG o PNG).</p></div></div>
-            @if($transferencia->estado === 'rechazado')<p class="tr-alert">El comprobante fue rechazado. Motivo: {{ $transferencia->motivo_rechazo }}</p>@endif
+            @if($transferencia->estado === 'rechazado')
+                <div class="tr-alert">
+                    @include('payments.transfer-rejection', ['rejectedTransfer' => $transferencia])
+                </div>
+            @endif
             <div class="tr-upload-grid"><label class="tr-drop" id="transfer-drop"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i><strong id="transfer-file-label">Arrastra tu archivo aquí o selecciona un archivo</strong><small>Tamaño máximo: {{ rtrim(rtrim(number_format(config('constantes.pagos_transferencia.max_kb', 10240) / 1024, 2), '0'), '.') }} MB</small><input id="comprobante" name="comprobante" type="file" accept="application/pdf,image/jpeg,image/png" aria-label="Selecciona tu comprobante" required></label><div class="tr-next"><h3><i class="fa-solid fa-circle-check" aria-hidden="true"></i> ¿Qué sigue?</h3><p>Revisaremos tu comprobante. La validación puede tomar hasta 48 horas hábiles; el pago se confirma después de la revisión.</p></div></div>
             <div class="tr-actions">@if($requiresConsent)<label><input type="checkbox" name="terms_accepted" value="1" required><span>He leído y acepto las condiciones para realizar pagos mediante transferencia bancaria.</span></label>@endif<button class="btn-hr btn-primary-hr tr-submit" type="submit"><i class="fa-regular fa-paper-plane" aria-hidden="true"></i> Enviar comprobante</button></div>
         </form>

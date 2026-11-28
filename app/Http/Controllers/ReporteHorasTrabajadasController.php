@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReporteHorasTrabajadasExport;
 use App\Http\Controllers\Concerns\ManagesGeneratedReports;
 use App\Jobs\GenerarReporteHorasTrabajadas;
 use App\Models\ReporteHorasTrabajadas;
@@ -11,7 +12,6 @@ use App\Support\DataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class ReporteHorasTrabajadasController extends Controller
 {
@@ -101,16 +101,12 @@ class ReporteHorasTrabajadasController extends Controller
         return compact('rows', 'unfilteredTotal');
     }
 
-    public function download(Request $request, ReporteHorasTrabajadas $reporte)
+    public function download(Request $request, ReporteHorasTrabajadas $reporte, ReporteHorasTrabajadasExport $export)
     {
         $this->authorizeReport($request, $reporte);
-        $disk = Storage::disk('reportes');
-        abort_unless($reporte->estado === ReporteHorasTrabajadas::LISTO && $disk->exists($reporte->archivo()), 404);
+        abort_unless($reporte->estado === ReporteHorasTrabajadas::LISTO, 404);
 
-        return $disk->download($reporte->archivo(), $reporte->nombreArchivo(), [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'Cache-Control' => 'private, no-store',
-        ]);
+        return $this->downloadReportExcel($reporte, $export->generate($reporte));
     }
 
     private function authorizeProfile(Request $request): void

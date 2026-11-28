@@ -2,14 +2,11 @@
 
 namespace App\Jobs;
 
-use App\Exports\ReporteHorasTrabajadasExport;
 use App\Models\ReporteHorasTrabajadas;
 use App\Services\ReporteHorasTrabajadasService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\LazyCollection;
-use RuntimeException;
 
 class GenerarReporteHorasTrabajadas implements ShouldQueue
 {
@@ -30,7 +27,7 @@ class GenerarReporteHorasTrabajadas implements ShouldQueue
         $this->onConnection(self::CONNECTION)->onQueue(self::QUEUE)->beforeCommit();
     }
 
-    public function handle(ReporteHorasTrabajadasService $service, ReporteHorasTrabajadasExport $export): void
+    public function handle(ReporteHorasTrabajadasService $service): void
     {
         $reporte = ReporteHorasTrabajadas::query()->where('tipo', ReporteHorasTrabajadas::HORAS)->find($this->reporteId);
         if (! $reporte || $reporte->estado === ReporteHorasTrabajadas::LISTO) {
@@ -46,16 +43,7 @@ class GenerarReporteHorasTrabajadas implements ShouldQueue
                 ->map(fn (array $row) => $row + ['reporte_id' => $reporte->id])->all());
         }
 
-        $tempPath = $export->generate($reporte);
-        try {
-            if (! Storage::disk('reportes')->putFileAs(dirname($reporte->archivo()), $tempPath, basename($reporte->archivo()), 'private')) {
-                throw new RuntimeException('No se pudo guardar el resumen de horas trabajadas.');
-            }
-
-            $reporte->update(['estado' => ReporteHorasTrabajadas::LISTO]);
-        } finally {
-            @unlink($tempPath);
-        }
+        $reporte->update(['estado' => ReporteHorasTrabajadas::LISTO]);
     }
 
     public function failed(): void
@@ -67,6 +55,5 @@ class GenerarReporteHorasTrabajadas implements ShouldQueue
 
         $reporte->update(['estado' => ReporteHorasTrabajadas::FALLIDO]);
         $reporte->filas()->delete();
-        Storage::disk('reportes')->delete($reporte->archivo());
     }
 }

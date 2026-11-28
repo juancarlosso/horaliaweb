@@ -30,7 +30,7 @@ class ReportesGeneradosTest extends TestCase
 
     public function test_each_report_type_has_its_own_history_and_publishes_queued_results(): void
     {
-        $disk = Storage::fake('reportes', config('filesystems.disks.reportes'));
+        $disk = Storage::fake('reportes');
         $company = Empresa::create(['rfc' => 'AAA010101AAA', 'nombre' => 'Empresa de prueba', 'razon_social' => 'Empresa de prueba']);
         $user = User::factory()->create(['profile' => 2]);
         $user->empresas()->attach($company, ['control_total' => true]);
@@ -87,10 +87,6 @@ class ReportesGeneradosTest extends TestCase
         $this->get('/home/reportes/generados')->assertNotFound();
         foreach ($reports as $report) {
             $this->assertSame(ReporteGenerado::LISTO, $report->refresh()->estado);
-            $disk->assertExists($report->archivo());
-            $this->assertSame(0640, fileperms($disk->path($report->archivo())) & 0777);
-            $download = $this->get(route('reportes.generados.download', $report))->assertDownload($report->nombreArchivo());
-            $this->assertSame($disk->get($report->archivo()), $download->streamedContent());
         }
         $this->get(route('reportes.horas-trabajadas.index'))->assertOk()
             ->assertSee(route('reportes.horas-trabajadas.show', $hours))
@@ -115,13 +111,13 @@ class ReportesGeneradosTest extends TestCase
             ->assertSee('Ana Pérez')->assertSee('10 min')->assertSee('08:15')->assertDontSee('Juan López');
         $this->getJson(route('reportes.generados.pausas', [$general, $shift->id]))
             ->assertOk()->assertJsonPath('pausas.0.tipo', 'COMIDA')->assertJsonPath('pausas.0.duracion', '00:30');
-        $this->assertWorkbook($disk->path($general->archivo()), ['Asistencias', 'Pausas'], ['Juan López', 'Ana Pérez', 'COMIDA']);
+        $this->assertWorkbookDownload($general, ['Asistencias', 'Pausas'], ['Juan López', 'Ana Pérez', 'COMIDA']);
 
         $incidencias = $reports[ReporteGenerado::INCIDENCIAS];
         $this->get(route('reportes.generados.show', $incidencias).'?q=salida+pendiente&sort=tipo')->assertOk()
             ->assertSeeInOrder(['Volver al listado', 'Exportar a Excel', 'Empresa de prueba', '(01/11/2026 al 04/11/2026)', 'Buscar incidencias…'])
             ->assertSee('Juan López')->assertSee('Salida Pendiente')->assertDontSee('Ana Pérez');
-        $this->assertWorkbook($disk->path($incidencias->archivo()), ['Incidencias'], ['Juan López', 'Salida Pendiente']);
+        $this->assertWorkbookDownload($incidencias, ['Incidencias'], ['Juan López', 'Salida Pendiente']);
 
         $departments = $reports[ReporteGenerado::DEPARTAMENTO];
         $this->get(route('reportes.generados.show', $departments))->assertOk()
@@ -131,7 +127,8 @@ class ReportesGeneradosTest extends TestCase
         $this->get(route('reportes.generados.departamento', [$departments, 'tipo' => 'without_exit', 'sin_departamento' => 1]))
             ->assertOk()->assertSee('Juan López')->assertSee('1 registro encontrado');
         $this->assertSame(['total' => 2, 'late' => 1, 'early_departure' => 1, 'out_of_range' => 1, 'without_exit' => 1], $departments->resumen['totales']);
-        $this->assertWorkbook($disk->path($departments->archivo()), ['Resumen', 'Detalle'], ['Operación', 'Ventas', 'Ana Pérez', 'Juan López', 'Sin departamento']);
+        $this->assertWorkbookDownload($departments, ['Resumen', 'Detalle'], ['Operación', 'Ventas', 'Ana Pérez', 'Juan López', 'Sin departamento']);
+        $this->assertSame([], $disk->allFiles());
 
         $this->actingAs(User::factory()->create(['profile' => 1]));
         $this->get($url)->assertNotFound();
@@ -207,7 +204,13 @@ class ReportesGeneradosTest extends TestCase
         $this->travelTo('2026-12-01 18:00:00 UTC');
         $company = Empresa::create(['rfc' => 'AAA010101AAA', 'razon_social' => 'Empresa de prueba']);
         $this->actingAs(User::factory()->create(['profile' => 1]));
-        $this->mock(ReporteDepartamentoExport::class)->shouldReceive('generate')->twice()->andThrow(new RuntimeException('Prueba de error'));
+        $this->mock(ReporteAsistenciasSnapshot::class)->shouldReceive('generar')->twice()->andReturnUsing(function (ReporteGenerado $report) {
+            $report->resultado()->insert([
+                'reporte_id' => $report->id, 'origen_id' => 1, 'fecha' => '2026-11-01', 'datos' => '{}',
+            ]);
+
+            throw new RuntimeException('Prueba de error');
+        });
         $this->post(route('reportes.generados.store', 'departamento'), [
             'empresa_id' => $company->id, 'desde' => '2026-11-01', 'hasta' => '2026-11-30',
         ])->assertRedirect();
@@ -215,6 +218,7 @@ class ReportesGeneradosTest extends TestCase
         $report = ReporteGenerado::sole();
         $this->artisan('queue:work', ['connection' => 'reportes', '--once' => true])->assertSuccessful();
         $this->assertSame(ReporteGenerado::PROCESANDO, $report->refresh()->estado);
+        $this->assertDatabaseCount('reportes_generados_filas', 1);
         $this->travel(16)->seconds();
         $this->artisan('queue:work', ['connection' => 'reportes', '--once' => true])->assertSuccessful();
         $this->assertSame(ReporteGenerado::FALLIDO, $report->refresh()->estado);
@@ -224,11 +228,16 @@ class ReportesGeneradosTest extends TestCase
         $this->get(route('reportes.departamento'))->assertOk()->assertSee('badge-st st-terminated');
     }
 
-    private function assertWorkbook(string $path, array $sheetNames, array $values): void
+    private function assertWorkbookDownload(ReporteGenerado $report, array $sheetNames, array $values): void
     {
+        $response = $this->get(route('reportes.generados.download', $report))->assertDownload($report->nombreArchivo());
+        $this->assertTrue($response->headers->hasCacheControlDirective('no-store'));
+        $this->assertTrue($response->headers->hasCacheControlDirective('private'));
+        $path = $response->getFile()->getPathname();
+        $expected = file_get_contents($path);
         $zip = new ZipArchive;
-        $this->assertTrue($zip->open($path));
         try {
+            $this->assertTrue($zip->open($path));
             $book = $zip->getFromName('xl/workbook.xml');
             $xml = '';
             foreach ($sheetNames as $offset => $sheet) {
@@ -242,6 +251,14 @@ class ReportesGeneradosTest extends TestCase
             }
         } finally {
             $zip->close();
+            ob_start();
+            try {
+                $response->sendContent();
+                $this->assertSame($expected, ob_get_contents());
+            } finally {
+                ob_end_clean();
+            }
         }
+        $this->assertFileDoesNotExist($path);
     }
 }

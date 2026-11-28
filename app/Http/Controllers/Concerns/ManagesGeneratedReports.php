@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Concerns;
 use App\Models\ReporteGenerado;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 trait ManagesGeneratedReports
 {
@@ -34,6 +35,14 @@ trait ManagesGeneratedReports
     {
         abort_unless((int) $reporte->user_id === (int) $request->user()->id, 404);
         $this->authorizeReportCompany($request, $reporte->tipo, (int) $reporte->empresa_id);
+    }
+
+    protected function downloadReportExcel(ReporteGenerado $reporte, string $archivo): BinaryFileResponse
+    {
+        return response()->download($archivo, $reporte->nombreArchivo(), [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Cache-Control' => 'private, no-store',
+        ])->setPrivate()->deleteFileAfterSend(true);
     }
 
     protected function hasReportManagementProfile(Request $request): bool

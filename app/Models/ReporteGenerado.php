@@ -60,11 +60,6 @@ class ReporteGenerado extends Model
         return in_array($this->estado, [self::PENDIENTE, self::PROCESANDO], true);
     }
 
-    public function archivo(): string
-    {
-        return $this->tipo.'/'.$this->id.'.xlsx';
-    }
-
     public function nombreArchivo(): string
     {
         $from = $this->desde;

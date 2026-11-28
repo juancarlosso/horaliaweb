@@ -2,18 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Exports\AsistenciaReporteExport;
-use App\Exports\ReporteDepartamentoExport;
-use App\Exports\ReporteIncidenciasExport;
 use App\Models\ReporteGenerado;
 use App\Services\ReporteAsistenciasSnapshot;
 use App\Services\ReporteIncidenciasService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\LazyCollection;
-use RuntimeException;
 
 class GenerarReporte implements ShouldQueue
 {
@@ -43,18 +38,7 @@ class GenerarReporte implements ShouldQueue
         $resumen = $reporte->tipo === ReporteGenerado::INCIDENCIAS
             ? $this->generarIncidencias($reporte, $incidencias)
             : $asistencias->generar($reporte);
-        $reporte->update(['resumen' => $resumen]);
-
-        $path = $this->exportar($reporte, $asistencias);
-        try {
-            if (! Storage::disk('reportes')->putFileAs(dirname($reporte->archivo()), $path, basename($reporte->archivo()), 'private')) {
-                throw new RuntimeException('No se pudo guardar el archivo del reporte.');
-            }
-
-            $reporte->update(['estado' => ReporteGenerado::LISTO]);
-        } finally {
-            @unlink($path);
-        }
+        $reporte->update(['resumen' => $resumen, 'estado' => ReporteGenerado::LISTO]);
     }
 
     public function failed(): void
@@ -66,7 +50,6 @@ class GenerarReporte implements ShouldQueue
 
         $reporte->update(['estado' => ReporteGenerado::FALLIDO, 'resumen' => null]);
         $reporte->resultado()->delete();
-        Storage::disk('reportes')->delete($reporte->archivo());
     }
 
     private function generarIncidencias(ReporteGenerado $reporte, ReporteIncidenciasService $service): array
@@ -91,22 +74,5 @@ class GenerarReporte implements ShouldQueue
         }
 
         return ['total' => $total];
-    }
-
-    private function exportar(ReporteGenerado $reporte, ReporteAsistenciasSnapshot $snapshot): string
-    {
-        $from = $reporte->desde->toDateString();
-        $through = $reporte->hasta->toDateString();
-
-        return match ($reporte->tipo) {
-            ReporteGenerado::GENERAL => app(AsistenciaReporteExport::class)->generateFromRecords(
-                $reporte->empresa, $from, $through, $snapshot->asistencias($reporte), $snapshot->asistencias($reporte, porFecha: false),
-            ),
-            ReporteGenerado::INCIDENCIAS => app(ReporteIncidenciasExport::class)->generate(
-                $reporte->resultado()->orderBy('fecha')->orderBy('nombre')->orderBy('datos->tipo')->orderBy('id')->lazy(400)->pluck('datos'),
-                $reporte->empresa, $from, $through, $reporte->filtros['tipos'],
-            ),
-            ReporteGenerado::DEPARTAMENTO => app(ReporteDepartamentoExport::class)->generate($reporte, $snapshot),
-        };
     }
 }

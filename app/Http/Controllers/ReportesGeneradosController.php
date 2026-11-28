@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AsistenciaReporteExport;
+use App\Exports\ReporteDepartamentoExport;
+use App\Exports\ReporteIncidenciasExport;
 use App\Http\Controllers\Concerns\ManagesGeneratedReports;
 use App\Jobs\GenerarReporte;
 use App\Models\Asistencia;
@@ -13,7 +16,6 @@ use App\Support\DataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class ReportesGeneradosController extends Controller
@@ -80,16 +82,28 @@ class ReportesGeneradosController extends Controller
         ])->header('Cache-Control', 'no-store');
     }
 
-    public function download(Request $request, ReporteGenerado $reporte)
+    public function download(Request $request, ReporteGenerado $reporte, ReporteAsistenciasSnapshot $snapshot)
     {
         $this->authorizeReportOwner($request, $reporte);
-        $disk = Storage::disk('reportes');
-        abort_unless($reporte->estado === ReporteGenerado::LISTO && $disk->exists($reporte->archivo()), 404);
+        abort_unless($reporte->estado === ReporteGenerado::LISTO, 404);
+        if ($reporte->tipo === ReporteGenerado::HORAS) {
+            return redirect()->route('reportes.horas-trabajadas.download', $reporte);
+        }
 
-        return $disk->download($reporte->archivo(), $reporte->nombreArchivo(), [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'Cache-Control' => 'private, no-store',
-        ]);
+        $from = $reporte->desde->toDateString();
+        $through = $reporte->hasta->toDateString();
+        $archivo = match ($reporte->tipo) {
+            ReporteGenerado::GENERAL => app(AsistenciaReporteExport::class)->generateFromRecords(
+                $reporte->empresa, $from, $through, $snapshot->asistencias($reporte), $snapshot->asistencias($reporte, porFecha: false),
+            ),
+            ReporteGenerado::INCIDENCIAS => app(ReporteIncidenciasExport::class)->generate(
+                $reporte->resultado()->orderBy('fecha')->orderBy('nombre')->orderBy('datos->tipo')->orderBy('id')->lazy(400)->pluck('datos'),
+                $reporte->empresa, $from, $through, $reporte->filtros['tipos'],
+            ),
+            ReporteGenerado::DEPARTAMENTO => app(ReporteDepartamentoExport::class)->generate($reporte, $snapshot),
+        };
+
+        return $this->downloadReportExcel($reporte, $archivo);
     }
 
     public function pauses(Request $request, ReporteGenerado $reporte, int $asistencia, ReporteAsistenciasSnapshot $snapshot)

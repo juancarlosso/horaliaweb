@@ -8,6 +8,7 @@ use App\Models\Empresa;
 use App\Models\Personal;
 use App\Models\ReporteHorasTrabajadas;
 use App\Models\User;
+use App\Services\ReporteHorasTrabajadasService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
@@ -26,7 +27,7 @@ class ReporteHorasTrabajadasTest extends TestCase
 
     public function test_worker_publishes_a_weekly_summary_and_the_same_data_in_excel(): void
     {
-        $disk = Storage::fake('reportes', config('filesystems.disks.reportes'));
+        $disk = Storage::fake('reportes');
         $company = Empresa::query()->create([
             'rfc' => 'AAA010101AAA',
             'nombre' => 'Empresa de prueba',
@@ -114,12 +115,12 @@ class ReporteHorasTrabajadasTest extends TestCase
         $this->get($show)->assertOk()
             ->assertSeeInOrder(['Empresa de prueba</strong>', '(04/11/2026 al 09/11/2026)', '</p>'], escape: false)
             ->assertDontSee('RFC: AAA010101AAA')->assertDontSee('Av. Principal');
-        $this->assertSame(0640, fileperms($disk->path($report->archivo())) & 0777);
+        $this->get(route('reportes.generados.download', $report))->assertRedirect($download);
         $response = $this->get($download)->assertDownload('horas_trabajadas_2026-11-04_2026-11-09.xlsx');
-        $this->assertSame($disk->get($report->archivo()), $response->streamedContent());
+        $path = $response->getFile()->getPathname();
 
         $xlsx = new ZipArchive;
-        $this->assertTrue($xlsx->open($disk->path($report->archivo())));
+        $this->assertTrue($xlsx->open($path));
         $xml = simplexml_load_string($xlsx->getFromName('xl/worksheets/sheet1.xml'));
         $xml->registerXPathNamespace('x', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
         $this->assertSame('HORAS TRABAJADAS', (string) $xml->xpath('//x:c[@r="A1"]/x:is/x:t')[0]);
@@ -135,6 +136,16 @@ class ReporteHorasTrabajadasTest extends TestCase
         $this->assertEqualsWithDelta(1634 / 1440, (float) $xml->xpath('//x:c[@r="E10"]/x:v')[0], 0.0000001);
         $this->assertStringContainsString('formatCode="[h]:mm"', $xlsx->getFromName('xl/styles.xml'));
         $xlsx->close();
+        $expected = file_get_contents($path);
+        ob_start();
+        try {
+            $response->sendContent();
+            $this->assertSame($expected, ob_get_contents());
+        } finally {
+            ob_end_clean();
+        }
+        $this->assertFileDoesNotExist($path);
+        $this->assertSame([], $disk->allFiles());
 
         $this->actingAs(User::factory()->create(['profile' => 1]));
         $this->get($show)->assertNotFound();
@@ -225,12 +236,12 @@ class ReporteHorasTrabajadasTest extends TestCase
         $this->postJson($route, $filters)->assertForbidden();
     }
 
-    public function test_permanent_export_failure_leaves_the_report_retryable_from_the_screen(): void
+    public function test_permanent_generation_failure_leaves_the_report_retryable_from_the_screen(): void
     {
         $this->travelTo('2026-12-01 18:00:00 UTC');
         $company = Empresa::query()->create(['rfc' => 'AAA010101AAA', 'razon_social' => 'Empresa de prueba']);
         $this->actingAs(User::factory()->create(['profile' => 1]));
-        $this->mock(ReporteHorasTrabajadasExport::class)->shouldReceive('generate')
+        $this->mock(ReporteHorasTrabajadasService::class)->shouldReceive('filas')
             ->twice()->andThrow(new RuntimeException('Error de prueba'));
 
         $this->post(route('reportes.horas-trabajadas.store'), [

@@ -30,7 +30,7 @@ class ReportesGeneradosTest extends TestCase
 
     public function test_each_report_type_has_its_own_history_and_publishes_queued_results(): void
     {
-        $disk = Storage::fake('local');
+        $disk = Storage::fake('reportes', config('filesystems.disks.reportes'));
         $company = Empresa::create(['rfc' => 'AAA010101AAA', 'nombre' => 'Empresa de prueba', 'razon_social' => 'Empresa de prueba']);
         $user = User::factory()->create(['profile' => 2]);
         $user->empresas()->attach($company, ['control_total' => true]);
@@ -88,7 +88,9 @@ class ReportesGeneradosTest extends TestCase
         foreach ($reports as $report) {
             $this->assertSame(ReporteGenerado::LISTO, $report->refresh()->estado);
             $disk->assertExists($report->archivo());
-            $this->get(route('reportes.generados.download', $report))->assertDownload($report->nombreArchivo());
+            $this->assertSame(0640, fileperms($disk->path($report->archivo())) & 0777);
+            $download = $this->get(route('reportes.generados.download', $report))->assertDownload($report->nombreArchivo());
+            $this->assertSame($disk->get($report->archivo()), $download->streamedContent());
         }
         $this->get(route('reportes.horas-trabajadas.index'))->assertOk()
             ->assertSee(route('reportes.horas-trabajadas.show', $hours))

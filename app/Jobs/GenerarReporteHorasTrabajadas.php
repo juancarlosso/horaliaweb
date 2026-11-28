@@ -48,7 +48,7 @@ class GenerarReporteHorasTrabajadas implements ShouldQueue
 
         $tempPath = $export->generate($reporte);
         try {
-            if (! Storage::disk('local')->putFileAs('reportes/horas-trabajadas', $tempPath, $reporte->id.'.xlsx', 'private')) {
+            if (! Storage::disk('reportes')->putFileAs(dirname($reporte->archivo()), $tempPath, basename($reporte->archivo()), 'private')) {
                 throw new RuntimeException('No se pudo guardar el resumen de horas trabajadas.');
             }
 
@@ -67,6 +67,6 @@ class GenerarReporteHorasTrabajadas implements ShouldQueue
 
         $reporte->update(['estado' => ReporteHorasTrabajadas::FALLIDO]);
         $reporte->filas()->delete();
-        Storage::disk('local')->delete($reporte->archivo());
+        Storage::disk('reportes')->delete($reporte->archivo());
     }
 }

@@ -47,7 +47,7 @@ class GenerarReporte implements ShouldQueue
 
         $path = $this->exportar($reporte, $asistencias);
         try {
-            if (! Storage::disk('local')->putFileAs(dirname($reporte->archivo()), $path, basename($reporte->archivo()), 'private')) {
+            if (! Storage::disk('reportes')->putFileAs(dirname($reporte->archivo()), $path, basename($reporte->archivo()), 'private')) {
                 throw new RuntimeException('No se pudo guardar el archivo del reporte.');
             }
 
@@ -66,7 +66,7 @@ class GenerarReporte implements ShouldQueue
 
         $reporte->update(['estado' => ReporteGenerado::FALLIDO, 'resumen' => null]);
         $reporte->resultado()->delete();
-        Storage::disk('local')->delete($reporte->archivo());
+        Storage::disk('reportes')->delete($reporte->archivo());
     }
 
     private function generarIncidencias(ReporteGenerado $reporte, ReporteIncidenciasService $service): array

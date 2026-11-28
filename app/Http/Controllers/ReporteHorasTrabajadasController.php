@@ -104,7 +104,7 @@ class ReporteHorasTrabajadasController extends Controller
     public function download(Request $request, ReporteHorasTrabajadas $reporte)
     {
         $this->authorizeReport($request, $reporte);
-        $disk = Storage::disk('local');
+        $disk = Storage::disk('reportes');
         abort_unless($reporte->estado === ReporteHorasTrabajadas::LISTO && $disk->exists($reporte->archivo()), 404);
 
         return $disk->download($reporte->archivo(), $reporte->nombreArchivo(), [

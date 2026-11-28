@@ -62,7 +62,7 @@ class ReporteGenerado extends Model
 
     public function archivo(): string
     {
-        return 'reportes/'.$this->tipo.'/'.$this->id.'.xlsx';
+        return $this->tipo.'/'.$this->id.'.xlsx';
     }
 
     public function nombreArchivo(): string

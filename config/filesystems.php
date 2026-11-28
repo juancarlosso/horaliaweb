@@ -38,6 +38,16 @@ return [
             'report' => false,
         ],
 
+        'reportes' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/reportes'),
+            // El worker y PHP web deben compartir el grupo del directorio de reportes.
+            'permissions' => [
+                'file' => ['private' => 0640],
+                'dir' => ['private' => 0750],
+            ],
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

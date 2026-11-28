@@ -26,7 +26,7 @@ class ReporteHorasTrabajadasTest extends TestCase
 
     public function test_worker_publishes_a_weekly_summary_and_the_same_data_in_excel(): void
     {
-        $disk = Storage::fake('local');
+        $disk = Storage::fake('reportes', config('filesystems.disks.reportes'));
         $company = Empresa::query()->create([
             'rfc' => 'AAA010101AAA',
             'nombre' => 'Empresa de prueba',
@@ -114,7 +114,9 @@ class ReporteHorasTrabajadasTest extends TestCase
         $this->get($show)->assertOk()
             ->assertSeeInOrder(['Empresa de prueba</strong>', '(04/11/2026 al 09/11/2026)', '</p>'], escape: false)
             ->assertDontSee('RFC: AAA010101AAA')->assertDontSee('Av. Principal');
-        $this->get($download)->assertDownload('horas_trabajadas_2026-11-04_2026-11-09.xlsx');
+        $this->assertSame(0640, fileperms($disk->path($report->archivo())) & 0777);
+        $response = $this->get($download)->assertDownload('horas_trabajadas_2026-11-04_2026-11-09.xlsx');
+        $this->assertSame($disk->get($report->archivo()), $response->streamedContent());
 
         $xlsx = new ZipArchive;
         $this->assertTrue($xlsx->open($disk->path($report->archivo())));

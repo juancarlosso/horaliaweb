@@ -83,7 +83,7 @@ class ReportesGeneradosController extends Controller
     public function download(Request $request, ReporteGenerado $reporte)
     {
         $this->authorizeReportOwner($request, $reporte);
-        $disk = Storage::disk('local');
+        $disk = Storage::disk('reportes');
         abort_unless($reporte->estado === ReporteGenerado::LISTO && $disk->exists($reporte->archivo()), 404);
 
         return $disk->download($reporte->archivo(), $reporte->nombreArchivo(), [
